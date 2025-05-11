@@ -24,11 +24,18 @@ Route::post('/loginAuth', function (Request $request) {
         return response()->json(['message' => 'Invalid credentials'], 401);
     }
 
+       // Laravel login to create session (for Blade)
+    Auth::login($user); // ✅ session-based login
+   
     $token = $user->createToken('api-token')->plainTextToken;
 
-    return response()->json(['token' => $token]);
+    return response()->json(['user'=>$user,'token' => $token],200);
 });
 
 Route::middleware('auth:sanctum')->get('/profile', function (Request $request) {
+    return response()->json($request->user());
+});
+
+Route::middleware('auth:sanctum')->get('/userLoggedIn', function (Request $request) {
     return response()->json($request->user());
 });

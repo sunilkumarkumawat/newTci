@@ -1,59 +1,53 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Auth;
 
-use Illuminate\Support\Facades\Mail;
-use App\Mail\MyMail;
-/*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| contains the "web" middleware group. Now create something great!
-|
-*/
+// 🔓 Public Routes
+Route::match(['get', 'post'], 'login', 'Auth\AuthController@getLogin')->name('login');
+Route::get('/', function () {
+    return redirect('/login');
+});
+Route::get('logout', function () {
+    Auth::logout();
+    return redirect('/login');
+});
 
-// sidebar
-Route::match(['get', 'post'], 'sidebar', 'Auth\AuthController@sidebar');
+// 🔐 Protected Routes (Only accessible if logged in)
+Route::middleware(['auth'])->group(function () {
 
+    // Dashboard
+    Route::match(['get', 'post'], 'dashboard', 'Controller@index');
 
-// dashboard
-Route::match(['get', 'post'], 'dashboard', 'Controller@index');
+    // Sidebar
+    Route::match(['get', 'post'], 'sidebar', 'Auth\AuthController@sidebar');
 
-// Usercontroller
-Route::match(['get', 'post'], 'login', 'Auth\AuthController@getLogin');
-Route::match(['get', 'post'], '/', 'DashboardController@dashboard');
-Route::match(['get', 'post'], 'userAdd', 'UserController@userAdd');
-Route::match(['get', 'post'], 'userView', 'UserController@userView');
-Route::match(['get', 'post'], 'userEdit', 'UserController@userEdit');
+    // User Controller
+    Route::match(['get', 'post'], 'userAdd', 'UserController@userAdd');
+    Route::match(['get', 'post'], 'userView', 'UserController@userView');
+    Route::match(['get', 'post'], 'userEdit', 'UserController@userEdit');
 
-// student
+    // Student
+    Route::match(['get', 'post'], 'studentAdd', 'StudentController@studentAdd');
+    Route::match(['get', 'post'], 'studentView', 'StudentController@studentView');
+    Route::match(['get', 'post'], 'studentEdit', 'StudentController@studentEdit');
 
-Route::match(['get', 'post'], 'studentAdd', 'StudentController@studentAdd');
-Route::match(['get', 'post'], 'studentView', 'StudentController@studentView');
-Route::match(['get', 'post'], 'studentEdit', 'StudentController@studentEdit');
+    // Teacher
+    Route::match(['get', 'post'], 'teacherView', 'TeacherController@teacherView');
 
+    // Expense
+    Route::match(['get', 'post'], 'expense', 'ExpenseController@expense');
 
-// teacher
-Route::match(['get', 'post'], 'teacherView', 'TeacherController@teacherView');
+    // Library Management
+    Route::match(['get', 'post'], 'cabin', 'LibraryController@cabin');
+    Route::match(['get', 'post'], 'locker', 'LibraryController@locker');
+    Route::match(['get', 'post'], 'wallet', 'LibraryController@wallet');
+    Route::match(['get', 'post'], 'walletlist', 'LibraryController@walletlist');
+    Route::match(['get', 'post'], 'billing', 'LibraryController@billadd');
+    Route::match(['get', 'post'], 'subscription', 'LibraryController@subscription');
+    Route::match(['get', 'post'], 'due', 'LibraryController@duefees');
 
-
-// expense
-Route::match(['get', 'post'], 'expense', 'ExpenseController@expense');
-// Route::match(['get', 'post'], 'expenseView', 'ExpenseController@expenseView');
-
-// library-management
-Route::match(['get', 'post'], 'cabin', 'LibraryController@cabin');
-Route::match(['get', 'post'], 'locker', 'LibraryController@locker');
-Route::match(['get', 'post'], 'wallet', 'LibraryController@wallet');
-Route::match(['get', 'post'], 'walletlist', 'LibraryController@walletlist');
-Route::match(['get', 'post'], 'billing', 'LibraryController@billadd');
-Route::match(['get', 'post'], 'subscription', 'LibraryController@subscription');
-Route::match(['get', 'post'], 'due', 'LibraryController@duefees');
-
-
-// book management
-Route::match(['get', 'post'], 'bookAdd', 'BookController@bookadd');
-Route::match(['get', 'post'], 'bookAssign', 'BookController@bookassign');
+    // Book Management
+    Route::match(['get', 'post'], 'bookAdd', 'BookController@bookadd');
+    Route::match(['get', 'post'], 'bookAssign', 'BookController@bookassign');
+});

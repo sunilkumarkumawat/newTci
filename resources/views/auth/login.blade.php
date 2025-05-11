@@ -109,10 +109,14 @@
     $('#loginForm').on('submit', function (e) {
       e.preventDefault();
 
+
+    var baseUrl = "{{url('/')}}"
+   
+
       $('#login-error').text('');
 
       $.ajax({
-        url: "http://localhost/library/api/loginAuth",
+        url: baseUrl+'/public/api/loginAuth',
         type: "POST",
         data: {
           user_name: $('input[name="user_name"]').val(),
@@ -120,11 +124,7 @@
           _token: '{{ csrf_token() }}'
         },
         success: function (response) {
-          if (response.success) {
-            window.location.href = response.redirect_to || "/dashboard";
-          } else {
-            $('#login-error').text(response.message || 'Login failed');
-          }
+            window.location.href = response.redirect_to || baseUrl+"/dashboard";
         },
         error: function (xhr) {
           let response = xhr.responseJSON;
