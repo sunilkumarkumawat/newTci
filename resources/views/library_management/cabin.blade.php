@@ -8,7 +8,9 @@
                     <div class="col-md-3 pr-0">
                         <div class="card card-outline card-orange mr-1">
                             <div class="card-header bg-primary">
-                                <h3 class="card-title">Create Cabin / Locker</h3>
+                                <div class="card-title">
+                                    <h4>Create Cabin / Locker</h4>
+                                </div>
                             </div>
                             <!-- Tabs for Cabin/Locker -->
                             <ul class="nav nav-tabs" id="addItemTabs" role="tablist">
@@ -31,7 +33,7 @@
                                     aria-labelledby="cabin-tab">
                                     <form id="addCabinForm" action="cabin_add" method="post">
                                         <div class="row m-2">
-                                            <div class="col-md-12">
+                                            <div class="col-md-12 col-12">
                                                 <label style="color:red;">Select Library*</label>
                                                 <select class="select2 form-control" id="library_id" name="library_id">
                                                     <option value="">Select</option>
@@ -95,108 +97,110 @@
                     <div class="col-md-5 pl-0">
                         <div class="card card-outline card-orange ml-1">
                             <div class="card-header bg-primary">
-                                <h3 class="card-title"><i class="fa fa-door-open"></i> Cabin Management</h3>
+                                <div class="card-title">
+                                    <h4 class="mb-1"><i class="fa fa-door-open"></i> Cabin Management</h4>
+                                </div>
                             </div>
 
                             <div class="card-body">
                                 <h4 class="library-name">Main Library</h4>
                                 <div class="cabin-grid">
-                                  <div class="row">
-                                    <div class="col-md-2 col-sm-3 col-3 pb-2">
-                                       <div class="item-box available cabin" data-type="cabin">A1</div>
+                                    <div class="row">
+                                        <div class="col-md-2 col-sm-3 col-3 pb-2">
+                                            <div class="item-box available cabin" data-type="cabin">A1</div>
+                                        </div>
+                                        <div class="col-md-2 col-sm-3 col-3 pb-2">
+                                            <div class="item-box available cabin" data-type="cabin">A2</div>
+                                        </div>
+                                        <div class="col-md-2 col-sm-3 col-3 pb-2">
+                                            <div class="item-box available cabin" data-type="cabin">A3</div>
+                                        </div>
+                                        <div class="col-md-2 col-sm-3 col-3 pb-2">
+                                            <div class="item-box available cabin" data-type="cabin">A4</div>
+                                        </div>
+                                        <div class="col-md-2 col-sm-3 col-3 pb-2">
+                                            <div class="item-box occupied cabin" data-type="cabin">A5</div>
+                                        </div>
+                                        <div class="col-md-2 col-sm-3 col-3 pb-2">
+                                            <div class="item-box available cabin" data-type="cabin">A6</div>
+                                        </div>
+                                        <div class="col-md-2 col-sm-3 col-3 pb-2">
+                                            <div class="item-box available cabin" data-type="cabin">A7</div>
+                                        </div>
+                                        <div class="col-md-2 col-sm-3 col-3 pb-2">
+                                            <div class="item-box available cabin" data-type="cabin">A8</div>
+                                        </div>
+                                        <div class="col-md-2 col-sm-3 col-3 pb-2">
+                                            <div class="item-box available cabin" data-type="cabin">A9</div>
+                                        </div>
+                                        <div class="col-md-2 col-sm-3 col-3 pb-2">
+                                            <div class="item-box occupied cabin" data-type="cabin">A10</div>
+                                        </div>
+                                        <div class="col-md-2 col-sm-3 col-3 pb-2">
+                                            <div class="item-box available cabin" data-type="cabin">A11</div>
+                                        </div>
+                                        <div class="col-md-2 col-sm-3 col-3 pb-2">
+                                            <div class="item-box available cabin" data-type="cabin">A12</div>
+                                        </div>
+                                        <div class="col-md-2 col-sm-3 col-3 pb-2">
+                                            <div class="item-box available cabin" data-type="cabin">A13</div>
+                                        </div>
+                                        <div class="col-md-2 col-sm-3 col-3 pb-2">
+                                            <div class="item-box available cabin" data-type="cabin">A14</div>
+                                        </div>
+                                        <div class="col-md-2 col-sm-3 col-3 pb-2">
+                                            <div class="item-box occupied cabin" data-type="cabin">A15</div>
+                                        </div>
+                                        <div class="col-md-2 col-sm-3 col-3 pb-2">
+                                            <div class="item-box available cabin" data-type="cabin">A16</div>
+                                        </div>
+                                        <div class="col-md-2 col-sm-3 col-3 pb-2">
+                                            <div class="item-box available cabin" data-type="cabin">A17</div>
+                                        </div>
+                                        <div class="col-md-2 col-sm-3 col-3 pb-2">
+                                            <div class="item-box available cabin" data-type="cabin">A18</div>
+                                        </div>
+                                        <div class="col-md-2 col-sm-3 col-3 pb-2">
+                                            <div class="item-box available cabin" data-type="cabin">A19</div>
+                                        </div>
+                                        <div class="col-md-2 col-sm-3 col-3 pb-2">
+                                            <div class="item-box occupied cabin" data-type="cabin">A20</div>
+                                        </div>
+                                        <div class="col-md-2 col-sm-3 col-3 pb-2">
+                                            <div class="item-box available cabin" data-type="cabin">A21</div>
+                                        </div>
+                                        <div class="col-md-2 col-sm-3 col-3 pb-2">
+                                            <div class="item-box available cabin" data-type="cabin">A22</div>
+                                        </div>
+                                        <div class="col-md-2 col-sm-3 col-3 pb-2">
+                                            <div class="item-box available cabin" data-type="cabin">A23</div>
+                                        </div>
+                                        <div class="col-md-2 col-sm-3 col-3 pb-2">
+                                            <div class="item-box available cabin" data-type="cabin">A24</div>
+                                        </div>
+                                        <div class="col-md-2 col-sm-3 col-3 pb-2">
+                                            <div class="item-box occupied cabin" data-type="cabin">A25</div>
+                                        </div>
+                                        <div class="col-md-2 col-sm-3 col-3 pb-2">
+                                            <div class="item-box available cabin" data-type="cabin">A26</div>
+                                        </div>
+                                        <div class="col-md-2 col-sm-3 col-3 pb-2">
+                                            <div class="item-box available cabin" data-type="cabin">A27</div>
+                                        </div>
+                                        <div class="col-md-2 col-sm-3 col-3 pb-2">
+                                            <div class="item-box available cabin" data-type="cabin">A28</div>
+                                        </div>
+                                        <div class="col-md-2 col-sm-3 col-3 pb-2">
+                                            <div class="item-box available cabin" data-type="cabin">A29</div>
+                                        </div>
+                                        <div class="col-md-2 col-sm-3 col-3 pb-2">
+                                            <div class="item-box occupied cabin" data-type="cabin">A30</div>
+                                        </div>
+                                        <div class="col-md-2 col-sm-3 col-3 pb-2">
+                                            <div class="item-box available cabin" data-type="cabin">A31</div>
+                                        </div>
                                     </div>
-                                    <div class="col-md-2 col-sm-3 col-3 pb-2">
-                                       <div class="item-box available cabin" data-type="cabin">A2</div>
-                                    </div>
-                                    <div class="col-md-2 col-sm-3 col-3 pb-2">
-                                       <div class="item-box available cabin" data-type="cabin">A3</div>
-                                    </div>
-                                    <div class="col-md-2 col-sm-3 col-3 pb-2">
-                                       <div class="item-box available cabin" data-type="cabin">A4</div>
-                                    </div>
-                                    <div class="col-md-2 col-sm-3 col-3 pb-2">
-                                       <div class="item-box occupied cabin" data-type="cabin">A5</div>
-                                    </div>
-                                    <div class="col-md-2 col-sm-3 col-3 pb-2">
-                                       <div class="item-box available cabin" data-type="cabin">A6</div>
-                                    </div>
-                                    <div class="col-md-2 col-sm-3 col-3 pb-2">
-                                       <div class="item-box available cabin" data-type="cabin">A7</div>
-                                    </div>
-                                    <div class="col-md-2 col-sm-3 col-3 pb-2">
-                                       <div class="item-box available cabin" data-type="cabin">A8</div>
-                                    </div>
-                                    <div class="col-md-2 col-sm-3 col-3 pb-2">
-                                       <div class="item-box available cabin" data-type="cabin">A9</div>
-                                    </div>
-                                    <div class="col-md-2 col-sm-3 col-3 pb-2">
-                                       <div class="item-box occupied cabin" data-type="cabin">A10</div>
-                                    </div>
-                                    <div class="col-md-2 col-sm-3 col-3 pb-2">
-                                       <div class="item-box available cabin" data-type="cabin">A11</div>
-                                    </div>
-                                    <div class="col-md-2 col-sm-3 col-3 pb-2">
-                                       <div class="item-box available cabin" data-type="cabin">A12</div>
-                                    </div>
-                                    <div class="col-md-2 col-sm-3 col-3 pb-2">
-                                       <div class="item-box available cabin" data-type="cabin">A13</div>
-                                    </div>
-                                    <div class="col-md-2 col-sm-3 col-3 pb-2">
-                                       <div class="item-box available cabin" data-type="cabin">A14</div>
-                                    </div>
-                                    <div class="col-md-2 col-sm-3 col-3 pb-2">
-                                       <div class="item-box occupied cabin" data-type="cabin">A15</div>
-                                    </div>
-                                    <div class="col-md-2 col-sm-3 col-3 pb-2">
-                                       <div class="item-box available cabin" data-type="cabin">A16</div>
-                                    </div>
-                                    <div class="col-md-2 col-sm-3 col-3 pb-2">
-                                       <div class="item-box available cabin" data-type="cabin">A17</div>
-                                    </div>
-                                    <div class="col-md-2 col-sm-3 col-3 pb-2">
-                                       <div class="item-box available cabin" data-type="cabin">A18</div>
-                                    </div>
-                                    <div class="col-md-2 col-sm-3 col-3 pb-2">
-                                       <div class="item-box available cabin" data-type="cabin">A19</div>
-                                    </div>
-                                    <div class="col-md-2 col-sm-3 col-3 pb-2">
-                                       <div class="item-box occupied cabin" data-type="cabin">A20</div>
-                                    </div>
-                                    <div class="col-md-2 col-sm-3 col-3 pb-2">
-                                       <div class="item-box available cabin" data-type="cabin">A21</div>
-                                    </div>
-                                    <div class="col-md-2 col-sm-3 col-3 pb-2">
-                                       <div class="item-box available cabin" data-type="cabin">A22</div>
-                                    </div>
-                                    <div class="col-md-2 col-sm-3 col-3 pb-2">
-                                       <div class="item-box available cabin" data-type="cabin">A23</div>
-                                    </div>
-                                    <div class="col-md-2 col-sm-3 col-3 pb-2">
-                                       <div class="item-box available cabin" data-type="cabin">A24</div>
-                                    </div>
-                                    <div class="col-md-2 col-sm-3 col-3 pb-2">
-                                       <div class="item-box occupied cabin" data-type="cabin">A25</div>
-                                    </div>
-                                    <div class="col-md-2 col-sm-3 col-3 pb-2">
-                                       <div class="item-box available cabin" data-type="cabin">A26</div>
-                                    </div>
-                                    <div class="col-md-2 col-sm-3 col-3 pb-2">
-                                       <div class="item-box available cabin" data-type="cabin">A27</div>
-                                    </div>
-                                    <div class="col-md-2 col-sm-3 col-3 pb-2">
-                                       <div class="item-box available cabin" data-type="cabin">A28</div>
-                                    </div>
-                                    <div class="col-md-2 col-sm-3 col-3 pb-2">
-                                       <div class="item-box available cabin" data-type="cabin">A29</div>
-                                    </div>
-                                    <div class="col-md-2 col-sm-3 col-3 pb-2">
-                                       <div class="item-box occupied cabin" data-type="cabin">A30</div>
-                                    </div>
-                                    <div class="col-md-2 col-sm-3 col-3 pb-2">
-                                       <div class="item-box available cabin" data-type="cabin">A31</div>
-                                    </div>
-                                 </div> 
-                               </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -205,75 +209,77 @@
                     <div class="col-md-4 pl-0">
                         <div class="card card-outline card-orange ml-1">
                             <div class="card-header bg-primary">
-                                <h3 class="card-title"><i class="fa fa-lock"></i> Locker Management</h3>
+                                <div class="card-title">
+                                    <h4><i class="fa fa-lock"></i> Locker Management</h4>
+                                </div>
                             </div>
                             <div class="card-body">
                                 <h4 class="locker-library-name">Locker List</h4>
                                 <div class="locker-grid">
-                                  <div class="row">
-                                    <div class="col-md-3 col-sm-4 col-3  ">
-                                      <div class="item-box available locker" data-type="locker">L1</div>
+                                    <div class="row">
+                                        <div class="col-md-3 col-sm-4 col-3  ">
+                                            <div class="item-box available locker" data-type="locker">L1</div>
+                                        </div>
+                                        <div class="col-md-3 col-sm-4 col-3  ">
+                                            <div class="item-box available locker" data-type="locker">L2</div>
+                                        </div>
+                                        <div class="col-md-3 col-sm-4 col-3  ">
+                                            <div class="item-box available locker" data-type="locker">L3</div>
+                                        </div>
+                                        <div class="col-md-3 col-sm-4 col-3  ">
+                                            <div class="item-box available locker" data-type="locker">L4</div>
+                                        </div>
+                                        <div class="col-md-3 col-sm-4 col-3  ">
+                                            <div class="item-box occupied locker" data-type="locker">L5</div>
+                                        </div>
+                                        <div class="col-md-3 col-sm-4 col-3  ">
+                                            <div class="item-box available locker" data-type="locker">L6</div>
+                                        </div>
+                                        <div class="col-md-3 col-sm-4 col-3  ">
+                                            <div class="item-box available locker" data-type="locker">L7</div>
+                                        </div>
+                                        <div class="col-md-3 col-sm-4 col-3  ">
+                                            <div class="item-box available locker" data-type="locker">L8</div>
+                                        </div>
+                                        <div class="col-md-3 col-sm-4 col-3  ">
+                                            <div class="item-box available locker" data-type="locker">L9</div>
+                                        </div>
+                                        <div class="col-md-3 col-sm-4 col-3  ">
+                                            <div class="item-box occupied locker" data-type="locker">L10</div>
+                                        </div>
+                                        <div class="col-md-3 col-sm-4 col-3  ">
+                                            <div class="item-box available locker" data-type="locker">L11</div>
+                                        </div>
+                                        <div class="col-md-3 col-sm-4 col-3  ">
+                                            <div class="item-box available locker" data-type="locker">L12</div>
+                                        </div>
+                                        <div class="col-md-3 col-sm-4 col-3  ">
+                                            <div class="item-box available locker" data-type="locker">L13</div>
+                                        </div>
+                                        <div class="col-md-3 col-sm-4 col-3  ">
+                                            <div class="item-box available locker" data-type="locker">L14</div>
+                                        </div>
+                                        <div class="col-md-3 col-sm-4 col-3  ">
+                                            <div class="item-box occupied locker" data-type="locker">L15</div>
+                                        </div>
+                                        <div class="col-md-3 col-sm-4 col-3  ">
+                                            <div class="item-box available locker" data-type="locker">L16</div>
+                                        </div>
+                                        <div class="col-md-3 col-sm-4 col-3  ">
+                                            <div class="item-box available locker" data-type="locker">L17</div>
+                                        </div>
+                                        <div class="col-md-3 col-sm-4 col-3  ">
+                                            <div class="item-box available locker" data-type="locker">L18</div>
+                                        </div>
+                                        <div class="col-md-3 col-sm-4 col-3  ">
+                                            <div class="item-box available locker" data-type="locker">L19</div>
+                                        </div>
+                                        <div class="col-md-3 col-sm-4 col-3  ">
+                                            <div class="item-box occupied locker" data-type="locker">L20</div>
+                                        </div>
                                     </div>
-                                    <div class="col-md-3 col-sm-4 col-3  ">
-                                      <div class="item-box available locker" data-type="locker">L2</div>
-                                    </div>
-                                    <div class="col-md-3 col-sm-4 col-3  ">
-                                      <div class="item-box available locker" data-type="locker">L3</div>
-                                    </div>
-                                    <div class="col-md-3 col-sm-4 col-3  ">
-                                      <div class="item-box available locker" data-type="locker">L4</div>
-                                    </div>
-                                    <div class="col-md-3 col-sm-4 col-3  ">
-                                      <div class="item-box occupied locker" data-type="locker">L5</div>
-                                    </div>
-                                    <div class="col-md-3 col-sm-4 col-3  ">
-                                      <div class="item-box available locker" data-type="locker">L6</div>
-                                    </div>
-                                    <div class="col-md-3 col-sm-4 col-3  ">
-                                      <div class="item-box available locker" data-type="locker">L7</div>
-                                    </div>
-                                    <div class="col-md-3 col-sm-4 col-3  ">
-                                      <div class="item-box available locker" data-type="locker">L8</div>
-                                    </div>
-                                    <div class="col-md-3 col-sm-4 col-3  ">
-                                      <div class="item-box available locker" data-type="locker">L9</div>
-                                    </div>
-                                    <div class="col-md-3 col-sm-4 col-3  ">
-                                      <div class="item-box occupied locker" data-type="locker">L10</div>
-                                    </div>
-                                    <div class="col-md-3 col-sm-4 col-3  ">
-                                      <div class="item-box available locker" data-type="locker">L11</div>
-                                    </div>
-                                    <div class="col-md-3 col-sm-4 col-3  ">
-                                      <div class="item-box available locker" data-type="locker">L12</div>
-                                    </div>
-                                    <div class="col-md-3 col-sm-4 col-3  ">
-                                      <div class="item-box available locker" data-type="locker">L13</div>
-                                    </div>
-                                    <div class="col-md-3 col-sm-4 col-3  ">
-                                      <div class="item-box available locker" data-type="locker">L14</div>
-                                    </div>
-                                    <div class="col-md-3 col-sm-4 col-3  ">
-                                      <div class="item-box occupied locker" data-type="locker">L15</div>
-                                    </div>
-                                    <div class="col-md-3 col-sm-4 col-3  ">
-                                      <div class="item-box available locker" data-type="locker">L16</div>
-                                    </div>
-                                    <div class="col-md-3 col-sm-4 col-3  ">
-                                      <div class="item-box available locker" data-type="locker">L17</div>
-                                    </div>
-                                    <div class="col-md-3 col-sm-4 col-3  ">
-                                      <div class="item-box available locker" data-type="locker">L18</div>
-                                    </div>
-                                    <div class="col-md-3 col-sm-4 col-3  ">
-                                      <div class="item-box available locker" data-type="locker">L19</div>
-                                    </div>
-                                    <div class="col-md-3 col-sm-4 col-3  ">
-                                      <div class="item-box occupied locker" data-type="locker">L20</div>
-                                    </div>
-                                  </div>
                                 </div>
-                                
+
                                 <!-- Locker details will be shown in the same item-details-container as cabins -->
                             </div>
                         </div>

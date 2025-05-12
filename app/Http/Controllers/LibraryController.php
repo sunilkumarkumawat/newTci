@@ -38,4 +38,8 @@ Class LibraryController extends Controller
    public function walletlist(){
     return view('library_management.walletlist');
    }
+
+   public function print(){
+    return view('printfiles.print');
+   }
 }

@@ -16,7 +16,9 @@
                 <div class="row">
                     <div class="card card-outline card-orange col-md-12 col-12 p-0">
                         <div class="card-header bg-primary">
-                            <h3 class="card-title"><i class="fa fa-desktop"></i> &nbsp;View User</h3>
+                            <div class="card-title">
+                                <h4><i class="fa fa-desktop"></i> &nbsp;View User</h4>
+                            </div>
                             <div class="card-tools">
                                 <a href="{{ url('userAdd') }}" class="btn btn-primary  btn-sm"><i class="fa fa-plus"></i>
                                     <span class="Display_none_mobile"> {{ __('common.Add') }} </span></a>

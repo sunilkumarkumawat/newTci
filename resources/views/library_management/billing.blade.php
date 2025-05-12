@@ -7,7 +7,9 @@
                     <div class="col-md-8 col-12">
                         <div class="card card-orange card-outline">
                             <div class="card-header bg-primary">
-                                <h3 class="card-title"><i class="fa-solid fa-money-bill"></i> Library Bill Management</h3>
+                                <div class="card-title">
+                                    <h4><i class="fa-solid fa-money-bill"></i> Library Bill Management</h4>
+                                </div>
                             </div>
                             <div class="card-body">
                                 <!-- Wizard Circle Bar -->
@@ -82,7 +84,8 @@
                                             <div class="px-2" style="color: #002c54">Choose Plan</div>
                                             <div class="flex-grow-1" style="border-bottom: 1px solid #949faa"></div>
                                         </div>
-                                        <div class="col-lg-6 col-md-6 col-sm-12">
+                                        {{-- basic plan --}}
+                                        <div class="col-lg-6 col-md-6 col-sm-12 mt-2">
                                             <div class="card mb-3 subscription-plan-card">
                                                 <div class="card-body">
                                                     <div class="d-flex justify-content-between align-items-center">
@@ -125,7 +128,7 @@
                                         </div>
 
                                         <!-- Premium/gold Plan -->
-                                        <div class="col-lg-6 col-md-6 col-sm-12">
+                                        <div class="col-lg-6 col-md-6 col-sm-12 mt-2">
                                             <div class="card mb-3 subscription-plan-card">
                                                 <div class="card-body">
                                                     <div class="d-flex justify-content-between align-items-center">
@@ -166,7 +169,7 @@
                                         </div>
 
                                         <!-- diamond Plan -->
-                                        <div class="col-lg-6 col-md-6 col-sm-12">
+                                        <div class="col-lg-6 col-md-6 col-sm-12 mt-2">
                                             <div class="card mb-3 subscription-plan-card">
                                                 <div class="card-body">
                                                     <div class="d-flex justify-content-between align-items-center">
@@ -446,7 +449,9 @@
                     <div class="col-md-4">
                         <div class="card card-orange card-outline">
                             <div class="card-header bg-primary">
-                                <h3 class="card-title"><i class="fa-solid fa-receipt"></i> Billing</h3>
+                                <div class="card-title">
+                                    <h4><i class="fa-solid fa-receipt"></i> Billing</h4>
+                                </div>
                             </div>
 
                             <div class="card-body">
@@ -510,7 +515,7 @@
                             </div>
 
                             <div class="card-footer bg-light text-end py-3 rounded-bottom">
-                                <button class="btn btn-success px-4">Confirm & Print</button>
+                                <a href="{{url('printbill')}}" class="btn btn-success px-4">Confirm & Print</a>
                             </div>
                         </div>
                     </div>

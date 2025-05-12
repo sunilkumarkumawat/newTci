@@ -17,7 +17,9 @@
                     <div class="col-12 col-md-4">
                         <div class="card card-outline card-orange">
                             <div class="card-header bg-primary">
-                                <h3 class="card-title"><i class="fa fa-book"></i> &nbsp; Add Library Books</h3>
+                                <div class="card-title">
+                                    <h4><i class="fa fa-book"></i> &nbsp; Add Library Books</h4>
+                                </div>
                             </div>
 
                             <div class="card-body">
@@ -168,7 +170,9 @@
                     <div class="col-12 col-md-8">
                         <div class="card card-outline card-orange">
                             <div class="card-header bg-primary">
-                                <h3 class="card-title"><i class="fa fa-list"></i> View Library Books</h3>
+                                <div class="card-title">
+                                    <h4><i class="fa fa-list"></i> View Library Books</h4>
+                                </div>
                                 {{-- <div class="card-tools">
                                     <button type="button" class="btn btn-primary btn-sm" id="barcode-btn">
                                         <i class="fa fa-barcode"></i> Barcode
@@ -277,5 +281,4 @@
             </div>
         </section>
     </div>
-    
 @endsection

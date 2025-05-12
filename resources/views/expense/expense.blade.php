@@ -18,7 +18,9 @@
                     <div class="col-md-4 col-12">
                         <div class="card card-outline card-orange">
                             <div class="card-header bg-primary">
-                                <h3 class="card-title"><i class="fa fa-credit-card"></i> &nbsp;Add Expense</h3>
+                                <div class="card-title">
+                                    <h4><i class="fa fa-credit-card"></i> &nbsp;Add Expense</h4>
+                                </div>
                             </div>
 
                             <div class="card-body">
@@ -77,22 +79,8 @@
                                                 <textarea class="form-control blockHeight" id="expense-remark" name="remark" rows="6"></textarea>
                                             </div>
                                         </div>
-                                    </div>
 
-
-                                    {{-- <div class="row mt-3">
-                                        <div class="col-12">
-                                            <div class="input-group">
-                                                <span class="input-group-text bg-light text-danger"><strong>Total
-                                                        Amount*</strong></span>
-                                                <input type="text" class="form-control" id="total_amount"
-                                                    name="total_amount" readonly required>
-                                            </div>
-                                        </div>
-                                    </div> --}}
-
-                                    <div class="row">
-                                        <div class="col-12 text-end mt-3">
+                                        <div class="col-12 col-md-12 p-0 ">
                                             <button type="submit" class="btn btn-primary">Submit</button>
                                         </div>
                                     </div>
@@ -105,7 +93,9 @@
                     <div class="col-md-8">
                         <div class="card card-outline card-orange">
                             <div class="card-header bg-light">
-                                <h3 class="card-title"><i class="fa fa-list"></i> &nbsp;Expense List</h3>
+                                <div class="card-title">
+                                    <h4><i class="fa fa-list"></i> &nbsp;Expense List</h4>
+                                </div>
                                 {{-- <div class="card-tools">
                                     <button type="button" class="btn btn-success btn-sm" id="refresh-list">
                                         <i class="fa fa-refresh"></i> <span class="Display_none_mobile">Refresh</span>

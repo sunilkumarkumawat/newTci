@@ -8,9 +8,11 @@
                     <div class="col-12 col-md-12">
                         <div class="card card-outline card-orange">
                             <div class="card-header bg-primary">
-                                <h3 class="card-title">
-                                    <i class="fa fa-book"></i> &nbsp; Library Admin Dashboard
-                                </h3>
+                                <div class="card-title">
+                                    <h4>
+                                        <i class="fa fa-book"></i> &nbsp; Library Admin Dashboard
+                                    </h4>
+                                </div>
                                 <div class="card-tools">
                                     <!-- Optional button here -->
                                 </div>
@@ -21,11 +23,12 @@
                                     <div class="col-md-9 col-12">
                                         <div class="card">
                                             <div class="card-header bg-primary">
-                                                <div class="card-title fs-5">
+                                                <div class="card-title">
                                                     <h4>Recent Book Checkouts</h4>
                                                 </div>
                                                 <div class="card-tools fs-5">
-                                                    <a href="{{url('bookAdd')}}" class="px-1 text-light"><i class="fa fa-eye"></i> View</a>
+                                                    <a href="{{ url('bookAdd') }}" class="px-1 text-light"><i
+                                                            class="fa fa-eye"></i> View</a>
                                                 </div>
                                             </div>
                                             <div class="card-body">
@@ -128,7 +131,7 @@
                                         <div class="card">
                                             <div class="card-header bg-light">
                                                 <div class="card-title">
-                                                    Seating Management
+                                                   <h4>Seating Management</h4>
                                                 </div>
                                                 {{-- <div class="card-tools">
                                                     <a href="{{url('bill')}}" class="btn btn-light">Assign Seat</a>
@@ -229,7 +232,7 @@
                                                         </div>
                                                     </div>
                                                     <div class="text-center">
-                                                        <a href="{{url('billing')}}">View all Seat</a>
+                                                        <a href="{{ url('billing') }}">View all Seat</a>
                                                     </div>
                                                 </div>
                                             </div>
@@ -243,10 +246,11 @@
                                         <div class="card">
                                             <div class="card-header bg-primary">
                                                 <div class="card-title">
-                                                    Subscription Plan
+                                                    <h4>Subscription Plan</h4>
                                                 </div>
                                                 <div class="card-tools">
-                                                    <a href="{{url('subscription')}}" class="btn btn-primary"><i class="fa fa-plus"></i> Add Plan</a>
+                                                    <a href="{{ url('subscription') }}" class="btn btn-primary"><i
+                                                            class="fa fa-plus"></i> Add Plan</a>
                                                 </div>
                                             </div>
                                             <div class="card-body">

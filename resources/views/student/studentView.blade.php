@@ -16,7 +16,9 @@
                 <div class="row">
                     <div class="card card-outline card-orange col-md-12 col-12 p-0">
                         <div class="card-header bg-primary">
-                            <h3 class="card-title"><i class="fa fa-desktop"></i> &nbsp;View Student</h3>
+                            <div class="card-title">
+                                <h4><i class="fa fa-desktop"></i> &nbsp;View Student</h4>
+                            </div>
                             <div class="card-tools">
                                 <a href="{{ url('studentAdd') }}" class="btn btn-primary  btn-sm"><i class="fa fa-plus"></i>
                                     <span class="Display_none_mobile"> {{ __('common.Add') }} </span></a>
@@ -27,7 +29,7 @@
                         </div>
                         <div class="card-body">
                             <div class="bg-item border p-3 rounded">
-    
+
                                 <form id="quickForm" method="post">
                                     <div class="row">
                                         <div class="col-md-2">
@@ -35,26 +37,26 @@
                                             <input type="text" class="form-control" id="registration_no"
                                                 name="registration_no" placeholder="Registration No" value="">
                                         </div>
-    
+
                                         <div class="col-md-2">
                                             <label>Search By Keywords</label>
                                             <input type="text" class="form-control"
                                                 placeholder="Ex. Name, Mobile, Email, Aadhaar etc.">
                                         </div>
-    
+
                                         <div class="col-md-2">
                                             <label>Search By Desk No</label>
                                             <input type="number" class="form-control" id="desk_no" name="registration_no"
                                                 placeholder="Desk No" value="">
                                         </div>
-    
+
                                         <div class="col-md-1 mt-4">
                                             <button type="submit" class="btn btn-primary">Search</button>
                                         </div>
                                     </div>
                                 </form>
                             </div>
-    
+
                             <div class="table-responsive">
                                 <table class="table table-bordered table-striped mt-4">
                                     <thead>
@@ -78,7 +80,7 @@
                                                 <img src="{{ asset(env('IMAGE_SHOW_PATH') . 'default_user_image.jpg') }}"
                                                     class="profileImg" alt="Student Image">
                                             </td>
-    
+
                                             <td>John Doe</td>
                                             <td>1234567890</td>
                                             <td>john@example.com</td>
