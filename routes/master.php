@@ -31,14 +31,14 @@ Route::match(['get'],'master_dashboard', 'master\DashboardController@dashboard')
 //Branch end..
 
 //Message Template
-    Route::match(['get','post'],'messageDashboard', 'master\message\MessageTemplateController@messageDashboard');
-    Route::match(['get','post'],'messageType', 'master\message\MessageTemplateController@messageTypeAdd');
-    Route::match(['get','post'],'messageTypeEdit/{id}', 'master\message\MessageTemplateController@messageTypeEdit');
-    Route::match(['get','post'],'messageTypeDelete', 'master\message\MessageTemplateController@messageTypeDelete');
-    Route::match(['get','post'],'messageTypeStatus', 'master\message\MessageTemplateController@messageTypeStatus');
-    Route::match(['get','post'],'messageTemplate', 'master\message\MessageTemplateController@messageTemplateAdd');
-    Route::match(['get','post'],'messageTemplateEdit/{id}', 'master\message\MessageTemplateController@messageTemplateEdit');
-    Route::match(['get','post'],'messageTemplateDelete', 'master\message\MessageTemplateController@messageTemplateDelete');
+    // Route::match(['get','post'],'messageDashboard', 'master\message\MessageTemplateController@messageDashboard');
+    // Route::match(['get','post'],'messageType', 'master\message\MessageTemplateController@messageTypeAdd');
+    // Route::match(['get','post'],'messageTypeEdit/{id}', 'master\message\MessageTemplateController@messageTypeEdit');
+    // Route::match(['get','post'],'messageTypeDelete', 'master\message\MessageTemplateController@messageTypeDelete');
+    // Route::match(['get','post'],'messageTypeStatus', 'master\message\MessageTemplateController@messageTypeStatus');
+    // Route::match(['get','post'],'messageTemplate', 'master\message\MessageTemplateController@messageTemplateAdd');
+    // Route::match(['get','post'],'messageTemplateEdit/{id}', 'master\message\MessageTemplateController@messageTemplateEdit');
+    // Route::match(['get','post'],'messageTemplateDelete', 'master\message\MessageTemplateController@messageTemplateDelete');
 
 
 //PrayerController

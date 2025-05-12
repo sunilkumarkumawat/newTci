@@ -50,4 +50,8 @@ Route::middleware(['auth'])->group(function () {
     // Book Management
     Route::match(['get', 'post'], 'bookAdd', 'BookController@bookadd');
     Route::match(['get', 'post'], 'bookAssign', 'BookController@bookassign');
+
+    //Message Type
+    Route::match(['get', 'post'], 'messageTypeAdd', 'MessageController@messageTypeAdd');
+    Route::match(['get', 'post'], 'messageTemplate', 'MessageController@messageTemplate');
 });
