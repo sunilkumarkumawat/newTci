@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\ApiController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Hash;
@@ -39,3 +40,4 @@ Route::middleware('auth:sanctum')->get('/profile', function (Request $request) {
 Route::middleware('auth:sanctum')->get('/userLoggedIn', function (Request $request) {
     return response()->json($request->user());
 });
+
