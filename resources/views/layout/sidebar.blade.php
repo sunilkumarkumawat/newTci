@@ -86,6 +86,51 @@
                     </ul>
                 </li>
 
+                {{-- message --}}
+                <li class="nav-item has-treeview">
+                    <a href="#" class="nav-link">
+                        <i class="fa-solid fa-envelope"></i>
+                        <p>
+                            Message
+                            <i class="fa fa-angle-left right"></i>
+                        </p>
+                    </a>
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <a href="{{ url('messageTypeAdd') }}" class="nav-link">
+                                <i class="fa fa-plus-circle nav-icon"></i>
+                                <p>Add Message</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ url('messageTemplate') }}" class="nav-link">
+                                <i class="fa fa-square-envelope nav-icon"></i>
+                                <p>Message Template</p>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+
+                <!-- Branch -->
+                <li class="nav-item has-treeview">
+                    <a href="{{ url('branch') }}" class="nav-link">
+                       <i class="fa-solid fa-code-branch"></i>
+                        <p>
+                            Branch
+                        </p>
+                    </a>
+                </li>
+
+                <!-- Role -->
+                <li class="nav-item has-treeview">
+                    <a href="{{ url('role') }}" class="nav-link">
+                       <i class="fa-solid fa-user-circle"></i>
+                        <p>
+                            Role
+                        </p>
+                    </a>
+                </li>
+
                 <!-- Expense MENU -->
                 <li class="nav-item has-treeview">
                     <a href="{{ url('expense') }}" class="nav-link">
@@ -156,13 +201,13 @@
                     </a>
                     <ul class="nav nav-treeview">
                         <li class="nav-item">
-                            <a href="{{url('bookAdd')}}" class="nav-link">
+                            <a href="{{ url('bookAdd') }}" class="nav-link">
                                 <i class="fa fa-plus nav-icon"></i>
                                 <p>Book Add</p>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="{{url('bookAssign')}}" class="nav-link">
+                            <a href="{{ url('bookAssign') }}" class="nav-link">
                                 <i class="fa fa-book nav-icon"></i>
                                 <p>Book Assign</p>
                             </a>
