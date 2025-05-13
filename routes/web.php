@@ -53,4 +53,7 @@ Route::middleware(['auth'])->group(function () {
 
     // printfiles
     Route::match(['get', 'post'], 'printbill', 'LibraryController@print');
+    //Message Type
+    Route::match(['get', 'post'], 'messageTypeAdd', 'MessageController@messageTypeAdd');
+    Route::match(['get', 'post'], 'messageTemplate', 'MessageController@messageTemplate');
 });
