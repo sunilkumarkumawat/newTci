@@ -46,14 +46,22 @@ Route::middleware(['auth'])->group(function () {
     Route::match(['get', 'post'], 'billing', 'LibraryController@billadd');
     Route::match(['get', 'post'], 'subscription', 'LibraryController@subscription');
     Route::match(['get', 'post'], 'due', 'LibraryController@duefees');
+    // printfiles
+    Route::match(['get', 'post'], 'printbill', 'LibraryController@print');
 
     // Book Management
     Route::match(['get', 'post'], 'bookAdd', 'BookController@bookadd');
     Route::match(['get', 'post'], 'bookAssign', 'BookController@bookassign');
 
-    // printfiles
-    Route::match(['get', 'post'], 'printbill', 'LibraryController@print');
+
+
     //Message Type
     Route::match(['get', 'post'], 'messageTypeAdd', 'MessageController@messageTypeAdd');
     Route::match(['get', 'post'], 'messageTemplate', 'MessageController@messageTemplate');
+
+    // branch
+    Route::match(['get', 'post'], 'branch', 'CommonController@branch');
+
+    // branch
+    Route::match(['get', 'post'], 'role', 'CommonController@role');
 });
