@@ -33,11 +33,12 @@ Route::post('/loginAuth', function (Request $request) {
     return response()->json(['user'=>$user,'token' => $token],200);
 });
 
-Route::middleware('auth:sanctum')->get('/profile', function (Request $request) {
-    return response()->json($request->user());
+
+
+Route::middleware('auth:sanctum')->group(function () {
+
+
+    Route::post('createCommon', [ApiController::class, 'createCommon']);
 });
 
-Route::middleware('auth:sanctum')->get('/userLoggedIn', function (Request $request) {
-    return response()->json($request->user());
-});
 
