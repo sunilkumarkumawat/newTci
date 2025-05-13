@@ -69,11 +69,10 @@
                                 </div>
 
 
-                                <form action="#" method="post" enctype="multipart/form-data">
-                                    @csrf
-
+                                <form id="createCommon">
+                                    <input type='hidden' value='User' name='modal_type' />
+                                    <input type='hidden' value='3' name='branch_id' />
                                     <div class="card-body">
-
                                         <div class="bg-item border p-3 rounded">
                                             <!-- Step 1: Basic Details -->
                                             <div id="step-1" class="wizard-step">
@@ -81,38 +80,43 @@
                                                 <div class="row">
                                                     <div class="col-md-4">
                                                         <div class="form-group">
-                                                            <label>Branch ID *</label>
-                                                            <select class="form-control">
-                                                                <option value="">Select</option>
-                                                                <option>Branch A</option>
-                                                                <option>Branch B</option>
-                                                            </select>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-md-4">
-                                                        <div class="form-group">
                                                             <label>First Name *</label>
                                                             <input type="text" class="form-control"
-                                                                placeholder="First Name">
+                                                                placeholder="First Name" name="first_name">
                                                         </div>
                                                     </div>
                                                     <div class="col-md-4">
                                                         <div class="form-group">
                                                             <label>Last Name *</label>
                                                             <input type="text" class="form-control"
-                                                                placeholder="Last Name">
+                                                                placeholder="Last Name" name="last_name">
                                                         </div>
                                                     </div>
                                                     <div class="col-md-4">
                                                         <div class="form-group">
                                                             <label>Mobile *</label>
-                                                            <input type="text" class="form-control" placeholder="Mobile">
+                                                            <input type="text" class="form-control" placeholder="Mobile"
+                                                                name="mobile">
                                                         </div>
                                                     </div>
                                                     <div class="col-md-4">
                                                         <div class="form-group">
                                                             <label>Email *</label>
-                                                            <input type="email" class="form-control" placeholder="Email">
+                                                            <input type="email" class="form-control" placeholder="Email"
+                                                                name="email">
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-4">
+                                                        <div class="form-group">
+                                                            <label>DOB *</label>
+                                                            <input type="date" class="form-control" name="dob">
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-4">
+                                                        <div class="form-group">
+                                                            <label>Father Name *</label>
+                                                            <input type="text" class="form-control" name="father_name"
+                                                                placeholder="Father Name">
                                                         </div>
                                                     </div>
                                                 </div>
@@ -125,20 +129,20 @@
                                                     <div class="col-md-4">
                                                         <div class="form-group">
                                                             <label>State *</label>
-                                                            <select class="form-control">
+                                                            <select class="form-control" name="state_id" id="state">
                                                                 <option value="">Select</option>
-                                                                <option>State A</option>
-                                                                <option>State B</option>
+                                                                <option value="1">State A</option>
+                                                                <option value="2">State B</option>
                                                             </select>
                                                         </div>
                                                     </div>
                                                     <div class="col-md-4">
                                                         <div class="form-group">
                                                             <label>City *</label>
-                                                            <select class="form-control">
+                                                            <select class="form-control" name="city_id" id="city_id">
                                                                 <option value="">Select</option>
-                                                                <option>City X</option>
-                                                                <option>City Y</option>
+                                                                <option value="1">City X</option>
+                                                                <option value="2">City Y</option>
                                                             </select>
                                                         </div>
                                                     </div>
@@ -146,27 +150,27 @@
                                                         <div class="form-group">
                                                             <label>Address *</label>
                                                             <input type="text" class="form-control"
-                                                                placeholder="Address">
+                                                                placeholder="Address" name="address">
                                                         </div>
                                                     </div>
                                                     <div class="col-md-4">
                                                         <div class="form-group">
                                                             <label>Username *</label>
                                                             <input type="text" class="form-control"
-                                                                placeholder="Username">
+                                                                placeholder="Username" name="userName">
                                                         </div>
                                                     </div>
                                                     <div class="col-md-4">
                                                         <div class="form-group">
                                                             <label>Password *</label>
                                                             <input type="password" class="form-control"
-                                                                placeholder="Password">
+                                                                placeholder="Password" name="password">
                                                         </div>
                                                     </div>
                                                     <div class="col-md-4">
                                                         <div class="form-group">
                                                             <label>Role *</label>
-                                                            <select class="form-control">
+                                                            <select class="form-control" name="role">
                                                                 <option value="">Select</option>
                                                                 <option>Manager</option>
                                                                 <option>Staff</option>
@@ -177,13 +181,14 @@
                                                         <div class="form-group">
                                                             <label>Salary</label>
                                                             <input type="text" class="form-control"
-                                                                placeholder="Salary">
+                                                                placeholder="Salary" name="salary">
                                                         </div>
                                                     </div>
                                                     <div class="col-md-4">
                                                         <div class="form-group">
                                                             <label>Photo</label>
-                                                            <input type="file" class="form-control" accept="image/*">
+                                                            <input type="file" class="form-control" accept="image/*"
+                                                                name="image">
                                                         </div>
                                                     </div>
                                                 </div>
@@ -193,7 +198,7 @@
                                             <div id="step-3" class="wizard-step d-none">
                                                 <h5><i class="fa fa-lock"></i> User Permissions</h5>
                                                 <div class="row">
-                                                    <div class="col-md-4">
+                                                    {{-- <div class="col-md-4">
                                                         <div class="form-group">
                                                             <label>Sidebar Access</label>
                                                             <div class="form-check">
@@ -247,7 +252,7 @@
                                                                 </optgroup>
                                                             </select>
                                                         </div>
-                                                    </div>
+                                                    </div> --}}
                                                 </div>
                                             </div>
 
@@ -294,8 +299,8 @@
                 }
             });
 
-            const progress = Math.round((step / totalSteps) * 100);
-            document.getElementById('wizardProgressBar').style.width = progress + '%';
+            // const progress = Math.round((step / totalSteps) * 100);
+            // document.getElementById('wizardProgressBar').style.width = progress + '%';
         }
 
         document.getElementById('nextStep').addEventListener('click', () => {

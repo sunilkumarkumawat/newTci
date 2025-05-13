@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Api;
 use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Role;
-use App\Models\Master\Branch;
+use App\Models\Branch;
 use App\Models\Setting;
 use Illuminate\Support\Facades\Auth;
 use Validator;
@@ -108,15 +108,17 @@ public function createCommon(Request $request)
     $data = collect($request->all())->except('modal_type')->toArray();
     $modal = $request->modal_type;
 
+    // Add namespace if only class name is provided
+    if (!str_contains($modal, '\\')) {
+        $modal = 'App\\Models\\' . $modal;
+    }
+
     try {
-        // Check if the class exists before trying to create
         if (!class_exists($modal)) {
-            return response()->json(['message' => 'Invalid modal type'], 400);
+            return response()->json(['message' => 'Invalid modal type: ' . $modal], 400);
         }
 
-        // Create the record dynamically
         $record = $modal::create($data);
-        
 
         return response()->json([
             'message' => class_basename($modal) . ' created successfully.',

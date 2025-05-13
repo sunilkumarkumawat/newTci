@@ -24,9 +24,9 @@
                             </div>
 
                             <div class="card-body">
-                                <form id="expense-form" action="/expenses" method="POST" enctype="multipart/form-data">
-                                    <input type="hidden" name="_token" value="">
-
+                                <form id="createCommon" >
+                                  <input type='hidden' value='Branch' name='modal_type' />
+                                  <input type="hidden" value="{{ Auth::user()->id }}" name="user_id" />
                                     <div id="expense-container" class="bg-item mb-3 border p-3 rounded">
                                         <div class="row">
                                             <div class="col-sm-6 form-group">
@@ -40,12 +40,12 @@
                                                     name="branch_name">
                                             </div>
                                             <div class="col-sm-6 col-12 form-group">
-                                                <label for="director">Administrator</label>
-                                                <input type="text" class="form-control " id="director" name="director">
+                                                <label for="director">Contact Person</label>
+                                                <input type="text" class="form-control " id="director" name="contact_person">
                                             </div>
                                             <div class="col-sm-6 form-group">
                                                 <label class="text-danger" for="mobile_no">Mobile Number*</label>
-                                                <input type="text" class="form-control " id="mobile_no" name="mobile_no">
+                                                <input type="text" class="form-control " id="mobile_no" name="mobile">
                                             </div>
                                             <div class="col-sm-6 form-group">
                                                 <label class="text-danger" for="email">Email*</label>

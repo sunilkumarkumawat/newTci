@@ -427,6 +427,46 @@
         </script>
 
 
+<script>
+  $(document).ready(function () {
+    // Set up CSRF token for all AJAX requests
+    $.ajaxSetup({
+      headers: {
+        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+      }
+    });
+
+    $('#createCommon').on('submit', function (e) {
+      e.preventDefault();
+
+      const baseUrl = "{{ url('/') }}"; // Laravel base URL
+      const $form = $(this);
+    //   const modalType = $form.data('modal'); // e.g., "Role"
+      const endpoint = `${baseUrl}/api/createCommon`; // Adjust as per your route
+
+      const formData = $form.serialize();
+
+    
+
+      $.ajax({
+        url: endpoint,
+        method: 'POST',
+        data: formData,
+        success: function (response) {
+    
+          console.log(response);
+          $form[0].reset();
+        },
+        error: function (xhr) {
+          alert(`Failed to save .`);
+          console.error(xhr.responseText);
+        }
+      });
+    });
+  });
+</script>
+
+
 
 
 

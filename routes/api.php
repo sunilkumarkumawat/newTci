@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\ApiController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Hash;
@@ -32,10 +33,10 @@ Route::post('/loginAuth', function (Request $request) {
     return response()->json(['user'=>$user,'token' => $token],200);
 });
 
-Route::middleware('auth:sanctum')->get('/profile', function (Request $request) {
-    return response()->json($request->user());
-});
 
-Route::middleware('auth:sanctum')->get('/userLoggedIn', function (Request $request) {
-    return response()->json($request->user());
+
+Route::middleware('auth:sanctum')->group(function () {
+
+
+    Route::post('createCommon', [ApiController::class, 'createCommon']);
 });

@@ -14,14 +14,10 @@ class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable, SoftDeletes;
 
-    protected $table = 'users';
+     protected $table = "users"; // Table name
 
-    protected $fillable = [
-        'name',
-        'email',
-        'password',
-        // Add other fields you want to mass assign
-    ];
+      // Allow all fields to be mass assignable
+    protected $guarded = [];
 
     protected $hidden = [
         'password',

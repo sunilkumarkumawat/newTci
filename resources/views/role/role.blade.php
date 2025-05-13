@@ -24,15 +24,15 @@
                             </div>
 
                             <div class="card-body">
-                                <form id="expense-form" action="/expenses" method="POST" enctype="multipart/form-data">
-                                    <input type="hidden" name="_token" value="">
-
+                                <form id="createCommon" data-modal="Role">
                                     <div id="expense-container" class="bg-item mb-3 border p-3 rounded">
+                                        <input type='hidden' value='Role' name='modal_type' />
+                                        <input type="hidden" value="{{ Auth::user()->id }}" name="user_id" />
+                                        <input type='hidden' value='3' name='branch_id' />
                                         <div class="row">
                                             <div class="col-md-12 col-12 form-group">
                                                 <label class="text-danger" for="name"> Role*</label>
-                                                <input type="text" class="form-control" id="name"
-                                                    name="name" >
+                                                <input type="text" class="form-control" id="name" name="name">
                                             </div>
 
                                             <div class="col-12 col-md-12 ">
@@ -88,6 +88,4 @@
             </div>
         </section>
     </div>
-
-   
 @endsection

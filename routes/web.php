@@ -62,6 +62,6 @@ Route::middleware(['auth'])->group(function () {
     // branch
     Route::match(['get', 'post'], 'branch', 'CommonController@branch');
 
-    // branch
+    // role
     Route::match(['get', 'post'], 'role', 'CommonController@role');
 });

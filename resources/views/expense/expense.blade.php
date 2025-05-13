@@ -24,59 +24,78 @@
                             </div>
 
                             <div class="card-body">
-                                <form id="expense-form" action="/expenses" method="POST" enctype="multipart/form-data">
-                                    <input type="hidden" name="_token" value="">
+                                <form id="createCommon">
+                                    <input type='hidden' value='expense' name="modal_type" />
+                                    <input type="hidden" value="{{ Auth::user()->id }}" name="user_id" />
+                                    <input type='hidden' value='3' name='branch_id' />
 
                                     <div id="expense-container" class="bg-item mb-3 border p-3 rounded">
                                         <div class="row">
-                                            <div class="col-sm-6 mb-2">
-                                                <label class="text-danger">Sr.No.*</label>
-                                                <input type="text" class="form-control blockHeight sr-no" name="sr_no"
-                                                    value="" required>
+                                            <div class="col-sm-6 col-12">
+                                                <div class="form-group">
+                                                    <label class="text-danger">Sr.No.*</label>
+                                                    <input type="text" class="form-control blockHeight sr-no"
+                                                        name="sr_no">
+                                                </div>
                                             </div>
-                                            <div class="col-sm-6 mb-2">
-                                                <label class="text-danger">Date*</label>
-                                                <input type="date" class="form-control blockHeight" id="expense-date"
-                                                    name="date" required>
+                                            <div class="col-sm-6 col-12">
+                                                <div class="form-group">
+                                                    <label class="text-danger">Expense Name*</label>
+                                                    <input type="text" class="form-control blockHeight"
+                                                        id="expense-particular" name="expense_name">
+                                                </div>
                                             </div>
-                                            <div class="col-sm-6 mb-2">
-                                                <label class="text-danger">Particular*</label>
-                                                <input type="text" class="form-control blockHeight"
-                                                    id="expense-particular" name="particular" required>
+                                            <div class="col-sm-6 col-12">
+                                                <div class="form-group">
+                                                    <label class="text-danger">Date*</label>
+                                                    <input type="date" class="form-control blockHeight" id="expense-date"
+                                                        name="date">
+                                                </div>
                                             </div>
-                                            <div class="col-sm-6 mb-2">
+                                            
+                                            <div class="col-sm-6 col-12">
                                                 <label class="text-danger">Quantity*</label>
                                                 <input type="text" class="form-control blockHeight quantity"
-                                                    id="expense-quantity" name="quantity" required>
+                                                    id="expense-quantity" name="quantity">
                                             </div>
-                                            <div class="col-sm-6 mb-2">
-                                                <label class="text-danger">Rate*</label>
-                                                <input type="text" class="form-control blockHeight rate"
-                                                    id="expense-rate" name="rate" required>
+                                            <div class="col-sm-6 col-12">
+                                                <div class="form-group">
+                                                    <label class="text-danger">Rate*</label>
+                                                    <input type="text" class="form-control blockHeight rate"
+                                                        id="expense-rate" name="rate">
+                                                </div>
                                             </div>
-                                            <div class="col-sm-6 mb-2">
-                                                <label class="text-danger">Total*</label>
-                                                <input type="text" class="form-control blockHeight total"
-                                                    id="expense-total" name="total" readonly required>
+                                            <div class="col-sm-6 col-12">
+                                                <div class="form-group">
+                                                    <label class="text-danger">Total Amount*</label>
+                                                    <input type="text" class="form-control blockHeight total"
+                                                        id="expense-total" name="total_amt">
+                                                </div>
                                             </div>
-                                            <div class="col-sm-6 mb-2">
-                                                <label class="text-danger">Payment Mode*</label>
-                                                <select class="form-control " id="expense-payment-mode" name="payment_mode"
-                                                    readonly required>
-                                                    <option value="Cash">Cash</option>
-                                                    <option value="Card">Card</option>
-                                                    <option value="Bank Transfer">Bank Transfer</option>
-                                                    <option value="UPI">UPI</option>
-                                                </select>
+                                            <div class="col-sm-6 col-12">
+                                                <div class="form-group">
+                                                    <label class="text-danger">Payment Mode*</label>
+                                                    <select class="form-control " id="payment_mode_id"
+                                                        name="payment_mode_id" readonly required>
+                                                        <option value="1">Cash</option>
+                                                        <option value="2">Card</option>
+                                                        <option value="3 ">Bank Transfer</option>
+                                                        <option value="4">UPI</option>
+                                                    </select>
+                                                </div>
                                             </div>
-                                            <div class="col-sm-6 mb-2">
-                                                <label>Attachment</label>
-                                                <input type="file" class="form-control blockHeight attachment"
-                                                    id="expense-attachment" name="attachment">
+                                            <div class="col-sm-6 col-12">
+                                                <div class="form-group">
+                                                    <label>Attachment</label>
+                                                    <input type="file" class="form-control "
+                                                        id="expense-attachment" name="attachment">
+                                                </div>
                                             </div>
-                                            <div class="col-sm-12 mb-2">
-                                                <label>Remark</label>
-                                                <textarea class="form-control blockHeight" id="expense-remark" name="remark" rows="6"></textarea>
+                                            <div class="col-sm-12 col-12">
+                                                <div class="form-group">
+                                                    <label>Description</label>
+                                                    <textarea class="form-control blockHeight" id="expense-remark" name="description" rows="6"></textarea>
+                                                </div>
                                             </div>
                                         </div>
 
