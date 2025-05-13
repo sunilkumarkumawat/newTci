@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Api;
 
 use Illuminate\Http\Request;
 use App\Models\User;
+use App\Models\Role;
+use App\Models\Master\Branch;
 use App\Models\Setting;
 use Illuminate\Support\Facades\Auth;
 use Validator;
@@ -98,5 +100,35 @@ class ApiController extends BaseController
             ], 500);
         }
     }
+
+
+
+public function createCommon(Request $request)
+{
+    $data = collect($request->all())->except('modal_type')->toArray();
+    $modal = $request->modal_type;
+
+    try {
+        // Check if the class exists before trying to create
+        if (!class_exists($modal)) {
+            return response()->json(['message' => 'Invalid modal type'], 400);
+        }
+
+        // Create the record dynamically
+        $record = $modal::create($data);
+        
+
+        return response()->json([
+            'message' => class_basename($modal) . ' created successfully.',
+            'data' => $record
+        ], 201);
+
+    } catch (Exception $e) {
+        return response()->json([
+            'error' => 'Error: ' . $e->getMessage()
+        ], 500);
+    }
+}
+
 
 }
