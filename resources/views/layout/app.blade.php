@@ -427,7 +427,11 @@
         </script>
 
 
+<<<<<<< HEAD
 <script>
+=======
+      <script>
+>>>>>>> 27485d4fb50456f1ef95e3ebffb6864b85e5c702
   $(document).ready(function () {
     // Set up CSRF token for all AJAX requests
     $.ajaxSetup({
@@ -435,6 +439,7 @@
         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
       }
     });
+<<<<<<< HEAD
 
     $('#createCommon').on('submit', function (e) {
       e.preventDefault();
@@ -467,7 +472,38 @@
 </script>
 
 
+=======
+>>>>>>> 27485d4fb50456f1ef95e3ebffb6864b85e5c702
 
+    $('#createCommon').on('submit', function (e) {
+      e.preventDefault();
+
+      const baseUrl = "{{ url('/') }}"; // Laravel base URL
+      const $form = $(this);
+    //   const modalType = $form.data('modal'); // e.g., "Role"
+      const endpoint = `${baseUrl}/api/createCommon`; // Adjust as per your route
+
+      const formData = $form.serialize();
+
+    
+
+      $.ajax({
+        url: endpoint,
+        method: 'POST',
+        data: formData,
+        success: function (response) {
+    
+          console.log(response);
+          $form[0].reset();
+        },
+        error: function (xhr) {
+          alert(`Failed to save ${modalType}.`);
+          console.error(xhr.responseText);
+        }
+      });
+    });
+  });
+</script>
 
 
 

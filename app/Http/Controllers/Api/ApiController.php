@@ -23,7 +23,7 @@ use Mail;
 class ApiController extends BaseController
 {
 
-   public function loginAuth(Request $request)
+    public function loginAuth(Request $request)
     {
         try {
             // Validate incoming request
@@ -31,7 +31,7 @@ class ApiController extends BaseController
                 'username' => 'required|string',
                 'password' => 'required|string',
             ]);
-    
+
             // Attempt login
             if (!Auth::attempt($request->only('username', 'password'))) {
                 return response()->json([
@@ -40,10 +40,10 @@ class ApiController extends BaseController
                     'data' => null
                 ], 401); // Unauthorized
             }
-    
+
             // Retrieve the authenticated user
             $user = Auth::user();
-    
+
             // Check if the user's account is inactive
             if ($user->status !== '1') {
                 Auth::logout();
@@ -53,7 +53,7 @@ class ApiController extends BaseController
                     'data' => null
                 ], 403); // Forbidden
             }
-    
+
             // Restrict login for role_id 1 and 4
             if (in_array($user->role_id, [1, 4])) {
                 Auth::logout();
@@ -63,14 +63,14 @@ class ApiController extends BaseController
                     'data' => null
                 ], 403); // Forbidden
             }
-    
+
             // Create token
             $token = $user->createToken('auth_token')->plainTextToken;
-    
+
             // Retrieve role name
             $role = Role::find($user->role_id);
             $roleName = $role ? $role->name : null;
-    
+
             // Return success response
             return response()->json([
                 'status' => true,
@@ -82,7 +82,6 @@ class ApiController extends BaseController
                     'roles' => $roleName
                 ]
             ], 200);
-    
         } catch (ValidationException $e) {
             // Handle validation errors
             return response()->json([
@@ -90,7 +89,6 @@ class ApiController extends BaseController
                 'message' => 'Validation failed',
                 'errors' => $e->errors(),
             ], 422);
-    
         } catch (Exception $e) {
             // Handle other exceptions
             return response()->json([
@@ -103,34 +101,36 @@ class ApiController extends BaseController
 
 
 
-public function createCommon(Request $request)
-{
-    $data = collect($request->all())->except('modal_type')->toArray();
-    $modal = $request->modal_type;
+    public function createCommon(Request $request)
+    {
 
-    // Add namespace if only class name is provided
-    if (!str_contains($modal, '\\')) {
-        $modal = 'App\\Models\\' . $modal;
-    }
+        $data = collect($request->all())->except('modal_type')->toArray();
 
-    try {
-        if (!class_exists($modal)) {
-            return response()->json(['message' => 'Invalid modal type: ' . $modal], 400);
+        $modal = $request->modal_type;
+
+        if (!str_contains($modal, '\\')) {
+            $modal = 'App\\Models\\' . $modal;
         }
+        try {
 
-        $record = $modal::create($data);
+            //dd(!class_exists($modal));
+            // Check if the class exists before trying to create
+            if (!class_exists($modal)) {
+                return response()->json(['message' => 'Invalid modal type'], 400);
+            }
 
-        return response()->json([
-            'message' => class_basename($modal) . ' created successfully.',
-            'data' => $record
-        ], 201);
+            // Create the record dynamically
+            $record = $modal::create($data);
 
-    } catch (Exception $e) {
-        return response()->json([
-            'error' => 'Error: ' . $e->getMessage()
-        ], 500);
+
+            return response()->json([
+                'message' => class_basename($modal) . ' created successfully.',
+                'data' => $record
+            ], 201);
+        } catch (Exception $e) {
+            return response()->json([
+                'error' => 'Error: ' . $e->getMessage()
+            ], 500);
+        }
     }
-}
-
-
 }

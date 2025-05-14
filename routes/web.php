@@ -59,6 +59,7 @@ Route::middleware(['auth'])->group(function () {
     Route::match(['get', 'post'], 'messageTypeAdd', 'MessageController@messageTypeAdd');
     Route::match(['get', 'post'], 'messageTemplate', 'MessageController@messageTemplate');
 
+
     // branch
     Route::match(['get', 'post'], 'branch', 'CommonController@branch');
 
