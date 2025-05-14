@@ -427,83 +427,120 @@
         </script>
 
 
-<<<<<<< HEAD
 <script>
-=======
-      <script>
->>>>>>> 27485d4fb50456f1ef95e3ebffb6864b85e5c702
   $(document).ready(function () {
-    // Set up CSRF token for all AJAX requests
     $.ajaxSetup({
       headers: {
         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
       }
     });
-<<<<<<< HEAD
 
+    // Apply to multiple forms
     $('#createCommon').on('submit', function (e) {
       e.preventDefault();
 
-      const baseUrl = "{{ url('/') }}"; // Laravel base URL
-      const $form = $(this);
-    //   const modalType = $form.data('modal'); // e.g., "Role"
-      const endpoint = `${baseUrl}/api/createCommon`; // Adjust as per your route
 
+
+
+function validateForm($form) {
+  let isValid = true;
+
+  // Remove previous validation messages
+  $form.find('.text-danger.validation-error').remove();
+
+  $form.find('[data-required="true"]').each(function () {
+    const $input = $(this);
+    const value = $input.val().trim();
+    const name = $input.attr('name');        // Get the name attribute (e.g., email, mobile, branch_code)
+    const customMessage = $input.data('error') || 'This field is required';
+    let message = '';
+
+
+      switch (name) {
+        case 'email':
+          if (!/^\S+@\S+\.\S+$/.test(value)) {
+            message = 'Please enter a valid email address.';
+          }
+          break;
+
+        case 'mobile':
+          
+          if (!/^\d{10}$/.test(value)) {
+            message = 'Please enter a valid 10-digit mobile number.';
+          }
+          break;
+
+        case 'branch_code':
+          if (value === '') {
+            message = 'Branch code is required.';
+          }
+          break;
+        case 'branch_name':
+          if (value === '') {
+            message = 'Branch name is required.';
+          }
+          break;
+        case 'contact_person':
+          if (value === '') {
+            message = 'Contact Person is required.';
+          }
+          break;
+        case 'name':
+          if (value === '') {
+            message = 'Role name is required.';
+          }
+          break;
+
+        // Add other validations for different fields here
+      }
+    
+
+    // Show error message if validation fails
+    if (message) {
+      isValid = false;
+      if (!$input.next('.validation-error').length) {
+        $input.after(`<small class="text-danger validation-error">${message}</small>`);
+      }
+    }
+  });
+
+  return isValid;
+}
+
+
+// Optional helper to format field names like "mobile_no" to "Mobile No"
+function formatFieldName(name) {
+  return name
+    .replace(/_/g, ' ')
+    .replace(/\b\w/g, l => l.toUpperCase());
+}
+
+
+
+      const $form = $(this);
+
+      if (!validateForm($form)) return;
+
+      const endpoint = $form.data('action'); // Get custom endpoint if needed
       const formData = $form.serialize();
 
-    
-
-      $.ajax({
-        url: endpoint,
-        method: 'POST',
-        data: formData,
-        success: function (response) {
-    
+      $.post(endpoint, formData)
+        .done(function (response) {
           console.log(response);
           $form[0].reset();
-        },
-        error: function (xhr) {
-          alert(`Failed to save .`);
+
+          toastr.success('Form Submitted Successfully')
+        })
+        .fail(function (xhr) {
+          alert('Failed to submit form.');
           console.error(xhr.responseText);
-        }
-      });
+        });
     });
   });
 </script>
 
 
-=======
->>>>>>> 27485d4fb50456f1ef95e3ebffb6864b85e5c702
 
-    $('#createCommon').on('submit', function (e) {
-      e.preventDefault();
-
-      const baseUrl = "{{ url('/') }}"; // Laravel base URL
-      const $form = $(this);
-    //   const modalType = $form.data('modal'); // e.g., "Role"
-      const endpoint = `${baseUrl}/api/createCommon`; // Adjust as per your route
-
-      const formData = $form.serialize();
-
-    
-
-      $.ajax({
-        url: endpoint,
-        method: 'POST',
-        data: formData,
-        success: function (response) {
-    
-          console.log(response);
-          $form[0].reset();
-        },
-        error: function (xhr) {
-          alert(`Failed to save ${modalType}.`);
-          console.error(xhr.responseText);
-        }
-      });
-    });
-  });
-</script>
 
 
 

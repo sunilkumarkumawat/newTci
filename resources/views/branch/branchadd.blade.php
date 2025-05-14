@@ -32,20 +32,22 @@
                                             <div class="col-sm-6 form-group">
                                                 <label class="text-danger" for="branch_code">Branch Code*</label>
                                                 <input type="text" class="form-control" name="branch_code"
-                                                    id="branch_code" >
+                                                    id="branch_code"  data-required="true">
                                             </div>
                                             <div class="col-sm-6 form-group">
                                                 <label class="text-danger" for="branch_name">Branch Name*</label>
                                                 <input type="text" class="form-control" id="branch_name"
-                                                    name="branch_name">
+                                                    name="branch_name" data-required="true">
                                             </div>
                                             <div class="col-sm-6 col-12 form-group">
                                                 <label for="director" class="text-danger">Contact Person*</label>
-                                                <input type="text" class="form-control " id="director" name="contact_person">
+                                                <input type="text" class="form-control " id="contact_person" name="contact_person" data-required="true">
                                             </div>
                                             <div class="col-sm-6 form-group">
-                                                <label class="text-danger" for="mobile_no">Mobile Number*</label>
-                                                <input type="text" class="form-control " id="mobile_no" name="mobile">
+                                                <label class="text-danger" for="mobile">Mobile Number*</label>
+                                            <input type="text" class="form-control" name="mobile" id="mobile_no"
+       data-required="true" data-type="mobile"
+       oninput="this.value = this.value.replace(/[^0-9]/g, '')">
                                             </div>
                                             <div class="col-sm-6 form-group">
                                                 <label for="email">Email</label>
