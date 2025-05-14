@@ -32,7 +32,7 @@
                                             <div class="col-sm-6 form-group">
                                                 <label class="text-danger" for="branch_code">Branch Code*</label>
                                                 <input type="text" class="form-control" name="branch_code"
-                                                    id="branch_code" value="">
+                                                    id="branch_code" >
                                             </div>
                                             <div class="col-sm-6 form-group">
                                                 <label class="text-danger" for="branch_name">Branch Name*</label>
@@ -40,7 +40,7 @@
                                                     name="branch_name">
                                             </div>
                                             <div class="col-sm-6 col-12 form-group">
-                                                <label for="director">Contact Person</label>
+                                                <label for="director" class="text-danger">Contact Person*</label>
                                                 <input type="text" class="form-control " id="director" name="contact_person">
                                             </div>
                                             <div class="col-sm-6 form-group">
@@ -48,11 +48,11 @@
                                                 <input type="text" class="form-control " id="mobile_no" name="mobile">
                                             </div>
                                             <div class="col-sm-6 form-group">
-                                                <label class="text-danger" for="email">Email*</label>
+                                                <label for="email">Email</label>
                                                 <input type="text" class="form-control " id="email" name="email">
                                             </div>
                                             <div class="col-sm-6 form-group">
-                                                <label for="address">Address*</label>
+                                                <label for="address">Address</label>
                                                 <input type="text" class="form-control" id="address" name="address">
                                             </div>
 
