@@ -45,7 +45,7 @@
 
                                             <div class="col-md-12">
                                                 <label style="color:red;">Total Cabin No.*</label>
-                                                <input class="form-control" type="text" name="name" id="cabin_number"
+                                                <input class="form-control" type="text" name="cabin_no" id="cabin_number"
                                                     placeholder="Total Cabin No." value="">
                                             </div>
                                         </div>
@@ -76,7 +76,7 @@
 
                                             <div class="col-md-12">
                                                 <label style="color:red;">Total Locker No*</label>
-                                                <input class="form-control" type="text" name="name" id="locker_number"
+                                                <input class="form-control" type="text" name="locker_no" id="locker_number"
                                                     placeholder="Locker Number" value="">
                                             </div>
                                         </div>

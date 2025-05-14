@@ -29,8 +29,7 @@
                                             <label>Start Time</label>
                                             <div class="input-group date" data-target-input="nearest">
                                                 <input type="text" class="form-control datetimepicker-input"
-                                                    data-target="#timepicker" data-toggle="datetimepicker" id="timepicker"
-                                                    name="start_time" />
+                                                    data-target="#timepicker" data-toggle="datetimepicker" id="timepicker" name="start_time" />
                                                 <div class="input-group-append" data-target="#timepicker"
                                                     data-toggle="datetimepicker">
                                                     <div class="input-group-text"><i class="fa fa-clock"></i></div>

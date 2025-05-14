@@ -22,10 +22,7 @@
                                         <div class="circle step-circle">2</div>
                                         <small class="d-block">Select Seat or Locker</small>
                                     </div>
-                                    {{-- <div class="wizard-step-indicator text-center flex-fill">
-                                        <div class="circle step-circle">3</div>
-                                        <small class="d-block">Recept / Bill</small>
-                                    </div> --}}
+                                    
                                     <div class="step-line position-absolute w-100"
                                         style="top: 12px; left: 0; height: 2px; background: #dee2e6; z-index: 0;"></div>
                                 </div>
@@ -75,7 +72,7 @@
                                         </div>
 
                                         <div class="col-md-12 col-12 form-group">
-                                            <input type="checkbox" class="form-input-check" id="locker" name="type">
+                                            <input type="checkbox" class="form-input-check" id="locker" name="locker">
                                             <label for="locker">Locker</label>
                                         </div>
 
