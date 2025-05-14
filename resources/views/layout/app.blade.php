@@ -100,10 +100,10 @@
         @include('layout.footer')
         <script>
             /*$.ajaxSetup({
-                                                                    headers: {
-                                                                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                                                                    }
-                                                                });*/
+                                                                                                                                    headers: {
+                                                                                                                                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                                                                                                                                    }
+                                                                                                                                });*/
             //var URL  = "{{ url('/') }}";
         </script>
 
@@ -427,124 +427,188 @@
         </script>
 
 
-<script>
-  $(document).ready(function () {
-    $.ajaxSetup({
-      headers: {
-        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-      }
-    });
+        <script>
+            $(document).ready(function() {
+                $.ajaxSetup({
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    }
+                });
 
-    // Apply to multiple forms
-    $('#createCommon').on('submit', function (e) {
-      e.preventDefault();
-
-
-
-
-function validateForm($form) {
-  let isValid = true;
-
-  // Remove previous validation messages
-  $form.find('.text-danger.validation-error').remove();
-
-  $form.find('[data-required="true"]').each(function () {
-    const $input = $(this);
-    const value = $input.val().trim();
-    const name = $input.attr('name');        // Get the name attribute (e.g., email, mobile, branch_code)
-    const customMessage = $input.data('error') || 'This field is required';
-    let message = '';
-
-
-      switch (name) {
-        case 'email':
-          if (!/^\S+@\S+\.\S+$/.test(value)) {
-            message = 'Please enter a valid email address.';
-          }
-          break;
-
-        case 'mobile':
-          
-          if (!/^\d{10}$/.test(value)) {
-            message = 'Please enter a valid 10-digit mobile number.';
-          }
-          break;
-
-        case 'branch_code':
-          if (value === '') {
-            message = 'Branch code is required.';
-          }
-          break;
-        case 'branch_name':
-          if (value === '') {
-            message = 'Branch name is required.';
-          }
-          break;
-        case 'contact_person':
-          if (value === '') {
-            message = 'Contact Person is required.';
-          }
-          break;
-        case 'name':
-          if (value === '') {
-            message = 'Role name is required.';
-          }
-          break;
-
-        // Add other validations for different fields here
-      }
-    
-
-    // Show error message if validation fails
-    if (message) {
-      isValid = false;
-      if (!$input.next('.validation-error').length) {
-        $input.after(`<small class="text-danger validation-error">${message}</small>`);
-      }
-    }
-  });
-
-  return isValid;
-}
-
-
-// Optional helper to format field names like "mobile_no" to "Mobile No"
-function formatFieldName(name) {
-  return name
-    .replace(/_/g, ' ')
-    .replace(/\b\w/g, l => l.toUpperCase());
-}
-
-
-
-      const $form = $(this);
-
-      if (!validateForm($form)) return;
-
-      const endpoint = $form.data('action'); // Get custom endpoint if needed
-      const formData = $form.serialize();
-
-      $.post(endpoint, formData)
-        .done(function (response) {
-          console.log(response);
-          $form[0].reset();
-
-          toastr.success('Form Submitted Successfully')
-        })
-        .fail(function (xhr) {
-          alert('Failed to submit form.');
-          console.error(xhr.responseText);
-        });
-    });
-  });
-</script>
+                // Apply to multiple forms
+                $('#createCommon').on('submit', function(e) {
+                    e.preventDefault();
 
 
 
 
+                    function validateForm($form) {
+                        let isValid = true;
+
+                        // Remove previous validation messages
+                        $form.find('.text-danger.validation-error').remove();
+
+                        $form.find('[data-required="true"]').each(function() {
+                            const $input = $(this);
+                            const value = $input.val().trim();
+                            const name = $input.attr(
+                                'name'); // Get the name attribute (e.g., email, mobile, branch_code)
+                            const customMessage = $input.data('error') || 'This field is required';
+                            let message = '';
 
 
-       
+                            switch (name) {
+                                case 'email':
+                                    if (!/^\S+@\S+\.\S+$/.test(value)) {
+                                        message = 'Please enter a valid email address.';
+                                    }
+                                    break;
+
+                                case 'mobile':
+
+                                    if (!/^\d{10}$/.test(value)) {
+                                        message = 'Please enter a valid 10-digit mobile number.';
+                                    }
+                                    break;
+
+                                case 'branch_code':
+                                    if (value === '') {
+                                        message = 'Branch code is required.';
+                                    }
+                                    break;
+                                case 'branch_name':
+                                    if (value === '') {
+                                        message = 'Branch name is required.';
+                                    }
+                                    break;
+                                case 'contact_person':
+                                    if (value === '') {
+                                        message = 'Contact Person is required.';
+                                    }
+                                    break;
+                                case 'role_name':
+                                    if (value === '') {
+                                        message = 'Role name is required.';
+                                    }
+                                    break;
+
+                                case 'first_name':
+                                    if (value === '') {
+                                        message = 'First Name is required.';
+                                    }
+                                    break;
+
+                                case 'last_name':
+                                    if (value === '') {
+                                        message = 'Last Name is required.';
+                                    }
+                                    break;
+
+                                case 'userName':
+                                    if (value === '') {
+                                        message = 'Username is required.';
+                                    }
+                                    break;
+
+                                case 'password':
+                                    if (value === '') {
+                                        message = 'Password is required.';
+                                    }
+                                    break;
+
+                                case 'state_id':
+                                    if (value === '') {
+                                        message = 'State is required.';
+                                    }
+                                    break;
+
+                                case 'city_id':
+                                    if (value === '') {
+                                        message = 'city is required.';
+                                    }
+                                    break;
+
+                                case 'dob':
+                                    if (value === '') {
+                                        message = 'Date of birth is required.';
+                                    }
+                                    break;
+
+                                case 'father_name':
+                                    if (value === '') {
+                                        message = 'father name is required.';
+                                    }
+                                    break;
+
+                                case 'address':
+                                    if (value === '') {
+                                        message = 'address is required.';
+                                    }
+                                    break;
+
+                                case 'gender':
+                                    if (value === '') {
+                                        message = 'Gender is required.';
+                                    }
+                                    break;
+
+
+                                    // Add other validations for different fields here
+                            }
+
+
+                            // Show error message if validation fails
+                            if (message) {
+                                isValid = false;
+                                if (!$input.next('.validation-error').length) {
+                                    $input.after(
+                                        `<small class="text-danger validation-error">${message}</small>`
+                                    );
+                                }
+                            }
+                        });
+
+                        return isValid;
+                    }
+
+
+                    // Optional helper to format field names like "mobile_no" to "Mobile No"
+                    function formatFieldName(name) {
+                        return name
+                            .replace(/_/g, ' ')
+                            .replace(/\b\w/g, l => l.toUpperCase());
+                    }
+
+
+
+                    const $form = $(this);
+
+                    if (!validateForm($form)) return;
+
+                    const endpoint = $form.data('action'); // Get custom endpoint if needed
+                    const formData = $form.serialize();
+
+                    $.post(endpoint, formData)
+                        .done(function(response) {
+                            console.log(response);
+                            $form[0].reset();
+
+                            toastr.success('Form Submitted Successfully')
+                        })
+                        .fail(function(xhr) {
+                            alert('Failed to submit form.');
+                            console.error(xhr.responseText);
+                        });
+                });
+            });
+        </script>
+
+
+
+
+
+
+
         <style>
 
         </style>

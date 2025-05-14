@@ -24,15 +24,15 @@
                             </div>
 
                             <div class="card-body">
-                                <form id="createCommon" >
-                                  <input type='hidden' value='Branch' name='modal_type' />
-                                  <input type="hidden" value="{{ Auth::user()->id }}" name="user_id" />
+                                <form id="createCommon">
+                                    <input type='hidden' value='Branch' name='modal_type' />
+                                    <input type="hidden" value="{{ Auth::user()->id }}" name="user_id" />
                                     <div id="expense-container" class="bg-item mb-3 border p-3 rounded">
                                         <div class="row">
                                             <div class="col-sm-6 form-group">
                                                 <label class="text-danger" for="branch_code">Branch Code*</label>
                                                 <input type="text" class="form-control" name="branch_code"
-                                                    id="branch_code"  data-required="true">
+                                                    id="branch_code" data-required="true">
                                             </div>
                                             <div class="col-sm-6 form-group">
                                                 <label class="text-danger" for="branch_name">Branch Name*</label>
@@ -41,13 +41,14 @@
                                             </div>
                                             <div class="col-sm-6 col-12 form-group">
                                                 <label for="director" class="text-danger">Contact Person*</label>
-                                                <input type="text" class="form-control " id="contact_person" name="contact_person" data-required="true">
+                                                <input type="text" class="form-control " id="contact_person"
+                                                    name="contact_person" data-required="true">
                                             </div>
                                             <div class="col-sm-6 form-group">
                                                 <label class="text-danger" for="mobile">Mobile Number*</label>
-                                            <input type="text" class="form-control" name="mobile" id="mobile_no"
-       data-required="true" data-type="mobile"
-       oninput="this.value = this.value.replace(/[^0-9]/g, '')">
+                                                <input type="text" class="form-control" name="mobile" id="mobile"
+                                                    data-required="true" data-type="mobile"
+                                                    oninput="this.value = this.value.replace(/[^0-9]/g, '')">
                                             </div>
                                             <div class="col-sm-6 form-group">
                                                 <label for="email">Email</label>
@@ -135,5 +136,4 @@
             </div>
         </section>
     </div>
-
 @endsection

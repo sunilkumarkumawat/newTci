@@ -78,45 +78,52 @@
                                             <div id="step-1" class="wizard-step">
                                                 <h5><i class="fa fa-user"></i> Basic Details</h5>
                                                 <div class="row">
-                                                    <div class="col-md-4">
+                                                    <div class="col-md-4 col-12">
                                                         <div class="form-group">
-                                                            <label>First Name *</label>
-                                                            <input type="text" class="form-control"
-                                                                placeholder="First Name" name="first_name">
+                                                            <label class="text-danger" for="first_name">First Name *</label>
+                                                            <input type="text" class="form-control" id="first_name"
+                                                                placeholder="First Name" name="first_name"
+                                                                data-required="true">
                                                         </div>
                                                     </div>
                                                     <div class="col-md-4">
                                                         <div class="form-group">
-                                                            <label>Last Name *</label>
+                                                            <label class="text-danger" for="last_name">Last Name *</label>
                                                             <input type="text" class="form-control"
-                                                                placeholder="Last Name" name="last_name">
+                                                                placeholder="Last Name" name="last_name" id="last_name"
+                                                                data-required="true">
                                                         </div>
                                                     </div>
                                                     <div class="col-md-4">
                                                         <div class="form-group">
-                                                            <label>Mobile *</label>
+                                                            <label class="text-danger" for="mobile">Mobile *</label>
                                                             <input type="text" class="form-control" placeholder="Mobile"
-                                                                name="mobile">
+                                                                id="mobile" data-required="true" name="mobile">
                                                         </div>
                                                     </div>
                                                     <div class="col-md-4">
                                                         <div class="form-group">
-                                                            <label>Email *</label>
+                                                            <label class="text-danger" for="email">Email *</label>
                                                             <input type="email" class="form-control" placeholder="Email"
-                                                                name="email">
+                                                                id="email" data-required="true" name="email">
                                                         </div>
                                                     </div>
+
                                                     <div class="col-md-4">
                                                         <div class="form-group">
-                                                            <label>DOB *</label>
-                                                            <input type="date" class="form-control" name="dob">
+                                                            <label class="text-danger" for="userName">Username *</label>
+                                                            <input type="text" class="form-control"
+                                                                placeholder="Username" name="userName" id="userName"
+                                                                data-required="true">
                                                         </div>
                                                     </div>
+
                                                     <div class="col-md-4">
                                                         <div class="form-group">
-                                                            <label>Father Name *</label>
-                                                            <input type="text" class="form-control" name="father_name"
-                                                                placeholder="Father Name">
+                                                            <label class="text-danger" for="password">Password *</label>
+                                                            <input type="password" class="form-control"
+                                                                placeholder="Password" name="password" id="password"
+                                                                data-required="true">
                                                         </div>
                                                     </div>
                                                 </div>
@@ -128,9 +135,39 @@
                                                 <div class="row">
                                                     <div class="col-md-4">
                                                         <div class="form-group">
-                                                            <label>State *</label>
-                                                            <select class="form-control" name="state_id" id="state">
-                                                                <option value="">Select</option>
+                                                            <label class="text-danger" for="dob">DOB *</label>
+                                                            <input type="date" class="form-control" name="dob"
+                                                                id="dob" data-required="true">
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="col-md-4">
+                                                        <div class="form-group">
+                                                            <label class="text-danger" for="father_name">Father
+                                                                Name*</label>
+                                                            <input type="text" class="form-control" name="father_name"
+                                                                id="father_name" placeholder="Father Name"
+                                                                data-required="true">
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="col-md-4">
+                                                        <div class="form-group">
+                                                            <label class="text-danger" for="gender">Gender*</label>
+                                                            <select name="gender" id="gender" class="form-control">
+                                                                <option value="M">Male</option>
+                                                                <option value="F">Female</option>
+                                                                <option value="other">Other</option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="col-md-4">
+                                                        <div class="form-group">
+                                                            <label class="text-danger" for="state_id">State*</label>
+                                                            <select class="form-control" name="state_id" id="state_id"
+                                                                data-required="true">
+                                                                <option value="0">Select</option>
                                                                 <option value="1">State A</option>
                                                                 <option value="2">State B</option>
                                                             </select>
@@ -138,9 +175,10 @@
                                                     </div>
                                                     <div class="col-md-4">
                                                         <div class="form-group">
-                                                            <label>City *</label>
-                                                            <select class="form-control" name="city_id" id="city_id">
-                                                                <option value="">Select</option>
+                                                            <label class="text-danger" for="city_id">City *</label>
+                                                            <select class="form-control" name="city_id" id="city_id"
+                                                                data-required="true">
+                                                                <option value="0">Select</option>
                                                                 <option value="1">City X</option>
                                                                 <option value="2">City Y</option>
                                                             </select>
@@ -148,29 +186,20 @@
                                                     </div>
                                                     <div class="col-md-4">
                                                         <div class="form-group">
-                                                            <label>Address *</label>
+                                                            <label class="text-danger" for="address">Address *</label>
                                                             <input type="text" class="form-control"
-                                                                placeholder="Address" name="address">
+                                                                placeholder="Address" name="address" id="address"
+                                                                data-required="true">
                                                         </div>
                                                     </div>
+
+
+
                                                     <div class="col-md-4">
                                                         <div class="form-group">
-                                                            <label>Username *</label>
-                                                            <input type="text" class="form-control"
-                                                                placeholder="Username" name="userName">
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-md-4">
-                                                        <div class="form-group">
-                                                            <label>Password *</label>
-                                                            <input type="password" class="form-control"
-                                                                placeholder="Password" name="password">
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-md-4">
-                                                        <div class="form-group">
-                                                            <label>Role *</label>
-                                                            <select class="form-control" name="role">
+                                                            <label class="text-danger" for="role_name">Role *</label>
+                                                            <select class="form-control" name="role_name" id="role_name"
+                                                                data-required="true">
                                                                 <option value="">Select</option>
                                                                 <option>Manager</option>
                                                                 <option>Staff</option>
@@ -198,6 +227,16 @@
                                             <div id="step-3" class="wizard-step d-none">
                                                 <h5><i class="fa fa-lock"></i> User Permissions</h5>
                                                 <div class="row">
+
+                                                    {{-- <div class="col-md-4">
+                                                        <div class="form-check">
+                                                            <input type="text" class="form-control"
+                                                                id="mother_name"  name="mother_name">
+                                                            <label class="text-danger"
+                                                                for="mother_name">mother name</label>
+                                                        </div>
+                                                    </div> --}}
+
                                                     {{-- <div class="col-md-4">
                                                         <div class="form-group">
                                                             <label>Sidebar Access</label>
@@ -302,11 +341,19 @@
             // const progress = Math.round((step / totalSteps) * 100);
             // document.getElementById('wizardProgressBar').style.width = progress + '%';
         }
-
         document.getElementById('nextStep').addEventListener('click', () => {
+
+            $('#createCommon').trigger('submit');
+            var smallTags = $('#step-' + currentStep).find('small');
+
+            if (smallTags.length > 0) {
+                return
+            }
+            // document.getElementById('nextStep').addEventListener('click', () => {
             if (currentStep < totalSteps) {
                 currentStep++;
                 showStep(currentStep);
+                $('#step-' + currentStep).find('small').remove();
             }
         });
 
