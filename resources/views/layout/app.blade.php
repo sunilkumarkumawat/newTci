@@ -1,5 +1,5 @@
 @php
-    $setting = DB::table('settings')->get()->first();
+$setting = DB::table('settings')->get()->first();
 @endphp
 
 <!DOCTYPE html>
@@ -82,7 +82,7 @@
 
 
 @php
-    $cur_route = Route::getFacadeRoot()->current()->uri();
+$cur_route = Route::getFacadeRoot()->current()->uri();
 @endphp
 
 <body class="sidebar-mini layout-fixed sidebar-collapse">
@@ -91,9 +91,9 @@
 
         @include('layout.header')
         @if (Session()->get('role_id') == 3)
-            @include('layout.student_sidebar')
+        @include('layout.student_sidebar')
         @else
-            @include('layout.sidebar')
+        @include('layout.sidebar')
         @endif
         @include('layout.message')
         @yield('content')
@@ -427,124 +427,231 @@
         </script>
 
 
-<script>
-  $(document).ready(function () {
-    $.ajaxSetup({
-      headers: {
-        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-      }
-    });
+        <script>
+            $(document).ready(function() {
+                $.ajaxSetup({
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    }
+                });
 
-    // Apply to multiple forms
-    $('#createCommon').on('submit', function (e) {
-      e.preventDefault();
-
-
-
-
-function validateForm($form) {
-  let isValid = true;
-
-  // Remove previous validation messages
-  $form.find('.text-danger.validation-error').remove();
-
-  $form.find('[data-required="true"]').each(function () {
-    const $input = $(this);
-    const value = $input.val().trim();
-    const name = $input.attr('name');        // Get the name attribute (e.g., email, mobile, branch_code)
-    const customMessage = $input.data('error') || 'This field is required';
-    let message = '';
-
-
-      switch (name) {
-        case 'email':
-          if (!/^\S+@\S+\.\S+$/.test(value)) {
-            message = 'Please enter a valid email address.';
-          }
-          break;
-
-        case 'mobile':
-          
-          if (!/^\d{10}$/.test(value)) {
-            message = 'Please enter a valid 10-digit mobile number.';
-          }
-          break;
-
-        case 'branch_code':
-          if (value === '') {
-            message = 'Branch code is required.';
-          }
-          break;
-        case 'branch_name':
-          if (value === '') {
-            message = 'Branch name is required.';
-          }
-          break;
-        case 'contact_person':
-          if (value === '') {
-            message = 'Contact Person is required.';
-          }
-          break;
-        case 'name':
-          if (value === '') {
-            message = 'Role name is required.';
-          }
-          break;
-
-        // Add other validations for different fields here
-      }
-    
-
-    // Show error message if validation fails
-    if (message) {
-      isValid = false;
-      if (!$input.next('.validation-error').length) {
-        $input.after(`<small class="text-danger validation-error">${message}</small>`);
-      }
-    }
-  });
-
-  return isValid;
-}
-
-
-// Optional helper to format field names like "mobile_no" to "Mobile No"
-function formatFieldName(name) {
-  return name
-    .replace(/_/g, ' ')
-    .replace(/\b\w/g, l => l.toUpperCase());
-}
+                // Apply to multiple forms
+                $('#createCommon').on('submit', function(e) {
+                    e.preventDefault();
 
 
 
-      const $form = $(this);
+                    function validateForm($form) {
+                        let isValid = true;
 
-      if (!validateForm($form)) return;
+                        // Remove previous validation messages
+                        $form.find('.text-danger.validation-error').remove();
 
-      const endpoint = $form.data('action'); // Get custom endpoint if needed
-      const formData = $form.serialize();
-
-      $.post(endpoint, formData)
-        .done(function (response) {
-          console.log(response);
-          $form[0].reset();
-
-          toastr.success('Form Submitted Successfully')
-        })
-        .fail(function (xhr) {
-          alert('Failed to submit form.');
-          console.error(xhr.responseText);
-        });
-    });
-  });
-</script>
+                        $form.find('[data-required="true"]').each(function() {
+                            const $input = $(this);
+                            const value = $input.val().trim();
+                            const name = $input.attr('name'); // Get the name attribute (e.g., email, mobile, branch_code)
+                            const customMessage = $input.data('error') || 'This field is required';
+                            let message = '';
 
 
+                            switch (name) {
+                                case 'email':
+                                    if (!/^\S+@\S+\.\S+$/.test(value)) {
+                                        message = 'Please enter a valid email address.';
+                                    }
+                                    break;
+
+                                case 'mobile':
+
+                                    if (!/^\d{10}$/.test(value)) {
+                                        message = 'Please enter a valid 10-digit mobile number.';
+                                    }
+                                    break;
+
+                                case 'expense_name':
+                                    if (!/^[a-zA-Z\s\-]{2,50}$/.test(value)) {
+                                        message = 'Please enter a valid expense name .';
+                                    }
+                                    break;
+
+                                case 'expense-date':
+                                    if (!/^\d{4}-\d{2}-\d{2}$/.test(value)) {
+                                        message = 'Please enter a valid date.';
+                                    }
+                                    break;
+
+                                case 'quantity':
+                                    if (!/^\d+(\.\d+)?$/.test(value) || parseFloat(value) <= 0) {
+                                        message = 'Please enter a valid expense quantity.';
+                                    }
+                                    break;
+
+                                case 'rate':
+                                    if (!/^\d+(\.\d+)?$/.test(value) || parseFloat(value) <= 0) {
+                                        message = 'Please enter a valid rate.';
+                                    }
+                                    break;
+
+                                case 'total_amt':
+                                    if (!/^\d+(\.\d+)?$/.test(value) || parseFloat(value) <= 0) {
+                                        message = 'Please enter a valid total amount.';
+                                    }
+                                    break;
+
+                                case 'payment_mode_id':
+                                    if (!value || value === '0') {
+                                        message = 'Please select a valid payment mode.';
+                                    }
+                                    break;
+
+                                case 'student_name':
+                                    if (!/^[a-zA-Z\s\-]{2,50}$/.test(value)) {
+                                        message = 'Please enter a valid student name.';
+                                    }
+                                    break;
+
+                                case 'aadhaar':
+                                    if (!/^\d{12}$/.test(value)) {
+                                        message = 'Please enter a valid 12-digit Aadhaar number.';
+                                    }
+                                    break;
+
+                                case 'student_address':
+                                    if (!/^[a-zA-Z0-9\s,.\-\/]{5,100}$/.test(value)) {
+                                        message = 'Please enter a valid address.';
+                                    }
+                                    break;
+
+                                case 'religion':
+                                    if (!/^[a-zA-Z\s\-]{2,30}$/.test(value)) {
+                                        message = 'Please enter a valid religion.';
+                                    }
+                                    break;
+
+                                case 'category':
+                                    if (!/^[a-zA-Z\s\-]{2,30}$/.test(value)) {
+                                        message = 'Please enter a valid category.';
+                                    }
+                                    break;
+
+                                case 'state':
+                                    if (value === '') {
+                                        message = 'Please enter a valid state name.';
+                                    }
+                                    break;
+
+                                case 'city':
+                                    if (value === '') {
+                                        message = 'Please enter a valid city name.';
+                                    }
+                                    break;
+
+                                case 'father_mobile':
+                                    if (!/^\d{10}$/.test(value)) {
+                                        message = 'Please enter a valid 10-digit mobile number.';
+                                    }
+                                    break;
+
+                                case 'mothers_name':
+                                    if (!/^[a-zA-Z\s\-]{2,50}$/.test(value)) {
+                                        message = "Please enter a valid mother's name.";
+                                    }
+                                    break;
+
+                                case 'guardian_name':
+                                    if (!/^[a-zA-Z\s\-]{2,50}$/.test(value)) {
+                                        message = "Please enter a valid guardian's name.";
+                                    }
+                                    break;
+
+                                case 'guardian_mobile':
+                                    if (!/^\d{10}$/.test(value)) {
+                                        message = 'Please enter a valid 10-digit mobile number.';
+                                    }
+                                    break;
+
+                                case 'guardian_address':
+                                    if (!/^[a-zA-Z0-9\s,.\-\/]{5,100}$/.test(value)) {
+                                        message = 'Please enter a valid guardian address.';
+                                    }
+                                    break;
+
+
+                                case 'branch_code':
+                                    if (value === '') {
+                                        message = 'Branch code is required.';
+                                    }
+                                    break;
+                                case 'branch_name':
+                                    if (value === '') {
+                                        message = 'Branch name is required.';
+                                    }
+                                    break;
+                                case 'contact_person':
+                                    if (value === '') {
+                                        message = 'Contact Person is required.';
+                                    }
+                                    break;
+                                case 'name':
+                                    if (value === '') {
+                                        message = 'Role name is required.';
+                                    }
+                                    break;
+
+                                    // Add other validations for different fields here
+                            }
+
+
+                            // Show error message if validation fails
+                            if (message) {
+                                isValid = false;
+                                if (!$input.next('.validation-error').length) {
+                                    $input.after(`<small class="text-danger validation-error">${message}</small>`);
+                                }
+                            }
+                        });
+
+                        return isValid;
+                    }
+
+
+                    // Optional helper to format field names like "mobile_no" to "Mobile No"
+                    function formatFieldName(name) {
+                        return name
+                            .replace(/_/g, ' ')
+                            .replace(/\b\w/g, l => l.toUpperCase());
+                    }
+
+
+                    const $form = $(this);
+
+                    if (!validateForm($form)) return;
+
+                    const endpoint = $form.data('action'); // Get custom endpoint if needed
+                    const formData = $form.serialize();
+
+                    $.post(endpoint, formData)
+                        .done(function(response) {
+                            console.log(response);
+                            $form[0].reset();
+
+                            toastr.success('Form Submitted Successfully')
+                        })
+                        .fail(function(xhr) {
+                            alert('Failed to submit form.');
+                            console.error(xhr.responseText);
+                        });
+                });
+            });
+        </script>
 
 
 
 
-       
+
+
+
         <style>
 
         </style>
@@ -561,7 +668,8 @@ function formatFieldName(name) {
 
                         <div class="col-md-12">
                             <p id="whatsapp_error_message" class="error_message_whatsapp">
-                                {{ Session::get('whatsapp_error') ?? '' }}</p>
+                                {{ Session::get('whatsapp_error') ?? '' }}
+                            </p>
                             <input type="hidden" id="whatsapp_error_respose_id"
                                 value="{{ Session::get('whatsapp_error_respose_id') ?? '' }}">
                         </div>
