@@ -39,7 +39,7 @@
 
                                     <div class="custom-file mt-3 col-md-8 col-12    ">
                                         <input type="file" name="profile_photo" class="form-control bg-white"
-                                            id="profilePhotoInput" onchange="previewImage(event)">
+                                            id="excelFile" accept=".xlsx, .xls" />
 
                                     </div>
                                     {{-- <small id="fileName" class="form-text text-muted mt-2">No file selected</small> --}}

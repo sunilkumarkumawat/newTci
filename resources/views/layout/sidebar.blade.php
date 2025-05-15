@@ -3,7 +3,7 @@
     crossorigin="anonymous" referrerpolicy="no-referrer" />
 
 <!-- Main Sidebar Container -->
-<aside class="main-sidebar bg-light " id="sidebar">
+<aside class="main-sidebar bg-light d-none d-md-block" id="sidebar">
     <!-- Brand Logo -->
     <a href="/">
         <div class="top_brand_section">
@@ -114,7 +114,7 @@
                 <!-- Branch -->
                 <li class="nav-item has-treeview">
                     <a href="{{ url('branch') }}" class="nav-link">
-                       <i class="fa-solid fa-code-branch"></i>
+                        <i class="fa-solid fa-code-branch"></i>
                         <p>
                             Branch
                         </p>
@@ -124,7 +124,7 @@
                 <!-- Role -->
                 <li class="nav-item has-treeview">
                     <a href="{{ url('role') }}" class="nav-link">
-                       <i class="fa-solid fa-user-circle"></i>
+                        <i class="fa-solid fa-user-circle"></i>
                         <p>
                             Role
                         </p>
@@ -305,5 +305,53 @@
     .nav-link p,
     .brand-text {
         font-size: 0.8rem !important;
+    }
+
+
+    /* Smooth transition */
+    #sidebar {
+        transition: all 0.3s ease;
+    }
+
+    /* Collapsed sidebar */
+    #sidebar.sidebar-collapsed {
+        width: 60px !important;
+        overflow: hidden;
+    }
+
+    /* Hide sidebar text when collapsed */
+    #sidebar.sidebar-collapsed .nav-link p,
+    #sidebar.sidebar-collapsed .brand_title {
+        display: none !important;
+    }
+
+    /* Expand on hover */
+    @media (min-width: 768px) {
+        #sidebar.sidebar-collapsed:hover {
+            width: 220px !important;
+        }
+
+        #sidebar.sidebar-collapsed:hover .nav-link p,
+        #sidebar.sidebar-collapsed:hover .brand_title {
+            display: inline-block !important;
+        }
+    }
+
+    /* Mobile view — default collapsed */
+    @media (max-width: 767.98px) {
+        #sidebar {
+            width: 0 !important;
+            overflow: hidden;
+        }
+
+        #sidebar.sidebar-collapsed {
+            width: 200px !important;
+            position: fixed;
+            top: 0;
+            bottom: 0;
+            z-index: 1050;
+            background-color: #f8f9fa;
+            overflow-y: auto;
+        }
     }
 </style>
