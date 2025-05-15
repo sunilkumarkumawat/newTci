@@ -1,7 +1,3 @@
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
-    integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg=="
-    crossorigin="anonymous" referrerpolicy="no-referrer" />
-
 <!-- Main Sidebar Container -->
 <aside class="main-sidebar bg-light d-none d-md-block" id="sidebar">
     <!-- Brand Logo -->
@@ -227,6 +223,14 @@
     </div>
 </aside>
 
+<!-- Toggle button -->
+<button class="mobile-sidebar-toggle d-md-none" id="sidebarToggleBtn">
+    <i class="fa fa-bars"></i>
+</button>
+
+<!-- Overlay -->
+<div class="sidebar-overlay" id="sidebarOverlay"></div>
+
 <style>
     .brand_img {
         width: 45px;
@@ -307,7 +311,6 @@
         font-size: 0.8rem !important;
     }
 
-
     /* Smooth transition */
     #sidebar {
         transition: all 0.3s ease;
@@ -337,21 +340,94 @@
         }
     }
 
-    /* Mobile view — default collapsed */
-    @media (max-width: 767.98px) {
-        #sidebar {
-            width: 0 !important;
-            overflow: hidden;
-        }
+    /* Mobile sidebar toggle button */
+    .mobile-sidebar-toggle {
+        position: fixed;
+        top: 15px;
+        left: 15px;
+        z-index: 1050;
+        background-color: #003366;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        padding: 8px 12px;
+        font-size: 1.25rem;
+        cursor: pointer;
+    }
 
-        #sidebar.sidebar-collapsed {
-            width: 200px !important;
+    /* Mobile view enhancements */
+    @media (max-width: 767.98px) {
+        /* Fix for the d-none d-md-block classes */
+        #sidebar {
+            display: block !important;
+            width: 0 !important;
+            min-width: 0;
+            overflow: hidden;
             position: fixed;
             top: 0;
+            left: 0;
+            height: 100%;
+            z-index: 1040;
+            background-color: #003366;
+            transition: width 0.3s ease;
+        }
+
+        /* Active state for mobile - sidebar shown */
+        #sidebar.mobile-show {
+            width: 250px !important;
+        }
+
+        /* Add overlay when sidebar is open */
+        .sidebar-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
             bottom: 0;
-            z-index: 1050;
-            background-color: #f8f9fa;
-            overflow-y: auto;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 10;
+            display: none;
+        }
+
+        .sidebar-overlay.show {
+            display: block;
+        }
+
+        /* Ensure text is visible on mobile */
+        #sidebar .nav-link p,
+        #sidebar .brand_title {
+            display: inline-block !important;
         }
     }
 </style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Get DOM elements
+    const toggleBtn = document.getElementById('sidebarToggleBtn');
+    const sidebar = document.getElementById('sidebar');
+    const overlay = document.getElementById('sidebarOverlay');
+    
+    if (toggleBtn && sidebar && overlay) {
+        // Toggle sidebar on button click
+        toggleBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            sidebar.classList.toggle('mobile-show');
+            overlay.classList.toggle('show');
+            console.log('Toggle clicked, sidebar classes:', sidebar.className);
+        });
+        
+        // Close sidebar when clicking overlay
+        overlay.addEventListener('click', function() {
+            sidebar.classList.remove('mobile-show');
+            overlay.classList.remove('show');
+        });
+    } else {
+        console.error('Sidebar elements not found:', { 
+            toggleBtn: !!toggleBtn, 
+            sidebar: !!sidebar, 
+            overlay: !!overlay 
+        });
+    }
+});
+</script>

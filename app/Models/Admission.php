@@ -10,7 +10,7 @@ class Admission extends Model
         use SoftDeletes;
 //	protected $table = "olympiad_results"; //table name
 protected $table = "admissions"; //table name
-	protected $fillable = ['password','body'];
+	protected $guarded = [];
 	
 	public function Student()
     {
