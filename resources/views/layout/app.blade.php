@@ -32,6 +32,7 @@
     <link rel="stylesheet" href="{{ asset('public/assets/school/css/select2.min.css') }}">
     <link rel="stylesheet" href="{{ asset('public/assets/school/css/select2-bootstrap4.min.css') }}">
     <link rel="stylesheet" href="https://adminlte.io/themes/v3/plugins/summernote/summernote-bs4.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
     <script src="{{ URL::asset('public/assets/school/js/jquery.min.js') }}"></script>
     <!--<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>-->
 </head>
@@ -100,10 +101,10 @@
         @include('layout.footer')
         <script>
             /*$.ajaxSetup({
-                                                                                                                                    headers: {
-                                                                                                                                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                                                                                                                                    }
-                                                                                                                                });*/
+                                                                                                                                                    headers: {
+                                                                                                                                                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                                                                                                                                                    }
+                                                                                                                                                });*/
             //var URL  = "{{ url('/') }}";
         </script>
 
@@ -603,15 +604,47 @@
             });
         </script>
 
+        {{-- convert excel data into array --}}
+        <script>
+            document.getElementById('excelFile').addEventListener('change', function(e) {
+                const file = e.target.files[0];
+                if (!file) {
+                    alert("No file selected.");
+                    return;
+                }
+
+                const reader = new FileReader();
+
+                reader.onload = function(e) {
+                    const data = new Uint8Array(e.target.result);
+                    const workbook = XLSX.read(data, {
+                        type: 'array'
+                    });
+
+                    const sheetName = workbook.SheetNames[0];
+                    const worksheet = workbook.Sheets[sheetName];
+                    const jsonData = XLSX.utils.sheet_to_json(worksheet, {
+                        header: 1
+                    });
+
+                    // 🔥 Filter out empty rows
+                    const filteredData = jsonData.filter(row =>
+                        Array.isArray(row) &&
+                        row.some(cell => cell !== null && cell !== undefined && String(cell).trim() !== "")
+                    );
+
+                    alert(JSON.stringify(filteredData, null, 2)); // Show filtered data
+                };
+
+                reader.readAsArrayBuffer(file);
+            });
+        </script>
 
 
 
 
 
 
-        <style>
-
-        </style>
         <div class="modal fade" id="whatsapp_error_modal">
             <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content">
