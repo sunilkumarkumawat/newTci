@@ -33,50 +33,50 @@
                                         <div class="row">
                                             <div class="col-sm-6 col-12">
                                                 <div class="form-group">
-                                                    <label class="text-danger">Sr.No.*</label>
-                                                    <input type="text" class="form-control blockHeight sr-no"
-                                                        name="sr_no">
+                                                    <label  for="sr_no">Sr.No.</label>
+                                                    <input type="text" id="sr_no" class="form-control blockHeight sr-no"
+                                                        name="sr_no" >
                                                 </div>
                                             </div>
                                             <div class="col-sm-6 col-12">
                                                 <div class="form-group">
-                                                    <label class="text-danger">Expense Name*</label>
+                                                    <label class="text-danger" for="expense_name" >Expense Name*</label>
                                                     <input type="text" class="form-control blockHeight"
-                                                        id="expense-particular" name="expense_name">
+                                                        id="expense_name" name="expense_name" data-required="true">
                                                 </div>
                                             </div>
                                             <div class="col-sm-6 col-12">
                                                 <div class="form-group">
-                                                    <label class="text-danger">Date*</label>
-                                                    <input type="date" class="form-control blockHeight" id="expense-date"
-                                                        name="date">
+                                                    <label class="text-danger" for="expense-date" >Date*</label>
+                                                    <input type="date"  class="form-control blockHeight" id="expense-date"
+                                                        name="expense-date" data-required="true">
                                                 </div>
                                             </div>
                                             
                                             <div class="col-sm-6 col-12">
-                                                <label class="text-danger">Quantity*</label>
+                                                <label class="text-danger" for="expense-quantity">Quantity*</label>
                                                 <input type="text" class="form-control blockHeight quantity"
-                                                    id="expense-quantity" name="quantity">
+                                                    id="expense-quantity" name="quantity" data-required="true">
                                             </div>
                                             <div class="col-sm-6 col-12">
                                                 <div class="form-group">
-                                                    <label class="text-danger">Rate*</label>
+                                                    <label class="text-danger" for="expense-rate">Rate*</label>
                                                     <input type="text" class="form-control blockHeight rate"
-                                                        id="expense-rate" name="rate">
+                                                        id="expense-rate" name="rate" data-required="true">
                                                 </div>
                                             </div>
                                             <div class="col-sm-6 col-12">
                                                 <div class="form-group">
-                                                    <label class="text-danger">Total Amount*</label>
+                                                    <label class="text-danger" for="expense-total">Total Amount*</label>
                                                     <input type="text" class="form-control blockHeight total"
-                                                        id="expense-total" name="total_amt">
+                                                        id="expense-total" name="total_amt" data-required="true">
                                                 </div>
                                             </div>
                                             <div class="col-sm-6 col-12">
                                                 <div class="form-group">
-                                                    <label class="text-danger">Payment Mode*</label>
+                                                    <label class="text-danger" for="payment_mode_id">Payment Mode*</label>
                                                     <select class="form-control " id="payment_mode_id"
-                                                        name="payment_mode_id" readonly required>
+                                                        name="payment_mode_id" readonly data-required="true">
                                                         <option value="1">Cash</option>
                                                         <option value="2">Card</option>
                                                         <option value="3 ">Bank Transfer</option>
