@@ -41,7 +41,7 @@
 
                                     <div class="custom-file mt-3 col-md-8 col-12    ">
                                         <input type="file" name="profile_photo" class="form-control bg-white"
-                                            id="profilePhotoInput" onchange="previewImage(event)">
+                                            id="excelFile" onchange="previewImage(event)">
 
                                     </div>
                                     {{-- <small id="fileName" class="form-text text-muted mt-2">No file selected</small> --}}
@@ -72,9 +72,9 @@
                             </div>
                             <div class="card-body">
                                 <form id="createCommon">
-                                    <input type="hidden" value="StudentAction" name="modal_type" />
+                                    <input type="hidden" value="Admission" name="modal_type" />
                                     <input type="hidden" value="{{Auth::user()->id}}" name="user_id" />
-                                    <input type="hidden" value="3" name="branch_id" />
+                                    <input type="hidden" id="branch_id" name="branch_id" />
                                     @csrf
 
 
@@ -88,84 +88,81 @@
                                                         <label>Admission No. </label>
                                                         <input type="text" class="form-control "
                                                             id="admissionNo" name="admission_no"
-                                                            placeholder="Admission No." value=""
-                                                            >
-                                                        
+                                                            placeholder="Admission No." value="">
+
                                                     </div>
                                                 </div>
 
                                                 <div class="col-md-4">
                                                     <div class="form-group">
-                                                        <label for="student_name" >Student Name<span style="color:red;">*</span></label>
+                                                        <label for="student_name">Student Name <span style="color:red;">*</span></label>
                                                         <input type="text" name="student_name" id="student_name"
                                                             class="form-control invalid" value=""
                                                             placeholder="Student Name" data-required="true">
-                                                        
+
                                                     </div>
                                                 </div>
 
                                                 <div class="col-md-4">
                                                     <div class="form-group">
-                                                        <label>Gender<span style="color:red;">*</span></label>
-                                                        <select class="form-control " id="gender_id"
-                                                            name="gender" >
+                                                        <label for="gender" >Gender<span style="color:red;">*</span></label>
+                                                        <select class="form-control " id="gender"
+                                                            name="gender" data-required="true" >
                                                             <option value="">Select</option>
                                                             <option value="1">Male</option>
                                                             <option value="2">Female</option>
                                                             <option value="3">Other</option>
                                                         </select>
-                                                        
+
                                                     </div>
                                                 </div>
 
                                                 <div class="col-md-4">
                                                     <div class="form-group">
-                                                        <label>Date Of Birth<span style="color:red;">*</span></label>
+                                                        <label for="dob" >Date Of Birth<span style="color:red;">*</span></label>
                                                         <input type="date" class="form-control"
-                                                            id="dob" name="dob" placeholder="Date Of Birth"
-                                                           >
-                                                        
+                                                            id="dob" name="dob" placeholder="Date Of Birth" data-required="true">
+
                                                     </div>
                                                 </div>
 
                                                 <div class="col-md-4">
                                                     <div class="form-group">
-                                                        <label>Mobile No.<span style="color:red;">*</span></label>
+                                                        <label for="mobile" >Mobile No.<span style="color:red;">*</span></label>
                                                         <input type="text" class="form-control" id="mobile"
-                                                            name="mobile" placeholder="Mobile No." >
-                                                        
+                                                            name="mobile" placeholder="Mobile No." data-required="true" >
+
                                                     </div>
                                                 </div>
 
                                                 <div class="col-md-4">
                                                     <div class="form-group">
-                                                        <label>Email *</label>
+                                                        <label for="email" >Email <span style="color:red;">*</span></label>
                                                         <input type="email" class="form-control" id="email"
-                                                            name="email" placeholder="Email">
+                                                            name="email" placeholder="Email" data-required="true" >
                                                     </div>
                                                 </div>
                                                 <div class="col-md-4">
                                                     <div class="form-group">
-                                                        <label for="aadhaar" >Aadhaar No.</label>
+                                                        <label for="aadhaar">Aadhaar No.<span style="color:red;">*</span></label>
                                                         <input type="text" class="form-control" id="aadhaar"
-                                                            name="aadhaar" placeholder="Aadhaar No." data-required="true" >
+                                                            name="aadhaar" placeholder="Aadhaar No." data-required="true">
                                                     </div>
                                                 </div>
 
                                                 <div class="col-md-4">
                                                     <div class="form-group">
-                                                        <label>Date Of Admission</label>
+                                                        <label for="admission_date">Date Of Admission</label>
                                                         <input type="date" class="form-control"
-                                                            id="admission_date" name="admission_date" >
+                                                            id="admission_date" name="admission_date">
                                                     </div>
                                                 </div>
 
                                                 <div class="col-md-4">
                                                     <div class="form-group">
-                                                        <label for="student_address" >Students Address</label>
+                                                        <label for="student_address">Students Address<span style="color:red;">*</span></label>
                                                         <input type="text" class="form-control" id="student_address"
-                                                            name="student_address" placeholder="Students Address" data-required="true" 
-                                                           >
+                                                            name="student_address" placeholder="Students Address" data-required="true">
                                                     </div>
                                                 </div>
 
@@ -190,11 +187,11 @@
 
                                                         <div class="col-md-3">
                                                             <div class="form-group">
-                                                                <label for="religion" >Religion</label>
+                                                                <label for="religion">Religion<span style="color:red;">*</span></label>
                                                                 <select class="form-control" id="religion"
-                                                                    name="religion"  data-required="true">
-                                                                    <option value="Select">Select</option>
-                                                                    <option value="Hindu" selected>Hindu</option>
+                                                                    name="religion" data-required="true">
+                                                                    <option value="" >Select</option>
+                                                                    <option value="Hindu" >Hindu</option>
                                                                     <option value="Islam">Islam</option>
                                                                     <option value="Sikh">Sikh</option>
                                                                     <option value="Buddhism">Buddhism</option>
@@ -208,9 +205,9 @@
 
                                                         <div class="col-md-3">
                                                             <div class="form-group">
-                                                                <label for="category" >Category</label>
+                                                                <label for="category">Category<span style="color:red;">*</span></label>
                                                                 <select class="form-control" id="category"
-                                                                    name="category" data-required="true" >
+                                                                    name="category" data-required="true">
                                                                     <option value="">Select</option>
                                                                     <option value="OBC" selected>OBC</option>
                                                                     <option value="ST">ST</option>
@@ -225,16 +222,16 @@
 
                                                         <div class="col-md-3">
                                                             <div class="form-group">
-                                                                <label>Caste</label>
+                                                                <label for="caste" >Caste</label>
                                                                 <input type="text" class="form-control"
-                                                                    id="caste_category" name="caste"
+                                                                    id="caste" name="caste"
                                                                     placeholder="Caste" value="">
                                                             </div>
                                                         </div>
 
                                                         <div class="col-md-3">
                                                             <div class="form-group">
-                                                                <label>Blood Group</label>
+                                                                <label for="blood_group" >Blood Group</label>
                                                                 <select class="form-control" id="blood_group"
                                                                     name="blood_group">
                                                                     <option value="">Select</option>
@@ -256,9 +253,9 @@
 
                                                         <div class="col-md-3">
                                                             <div class="form-group">
-                                                                <label>Country</label>
+                                                                <label for="country" >Country</label>
                                                                 <select class="form-control" name="country"
-                                                                    id="country_id">
+                                                                    id="country">
                                                                     <option value="">Select</option>
                                                                     <option value="1" selected>India</option>
                                                                     <option value="2">USA</option>
@@ -269,9 +266,9 @@
 
                                                         <div class="col-md-3">
                                                             <div class="form-group">
-                                                                <label for="state">State</label>
+                                                                <label for="state">State<span style="color:red;">*</span></label>
                                                                 <select class="form-control" id="state"
-                                                                    name="state" data-required="true" >
+                                                                    name="state" data-required="true">
                                                                     <option value="">Select</option>
                                                                     <option value="1" selected>Rajasthan</option>
                                                                     <option value="2">Delhi</option>
@@ -282,7 +279,7 @@
 
                                                         <div class="col-md-3">
                                                             <div class="form-group">
-                                                                <label for="city">City</label>
+                                                                <label for="city">City<span style="color:red;">*</span></label>
                                                                 <select class="form-control" name="city"
                                                                     id="city" data-required="true">
                                                                     <option value="">Select</option>
@@ -295,8 +292,8 @@
 
                                                         <div class="col-md-3">
                                                             <div class="form-group">
-                                                                <label>Village/City</label>
-                                                                <select class="form-control" id="village_city"
+                                                                <label for="village" >Village/City</label>
+                                                                <select class="form-control" id="village"
                                                                     name="village">
                                                                     <option value="">Select</option>
                                                                     <option value="Jaipur">Jaipur</option>
@@ -335,9 +332,9 @@
 
                                                         <div class="col-md-3">
                                                             <div class="form-group">
-                                                                <label>Pin Code</label>
+                                                                <label for="pincode" >Pin Code</label>
                                                                 <input type="text" class="form-control"
-                                                                    id="pincode" name="pin_code"
+                                                                    id="pincode" name="pincode"
                                                                     placeholder="Pin Code" value=""
                                                                     maxlength="6"
                                                                     onkeypress="javascript:return isNumber(event)">
@@ -354,32 +351,30 @@
                                                 <!-- Required Guardian Details -->
                                                 <div class="col-md-4">
                                                     <div class="form-group">
-                                                        <label>Father's Name<span style="color:red;">*</span></label>
+                                                        <label for="father_name" >Father's Name<span style="color:red;">*</span></label>
                                                         <input type="text" class="form-control "
-                                                            id="father_name" name="fathers_name"
-                                                            placeholder="Father's Name" 
-                                                            >
-                                                      
+                                                            id="father_name" name="father_name"
+                                                            placeholder="Father's Name" data-required="true" >
+
                                                     </div>
                                                 </div>
 
                                                 <div class="col-md-4">
                                                     <div class="form-group">
-                                                        <label for="father_mobile" >Father's Contact No<span
-                                                                style="color:red;">*</span></label>
+                                                        <label for="father_mobile">Father's Contact No<span style="color:red;">*</span></label>
                                                         <input type="text" class="form-control "
                                                             id="father_mobile" name="father_mobile"
-                                                            placeholder="Father's Contact No" data-required="true"                                                           >
-                                                       
+                                                            placeholder="Father's Contact No" data-required="true">
+
                                                     </div>
                                                 </div>
 
                                                 <div class="col-md-4">
                                                     <div class="form-group">
-                                                        <label>Father's Occupation</label>
+                                                        <label for="father_occupation" >Father's Occupation</label>
                                                         <input type="text" class="form-control"
-                                                            id="father_occupation" name="f_occupation"
-                                                            placeholder="Father's Occupation" >
+                                                            id="father_occupation" name="father_occupation"
+                                                            placeholder="Father's Occupation">
                                                     </div>
                                                 </div>
 
@@ -388,10 +383,10 @@
                                                     <div class="row">
                                                         <div class="col-md-4">
                                                             <div class="form-group">
-                                                                <label for="mothers_name">Mother's Name</label>
+                                                                <label for="mother_name">Mother's Name<span style="color:red;">*</span></label>
                                                                 <input type="text" class="form-control"
-                                                                    id="mothers_name" name="mothers_name"
-                                                                    placeholder="Mother's Name" data-required="true"                                                                   >
+                                                                    id="mother_name" name="mother_name"
+                                                                    placeholder="Mother's Name" data-required="true">
                                                             </div>
                                                         </div>
 
@@ -400,8 +395,7 @@
                                                                 <label>Mother's Contact No</label>
                                                                 <input type="text" class="form-control"
                                                                     id="mother_mobile" name="mother_mobile"
-                                                                    placeholder="Mother's Contact No" 
-                                                                   >
+                                                                    placeholder="Mother's Contact No">
                                                             </div>
                                                         </div>
 
@@ -410,13 +404,13 @@
                                                                 <label>Mother's Occupation</label>
                                                                 <input type="text" class="form-control"
                                                                     id="mother_occupation" name="m_occupation"
-                                                                    placeholder="Mother's Occupation" >
+                                                                    placeholder="Mother's Occupation">
                                                             </div>
                                                         </div>
 
                                                         <div class="col-md-4">
                                                             <div class="form-group">
-                                                                <label for="guardian_name" >Guardian's Name (If other than
+                                                                <label for="guardian_name">Guardian's Name<span style="color:red;">*</span> (If other than
                                                                     parent)</label>
                                                                 <input type="text" class="form-control"
                                                                     id="guardian_name" name="guardian_name"
@@ -426,7 +420,7 @@
 
                                                         <div class="col-md-4">
                                                             <div class="form-group">
-                                                                <label for="guardian_mobile" >Guardian's Contact No</label>
+                                                                <label for="guardian_mobile">Guardian's Contact No<span style="color:red;">*</span></label>
                                                                 <input type="text" class="form-control"
                                                                     id="guardian_mobile" name="guardian_mobile"
                                                                     placeholder="Guardian's Contact No" data-required="true">
@@ -435,7 +429,7 @@
 
                                                         <div class="col-md-4">
                                                             <div class="form-group">
-                                                                <label>Guardian's Relation</label>
+                                                                <label for="guardian_relation" >Guardian's Relation</label>
                                                                 <select class="form-control" id="guardian_relation"
                                                                     name="guardian_relation">
                                                                     <option value="">Select</option>
@@ -452,7 +446,7 @@
 
                                                         <div class="col-md-6">
                                                             <div class="form-group">
-                                                                <label for="guardian_address" >Guardian's Address</label>
+                                                                <label for="guardian_address">Guardian's Address<span style="color:red;">*</span></label>
                                                                 <textarea class="form-control" id="guardian_address" name="guardian_address" placeholder="Guardian's Address"
                                                                     rows="2" data-required="true"></textarea>
                                                             </div>
@@ -482,58 +476,69 @@
     </section>
 </div>
 
- <!-- JS Script -->
-    <script>
-        let currentStep = 1;
-        const totalSteps = 3;
+<!-- JS Script -->
+<script>
+    let currentStep = 1;
+    const totalSteps = 3;
 
-        function showStep(step) {
-            document.querySelectorAll('.wizard-step').forEach(el => el.classList.add('d-none'));
-            document.querySelector(`#step-${step}`).classList.remove('d-none');
+    function showStep(step) {
+        document.querySelectorAll('.wizard-step').forEach(el => el.classList.add('d-none'));
+        document.querySelector(`#step-${step}`).classList.remove('d-none');
 
-            document.getElementById('prevStep').disabled = (step === 1);
-            document.getElementById('nextStep').classList.toggle('d-none', step === totalSteps);
-            document.getElementById('submitBtn').classList.toggle('d-none', step !== totalSteps);
+        document.getElementById('prevStep').disabled = (step === 1);
+        document.getElementById('nextStep').classList.toggle('d-none', step === totalSteps);
+        document.getElementById('submitBtn').classList.toggle('d-none', step !== totalSteps);
 
-            const circles = document.querySelectorAll('.step-circle');
-            circles.forEach((circle, index) => {
-                circle.classList.remove('active', 'completed');
-                if (index + 1 < step) {
-                    circle.classList.add('completed');
-                } else if (index + 1 === step) {
-                    circle.classList.add('active');
-                }
-            });
+        const circles = document.querySelectorAll('.step-circle');
+        circles.forEach((circle, index) => {
+            circle.classList.remove('active', 'completed');
+            if (index + 1 < step) {
+                circle.classList.add('completed');
+            } else if (index + 1 === step) {
+                circle.classList.add('active');
+            }
+        });
 
-            // const progress = Math.round((step / totalSteps) * 100);
-            // document.getElementById('wizardProgressBar').style.width = progress + '%';
+        // const progress = Math.round((step / totalSteps) * 100);
+        // document.getElementById('wizardProgressBar').style.width = progress + '%';
+    }
+
+    document.getElementById('nextStep').addEventListener('click', () => {
+
+        $('#createCommon').trigger('submit');
+        var smallTags = $('#step-' + currentStep).find('small');
+
+        if (smallTags.length > 0) {
+            return
         }
-
-        document.getElementById('nextStep').addEventListener('click', () => {
-            if (currentStep < totalSteps) {
-                currentStep++;
-                showStep(currentStep);
-            }
-        });
-
-        document.getElementById('prevStep').addEventListener('click', () => {
-            if (currentStep > 1) {
-                currentStep--;
-                showStep(currentStep);
-            }
-        });
-
-        document.addEventListener('DOMContentLoaded', () => {
+        // document.getElementById('nextStep').addEventListener('click', () => {
+        if (currentStep < totalSteps) {
+            currentStep++;
             showStep(currentStep);
-        });
-
-        function previewImage(event) {
-            const reader = new FileReader();
-            reader.onload = function() {
-                document.getElementById('profilePreview').src = reader.result;
-            };
-            reader.readAsDataURL(event.target.files[0]);
-            document.getElementById('fileName').innerText = event.target.files[0].name;
+            $('#step-' + currentStep).find('small').remove();
         }
-    </script>
+    });
+
+
+
+    document.getElementById('prevStep').addEventListener('click', () => {
+        if (currentStep > 1) {
+            currentStep--;
+            showStep(currentStep);
+        }
+    });
+
+    document.addEventListener('DOMContentLoaded', () => {
+        showStep(currentStep);
+    });
+
+    function previewImage(event) {
+        const reader = new FileReader();
+        reader.onload = function() {
+            document.getElementById('profilePreview').src = reader.result;
+        };
+        reader.readAsDataURL(event.target.files[0]);
+        document.getElementById('fileName').innerText = event.target.files[0].name;
+    }
+</script>
 @endsection
