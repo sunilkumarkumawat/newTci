@@ -22,7 +22,7 @@
                 <!-- Dashboard -->
                 <li class="nav-item">
                     <a href="{{ url('dashboard') }}" class="nav-link">
-                        <i class="fa fa-dashboard"></i>
+                        <i class="fa fa-dashboard nav-icon"></i>
                         <p>Dashboard</p>
                     </a>
                 </li>
@@ -30,7 +30,7 @@
                 <!-- USER MENU -->
                 <li class="nav-item has-treeview">
                     <a href="#" class="nav-link">
-                        <i class="fa fa-user"></i>
+                        <i class="fa fa-user nav-icon"></i>
                         <p> User <i class="fa fa-angle-left right "></i> </p>
                     </a>
                     <ul class="nav nav-treeview">
@@ -58,7 +58,7 @@
                 <!-- STUDENT MENU -->
                 <li class="nav-item has-treeview">
                     <a href="#" class="nav-link">
-                        <i class="fa fa-graduation-cap" style="font-size: 14px"></i>
+                        <i class="fa fa-graduation-cap nav-icon" ></i>
                         <p>
                             Student
                             <i class="fa fa-angle-left right"></i>
@@ -89,7 +89,7 @@
                 {{-- message --}}
                 <li class="nav-item has-treeview">
                     <a href="#" class="nav-link">
-                        <i class="fa-solid fa-envelope"></i>
+                        <i class="fa-solid fa-envelope nav-icon" style="font-size: 18px;"></i>
                         <p>
                             Message
                             <i class="fa fa-angle-left right"></i>
@@ -114,39 +114,33 @@
                 <!-- Branch -->
                 <li class="nav-item has-treeview">
                     <a href="{{ url('branch') }}" class="nav-link">
-                        <i class="fa-solid fa-code-branch"></i>
-                        <p>
-                            Branch
-                        </p>
+                        <i class="fa-solid fa-code-branch nav-icon"></i>
+                        <p>Branch</p>
                     </a>
                 </li>
 
                 <!-- Role -->
                 <li class="nav-item has-treeview">
                     <a href="{{ url('role') }}" class="nav-link">
-                        <i class="fa-solid fa-user-circle"></i>
-                        <p>
-                            Role
-                        </p>
+                        <i class="fa-solid fa-user-circle nav-icon"></i>
+                        <p> Role</p>
                     </a>
                 </li>
 
                 <!-- Expense MENU -->
                 <li class="nav-item has-treeview">
                     <a href="{{ url('expense') }}" class="nav-link">
-                        <i class="fa fa-credit-card"></i>
-                        <p>
-                            Expense
-                        </p>
+                        <i class="fa fa-credit-card nav-icon"></i>
+                        <p>Expense</p>
                     </a>
                 </li>
 
                 <!-- library Management -->
                 <li class="nav-item has-treeview">
                     <a href="#" class="nav-link">
-                        <i class="fa fa-eraser"></i>
+                        <i class="fa fa-eraser nav-icon"></i>
                         <p>
-                            Library Management
+                             Library Management
                             <i class="fa fa-angle-left right"></i>
                         </p>
                     </a>
@@ -193,7 +187,7 @@
                 {{-- Book management --}}
                 <li class="nav-item has-treeview">
                     <a href="#" class="nav-link">
-                        <i class="fa fa-book"></i>
+                        <i class="fa fa-book nav-icon"></i>
                         <p>
                             Book Management
                             <i class="fa fa-angle-left right"></i>
@@ -218,7 +212,7 @@
                 <!-- Log Out -->
                 <li class="nav-item">
                     <a href="{{ url('login') }}" class="nav-link text-danger">
-                        <i class="fa fa-sign-out"></i>
+                        <i class="fa fa-sign-out nav-icon"></i>
                         <p>Log Out</p>
                     </a>
                 </li>

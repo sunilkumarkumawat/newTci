@@ -23,15 +23,16 @@
                             </div>
 
                             <div class="card-body">
-                                <form action="library_book_add" id="submit_form" method="post"
-                                    enctype="multipart/form-data">
-                                    <input type="hidden" name="_token" value="">
+                                <form id="createCommon">
+                                    <input type="hidden" name="modal_type" value="LibraryBook" />
+                                    <input type="hidden" value="{{ Auth::user()->id }}" name="user_id" />
+                                    <input type="hidden" name="branch_id" id="branch_id" />
                                     <div class="row pb-2">
                                         <div class="col-md-12 col-12">
                                             <label>Upload Excel</label>
                                             <span>
                                                 <i class="fa-solid fa-file-excel"></i>
-                                                <input class="form-control" type="file" id="excel" name="excel">
+                                                <input class="form-control" type="file" id="excelFile" name="excel">
                                             </span>
                                         </div>
                                         {{-- <div class="col-md-3 col-3 d-flex align-items-end">
@@ -41,70 +42,63 @@
                                     <div class="bg-item border rounded p-3">
                                         <div class="row">
 
-                                            <div class="col-md-6">
-                                                <label>Library Select<span class="text-danger">*</span></label>
-                                                <select class="form-control invalid" id="library_id" name="library_id"
-                                                    placeholder="Select Library" required>
-                                                    <option value="">Select</option>
-                                                    <option value="1">gh</option>
-                                                    <!-- Library options will be populated here -->
-                                                </select>
-
-                                                <span class="invalid-feedback" id="library_id_invalid" role="alert">
-                                                    <strong>Library Required</strong>
-                                                </span>
+                                            <div class="col-md-6 col-12">
+                                                <div class="form-group">
+                                                    <label class="text-danger" for="library_id">Library Select*</label>
+                                                    <select class="form-control" id="library_id" name="library_id"
+                                                        placeholder="Select Library" data-required="true">
+                                                        <option value="">Select</option>
+                                                        <option value="1">main library</option>
+                                                    </select>
+                                                </div>
                                             </div>
 
-                                            <div class="col-md-6">
-                                                <label>Book Category</label>
-                                                <select class="form-control" id="category_id" name="category_id"
-                                                    placeholder="Select Category">
-                                                    <option value="">Select Category</option>
-                                                    <option value="1">th</option>
-                                                    <!-- Category options will be populated here -->
-                                                </select>
-                                            </div>
-
-                                            <div class="col-md-6">
-                                                <label>Accession/Barcode ID<span class="text-danger">*</span></label>
-                                                <input class="form-control invalid" type="text" id="book_code"
-                                                    name="book_code" placeholder="Barcode ID">
-                                                <span class="invalid-feedback" id="book_code_invalid" role="alert">
-                                                    <strong>Barcode Id Required</strong>
-                                                </span>
+                                            <div class="col-md-6 col-12">
+                                                <div class="form-group">
+                                                    <label class="text-danger" for="book_code">Barcode NO*</label>
+                                                    <input class="form-control " type="text" id="barcode_no"
+                                                        name="barcode_no" placeholder="Barcode NO">
+                                                </div>
                                             </div>
 
 
-                                            <div class="col-md-6">
-                                                <label>Book Name<span class="text-danger">*</span></label>
-                                                <input class="form-control invalid" type="text" id="name"
-                                                    name="name" placeholder="Book Name">
-                                                <span class="invalid-feedback" id="name_invalid" role="alert">
-                                                    <strong>Name field is required</strong>
-                                                </span>
+                                            <div class="col-md-6 col-12">
+                                                <label class="text-danger" for="book_name">Book Name*</label>
+                                                <input class="form-control invalid" type="text" id="book_name"
+                                                    name="book_name" placeholder="Book Name" data-required="true">
                                             </div>
-                                            <div class="col-md-6">
+                                            <div class="col-md-6 col-12">
                                                 <label>Author Name</label>
                                                 <input class="form-control" type="text" id="author" name="author"
-                                                    onkeydown="return /[a-zA-Z ]/i.test(event.key)"
                                                     placeholder="Author Name">
                                             </div>
-                                            <div class="col-md-6">
+                                            <div class="col-md-6 col-12">
                                                 <label>Publisher Name</label>
                                                 <input class="form-control" type="text" id="publisher" name="publisher"
-                                                    onkeydown="return /[a-zA-Z ]/i.test(event.key)"
                                                     placeholder="Publisher Name">
                                             </div>
-                                            <div class="col-md-6">
-                                                <label>Date</label>
+                                            <div class="col-md-6 col-12">
+                                                <label class="text-danger" for="date">Date*</label>
                                                 <input class="form-control" type="date" id="date" name="date"
-                                                    placeholder="date" value="">
+                                                    placeholder="date">
+                                            </div>
+
+                                            <div class="col-md-6 col-12">
+                                                <div class="form-group">
+                                                    <label for="category_id">Book Category</label>
+                                                    <select class="form-control" id="category_id" name="category_id"
+                                                        placeholder="Select Category">
+                                                        <option value="">Select Category</option>
+                                                        <option value="1">basic</option>
+                                                    </select>
+                                                </div>
                                             </div>
 
                                             <div class="col-md-6">
                                                 <label>Edition</label>
                                                 <input class="form-control" type="text" id="edition" name="edition"
                                                     placeholder="Edition">
+
                                             </div>
 
                                             <div class="col-md-6 d-none">
@@ -113,45 +107,41 @@
                                                     placeholder="Brand">
                                             </div>
 
-                                            <div class="col-md-6">
-                                                <label>Quantity</label>
-                                                <input class="form-control" onkeypress="javascript:return isNumber(event)"
-                                                    type="int" id="quantity" name="quantity"
-                                                    placeholder="Quantity">
+                                            <div class="col-md-6 col-12">
+                                                <label class="text-danger" for="quantity">Quantity</label>
+                                                <input class="form-control" type="int" id="quantity"
+                                                    name="quantity" placeholder="Quantity">
                                             </div>
 
                                             <div class="col-md-6">
                                                 <label class="">Book Image</label>
                                                 <input class="form-control" type="file" id="image" name="image"
                                                     placeholder="image" accept="image/png, image/jpg, image/jpeg">
-                                                <p class="text-danger" id="image_error"></p>
                                             </div>
 
                                             <div class="col-md-6">
                                                 <label>MRP</label>
-                                                <input class="form-control" onkeypress="javascript:return isNumber(event)"
-                                                    type="int" id="mrp" name="mrp" placeholder="MRP.">
+                                                <input class="form-control" type="int" id="mrp" name="mrp"
+                                                    placeholder="MRP.">
                                             </div>
 
                                             <div class="col-md-6">
                                                 <label>Almari No.</label>
-                                                <input class="form-control" onkeypress="javascript:return isNumber(event)"
-                                                    type="int" id="almari_no" name="almari_no"
-                                                    placeholder="Almari No.">
+                                                <input class="form-control" type="int" id="almari_no"
+                                                    name="almari_no" placeholder="Almari No">
                                             </div>
 
                                             <div class="col-md-6">
                                                 <label>With Cover</label><br>
                                                 <div class="form-check-inline">
                                                     <label class="form-check-label cursor">
-                                                        <input type="radio" class="form-check-input xl" id="cover-yes"
-                                                            name="cover" value="1">Yes
-                                                    </label>
+                                                        <input type="radio" class="form-check-input xl" id="cover"
+                                                            name="cover"> Yes </label>
                                                 </div>
                                                 <div class="form-check-inline">
                                                     <label class="form-check-label cursor">
                                                         <input type="radio" class="form-check-input xl no_checked"
-                                                            id="cover-no" name="cover" value="0">No
+                                                            id="cover" name="cover">No
                                                     </label>
                                                 </div>
                                             </div>
@@ -173,17 +163,6 @@
                                 <div class="card-title">
                                     <h4><i class="fa fa-list"></i> View Library Books</h4>
                                 </div>
-                                {{-- <div class="card-tools">
-                                    <button type="button" class="btn btn-primary btn-sm" id="barcode-btn">
-                                        <i class="fa fa-barcode"></i> Barcode
-                                    </button>
-                                    <button type="button" class="btn btn-primary btn-sm" id="add-btn">
-                                        <i class="fa fa-plus"></i> Add
-                                    </button> 
-                                    <button type="button" class="btn btn-primary btn-sm" id="back-btn">
-                                        <i class="fa fa-arrow-left"></i> Back
-                                    </button>
-                                </div> --}}
                             </div>
                             <div class="card-body">
                                 <div class="bg-item border rounded p-3 mb-3">

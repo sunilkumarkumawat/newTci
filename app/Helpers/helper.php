@@ -4,16 +4,21 @@ namespace App\Helpers;
 
 use Illuminate\Support\Carbon;
 use App\Models\library\Library;
+use App\Models\Branch;
 use App\Models\Setting;
 use App\Models\User;
 use App\Models\Sessions;
 use App\Models\Sidebar;
-use App\Models\Master\Branch;
 use DB;
 use Session;
-
+use Illuminate\Support\Facades\Auth;
 class Helper
 {
+    public static function getBranches()
+    {
+        $getBranch = Branch::where('user_id',Auth::user()->id)->orderBy('id', 'DESC')->get();
+        return $getBranch;
+    }
     public static function getLibrary()
     {
         $getLibrary = Library::orderBy('id', 'DESC');

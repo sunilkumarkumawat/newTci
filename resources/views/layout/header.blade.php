@@ -1,3 +1,6 @@
+@php
+$getBranches = Helper::getBranches();
+@endphp
 <style>
     .selectDesign {
         padding: 5px 10px;
@@ -73,49 +76,46 @@
         </li>
 
 
-        <!-- Library Dropdown -->
-        <li class="nav-item dropdown">
-            <select class="selectDesign form-control-sm">
-                <option selected>Central Library</option>
-                <option>Branch Library 1</option>
-                <option>Branch Library 2</option>
-            </select>
-        </li>
+      
 
 
         <!-- Language Switcher -->
-        <li class="nav-item dropdown">
+        {{-- <li class="nav-item dropdown">
             <select class="selectDesign form-control-sm">
                 <option selected>English</option>
                 <option>Hindi</option>
                 <option>French</option>
             </select>
-        </li>
+        </li> --}}
 
         <!-- Branch Dropdown -->
         <li class="nav-item dropdown">
-            <select class="selectDesign form-control-sm">
-                <option selected>Main Branch</option>
-                <option>Branch A</option>
-                <option>Branch B</option>
+            <select class="selectDesign form-control-sm" id="headerBranchSelect">
+               @if(!empty($getBranches))
+               
+                @foreach($getBranches as $item)
+                
+                <option value='{{$item->id}}'>{{$item->branch_name ?? ''}}</option>
+                @endforeach
+            @endif
             </select>
         </li>
 
         <!-- Session Dropdown -->
-        <li class="nav-item dropdown">
+        {{-- <li class="nav-item dropdown">
             <select class="selectDesign form-control-sm">
                 <option value="1">2023 - 2024</option>
                 <option value="2">2024 - 2025</option>
                 <option value="3">2025 - 2026</option>
             </select>
-        </li>
+        </li> --}}
 
         <!-- Refresh -->
-        <li class="nav-item dropdown">
+        {{-- <li class="nav-item dropdown">
             <a href="#">
                 <button type="button" class="btn btn-success btn-head">Refresh!</button>
             </a>
-        </li>
+        </li> --}}
 
         <!-- User Profile -->
         <li class="nav-item dropdown">

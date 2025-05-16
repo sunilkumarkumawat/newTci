@@ -27,7 +27,7 @@
                                 <form id="createCommon">
                                     <input type='hidden' value='expense' name="modal_type" />
                                     <input type="hidden" value="{{ Auth::user()->id }}" name="user_id" />
-                                    <input type='hidden' value='3' name='branch_id' />
+                                    <input type='hidden' id="branch_id" name='branch_id' />
 
                                     <div id="expense-container" class="bg-item mb-3 border p-3 rounded">
                                         <div class="row">

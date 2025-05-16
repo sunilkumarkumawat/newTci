@@ -71,7 +71,7 @@
 
                                 <form id="createCommon">
                                     <input type='hidden' value='User' name='modal_type' />
-                                    <input type='hidden' value='3' name='branch_id' />
+                                    <input type='hidden' id="branch_id"  name='branch_id' />
                                     <div class="card-body">
                                         <div class="bg-item border p-3 rounded">
                                             <!-- Step 1: Basic Details -->
