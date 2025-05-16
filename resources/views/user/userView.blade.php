@@ -73,15 +73,18 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <!-- Sample Static Row -->
-                                        <tr>
-                                            <td>1</td>
+
+                                    @if(!empty($users))
+@foreach($users as $index => $user)
+
+      <tr>
+                                            <td>{{$index+1}}</td>
                                             <td class="text-center">
                                                 <img src="{{ asset(env('IMAGE_SHOW_PATH') . 'default_user_image.jpg') }}"
                                                     class="profileImg" alt="User Image">
                                             </td>
-                                            <td>Admin</td>
-                                            <td>John Doe</td>
+                                            <td>{{$user->role_id}}</td>
+                                            <td>{{$user->first_name}} {{$user->last_name}}</td>
                                             <td>1234567890</td>
                                             <td>john@example.com</td>
                                             <td>johndoe</td>
@@ -96,7 +99,10 @@
                                                     <i class="fa fa-trash fs-6 text-danger"></i></a>
                                             </td>
                                         </tr>
-                                        <!-- Add more rows as needed -->
+@endforeach
+
+                                    @endif
+                                       
                                     </tbody>
                                 </table>
                             </div>

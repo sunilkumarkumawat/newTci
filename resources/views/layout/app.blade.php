@@ -497,7 +497,7 @@
                                         message = 'Contact Person is required.';
                                     }
                                     break;
-                                case 'role_name':
+                                case 'role_id':
                                     if (value === '') {
                                         message = 'Role name is required.';
                                     }
@@ -607,8 +607,8 @@
                     const $form = $(this);
 
                     if (!validateForm($form)) return;
-
-                    const endpoint = $form.data('action'); // Get custom endpoint if needed
+                        const endpoint = "{{url('/')}}/api/createCommon";
+                 
                     const formData = $form.serialize();
 
                     $.post(endpoint, formData)

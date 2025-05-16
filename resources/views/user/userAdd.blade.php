@@ -197,8 +197,8 @@
 
                                                     <div class="col-md-4">
                                                         <div class="form-group">
-                                                            <label class="text-danger" for="role_name">Role *</label>
-                                                            <select class="form-control" name="role_name" id="role_name"
+                                                            <label class="text-danger" for="role_id">Role *</label>
+                                                            <select class="form-control" name="role_id" id="role_id"
                                                                 data-required="true">
                                                                 <option value="">Select</option>
                                                                 <option>Manager</option>

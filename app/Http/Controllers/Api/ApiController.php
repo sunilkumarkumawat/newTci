@@ -122,7 +122,6 @@ class ApiController extends BaseController
             // Create the record dynamically
             $record = $modal::create($data);
 
-
             return response()->json([
                 'message' => class_basename($modal) . ' created successfully.',
                 'data' => $record
@@ -133,4 +132,56 @@ class ApiController extends BaseController
             ], 500);
         }
     }
+
+
+
+
+
+
+
+
+    
+
+     public function getUsersData(Request $request)
+{
+    try {
+        $modal = $request->modal_type;
+
+        // Automatically add namespace if not fully qualified
+        if (!str_contains($modal, '\\')) {
+            $modal = 'App\\Models\\' . $modal;
+        }
+
+        // Check if the model class exists
+        if (!class_exists($modal)) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Invalid model type provided.'
+            ], 400); // 400 = Bad Request
+        }
+
+        // Retrieve all records
+        $records = $modal::all();
+
+        if ($records->isEmpty()) {
+            return response()->json([
+                'status' => true,
+                'message' => class_basename($modal) . ' data not found.',
+                'data' => []
+            ], 204); // 204 = No Content (success but no data)
+        }
+
+        return response()->json([
+            'status' => true,
+            'message' => class_basename($modal) . ' data fetched successfully.',
+            'data' => $records
+        ], 200); // 200 = OK
+
+    } catch (\Exception $e) {
+        return response()->json([
+            'status' => false,
+            'message' => 'Server Error: ' . $e->getMessage()
+        ], 500); // 500 = Internal Server Error
+    }
+}
 }

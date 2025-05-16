@@ -25,6 +25,7 @@ use Redirect;
 use Auth;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Http\Controllers\api\ApiController;
 
 class UserController extends Controller
 
@@ -34,11 +35,38 @@ class UserController extends Controller
         return view('user/userAdd');
  
     }
-    public function userView(){
-                     
-        return view('user/userView');
- 
+ public function userView()
+{
+    try {
+        // Create a new instance of the API controller
+        $api = new ApiController();
+
+        // Simulate request with modal_type = User
+        $fakeRequest = new Request([
+            'modal_type' => 'User',
+        ]);
+
+        // Call the API method
+        $response = $api->getUsersData($fakeRequest);
+
+        // Extract data from JSON response
+        $responseData = $response->getData();
+
+        // Check if data exists and is not empty
+        $users = isset($responseData->data) && !empty($responseData->data) ? $responseData->data : [];
+
+        // Return view with users
+        return view('user.userView', ['users' => $users]);
+
+    } catch (\Exception $e) {
+        // Log the error and show fallback view or message
+        \Log::error('Error in userView: ' . $e->getMessage());
+
+        return view('user.userView', ['users' => []])
+            ->with('error', 'Failed to load users.');
     }
+}
+
     public function userEdit(){
                      
         return view('user/userEdit');
