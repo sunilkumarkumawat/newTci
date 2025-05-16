@@ -80,7 +80,7 @@
                                                 <div class="row">
                                                     <div class="col-md-4 col-12">
                                                         <div class="form-group">
-                                                            <label class="text-danger" for="first_name">First Name *</label>
+                                                            <label for="first_name">First Name <span class="text-danger">*</span></label>
                                                             <input type="text" class="form-control" id="first_name"
                                                                 placeholder="First Name" name="first_name"
                                                                 data-required="true">
@@ -88,7 +88,7 @@
                                                     </div>
                                                     <div class="col-md-4">
                                                         <div class="form-group">
-                                                            <label class="text-danger" for="last_name">Last Name *</label>
+                                                            <label for="last_name">Last Name <span class="text-danger"></span>*</label>
                                                             <input type="text" class="form-control"
                                                                 placeholder="Last Name" name="last_name" id="last_name"
                                                                 data-required="true">
@@ -96,14 +96,14 @@
                                                     </div>
                                                     <div class="col-md-4">
                                                         <div class="form-group">
-                                                            <label class="text-danger" for="mobile">Mobile *</label>
+                                                            <label for="mobile">Mobile <span  class="text-danger">*</span></label>
                                                             <input type="text" class="form-control" placeholder="Mobile"
                                                                 id="mobile" data-required="true" name="mobile">
                                                         </div>
                                                     </div>
                                                     <div class="col-md-4">
                                                         <div class="form-group">
-                                                            <label class="text-danger" for="email">Email *</label>
+                                                            <label for="email">Email <span class="text-danger">*</span></label>
                                                             <input type="email" class="form-control" placeholder="Email"
                                                                 id="email" data-required="true" name="email">
                                                         </div>
@@ -111,7 +111,7 @@
 
                                                     <div class="col-md-4">
                                                         <div class="form-group">
-                                                            <label class="text-danger" for="userName">Username *</label>
+                                                            <label for="userName">Username <span class="text-danger">*</span></label>
                                                             <input type="text" class="form-control"
                                                                 placeholder="Username" name="userName" id="userName"
                                                                 data-required="true">
@@ -120,7 +120,7 @@
 
                                                     <div class="col-md-4">
                                                         <div class="form-group">
-                                                            <label class="text-danger" for="password">Password *</label>
+                                                            <label for="password">Password <span class="text-danger">*</span></label>
                                                             <input type="password" class="form-control"
                                                                 placeholder="Password" name="password" id="password"
                                                                 data-required="true">
@@ -135,7 +135,7 @@
                                                 <div class="row">
                                                     <div class="col-md-4">
                                                         <div class="form-group">
-                                                            <label class="text-danger" for="dob">DOB *</label>
+                                                            <label for="dob">DOB <span class="text-danger">*</span></label>
                                                             <input type="date" class="form-control" name="dob"
                                                                 id="dob" data-required="true">
                                                         </div>
@@ -143,8 +143,8 @@
 
                                                     <div class="col-md-4">
                                                         <div class="form-group">
-                                                            <label class="text-danger" for="father_name">Father
-                                                                Name*</label>
+                                                            <label for="father_name">Father
+                                                                Name <span class="text-danger">*</span></label>
                                                             <input type="text" class="form-control" name="father_name"
                                                                 id="father_name" placeholder="Father Name"
                                                                 data-required="true">
@@ -153,7 +153,7 @@
 
                                                     <div class="col-md-4">
                                                         <div class="form-group">
-                                                            <label class="text-danger" for="gender">Gender*</label>
+                                                            <label class="text-danger" for="gender">Gender <span class="text-danger">*</span></label>
                                                             <select name="gender" id="gender" class="form-control">
                                                                 <option value="M">Male</option>
                                                                 <option value="F">Female</option>
@@ -164,7 +164,7 @@
 
                                                     <div class="col-md-4">
                                                         <div class="form-group">
-                                                            <label class="text-danger" for="state_id">State*</label>
+                                                            <label for="state_id">State <span class="text-danger">*</span></label>
                                                             <select class="form-control" name="state_id" id="state_id"
                                                                 data-required="true">
                                                                 <option value="0">Select</option>
@@ -175,7 +175,7 @@
                                                     </div>
                                                     <div class="col-md-4">
                                                         <div class="form-group">
-                                                            <label class="text-danger" for="city_id">City *</label>
+                                                            <label for="city_id">City <span class="text-danger">*</span></label>
                                                             <select class="form-control" name="city_id" id="city_id"
                                                                 data-required="true">
                                                                 <option value="0">Select</option>
@@ -186,7 +186,7 @@
                                                     </div>
                                                     <div class="col-md-4">
                                                         <div class="form-group">
-                                                            <label class="text-danger" for="address">Address *</label>
+                                                            <label for="address">Address <span class="text-danger">*</span></label>
                                                             <input type="text" class="form-control"
                                                                 placeholder="Address" name="address" id="address"
                                                                 data-required="true">
@@ -197,7 +197,7 @@
 
                                                     <div class="col-md-4">
                                                         <div class="form-group">
-                                                            <label class="text-danger" for="role_id">Role *</label>
+                                                            <label for="role_id">Role <span class="text-danger">*</span></label>
                                                             <select class="form-control" name="role_id" id="role_id"
                                                                 data-required="true">
                                                                 <option value="">Select</option>
@@ -216,7 +216,7 @@
                                                     <div class="col-md-4">
                                                         <div class="form-group">
                                                             <label>Photo</label>
-                                                            <input type="file" class="form-control" accept="image/*"
+                                                            <input type="file" class="form-control" accept="image/*" id="image"
                                                                 name="image">
                                                         </div>
                                                     </div>

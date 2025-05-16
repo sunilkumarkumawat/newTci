@@ -25,11 +25,40 @@ use Redirect;
 use Auth;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Http\Controllers\api\ApiController;
 
 class ExpenseController extends Controller
 
 {
    public function expense(){
-    return view('expense/expense');
+
+      try {
+        // Create a new instance of the API controller
+        $api = new ApiController();
+
+        // Simulate request with modal_type = User
+        $fakeRequest = new Request([
+            'modal_type' => 'Expense',
+        ]);
+
+        // Call the API method
+        $response = $api->getUsersData($fakeRequest);
+
+        // Extract data from JSON response
+        $responseData = $response->getData();
+
+        // Check if data exists and is not empty
+        $data = isset($responseData->data) && !empty($responseData->data) ? $responseData->data : [];
+
+        // Return view with users
+        return view('expense/expense', ['data' => $data]);
+
+    } catch (\Exception $e) {
+        // Log the error and show fallback view or message
+
+        return view('expense/expense', ['data' => []])
+            ->with('error', 'Failed to load expense.');
+    }
+
    }
 }    

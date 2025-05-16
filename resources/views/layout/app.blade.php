@@ -101,10 +101,10 @@
         @include('layout.footer')
         <script>
             /*$.ajaxSetup({
-                                                                                                                                                                                    headers: {
-                                                                                                                                                                                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                                                                                                                                                                                    }
-                                                                                                                                                                                });*/
+                                                                                                                                                                                                                                                    headers: {
+                                                                                                                                                                                                                                                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                                                                                                                                                                                                                                                    }
+                                                                                                                                                                                                                                                });*/
             //var URL  = "{{ url('/') }}";
         </script>
 
@@ -602,13 +602,11 @@
                             .replace(/\b\w/g, l => l.toUpperCase());
                     }
 
-
-
                     const $form = $(this);
 
                     if (!validateForm($form)) return;
-                        const endpoint = "{{url('/')}}/api/createCommon";
-                 
+                    const endpoint = "{{ url('/') }}/api/createCommon";
+
                     const formData = $form.serialize();
 
                     $.post(endpoint, formData)
@@ -625,6 +623,9 @@
                 });
             });
         </script>
+
+        
+
 
         {{-- convert excel data into array --}}
         <script>
@@ -662,6 +663,52 @@
             });
         </script>
 
+        {{-- delete entry --}}
+        <script>
+            $(document).on('click', '.delete-btn', function() {
+                const model = $(this).data('modal');
+                const id = $(this).data('id');
+                const baseUrl = "{{ url('/') }}";
+                if (confirm('Are you sure you want to delete this item?')) {
+                    const endpoint = `${baseUrl}/api/common-delete/${model}/${id}`;
+
+                    $.post(endpoint, {
+                            _method: 'DELETE',
+                            _token: $('meta[name="csrf-token"]').attr('content') // Optional for API routes
+                        })
+                        .done(function(response) {
+                            console.log(response);
+                            toastr.success(response.message || 'Item deleted successfully.');
+                            location.reload();
+                        })
+                        .fail(function(xhr) {
+                            toastr.error('Failed to delete item.');
+                            console.error(xhr.responseText);
+                        });
+                }
+            });
+        </script>
+
+
+        <!-- Common Delete Confirmation Modal -->
+        <div class="modal fade" id="deleteConfirmModal" tabindex="-1" aria-labelledby="deleteModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog modal-sm modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header bg-danger text-white">
+                        <h5 class="modal-title" id="deleteModalLabel">Confirm Delete</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        Are you sure you want to delete this item?
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Cancel</button>
+                        <button type="button" id="confirmDeleteBtn" class="btn btn-danger btn-sm">Delete</button>
+                    </div>
+                </div>
+            </div>
+        </div>
 
 
 

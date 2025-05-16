@@ -31,8 +31,9 @@
                                         <input type='hidden' id="branch_id" name='branch_id' />
                                         <div class="row">
                                             <div class="col-md-12 col-12 form-group">
-                                                <label class="text-danger" for="name"> Role*</label>
-                                                <input type="text" class="form-control" id="role_name" name="role_name" data-required='true'>
+                                                <label for="name"> Role Name <span class="text-danger">*</span></label>
+                                                <input type="text" class="form-control" id="role_name" name="role_name"
+                                                    data-required='true'>
                                             </div>
 
                                             <div class="col-12 col-md-12 ">
@@ -64,20 +65,24 @@
                                             </tr>
                                         </thead>
                                         <tbody id="branch-list">
-                                            <!-- role entries will be loaded here -->
-                                            <tr>
-                                                <td>1</td>
-                                                <td>Admin</td>
-                                                <td>
-                                                    <div class="btn-group">
-                                                        <a href="#" class="btn-xs">
-                                                            <i class="fa fa-edit fs-6 mx-2 text-primary"></i>
-                                                        </a>
-                                                        <a href="#" class=" btn-xs">
-                                                            <i class="fa fa-trash fs-6 text-danger"></i></a>
-                                                    </div>
-                                                </td>
-                                            </tr>
+                                            @if (!empty($data))
+                                                @foreach ($data as $index => $role)
+                                                    <tr id="row-{{ $role->id }}">
+                                                        <td>{{ $index + 1 }}</td>
+                                                        <td>{{ $role->role_name ?? '' }}</td>
+                                                        <td>
+                                                            <div class="btn-group">
+                                                                <a href="#" class="btn-xs">
+                                                                    <i class="fa fa-edit fs-6 mx-2 text-primary"></i>
+                                                                </a>
+                                                                <a class=" btn-xs delete-btn" 
+                                                                    data-modal='Role' data-id='{{$role->id}}'>
+                                                                    <i class="fa fa-trash fs-6 text-danger"></i></a>
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                @endforeach
+                                            @endif
                                         </tbody>
                                     </table>
                                 </div>

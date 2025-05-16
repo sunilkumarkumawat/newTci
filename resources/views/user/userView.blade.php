@@ -74,35 +74,33 @@
                                     </thead>
                                     <tbody>
 
-                                    @if(!empty($users))
-@foreach($users as $index => $user)
+                                        @if (!empty($data))
+                                            @foreach ($data as $index => $user)
+                                                <tr>
+                                                    <td>{{ $index + 1 ?? ''}}</td>
+                                                    <td class="text-center">
+                                                        <img src="{{ asset(env('IMAGE_SHOW_PATH') . 'default_user_image.jpg') }}"
+                                                            class="profileImg" alt="User Image">
+                                                    </td>
+                                                    <td>{{ $user->role_id ?? ''}}</td>
+                                                    <td>{{ $user->first_name ?? ''}} {{ $user->last_name ?? ''}}</td>
+                                                    <td>{{ $user->mobile ?? ''}}</td>
+                                                    <td>{{ $user->email ?? ''}}</td>
+                                                    <td>{{ $user->userName ?? ''}}</td>
+                                                    <td>{{ $user->password ?? ''}}</td>
+                                                    <td>
+                                                        <button class="btn btn-success btn-sm w-75">Active</button>
+                                                    </td>
+                                                    <td>
+                                                        <a href="{{ url('userEdit') }}" class="btn-xs"><i
+                                                                class="fa fa-edit text-primary"></i></a>
+                                                        <a class=" btn-xs delete-btn" data-modal='User' data-id='{{$user->id}}'>
+                                                            <i class="fa fa-trash fs-6 text-danger"></i></a>
+                                                    </td>
+                                                </tr>
+                                            @endforeach
+                                        @endif
 
-      <tr>
-                                            <td>{{$index+1}}</td>
-                                            <td class="text-center">
-                                                <img src="{{ asset(env('IMAGE_SHOW_PATH') . 'default_user_image.jpg') }}"
-                                                    class="profileImg" alt="User Image">
-                                            </td>
-                                            <td>{{$user->role_id}}</td>
-                                            <td>{{$user->first_name}} {{$user->last_name}}</td>
-                                            <td>1234567890</td>
-                                            <td>john@example.com</td>
-                                            <td>johndoe</td>
-                                            <td>••••••</td>
-                                            <td>
-                                                <button class="btn btn-success btn-sm w-75">Active</button>
-                                            </td>
-                                            <td>
-                                                <a href="{{ url('userEdit') }}" class="btn-xs"><i
-                                                        class="fa fa-edit text-primary"></i></a>
-                                                <a href="#" class=" btn-xs">
-                                                    <i class="fa fa-trash fs-6 text-danger"></i></a>
-                                            </td>
-                                        </tr>
-@endforeach
-
-                                    @endif
-                                       
                                     </tbody>
                                 </table>
                             </div>

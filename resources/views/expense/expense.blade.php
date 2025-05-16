@@ -33,43 +33,43 @@
                                         <div class="row">
                                             <div class="col-sm-6 col-12">
                                                 <div class="form-group">
-                                                    <label  for="sr_no">Sr.No.</label>
-                                                    <input type="text" id="sr_no" class="form-control blockHeight sr-no"
-                                                        name="sr_no" >
+                                                    <label for="sr_no">Sr.No.</label>
+                                                    <input type="text" id="sr_no"
+                                                        class="form-control blockHeight sr-no" name="sr_no">
                                                 </div>
                                             </div>
                                             <div class="col-sm-6 col-12">
                                                 <div class="form-group">
-                                                    <label class="text-danger" for="expense_name" >Expense Name*</label>
-                                                    <input type="text" class="form-control blockHeight"
-                                                        id="expense_name" name="expense_name" data-required="true">
+                                                    <label class="text-danger" for="expense_name">Expense Name*</label>
+                                                    <input type="text" class="form-control blockHeight" id="expense_name"
+                                                        name="expense_name" data-required="true">
                                                 </div>
                                             </div>
                                             <div class="col-sm-6 col-12">
                                                 <div class="form-group">
-                                                    <label class="text-danger" for="expense-date" >Date*</label>
-                                                    <input type="date"  class="form-control blockHeight" id="expense-date"
-                                                        name="expense-date" data-required="true">
+                                                    <label class="text-danger" for="expense-date">Date*</label>
+                                                    <input type="date" class="form-control blockHeight" id="expense-date"
+                                                        name="expense_date" data-required="true">
                                                 </div>
                                             </div>
-                                            
+
                                             <div class="col-sm-6 col-12">
-                                                <label class="text-danger" for="expense-quantity">Quantity*</label>
+                                                <label class="text-danger" for="quantity">Quantity*</label>
                                                 <input type="text" class="form-control blockHeight quantity"
-                                                    id="expense-quantity" name="quantity" data-required="true">
+                                                    id="quantity" name="quantity" data-required="true">
                                             </div>
                                             <div class="col-sm-6 col-12">
                                                 <div class="form-group">
-                                                    <label class="text-danger" for="expense-rate">Rate*</label>
+                                                    <label class="text-danger" for="rate">Rate*</label>
                                                     <input type="text" class="form-control blockHeight rate"
-                                                        id="expense-rate" name="rate" data-required="true">
+                                                        id="rate" name="rate" data-required="true">
                                                 </div>
                                             </div>
                                             <div class="col-sm-6 col-12">
                                                 <div class="form-group">
-                                                    <label class="text-danger" for="expense-total">Total Amount*</label>
+                                                    <label class="text-danger" for="total_amt">Total Amount*</label>
                                                     <input type="text" class="form-control blockHeight total"
-                                                        id="expense-total" name="total_amt" data-required="true">
+                                                        id="total_amt" name="total_amt" data-required="true">
                                                 </div>
                                             </div>
                                             <div class="col-sm-6 col-12">
@@ -87,8 +87,8 @@
                                             <div class="col-sm-6 col-12">
                                                 <div class="form-group">
                                                     <label>Attachment</label>
-                                                    <input type="file" class="form-control "
-                                                        id="expense-attachment" name="attachment">
+                                                    <input type="file" class="form-control " id="expense-attachment"
+                                                        name="attachment">
                                                 </div>
                                             </div>
                                             <div class="col-sm-12 col-12">
@@ -127,37 +127,42 @@
                                         <thead>
                                             <tr class="bg-light">
                                                 <th>Sr.No</th>
+                                                <th>Expense Name</th>
                                                 <th>Date</th>
-                                                <th>Particular</th>
                                                 <th>Quantity</th>
+                                                <th>Rate</th>
                                                 <th>Amount</th>
                                                 <th>Actions</th>
                                             </tr>
                                         </thead>
                                         <tbody id="expense-list">
-                                            <!-- Expense entries will be loaded here -->
-                                            {{-- @foreach ($expenses ?? [] as $index => $expense) --}}
-                                            <tr>
-                                                <td>1</td>
-                                                <td>hello</td>
-                                                <td>34</td>
-                                                <td>60</td>
-                                                <td>800</td>
-                                                <td>
-                                                    <div class="btn-group">
-                                                        <a href="#" class="btn-xs">
-                                                            <i class="fa fa-eye  fs-6  text-info"></i>
-                                                        </a>
+                                            @if (!empty($data))
+                                                @foreach ($data as $index => $expense)
+                                                    <tr>
+                                                        <td>{{ $index + 1 }}</td>
+                                                        <td>{{ $expense->expense_name ?? '' }}</td>
+                                                        <td>
+                                                            {{ $expense->expense_date ? \Carbon\Carbon::parse($expense->expense_date)->format('d-m-Y') : '' }}
+                                                        </td>
+                                                        <td>{{ $expense->quantity ?? '' }}</td>
+                                                        <td>{{ $expense->rate ?? '' }}</td>
+                                                        <td>{{ $expense->total_amt ?? '' }}</td>
+                                                        <td>
+                                                            <div class="btn-group">
+                                                                <a href="#" class="btn-xs">
+                                                                    <i class="fa fa-eye  fs-6  text-info"></i>
+                                                                </a>
 
-                                                        <a href="#" class="btn-xs">
-                                                            <i class="fa fa-edit fs-6 mx-2 text-warning"></i>
-                                                        </a>
-                                                        <a href="#" class=" btn-xs">
-                                                            <i class="fa fa-trash fs-6 text-danger"></i></a>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                            {{-- @endforeach --}}
+                                                                <a href="#" class="btn-xs">
+                                                                    <i class="fa fa-edit fs-6 mx-2 text-warning"></i>
+                                                                </a>
+                                                                <a  class=" btn-xs delete-btn" data-modal='Expense' data-id='{{$expense->id}}'>
+                                                                    <i class="fa fa-trash fs-6 text-danger"></i></a>
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                @endforeach
+                                            @endif
                                         </tbody>
                                     </table>
                                 </div>

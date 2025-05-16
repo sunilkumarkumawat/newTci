@@ -65,4 +65,9 @@ Route::middleware(['auth'])->group(function () {
 
     // role
     Route::match(['get', 'post'], 'role', 'CommonController@role');
+
+
+
+   
+
 });
