@@ -8,7 +8,7 @@
                 <div class="col-md-12 col-12 p-0">
                     <ul class="breadcrumb">
                         <li class="breadcrumb-item"><a href="{{ url('dashboard') }}">Dashboard</a></li>
-                        <li class="breadcrumb-item">StudnetAdd</li>
+                        <li class="breadcrumb-item">StudentAdd</li>
                     </ul>
                 </div>
             </div>
@@ -266,9 +266,9 @@
 
                                                         <div class="col-md-3">
                                                             <div class="form-group">
-                                                                <label for="state">State<span style="color:red;">*</span></label>
-                                                                <select class="form-control" id="state"
-                                                                    name="state" data-required="true">
+                                                                <label for="state_id">State<span style="color:red;">*</span></label>
+                                                                <select class="form-control" id="state_id"
+                                                                    name="state_id" data-required="true">
                                                                     <option value="">Select</option>
                                                                     <option value="1" selected>Rajasthan</option>
                                                                     <option value="2">Delhi</option>
@@ -279,13 +279,13 @@
 
                                                         <div class="col-md-3">
                                                             <div class="form-group">
-                                                                <label for="city">City<span style="color:red;">*</span></label>
-                                                                <select class="form-control" name="city"
-                                                                    id="city" data-required="true">
+                                                                <label for="city_id">City<span style="color:red;">*</span></label>
+                                                                <select class="form-control" name="city_id"
+                                                                    id="city_id" data-required="true">
                                                                     <option value="">Select</option>
-                                                                    <option value="1" selected>Jaipur</option>
-                                                                    <option value="2">Jodhpur</option>
-                                                                    <option value="3">Udaipur</option>
+                                                                    <option value="Jaipur" selected>Jaipur</option>
+                                                                    <option value="Jodhpur">Jodhpur</option>
+                                                                    <option value="Udaipur">Udaipur</option>
                                                                 </select>
                                                             </div>
                                                         </div>
@@ -401,9 +401,9 @@
 
                                                         <div class="col-md-4">
                                                             <div class="form-group">
-                                                                <label>Mother's Occupation</label>
+                                                                <label for="mother_occupation" >Mother's Occupation</label>
                                                                 <input type="text" class="form-control"
-                                                                    id="mother_occupation" name="m_occupation"
+                                                                    id="mother_occupation" name="mother_occupation"
                                                                     placeholder="Mother's Occupation">
                                                             </div>
                                                         </div>

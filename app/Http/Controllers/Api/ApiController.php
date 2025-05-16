@@ -131,16 +131,7 @@ class ApiController extends BaseController
                 'error' => 'Error: ' . $e->getMessage()
             ], 500);
         }
-    }
-
-
-
-
-
-
-
-
-    
+    }  
 
      public function getUsersData(Request $request)
 {

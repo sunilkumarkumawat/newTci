@@ -25,6 +25,7 @@ use Redirect;
 use Auth;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Api\ApiController;
 
 class StudentController extends Controller
 
@@ -34,7 +35,34 @@ class StudentController extends Controller
    }
 
    public function studentView(){
-    return view('student/studentView');
+    try {
+        // Create a new instance of the API controller
+        $api = new ApiController();
+
+        // Simulate request with modal_type = User
+        $fakeRequest = new Request([
+            'modal_type' => 'Admission',
+        ]);
+
+        // Call the API method
+        $response = $api->getUsersData($fakeRequest);
+
+        // Extract data from JSON response
+        $responseData = $response->getData();
+
+        // Check if data exists and is not empty
+        $data = isset($responseData->data) && !empty($responseData->data) ? $responseData->data : [];
+
+        // Return view with users
+        return view('student.studentView', ['student' => $data]);
+
+    } catch (\Exception $e) {
+        
+        
+
+        return view('student.studentView', ['student' => []])
+            ->with('error', 'Failed to load student.');
+    }
    }
 
    public function studentEdit(){

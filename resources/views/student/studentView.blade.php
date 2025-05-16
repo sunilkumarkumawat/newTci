@@ -67,25 +67,30 @@
                                             <th>Mobile</th>
                                             <th>E-Mail</th>
                                             <th>Admission Date</th>
-                                            <th>Renew Date</th>
+                                            <th>City</th>
                                             <th>Status</th>
                                             <th>Action</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         <!-- Sample Static Row -->
+
+
+                                        @if(!empty($student))
+                                        @foreach ($student as $index => $studentAdd)
+
                                         <tr>
-                                            <td>1</td>
+                                            <td>{{ $index + 1 }}</td>
                                             <td class="text-center">
                                                 <img src="{{ asset(env('IMAGE_SHOW_PATH') . 'default_user_image.jpg') }}"
                                                     class="profileImg" alt="Student Image">
                                             </td>
 
-                                            <td>John Doe</td>
-                                            <td>1234567890</td>
-                                            <td>john@example.com</td>
-                                            <td>27/04/2025</td>
-                                            <td> 28/05/2025</td>
+                                            <td>{{ $studentAdd -> student_name ?? '' }}</td>
+                                            <td>{{ $studentAdd -> mobile ?? '' }}</td>
+                                            <td>{{ $studentAdd -> email ?? '' }}</td>
+                                            <td>{{ $studentAdd -> admission_date ?? '' }}</td>
+                                            <td> {{ $studentAdd -> city_id ?? '' }}</td>
                                             <td>
                                                 <button class="btn btn-success btn-sm w-75">Active</button>
                                             </td>
@@ -96,6 +101,8 @@
                                                     <i class="fa fa-trash fs-6 text-danger"></i></a>
                                             </td>
                                         </tr>
+                                        @endforeach 
+                                        @endif
                                         <!-- Add more rows as needed -->
                                     </tbody>
                                 </table>

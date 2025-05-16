@@ -482,6 +482,30 @@
                                     }
                                     break;
 
+                                case 'father_mobile':
+
+                                    if (!/^\d{10}$/.test(value)) {
+                                        message =
+                                            'Please enter a valid 10-digit mobile number.';
+                                    }
+                                    break;
+
+                                case 'guardian_mobile':
+
+                                    if (!/^\d{10}$/.test(value)) {
+                                        message =
+                                            'Please enter a valid 10-digit mobile number.';
+                                    }
+                                    break;
+
+                                case 'aadhaar':
+
+                                    if (!/^\d{12}$/.test(value)) {
+                                        message =
+                                            'Please enter a valid 12-digit aadhaar number.';
+                                    }
+                                    break;
+
                                 case 'branch_code':
                                     if (value === '') {
                                         message = 'Branch code is required.';
@@ -521,6 +545,12 @@
                                     }
                                     break;
 
+                                case 'student_name':
+                                    if (value === '') {
+                                        message = 'Student Name is required.';
+                                    }
+                                    break;
+
                                 case 'password':
                                     if (value === '') {
                                         message = 'Password is required.';
@@ -551,15 +581,51 @@
                                     }
                                     break;
 
+                                case 'mother_name':
+                                    if (value === '') {
+                                        message = 'mother name is required.';
+                                    }
+                                    break;
+
+                                case 'guardian_name':
+                                    if (value === '') {
+                                        message = 'guardian name is required.';
+                                    }
+                                    break;
+
                                 case 'address':
                                     if (value === '') {
                                         message = 'address is required.';
                                     }
                                     break;
 
+                                case 'guardian_address':
+                                    if (value === '') {
+                                        message = 'address is required.';
+                                    }
+                                    break;
+
+                                case 'student_address':
+                                    if (value === '') {
+                                        message = 'student address is required.';
+                                    }
+                                    break;
+
                                 case 'gender':
                                     if (value === '') {
                                         message = 'Gender is required';
+                                    }
+                                    break;
+
+                                case 'religion':
+                                    if (value === '') {
+                                        message = 'Religion is required';
+                                    }
+                                    break;
+
+                                case 'category':
+                                    if (value === '') {
+                                        message = 'Category is required';
                                     }
                                     break;
 
@@ -574,6 +640,50 @@
                                         message = 'Book Name is required';
                                     }
                                     break;
+
+                                case 'expense_name':
+                                    if (value === '') {
+                                        message = 'Expense Name is required';
+                                    }
+                                    break;
+
+                                case 'expense_date':
+                                    if (value === '') {
+                                        message = 'Expense date is required';
+                                    }
+                                    break;
+
+                                case 'expense_date':
+                                    if (value === '') {
+                                        message = 'Expense date is required';
+                                    }
+                                    break;
+
+                                case 'quantity':
+                                    if (value === '') {
+                                        message = 'Expense quantity is required';
+                                    }
+                                    break;
+
+                                case 'rate':
+                                    if (value === '') {
+                                        message = 'Rate is required';
+                                    }
+                                    break;
+
+                                case 'total_amt':
+                                    if (value === '') {
+                                        message = 'Total amount is required';
+                                    }
+                                    break;
+
+                                case 'payment_mode_id':
+                                    if (value === '') {
+                                        message = 'Payment mode is required';
+                                    }
+                                    break;
+
+
 
 
                                     // Add other validations for different fields here

@@ -31,5 +31,6 @@ class ExpenseController extends Controller
 {
    public function expense(){
     return view('expense/expense');
+    
    }
 }    
