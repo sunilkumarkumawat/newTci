@@ -86,7 +86,7 @@
                 {{-- message --}}
                 <li class="nav-item has-treeview">
                     <a href="#" class="nav-link">
-                        <i class="fa-solid fa-envelope nav-icon" style="font-size: 18px;"></i>
+                        <i class="fa fa-envelope nav-icon"></i>
                         <p>
                             Message
                             <i class="fa fa-angle-left right"></i>
@@ -101,7 +101,7 @@
                         </li>
                         <li class="nav-item">
                             <a href="{{ url('messageTemplate') }}" class="nav-link">
-                                <i class="fa fa-square-envelope nav-icon"></i>
+                                <i class="fa fa-envelope-square nav-icon"></i>
                                 <p>Message Template</p>
                             </a>
                         </li>
@@ -111,7 +111,7 @@
                 <!-- Branch -->
                 <li class="nav-item has-treeview">
                     <a href="{{ url('branch') }}" class="nav-link">
-                        <i class="fa-solid fa-code-branch nav-icon"></i>
+                        <i class="fa fa-code-branch nav-icon"></i>
                         <p>Branch</p>
                     </a>
                 </li>
@@ -119,7 +119,7 @@
                 <!-- Role -->
                 <li class="nav-item has-treeview">
                     <a href="{{ url('role') }}" class="nav-link">
-                        <i class="fa-solid fa-user-circle nav-icon"></i>
+                        <i class="fa fa-user-circle nav-icon"></i>
                         <p> Role</p>
                     </a>
                 </li>
@@ -144,37 +144,37 @@
                     <ul class="nav nav-treeview">
                         <li class="nav-item">
                             <a href="{{ url('cabin') }}" class="nav-link">
-                                <i class="fa-solid fa-house-user nav-icon" style="font-size: 15px"></i>
+                                <i class="fa fa-home nav-icon"></i>
                                 <p>Cabin</p>
                             </a>
                         </li>
                         <li class="nav-item">
                             <a href="{{ url('locker') }}" class="nav-link">
-                                <i class="fa fa-lock nav-icon" style="font-size: 15px"></i>
+                                <i class="fa fa-lock nav-icon"></i>
                                 <p>Locker</p>
                             </a>
                         </li>
                         <li class="nav-item">
                             <a href="{{ url('subscription') }}" class="nav-link">
-                                <i class="fa fa-layer-group nav-icon" style="font-size: 15px"></i>
+                                <i class="fa fa-bookmark nav-icon"></i>
                                 <p>Subscription</p>
                             </a>
                         </li>
                         <li class="nav-item">
                             <a href="{{ url('billing') }}" class="nav-link">
-                                <i class="fa fa-receipt nav-icon" style="font-size: 15px"></i>
+                                <i class="fa fa-file-text nav-icon"></i>
                                 <p>Bill</p>
                             </a>
                         </li>
                         <li class="nav-item">
                             <a href="{{ url('due') }}" class="nav-link">
-                                <i class="fa fa-rectangle-list  nav-icon" style="font-size: 15px"></i>
+                                <i class="fa fa-list nav-icon"></i>
                                 <p>Due List</p>
                             </a>
                         </li>
                         <li class="nav-item">
                             <a href="{{ url('wallet') }}" class="nav-link">
-                                <i class="fa fa-wallet nav-icon" style="font-size: 15px"></i>
+                                <i class="fa fa-money nav-icon"></i>
                                 <p>Wallet</p>
                             </a>
                         </li>

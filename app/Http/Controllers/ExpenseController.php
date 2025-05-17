@@ -60,5 +60,7 @@ class ExpenseController extends Controller
             ->with('error', 'Failed to load expense.');
     }
 
+    return view('expense/expense');
+    
    }
 }    

@@ -40,41 +40,41 @@
                                             </div>
                                             <div class="col-sm-6 col-12">
                                                 <div class="form-group">
-                                                    <label class="text-danger" for="expense_name">Expense Name*</label>
-                                                    <input type="text" class="form-control blockHeight" id="expense_name"
-                                                        name="expense_name" data-required="true">
+                                                    <label for="expense_name" >Expense Name<span style="color:red;">*</span></label>
+                                                    <input type="text" class="form-control blockHeight"
+                                                        id="expense_name" name="expense_name" data-required="true">
                                                 </div>
                                             </div>
                                             <div class="col-sm-6 col-12">
                                                 <div class="form-group">
-                                                    <label class="text-danger" for="expense-date">Date*</label>
-                                                    <input type="date" class="form-control blockHeight" id="expense-date"
+                                                    <label for="expense_date" >Date<span style="color:red;">*</span></label>
+                                                    <input type="date"  class="form-control blockHeight" id="expense_date"
                                                         name="expense_date" data-required="true">
                                                 </div>
                                             </div>
 
                                             <div class="col-sm-6 col-12">
-                                                <label class="text-danger" for="quantity">Quantity*</label>
+                                                <label for="quantity">Quantity<span style="color:red;">*</span></label>
                                                 <input type="text" class="form-control blockHeight quantity"
                                                     id="quantity" name="quantity" data-required="true">
                                             </div>
                                             <div class="col-sm-6 col-12">
                                                 <div class="form-group">
-                                                    <label class="text-danger" for="rate">Rate*</label>
+                                                    <label  for="rate">Rate<span style="color:red;">*</span></label>
                                                     <input type="text" class="form-control blockHeight rate"
                                                         id="rate" name="rate" data-required="true">
                                                 </div>
                                             </div>
-                                            <div class="col-sm-6 col-12">
+                                           <div class="col-sm-6 col-12">
                                                 <div class="form-group">
-                                                    <label class="text-danger" for="total_amt">Total Amount*</label>
+                                                    <label  for="total_amt">Total Amount<span style="color:red;">*</span></label>
                                                     <input type="text" class="form-control blockHeight total"
                                                         id="total_amt" name="total_amt" data-required="true">
                                                 </div>
                                             </div>
                                             <div class="col-sm-6 col-12">
                                                 <div class="form-group">
-                                                    <label class="text-danger" for="payment_mode_id">Payment Mode*</label>
+                                                    <label  for="payment_mode_id">Payment Mode<span style="color:red;">*</span></label>
                                                     <select class="form-control " id="payment_mode_id"
                                                         name="payment_mode_id" readonly data-required="true">
                                                         <option value="1">Cash</option>
