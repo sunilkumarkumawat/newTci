@@ -65,7 +65,26 @@ class StudentController extends Controller
     }
    }
 
-   public function studentEdit(){
-    return view('student/studentEdit');
+   public function studentEdit($id){
+    
+             $api = new ApiController();
+
+            // Simulate request with modal_type = User
+            $fakeRequest = new Request([
+                'modal_type' => 'Admission',
+                'id' => $id,
+            ]);
+
+            // Call the API method
+            $response = $api->getCommonRow($fakeRequest);
+
+            // Extract data from JSON response
+            $responseData = $response->getData();
+
+              // Check if data exists and is not empty
+            $data = isset($responseData->data) && !empty($responseData->data) ? $responseData->data : [];
+
+        return view('student.studentAdd',['student'=>$data]);
+    
    }
 }    
