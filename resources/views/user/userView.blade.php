@@ -92,8 +92,9 @@
                                                         <button class="btn btn-success btn-sm w-75">Active</button>
                                                     </td>
                                                     <td>
-                                                        <a href="{{ url('userEdit') }}" class="btn-xs"><i
-                                                                class="fa fa-edit text-primary"></i></a>
+                                                      <a href="{{ url('userEdit/' . $user->id) }}" class="btn btn-xs">
+                                                        <i class="fa fa-edit text-primary"></i>
+                                                    </a>
                                                         <a class=" btn-xs delete-btn" data-modal='User' data-id='{{$user->id}}'>
                                                             <i class="fa fa-trash fs-6 text-danger"></i></a>
                                                     </td>
