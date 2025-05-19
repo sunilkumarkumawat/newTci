@@ -39,6 +39,7 @@ Route::middleware(['auth'])->group(function () {
 
     // Expense
     Route::match(['get', 'post'], 'expense', 'ExpenseController@expense');
+    Route::match(['get', 'post'], 'expenseEdit/{id}', 'ExpenseController@expenseedit');
 
     // Library Management
     Route::match(['get', 'post'], 'cabin', 'LibraryController@cabin');

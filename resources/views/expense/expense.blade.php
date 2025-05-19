@@ -1,5 +1,10 @@
 @extends('layout.app')
 @section('content')
+
+    @php
+        $isEdit = isset($data);
+    @endphp
+
     <div class="content-wrapper">
         <section class="content">
             <div class="container-fluid">
@@ -24,77 +29,97 @@
                             </div>
 
                             <div class="card-body">
-                                <form id="createCommon">
-                                    <input type='hidden' value='expense' name="modal_type" />
-                                    <input type="hidden" value="{{ Auth::user()->id }}" name="user_id" />
-                                    <input type='hidden' id="branch_id" name='branch_id' />
-
+                                <form id="createCommon" enctype="multipart/form-data">
+                                    {{-- @if ($isEdit)
+                                        <input type='hidden' value='{{ $data->id }}' name='id' />
+                                    @endif --}}
+                                    <input type='hidden' value='Expense' name='modal_type' />
+                                    <input type='hidden' id="branch_id" name='branch_id'
+                                        value="{{ old('branch_id', $data->branch_id ?? '') }}" />
                                     <div id="expense-container" class="bg-item mb-3 border p-3 rounded">
                                         <div class="row">
                                             <div class="col-sm-6 col-12">
                                                 <div class="form-group">
                                                     <label for="sr_no">Sr.No.</label>
                                                     <input type="text" id="sr_no"
-                                                        class="form-control blockHeight sr-no" name="sr_no">
+                                                        class="form-control blockHeight sr-no" name="sr_no"
+                                                        value="{{ old('sr_no', $data->sr_no ?? '') }}">
                                                 </div>
                                             </div>
                                             <div class="col-sm-6 col-12">
                                                 <div class="form-group">
-                                                    <label for="expense_name" >Expense Name<span style="color:red;">*</span></label>
-                                                    <input type="text" class="form-control blockHeight"
-                                                        id="expense_name" name="expense_name" data-required="true">
+                                                    <label for="expense_name">Expense Name<span
+                                                            style="color:red;">*</span></label>
+                                                    <input type="text" class="form-control blockHeight" id="expense_name"
+                                                        name="expense_name" data-required="true"
+                                                        value="{{ old('expense_name', $data->expense_name ?? '') }}">
                                                 </div>
                                             </div>
                                             <div class="col-sm-6 col-12">
                                                 <div class="form-group">
-                                                    <label for="expense_date" >Date<span style="color:red;">*</span></label>
-                                                    <input type="date"  class="form-control blockHeight" id="expense_date"
-                                                        name="expense_date" data-required="true">
+                                                    <label for="expense_date">Date<span style="color:red;">*</span></label>
+                                                    <input type="date" class="form-control blockHeight" id="expense_date"
+                                                        name="expense_date" data-required="true"
+                                                        value="{{ old('expense_date', $data->expense_date ?? '') }}">
                                                 </div>
                                             </div>
 
                                             <div class="col-sm-6 col-12">
                                                 <label for="quantity">Quantity<span style="color:red;">*</span></label>
                                                 <input type="text" class="form-control blockHeight quantity"
-                                                    id="quantity" name="quantity" data-required="true">
+                                                    id="quantity" name="quantity" data-required="true"
+                                                    value="{{ old('quantity', $data->quantity ?? '') }}">
                                             </div>
                                             <div class="col-sm-6 col-12">
                                                 <div class="form-group">
-                                                    <label  for="rate">Rate<span style="color:red;">*</span></label>
+                                                    <label for="rate">Rate<span style="color:red;">*</span></label>
                                                     <input type="text" class="form-control blockHeight rate"
-                                                        id="rate" name="rate" data-required="true">
-                                                </div>
-                                            </div>
-                                           <div class="col-sm-6 col-12">
-                                                <div class="form-group">
-                                                    <label  for="total_amt">Total Amount<span style="color:red;">*</span></label>
-                                                    <input type="text" class="form-control blockHeight total"
-                                                        id="total_amt" name="total_amt" data-required="true">
+                                                        id="rate" name="rate" data-required="true"
+                                                        value="{{ old('rate', $data->rate ?? '') }}">
                                                 </div>
                                             </div>
                                             <div class="col-sm-6 col-12">
                                                 <div class="form-group">
-                                                    <label  for="payment_mode_id">Payment Mode<span style="color:red;">*</span></label>
-                                                    <select class="form-control " id="payment_mode_id"
-                                                        name="payment_mode_id" readonly data-required="true">
-                                                        <option value="1">Cash</option>
-                                                        <option value="2">Card</option>
-                                                        <option value="3 ">Bank Transfer</option>
-                                                        <option value="4">UPI</option>
+                                                    <label for="total_amt">Total Amount<span
+                                                            style="color:red;">*</span></label>
+                                                    <input type="text" class="form-control blockHeight total"
+                                                        id="total_amt" name="total_amt" data-required="true"
+                                                        value="{{ old('total_amt', $data->total_amt ?? '') }}">
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-6 col-12">
+                                                <div class="form-group">
+                                                    <label for="payment_mode_id">Payment Mode<span
+                                                            style="color:red;">*</span></label>
+                                                    <select class="form-control" id="payment_mode_id" name="payment_mode_id"
+                                                        readonly data-required="true">
+                                                        <option value="1"
+                                                            {{ old('payment_mode_id', $data->payment_mode_id ?? '') == 1 ? 'selected' : '' }}>
+                                                            Cash</option>
+                                                        <option value="2"
+                                                            {{ old('payment_mode_id', $data->payment_mode_id ?? '') == 2 ? 'selected' : '' }}>
+                                                            Card</option>
+                                                        <option value="3"
+                                                            {{ old('payment_mode_id', $data->payment_mode_id ?? '') == 3 ? 'selected' : '' }}>
+                                                            Bank Transfer</option>
+                                                        <option value="4"
+                                                            {{ old('payment_mode_id', $data->payment_mode_id ?? '') == 4 ? 'selected' : '' }}>
+                                                            UPI</option>
                                                     </select>
                                                 </div>
                                             </div>
                                             <div class="col-sm-6 col-12">
                                                 <div class="form-group">
                                                     <label>Attachment</label>
-                                                    <input type="file" class="form-control " id="expense-attachment"
+                                                    <input type="file" class="form-control" id="expense-attachment"
                                                         name="attachment">
+                                                    {{-- File inputs cannot retain old values due to security reasons --}}
                                                 </div>
                                             </div>
                                             <div class="col-sm-12 col-12">
                                                 <div class="form-group">
                                                     <label>Description</label>
-                                                    <textarea class="form-control blockHeight" id="expense-remark" name="description" rows="6"></textarea>
+                                                    <textarea class="form-control blockHeight" id="expense-remark" name="description" rows="6">{{ old('description', $data->description ?? '') }}</textarea>
                                                 </div>
                                             </div>
                                         </div>
@@ -140,7 +165,7 @@
                                             @if (!empty($data))
                                                 @foreach ($data as $index => $expense)
                                                     <tr>
-                                                        <td>{{ $index + 1 }}</td>
+                                                        <td>{{ $index + 1}}</td>
                                                         <td>{{ $expense->expense_name ?? '' }}</td>
                                                         <td>
                                                             {{ $expense->expense_date ? \Carbon\Carbon::parse($expense->expense_date)->format('d-m-Y') : '' }}
@@ -148,17 +173,21 @@
                                                         <td>{{ $expense->quantity ?? '' }}</td>
                                                         <td>{{ $expense->rate ?? '' }}</td>
                                                         <td>{{ $expense->total_amt ?? '' }}</td>
-                                                        <td class="text-center"><img src="{{ $expense->attachment ? url('public/' . $expense->attachment) : url('images/df-expense.jpg') }}" class="profileImg" alt="User Image"></td>
+                                                        <td class="text-center"><img
+                                                                src="{{ $expense->attachment ? url('public/' . $expense->attachment) : url('images/df-expense.png') }}"
+                                                                class="profileImg" alt="User Image"></td>
                                                         <td>
                                                             <div class="btn-group">
                                                                 {{-- <a href="#" class="btn-xs">
                                                                     <i class="fa fa-eye  fs-6  text-info"></i>
                                                                 </a> --}}
 
-                                                                <a href="#" class="btn-xs">
-                                                                    <i class="fa fa-edit fs-6 mx-2 text-primary"></i>
+                                                                <a href="{{ url('expenseEdit/' . $expense->id) }}"
+                                                                    class="btn btn-xs">
+                                                                    <i class="fa fa-edit text-primary"></i>
                                                                 </a>
-                                                                <a  class=" btn-xs delete-btn" data-modal='Expense' data-id='{{$expense->id}}'>
+                                                                <a class=" btn-xs delete-btn" data-modal='Expense'
+                                                                    data-id='{{ $expense->id }}'>
                                                                     <i class="fa fa-trash fs-6 text-danger"></i></a>
                                                             </div>
                                                         </td>
@@ -420,61 +449,6 @@
                         alert('Error refreshing expense list.');
                     });
             });
-
-            // Function to add event listeners to all delete buttons
-            function addDeleteEventListeners() {
-                document.querySelectorAll('.delete-expense').forEach(function(button) {
-                    button.addEventListener('click', function() {
-                        if (confirm('Are you sure you want to delete this expense?')) {
-                            const expenseId = this.getAttribute('data-id');
-                            const row = this.closest('tr');
-                            const amount = parseFloat(row.querySelector('td:nth-child(5)')
-                                .textContent) || 0;
-
-                            // If it's a server-stored expense (has a numeric ID)
-                            if (!expenseId.startsWith('temp-')) {
-                                // Delete from server
-                                fetch(`/expenses/${expenseId}`, {
-                                        method: 'DELETE',
-                                        headers: {
-                                            'Content-Type': 'application/json',
-                                            'X-CSRF-TOKEN': document.querySelector(
-                                                'input[name="_token"]').value
-                                        }
-                                    })
-                                    .then(response => {
-                                        if (!response.ok) {
-                                            throw new Error('Network response was not ok');
-                                        }
-                                        return response.json();
-                                    })
-                                    .then(data => {
-                                        console.log('Success:', data);
-                                        // Remove the row from DOM
-                                        row.remove();
-                                        // Update sr numbers and recalculate total
-                                        updateSrNumbers();
-                                        recalculateTotal();
-                                        alert('Expense deleted successfully!');
-                                    })
-                                    .catch(error => {
-                                        console.error('Error:', error);
-                                        alert('Error deleting expense.');
-                                    });
-                            } else {
-                                // Just remove the temporary row
-                                row.remove();
-                                // Update sr numbers and recalculate total
-                                updateSrNumbers();
-                                recalculateTotal();
-                            }
-                        }
-                    });
-                });
-            }
-
-            // Add event listeners to the initial delete buttons
-            addDeleteEventListeners();
         });
     </script>
 @endsection

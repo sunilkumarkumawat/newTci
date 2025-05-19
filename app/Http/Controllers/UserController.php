@@ -67,7 +67,6 @@ class UserController extends Controller
 
     public function userEdit($id)
     {
-
              $api = new ApiController();
 
             // Simulate request with modal_type = User

@@ -1,10 +1,9 @@
 @extends('layout.app')
 @section('content')
+    @php
+        $isEdit = isset($data);
 
-@php
-    $isEdit = isset($data);
-    
-@endphp
+    @endphp
     <div class="content-wrapper">
         <section class="content">
             <div class="container-fluid">
@@ -74,181 +73,229 @@
                                 </div>
 
 
-                              <form id="createCommon" enctype="multipart/form-data">
-    @if($isEdit)
-        <input type='hidden' value='{{$data->id}}' name='id' />
-    @endif
-    <input type='hidden' value='User' name='modal_type' />
-    <input type='hidden' id="branch_id"  name='branch_id' value="{{ old('branch_id', $data->branch_id ?? '') }}" />
-    <div class="card-body">
-        <div class="bg-item border p-3 rounded">
-            <!-- Step 1: Basic Details -->
-            <div id="step-1" class="wizard-step">
-                <h5><i class="fa fa-user"></i> Basic Details</h5>
-                <div class="row">
-                    <div class="col-md-4 col-12">
-                        <div class="form-group">
-                            <label for="first_name">First Name <span class="text-danger">*</span></label>
-                            <input type="text" class="form-control" id="first_name"
-                                placeholder="First Name" name="first_name"
-                                data-required="true" value="{{ old('first_name', $data->first_name ?? '') }}">
-                        </div>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="form-group">
-                            <label for="last_name">Last Name <span class="text-danger">*</span></label>
-                            <input type="text" class="form-control"
-                                placeholder="Last Name" name="last_name" id="last_name"
-                                data-required="true" value="{{ old('last_name', $data->last_name ?? '') }}">
-                        </div>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="form-group">
-                            <label for="mobile">Mobile <span  class="text-danger">*</span></label>
-                            <input type="text" class="form-control" placeholder="Mobile"
-                                id="mobile" data-required="true" name="mobile"
-                                value="{{ old('mobile', $data->mobile ?? '') }}">
-                        </div>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="form-group">
-                            <label for="email">Email <span class="text-danger">*</span></label>
-                            <input type="email" class="form-control" placeholder="Email"
-                                id="email" data-required="true" name="email"
-                                value="{{ old('email', $data->email ?? '') }}">
-                        </div>
-                    </div>
+                                <form id="createCommon" enctype="multipart/form-data">
+                                    @if ($isEdit)
+                                        <input type='hidden' value='{{ $data->id }}' name='id' />
+                                    @endif
+                                    <input type='hidden' value='User' name='modal_type' />
+                                    <input type='hidden' id="branch_id" name='branch_id'
+                                        value="{{ old('branch_id', $data->branch_id ?? '') }}" />
+                                    <div class="card-body">
+                                        <div class="bg-item border p-3 rounded">
+                                            <!-- Step 1: Basic Details -->
+                                            <div id="step-1" class="wizard-step">
+                                                <h5><i class="fa fa-user"></i> Basic Details</h5>
+                                                <div class="row">
+                                                    <div class="col-md-4 col-12">
+                                                        <div class="form-group">
+                                                            <label for="first_name">First Name <span
+                                                                    class="text-danger">*</span></label>
+                                                            <input type="text" class="form-control" id="first_name"
+                                                                placeholder="First Name" name="first_name"
+                                                                data-required="true"
+                                                                value="{{ old('first_name', $data->first_name ?? '') }}">
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-4">
+                                                        <div class="form-group">
+                                                            <label for="last_name">Last Name <span
+                                                                    class="text-danger">*</span></label>
+                                                            <input type="text" class="form-control"
+                                                                placeholder="Last Name" name="last_name" id="last_name"
+                                                                data-required="true"
+                                                                value="{{ old('last_name', $data->last_name ?? '') }}">
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-4">
+                                                        <div class="form-group">
+                                                            <label for="mobile">Mobile <span
+                                                                    class="text-danger">*</span></label>
+                                                            <input type="text" class="form-control" placeholder="Mobile"
+                                                                id="mobile" data-required="true" name="mobile"
+                                                                value="{{ old('mobile', $data->mobile ?? '') }}">
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-4">
+                                                        <div class="form-group">
+                                                            <label for="email">Email <span
+                                                                    class="text-danger">*</span></label>
+                                                            <input type="email" class="form-control"
+                                                                placeholder="Email" id="email" data-required="true"
+                                                                name="email"
+                                                                value="{{ old('email', $data->email ?? '') }}">
+                                                        </div>
+                                                    </div>
 
-                    <div class="col-md-4">
-                        <div class="form-group">
-                            <label for="userName">Username <span class="text-danger">*</span></label>
-                            <input type="text" class="form-control"
-                                placeholder="Username" name="userName" id="userName"
-                                data-required="true" value="{{ old('userName', $data->userName ?? '') }}">
-                        </div>
-                    </div>
+                                                    <div class="col-md-4">
+                                                        <div class="form-group">
+                                                            <label for="userName">Username <span
+                                                                    class="text-danger">*</span></label>
+                                                            <input type="text" class="form-control"
+                                                                placeholder="Username" name="userName" id="userName"
+                                                                data-required="true"
+                                                                value="{{ old('userName', $data->userName ?? '') }}">
+                                                        </div>
+                                                    </div>
 
-                    <div class="col-md-4">
-                        <div class="form-group">
-                            <label for="password">Password <span class="text-danger">*</span></label>
-                            <input type="password" class="form-control"
-                                placeholder="Password" name="password" id="password"
-                                data-required="true" value="{{ old('password') }}">
-                        </div>
-                    </div>
-                </div>
-            </div>
+                                                    <div class="col-md-4">
+                                                        <div class="form-group">
+                                                            <label for="password">Password <span
+                                                                    class="text-danger">*</span></label>
+                                                            <input type="password" class="form-control"
+                                                                placeholder="Password" name="password" id="password"
+                                                                data-required="true" value="{{ old('password') }}">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
 
-            <!-- Step 2: Additional Details -->
-            <div id="step-2" class="wizard-step d-none">
-                <h5><i class="fa fa-info-circle"></i> Additional Details</h5>
-                <div class="row">
-                    <div class="col-md-4">
-                        <div class="form-group">
-                            <label for="dob">DOB <span class="text-danger">*</span></label>
-                            <input type="date" class="form-control" name="dob"
-                                id="dob" data-required="true" value="{{ old('dob', $data->dob ?? '') }}">
-                        </div>
-                    </div>
+                                            <!-- Step 2: Additional Details -->
+                                            <div id="step-2" class="wizard-step d-none">
+                                                <h5><i class="fa fa-info-circle"></i> Additional Details</h5>
+                                                <div class="row">
+                                                    <div class="col-md-4">
+                                                        <div class="form-group">
+                                                            <label for="dob">DOB <span
+                                                                    class="text-danger">*</span></label>
+                                                            <input type="date" class="form-control" name="dob"
+                                                                id="dob" data-required="true"
+                                                                value="{{ old('dob', $data->dob ?? '') }}">
+                                                        </div>
+                                                    </div>
 
-                    <div class="col-md-4">
-                        <div class="form-group">
-                            <label for="father_name">Father
-                                Name <span class="text-danger">*</span></label>
-                            <input type="text" class="form-control" name="father_name"
-                                id="father_name" placeholder="Father Name"
-                                data-required="true" value="{{ old('father_name', $data->father_name ?? '') }}">
-                        </div>
-                    </div>
+                                                    <div class="col-md-4">
+                                                        <div class="form-group">
+                                                            <label for="father_name">Father
+                                                                Name <span class="text-danger">*</span></label>
+                                                            <input type="text" class="form-control" name="father_name"
+                                                                id="father_name" placeholder="Father Name"
+                                                                data-required="true"
+                                                                value="{{ old('father_name', $data->father_name ?? '') }}">
+                                                        </div>
+                                                    </div>
 
-                    <div class="col-md-4">
-                        <div class="form-group">
-                            <label for="gender">Gender <span class="text-danger">*</span></label>
-                            <select name="gender" id="gender" class="form-control">
-                                <option value="M" {{ old('gender', $data->gender ?? '') == 'M' ? 'selected' : '' }}>Male</option>
-                                <option value="F" {{ old('gender', $data->gender ?? '') == 'F' ? 'selected' : '' }}>Female</option>
-                                <option value="other" {{ old('gender', $data->gender ?? '') == 'other' ? 'selected' : '' }}>Other</option>
-                            </select>
-                        </div>
-                    </div>
+                                                    <div class="col-md-4">
+                                                        <div class="form-group">
+                                                            <label for="gender">Gender <span
+                                                                    class="text-danger">*</span></label>
+                                                            <select name="gender" id="gender" class="form-control">
+                                                                <option value="M"
+                                                                    {{ old('gender', $data->gender ?? '') == 'M' ? 'selected' : '' }}>
+                                                                    Male</option>
+                                                                <option value="F"
+                                                                    {{ old('gender', $data->gender ?? '') == 'F' ? 'selected' : '' }}>
+                                                                    Female</option>
+                                                                <option value="other"
+                                                                    {{ old('gender', $data->gender ?? '') == 'other' ? 'selected' : '' }}>
+                                                                    Other</option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
 
-                    <div class="col-md-4">
-                        <div class="form-group">
-                            <label for="state_id">State <span class="text-danger">*</span></label>
-                            <select class="form-control" name="state_id" id="state_id"
-                                data-required="true">
-                                <option value="0" {{ old('state_id', $data->state_id ?? '') == 0 ? 'selected' : '' }}>Select</option>
-                                <option value="1" {{ old('state_id', $data->state_id ?? '') == 1 ? 'selected' : '' }}>State A</option>
-                                <option value="2" {{ old('state_id', $data->state_id ?? '') == 2 ? 'selected' : '' }}>State B</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="form-group">
-                            <label for="city_id">City <span class="text-danger">*</span></label>
-                            <select class="form-control" name="city_id" id="city_id"
-                                data-required="true">
-                                <option value="0" {{ old('city_id', $data->city_id ?? '') == 0 ? 'selected' : '' }}>Select</option>
-                                <option value="1" {{ old('city_id', $data->city_id ?? '') == 1 ? 'selected' : '' }}>City X</option>
-                                <option value="2" {{ old('city_id', $data->city_id ?? '') == 2 ? 'selected' : '' }}>City Y</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="form-group">
-                            <label for="address">Address <span class="text-danger">*</span></label>
-                            <input type="text" class="form-control"
-                                placeholder="Address" name="address" id="address"
-                                data-required="true" value="{{ old('address', $data->address ?? '') }}">
-                        </div>
-                    </div>
+                                                    <div class="col-md-4">
+                                                        <div class="form-group">
+                                                            <label for="state_id">State <span
+                                                                    class="text-danger">*</span></label>
+                                                            <select class="form-control" name="state_id" id="state_id"
+                                                                data-required="true">
+                                                                <option value="0"
+                                                                    {{ old('state_id', $data->state_id ?? '') == 0 ? 'selected' : '' }}>
+                                                                    Select</option>
+                                                                <option value="1"
+                                                                    {{ old('state_id', $data->state_id ?? '') == 1 ? 'selected' : '' }}>
+                                                                    State A</option>
+                                                                <option value="2"
+                                                                    {{ old('state_id', $data->state_id ?? '') == 2 ? 'selected' : '' }}>
+                                                                    State B</option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-4">
+                                                        <div class="form-group">
+                                                            <label for="city_id">City <span
+                                                                    class="text-danger">*</span></label>
+                                                            <select class="form-control" name="city_id" id="city_id"
+                                                                data-required="true">
+                                                                <option value="0"
+                                                                    {{ old('city_id', $data->city_id ?? '') == 0 ? 'selected' : '' }}>
+                                                                    Select</option>
+                                                                <option value="1"
+                                                                    {{ old('city_id', $data->city_id ?? '') == 1 ? 'selected' : '' }}>
+                                                                    City X</option>
+                                                                <option value="2"
+                                                                    {{ old('city_id', $data->city_id ?? '') == 2 ? 'selected' : '' }}>
+                                                                    City Y</option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-4">
+                                                        <div class="form-group">
+                                                            <label for="address">Address <span
+                                                                    class="text-danger">*</span></label>
+                                                            <input type="text" class="form-control"
+                                                                placeholder="Address" name="address" id="address"
+                                                                data-required="true"
+                                                                value="{{ old('address', $data->address ?? '') }}">
+                                                        </div>
+                                                    </div>
 
-                    <div class="col-md-4">
-                        <div class="form-group">
-                            <label for="role_id">Role <span class="text-danger">*</span></label>
-                            <select class="form-control" name="role_id" id="role_id"
-                                data-required="true">
-                                <option value="" {{ old('role_id', $data->role_id ?? '') == '' ? 'selected' : '' }}>Select</option>
-                                <option value="Manager" {{ old('role_id', $data->role_id ?? '') == 'Manager' ? 'selected' : '' }}>Manager</option>
-                                <option value="Staff" {{ old('role_id', $data->role_id ?? '') == 'Staff' ? 'selected' : '' }}>Staff</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="form-group">
-                            <label>Salary</label>
-                            <input type="text" class="form-control"
-                                placeholder="Salary" name="salary" value="{{ old('salary', $data->salary ?? '') }}">
-                        </div>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="form-group">
-                            <label>Photo</label>
-                            <input type="file" class="form-control" accept="image/*" id="image"
-                                name="image">
-                            {{-- Note: old value doesn't apply for file inputs --}}
-                        </div>
-                    </div>
-                </div>
-            </div>
+                                                    <div class="col-md-4">
+                                                        <div class="form-group">
+                                                            <label for="role_id">Role <span
+                                                                    class="text-danger">*</span></label>
+                                                            <select class="form-control" name="role_id" id="role_id"
+                                                                data-required="true">
+                                                                <option value=""
+                                                                    {{ old('role_id', $data->role_id ?? '') == '' ? 'selected' : '' }}>
+                                                                    Select</option>
+                                                                <option value="Manager"
+                                                                    {{ old('role_id', $data->role_id ?? '') == 'Manager' ? 'selected' : '' }}>
+                                                                    Manager</option>
+                                                                <option value="Staff"
+                                                                    {{ old('role_id', $data->role_id ?? '') == 'Staff' ? 'selected' : '' }}>
+                                                                    Staff</option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-4">
+                                                        <div class="form-group">
+                                                            <label>Salary</label>
+                                                            <input type="text" class="form-control"
+                                                                placeholder="Salary" name="salary"
+                                                                value="{{ old('salary', $data->salary ?? '') }}">
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-4">
+                                                        <div class="form-group">
+                                                            <label>Photo</label>
+                                                            <input type="file" class="form-control" accept="image/*"
+                                                                id="image" name="image">
+                                                            {{-- Note: old value doesn't apply for file inputs --}}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
 
-            <!-- Step 3: Permissions -->
-            <div id="step-3" class="wizard-step d-none">
-                <h5><i class="fa fa-lock"></i> User Permissions</h5>
-                <div class="row">
-                    {{-- Permissions content here (if needed) --}}
-                </div>
-            </div>
+                                            <!-- Step 3: Permissions -->
+                                            <div id="step-3" class="wizard-step d-none">
+                                                <h5><i class="fa fa-lock"></i> User Permissions</h5>
+                                                <div class="row">
+                                                    {{-- Permissions content here (if needed) --}}
+                                                </div>
+                                            </div>
 
-            <!-- Navigation Buttons -->
-            <div class="card-footer text-center bg-transparent">
-                <button type="button" class="btn btn-secondary" id="prevStep" disabled>Previous</button>
-                <button type="button" class="btn btn-primary" id="nextStep">Next</button>
-                <button type="submit" class="btn btn-success d-none" id="submitBtn">Submit</button>
-            </div>
-        </div>
-    </div>
-</form>
+                                            <!-- Navigation Buttons -->
+                                            <div class="card-footer text-center bg-transparent">
+                                                <button type="button" class="btn btn-secondary" id="prevStep"
+                                                    disabled>Previous</button>
+                                                <button type="button" class="btn btn-primary"
+                                                    id="nextStep">Next</button>
+                                                <button type="submit" class="btn btn-success d-none"
+                                                    id="submitBtn">Submit</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
 
                             </div>
                         </div>
