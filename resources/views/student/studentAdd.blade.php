@@ -1,5 +1,9 @@
 @extends('layout.app')
 @section('content')
+
+@php
+$isEdit = isset($student);
+@endphp
 <div class="content-wrapper">
     <section class="content">
         <div class="container-fluid">
@@ -71,10 +75,15 @@
                                 </div>
                             </div>
                             <div class="card-body">
-                                <form id="createCommon">
-                                    <input type="hidden" value="Admission" name="modal_type" />
-                                    <input type="hidden" value="{{Auth::user()->id}}" name="user_id" />
-                                    <input type="hidden" id="branch_id" name="branch_id" />
+
+                                <form id="createCommon" enctype="multipart/form-data">
+                                    @if ($isEdit)
+                                    <input type='hidden' value='{{ $student->id }}' name='id' />
+                                    @endif
+                                    <input type='hidden' value='Admission' name='modal_type' />
+                                    <input type='hidden' id="branch_id" name='branch_id'
+                                        value="{{ old('branch_id', $data->branch_id ?? '') }}" />
+
                                     @csrf
 
 
@@ -85,11 +94,9 @@
                                             <div class="row">
                                                 <div class="col-md-4">
                                                     <div class="form-group">
-                                                        <label>Admission No. </label>
-                                                        <input type="text" class="form-control "
-                                                            id="admissionNo" name="admission_no"
-                                                            placeholder="Admission No." value="">
-
+                                                        <label>Admission No.</label>
+                                                        <input type="text" class="form-control" id="admissionNo" name="admission_no"
+                                                            placeholder="Admission No." value="{{ old('admission_no', $student->admission_no ?? '') }}">
                                                     </div>
                                                 </div>
 
@@ -97,72 +104,74 @@
                                                     <div class="form-group">
                                                         <label for="student_name">Student Name <span style="color:red;">*</span></label>
                                                         <input type="text" name="student_name" id="student_name"
-                                                            class="form-control invalid" value=""
+                                                            class="form-control invalid"
+                                                            value="{{ old('student_name', $student->student_name ?? '') }}"
                                                             placeholder="Student Name" data-required="true">
-
                                                     </div>
                                                 </div>
 
                                                 <div class="col-md-4">
                                                     <div class="form-group">
-                                                        <label for="gender" >Gender<span style="color:red;">*</span></label>
-                                                        <select class="form-control " id="gender"
-                                                            name="gender" data-required="true" >
+                                                        <label for="gender">Gender <span style="color:red;">*</span></label>
+                                                        <select class="form-control" id="gender" name="gender" data-required="true">
                                                             <option value="">Select</option>
-                                                            <option value="1">Male</option>
-                                                            <option value="2">Female</option>
-                                                            <option value="3">Other</option>
+                                                            <option value="1" {{ old('gender', $student->gender ?? '') == '1' ? 'selected' : '' }}>Male</option>
+                                                            <option value="2" {{ old('gender', $student->gender ?? '') == '2' ? 'selected' : '' }}>Female</option>
+                                                            <option value="3" {{ old('gender', $student->gender ?? '') == '3' ? 'selected' : '' }}>Other</option>
                                                         </select>
-
                                                     </div>
                                                 </div>
 
                                                 <div class="col-md-4">
                                                     <div class="form-group">
-                                                        <label for="dob" >Date Of Birth<span style="color:red;">*</span></label>
-                                                        <input type="date" class="form-control"
-                                                            id="dob" name="dob" placeholder="Date Of Birth" data-required="true">
-
+                                                        <label for="dob">Date Of Birth <span style="color:red;">*</span></label>
+                                                        <input type="date" class="form-control" id="dob" name="dob"
+                                                            placeholder="Date Of Birth" data-required="true"
+                                                            value="{{ old('dob', $student->dob ?? '') }}">
                                                     </div>
                                                 </div>
 
                                                 <div class="col-md-4">
                                                     <div class="form-group">
-                                                        <label for="mobile" >Mobile No.<span style="color:red;">*</span></label>
-                                                        <input type="text" class="form-control" id="mobile"
-                                                            name="mobile" placeholder="Mobile No." data-required="true" >
-
+                                                        <label for="mobile">Mobile No. <span style="color:red;">*</span></label>
+                                                        <input type="text" class="form-control" id="mobile" name="mobile"
+                                                            placeholder="Mobile No." data-required="true"
+                                                            value="{{ old('mobile', $student->mobile ?? '') }}">
                                                     </div>
                                                 </div>
 
                                                 <div class="col-md-4">
                                                     <div class="form-group">
-                                                        <label for="email" >Email <span style="color:red;">*</span></label>
-                                                        <input type="email" class="form-control" id="email"
-                                                            name="email" placeholder="Email" data-required="true" >
+                                                        <label for="email">Email <span style="color:red;">*</span></label>
+                                                        <input type="email" class="form-control" id="email" name="email"
+                                                            placeholder="Email" data-required="true"
+                                                            value="{{ old('email', $student->email ?? '') }}">
                                                     </div>
                                                 </div>
+
                                                 <div class="col-md-4">
                                                     <div class="form-group">
-                                                        <label for="aadhaar">Aadhaar No.<span style="color:red;">*</span></label>
-                                                        <input type="text" class="form-control" id="aadhaar"
-                                                            name="aadhaar" placeholder="Aadhaar No." data-required="true">
+                                                        <label for="aadhaar">Aadhaar No. <span style="color:red;">*</span></label>
+                                                        <input type="text" class="form-control" id="aadhaar" name="aadhaar"
+                                                            placeholder="Aadhaar No." data-required="true"
+                                                            value="{{ old('aadhaar', $student->aadhaar ?? '') }}">
                                                     </div>
                                                 </div>
 
                                                 <div class="col-md-4">
                                                     <div class="form-group">
                                                         <label for="admission_date">Date Of Admission</label>
-                                                        <input type="date" class="form-control"
-                                                            id="admission_date" name="admission_date">
+                                                        <input type="date" class="form-control" id="admission_date" name="admission_date"
+                                                            value="{{ old('admission_date', $student->admission_date ?? '') }}">
                                                     </div>
                                                 </div>
 
                                                 <div class="col-md-4">
                                                     <div class="form-group">
-                                                        <label for="student_address">Students Address<span style="color:red;">*</span></label>
-                                                        <input type="text" class="form-control" id="student_address"
-                                                            name="student_address" placeholder="Students Address" data-required="true">
+                                                        <label for="student_address">Students Address <span style="color:red;">*</span></label>
+                                                        <input type="text" class="form-control" id="student_address" name="student_address"
+                                                            placeholder="Students Address" data-required="true"
+                                                            value="{{ old('student_address', $student->student_address ?? '') }}">
                                                     </div>
                                                 </div>
 
@@ -170,309 +179,271 @@
                                                     <div class="form-group">
                                                         <label>Photo</label>
                                                         <input type="file" class="form-control" name="image" accept="image/*">
+                                                        <!-- No value for file inputs for security reasons -->
                                                     </div>
                                                 </div>
                                             </div>
-                                        </div>
-
-                                        <!-- Step 2: Additional Details -->
-                                        <div id="step-2" class="wizard-step">
-                                            <h5><i class="fa fa-info-circle"></i> Additional Details</h5>
-                                            <div class="row">
-                                                <div id="additionalDetailsSection" class="col-md-12">
-                                                    <div class="row">
-                                                        <div class="col-md-12 mb-2">
-                                                            <h6 class="text-primary">Personal Information</h6>
-                                                        </div>
-
-                                                        <div class="col-md-3">
-                                                            <div class="form-group">
-                                                                <label for="religion">Religion<span style="color:red;">*</span></label>
-                                                                <select class="form-control" id="religion"
-                                                                    name="religion" data-required="true">
-                                                                    <option value="" >Select</option>
-                                                                    <option value="Hindu" >Hindu</option>
-                                                                    <option value="Islam">Islam</option>
-                                                                    <option value="Sikh">Sikh</option>
-                                                                    <option value="Buddhism">Buddhism</option>
-                                                                    <option value="Adivasi">Adivasi</option>
-                                                                    <option value="Jain">Jain</option>
-                                                                    <option value="Christianity">Christianity</option>
-                                                                    <option value="Other">Other</option>
-                                                                </select>
-                                                            </div>
-                                                        </div>
-
-                                                        <div class="col-md-3">
-                                                            <div class="form-group">
-                                                                <label for="category">Category<span style="color:red;">*</span></label>
-                                                                <select class="form-control" id="category"
-                                                                    name="category" data-required="true">
-                                                                    <option value="">Select</option>
-                                                                    <option value="OBC" selected>OBC</option>
-                                                                    <option value="ST">ST</option>
-                                                                    <option value="SC">SC</option>
-                                                                    <option value="BC">BC</option>
-                                                                    <option value="GEN">GEN</option>
-                                                                    <option value="SBC">SBC</option>
-                                                                    <option value="Other">Other</option>
-                                                                </select>
-                                                            </div>
-                                                        </div>
-
-                                                        <div class="col-md-3">
-                                                            <div class="form-group">
-                                                                <label for="caste" >Caste</label>
-                                                                <input type="text" class="form-control"
-                                                                    id="caste" name="caste"
-                                                                    placeholder="Caste" value="">
-                                                            </div>
-                                                        </div>
-
-                                                        <div class="col-md-3">
-                                                            <div class="form-group">
-                                                                <label for="blood_group" >Blood Group</label>
-                                                                <select class="form-control" id="blood_group"
-                                                                    name="blood_group">
-                                                                    <option value="">Select</option>
-                                                                    <option value="A+">A+</option>
-                                                                    <option value="A-">A-</option>
-                                                                    <option value="B+">B+</option>
-                                                                    <option value="B-">B-</option>
-                                                                    <option value="AB+">AB+</option>
-                                                                    <option value="AB-">AB-</option>
-                                                                    <option value="O+">O+</option>
-                                                                    <option value="O-">O-</option>
-                                                                </select>
-                                                            </div>
-                                                        </div>
-
-                                                        <div class="col-md-12 mb-2 mt-3">
-                                                            <h6 class="text-primary">Location Information</h6>
-                                                        </div>
-
-                                                        <div class="col-md-3">
-                                                            <div class="form-group">
-                                                                <label for="country" >Country</label>
-                                                                <select class="form-control" name="country"
-                                                                    id="country">
-                                                                    <option value="">Select</option>
-                                                                    <option value="1" selected>India</option>
-                                                                    <option value="2">USA</option>
-                                                                    <option value="3">UK</option>
-                                                                </select>
-                                                            </div>
-                                                        </div>
-
-                                                        <div class="col-md-3">
-                                                            <div class="form-group">
-                                                                <label for="state_id">State<span style="color:red;">*</span></label>
-                                                                <select class="form-control" id="state_id"
-                                                                    name="state_id" data-required="true">
-                                                                    <option value="">Select</option>
-                                                                    <option value="1" selected>Rajasthan</option>
-                                                                    <option value="2">Delhi</option>
-                                                                    <option value="3">Gujarat</option>
-                                                                </select>
-                                                            </div>
-                                                        </div>
-
-                                                        <div class="col-md-3">
-                                                            <div class="form-group">
-                                                                <label for="city_id">City<span style="color:red;">*</span></label>
-                                                                <select class="form-control" name="city_id"
-                                                                    id="city_id" data-required="true">
-                                                                    <option value="">Select</option>
-                                                                    <option value="Jaipur" selected>Jaipur</option>
-                                                                    <option value="Jodhpur">Jodhpur</option>
-                                                                    <option value="Udaipur">Udaipur</option>
-                                                                </select>
-                                                            </div>
-                                                        </div>
-
-                                                        <div class="col-md-3">
-                                                            <div class="form-group">
-                                                                <label for="village" >Village/City</label>
-                                                                <select class="form-control" id="village"
-                                                                    name="village">
-                                                                    <option value="">Select</option>
-                                                                    <option value="Jaipur">Jaipur</option>
-                                                                    <option value="Sanganer">Sanganer</option>
-                                                                    <option value="Mansarovar">Mansarovar</option>
-                                                                </select>
-                                                            </div>
-                                                        </div>
-
-                                                        <!-- <div class="col-md-3">
-                                                            <div class="form-group">
-                                                                <label>District</label>
-                                                                <input type="text" class="form-control"
-                                                                    id="district" name="district"
-                                                                    placeholder="District" value="">
-                                                            </div>
-                                                        </div>
-
-                                                        <div class="col-md-3">
-                                                            <div class="form-group">
-                                                                <label>Tehsil</label>
-                                                                <input type="text" class="form-control"
-                                                                    id="tehsil" name="tehsil"
-                                                                    placeholder="Tehsil" value="">
-                                                            </div>
-                                                        </div>
-
-                                                        <div class="col-md-3">
-                                                            <div class="form-group">
-                                                                <label>Urban/Rural</label>
-                                                                <input type="text" class="form-control"
-                                                                    id="urban" name="urban/rural"
-                                                                    placeholder="Urban/Rural" value="">
-                                                            </div>
-                                                        </div> -->
-
-                                                        <div class="col-md-3">
-                                                            <div class="form-group">
-                                                                <label for="pincode" >Pin Code</label>
-                                                                <input type="text" class="form-control"
-                                                                    id="pincode" name="pincode"
-                                                                    placeholder="Pin Code" value=""
-                                                                    maxlength="6"
-                                                                    onkeypress="javascript:return isNumber(event)">
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <!-- Step 3: Guardian Details -->
-                                        <div id="step-3" class="wizard-step ">
-                                            <h5><i class="fa fa-hands-holding-child"></i> Guardian Details</h5>
-                                            <div class="row">
-                                                <!-- Required Guardian Details -->
-                                                <div class="col-md-4">
-                                                    <div class="form-group">
-                                                        <label for="father_name" >Father's Name<span style="color:red;">*</span></label>
-                                                        <input type="text" class="form-control "
-                                                            id="father_name" name="father_name"
-                                                            placeholder="Father's Name" data-required="true" >
-
-                                                    </div>
-                                                </div>
-
-                                                <div class="col-md-4">
-                                                    <div class="form-group">
-                                                        <label for="father_mobile">Father's Contact No<span style="color:red;">*</span></label>
-                                                        <input type="text" class="form-control "
-                                                            id="father_mobile" name="father_mobile"
-                                                            placeholder="Father's Contact No" data-required="true">
-
-                                                    </div>
-                                                </div>
-
-                                                <div class="col-md-4">
-                                                    <div class="form-group">
-                                                        <label for="father_occupation" >Father's Occupation</label>
-                                                        <input type="text" class="form-control"
-                                                            id="father_occupation" name="father_occupation"
-                                                            placeholder="Father's Occupation">
-                                                    </div>
-                                                </div>
-
-                                                <!-- Additional Guardian Details -->
-                                                <div id="additionalGuardianDetails" class="col-md-12">
-                                                    <div class="row">
-                                                        <div class="col-md-4">
-                                                            <div class="form-group">
-                                                                <label for="mother_name">Mother's Name<span style="color:red;">*</span></label>
-                                                                <input type="text" class="form-control"
-                                                                    id="mother_name" name="mother_name"
-                                                                    placeholder="Mother's Name" data-required="true">
-                                                            </div>
-                                                        </div>
-
-                                                        <div class="col-md-4">
-                                                            <div class="form-group">
-                                                                <label>Mother's Contact No</label>
-                                                                <input type="text" class="form-control"
-                                                                    id="mother_mobile" name="mother_mobile"
-                                                                    placeholder="Mother's Contact No">
-                                                            </div>
-                                                        </div>
-
-                                                        <div class="col-md-4">
-                                                            <div class="form-group">
-                                                                <label for="mother_occupation" >Mother's Occupation</label>
-                                                                <input type="text" class="form-control"
-                                                                    id="mother_occupation" name="mother_occupation"
-                                                                    placeholder="Mother's Occupation">
-                                                            </div>
-                                                        </div>
-
-                                                        <div class="col-md-4">
-                                                            <div class="form-group">
-                                                                <label for="guardian_name">Guardian's Name<span style="color:red;">*</span> (If other than
-                                                                    parent)</label>
-                                                                <input type="text" class="form-control"
-                                                                    id="guardian_name" name="guardian_name"
-                                                                    placeholder="Guardian's Name" data-required="true">
-                                                            </div>
-                                                        </div>
-
-                                                        <div class="col-md-4">
-                                                            <div class="form-group">
-                                                                <label for="guardian_mobile">Guardian's Contact No<span style="color:red;">*</span></label>
-                                                                <input type="text" class="form-control"
-                                                                    id="guardian_mobile" name="guardian_mobile"
-                                                                    placeholder="Guardian's Contact No" data-required="true">
-                                                            </div>
-                                                        </div>
-
-                                                        <div class="col-md-4">
-                                                            <div class="form-group">
-                                                                <label for="guardian_relation" >Guardian's Relation</label>
-                                                                <select class="form-control" id="guardian_relation"
-                                                                    name="guardian_relation">
-                                                                    <option value="">Select</option>
-                                                                    <option value="Grandfather">Grandfather
-                                                                    </option>
-                                                                    <option value="Grandmother">Grandmother
-                                                                    </option>
-                                                                    <option value="Uncle">Uncle</option>
-                                                                    <option value="Aunt">Aunt</option>
-                                                                    <option value="Other">Other</option>
-                                                                </select>
-                                                            </div>
-                                                        </div>
-
-                                                        <div class="col-md-6">
-                                                            <div class="form-group">
-                                                                <label for="guardian_address">Guardian's Address<span style="color:red;">*</span></label>
-                                                                <textarea class="form-control" id="guardian_address" name="guardian_address" placeholder="Guardian's Address"
-                                                                    rows="2" data-required="true"></textarea>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        {{-- </div> --}}
-
-                                        <!-- Navigation Buttons -->
-                                        <div class="card-footer text-center bg-transparent">
-                                            <button type="button" class="btn btn-secondary" id="prevStep"
-                                                disabled>Previous</button>
-                                            <button type="button" class="btn btn-primary"
-                                                id="nextStep">Next</button>
-                                            <button type="submit" class="btn btn-success d-none"
-                                                id="submitBtn">Submit</button>
                                         </div>
                                     </div>
+
+                                    <!-- Step 2: Additional Details -->
+                                    <div id="step-2" class="wizard-step">
+                                        <h5><i class="fa fa-info-circle"></i> Additional Details</h5>
+                                        <div class="row">
+                                            <div id="additionalDetailsSection" class="col-md-12">
+                                                <div class="row">
+                                                    <div class="col-md-12 mb-2">
+                                                        <h6 class="text-primary">Personal Information</h6>
+                                                    </div>
+
+                                                    <div class="col-md-3">
+                                                        <div class="form-group">
+                                                            <label for="religion">Religion<span style="color:red;">*</span></label>
+                                                            <select class="form-control" id="religion" name="religion" data-required="true">
+                                                                <option value="">Select</option>
+                                                                <option value="Hindu" {{ old('religion', $student->religion ?? '') == 'Hindu' ? 'selected' : '' }}>Hindu</option>
+                                                                <option value="Islam" {{ old('religion', $student->religion ?? '') == 'Islam' ? 'selected' : '' }}>Islam</option>
+                                                                <option value="Sikh" {{ old('religion', $student->religion ?? '') == 'Sikh' ? 'selected' : '' }}>Sikh</option>
+                                                                <option value="Buddhism" {{ old('religion', $student->religion ?? '') == 'Buddhism' ? 'selected' : '' }}>Buddhism</option>
+                                                                <option value="Adivasi" {{ old('religion', $student->religion ?? '') == 'Adivasi' ? 'selected' : '' }}>Adivasi</option>
+                                                                <option value="Jain" {{ old('religion', $student->religion ?? '') == 'Jain' ? 'selected' : '' }}>Jain</option>
+                                                                <option value="Christianity" {{ old('religion', $student->religion ?? '') == 'Christianity' ? 'selected' : '' }}>Christianity</option>
+                                                                <option value="Other" {{ old('religion', $student->religion ?? '') == 'Other' ? 'selected' : '' }}>Other</option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="col-md-3">
+                                                        <div class="form-group">
+                                                            <label for="category">Category<span style="color:red;">*</span></label>
+                                                            <select class="form-control" id="category" name="category" data-required="true">
+                                                                <option value="">Select</option>
+                                                                <option value="OBC" {{ old('category', $student->category ?? '') == 'OBC' ? 'selected' : '' }}>OBC</option>
+                                                                <option value="ST" {{ old('category', $student->category ?? '') == 'ST' ? 'selected' : '' }}>ST</option>
+                                                                <option value="SC" {{ old('category', $student->category ?? '') == 'SC' ? 'selected' : '' }}>SC</option>
+                                                                <option value="BC" {{ old('category', $student->category ?? '') == 'BC' ? 'selected' : '' }}>BC</option>
+                                                                <option value="GEN" {{ old('category', $student->category ?? '') == 'GEN' ? 'selected' : '' }}>GEN</option>
+                                                                <option value="SBC" {{ old('category', $student->category ?? '') == 'SBC' ? 'selected' : '' }}>SBC</option>
+                                                                <option value="Other" {{ old('category', $student->category ?? '') == 'Other' ? 'selected' : '' }}>Other</option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="col-md-3">
+                                                        <div class="form-group">
+                                                            <label for="caste">Caste</label>
+                                                            <input type="text" class="form-control" id="caste" name="caste"
+                                                                placeholder="Caste" value="{{ old('caste', $student->caste ?? '') }}">
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="col-md-3">
+                                                        <div class="form-group">
+                                                            <label for="blood_group">Blood Group</label>
+                                                            <select class="form-control" id="blood_group" name="blood_group">
+                                                                <option value="">Select</option>
+                                                                @foreach(['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'] as $group)
+                                                                <option value="{{ $group }}" {{ old('blood_group', $student->blood_group ?? '') == $group ? 'selected' : '' }}>{{ $group }}</option>
+                                                                @endforeach
+                                                            </select>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="col-md-12 mb-2 mt-3">
+                                                        <h6 class="text-primary">Location Information</h6>
+                                                    </div>
+
+                                                    <div class="col-md-3">
+                                                        <div class="form-group">
+                                                            <label for="country">Country</label>
+                                                            <select class="form-control" name="country" id="country">
+                                                                <option value="">Select</option>
+                                                                <option value="1" {{ old('country', $student->country ?? '') == '1' ? 'selected' : '' }}>India</option>
+                                                                <option value="2" {{ old('country', $student->country ?? '') == '2' ? 'selected' : '' }}>USA</option>
+                                                                <option value="3" {{ old('country', $student->country ?? '') == '3' ? 'selected' : '' }}>UK</option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="col-md-3">
+                                                        <div class="form-group">
+                                                            <label for="state_id">State<span style="color:red;">*</span></label>
+                                                            <select class="form-control" id="state_id" name="state_id" data-required="true">
+                                                                <option value="">Select</option>
+                                                                <option value="1" {{ old('state_id', $student->state_id ?? '') == '1' ? 'selected' : '' }}>Rajasthan</option>
+                                                                <option value="2" {{ old('state_id', $student->state_id ?? '') == '2' ? 'selected' : '' }}>Delhi</option>
+                                                                <option value="3" {{ old('state_id', $student->state_id ?? '') == '3' ? 'selected' : '' }}>Gujarat</option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="col-md-3">
+                                                        <div class="form-group">
+                                                            <label for="city_id">City<span style="color:red;">*</span></label>
+                                                            <select class="form-control" name="city_id" id="city_id" data-required="true">
+                                                                <option value="">Select</option>
+                                                                <option value="Jaipur" {{ old('city_id', $student->city_id ?? '') == 'Jaipur' ? 'selected' : '' }}>Jaipur</option>
+                                                                <option value="Jodhpur" {{ old('city_id', $student->city_id ?? '') == 'Jodhpur' ? 'selected' : '' }}>Jodhpur</option>
+                                                                <option value="Udaipur" {{ old('city_id', $student->city_id ?? '') == 'Udaipur' ? 'selected' : '' }}>Udaipur</option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="col-md-3">
+                                                        <div class="form-group">
+                                                            <label for="village">Village/City</label>
+                                                            <select class="form-control" id="village" name="village">
+                                                                <option value="">Select</option>
+                                                                <option value="Jaipur" {{ old('village', $student->village ?? '') == 'Jaipur' ? 'selected' : '' }}>Jaipur</option>
+                                                                <option value="Sanganer" {{ old('village', $student->village ?? '') == 'Sanganer' ? 'selected' : '' }}>Sanganer</option>
+                                                                <option value="Mansarovar" {{ old('village', $student->village ?? '') == 'Mansarovar' ? 'selected' : '' }}>Mansarovar</option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="col-md-3">
+                                                        <div class="form-group">
+                                                            <label for="pincode">Pin Code</label>
+                                                            <input type="text" class="form-control" id="pincode" name="pincode"
+                                                                placeholder="Pin Code" value="{{ old('pincode', $student->pincode ?? '') }}"
+                                                                maxlength="6" onkeypress="javascript:return isNumber(event)">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Step 3: Guardian Details -->
+                                    <div id="step-3" class="wizard-step">
+                                        <h5><i class="fa fa-hands-holding-child"></i> Guardian Details</h5>
+                                        <div class="row">
+                                            <!-- Required Guardian Details -->
+                                            <div class="col-md-4">
+                                                <div class="form-group">
+                                                    <label for="father_name">Father's Name <span style="color:red;">*</span></label>
+                                                    <input type="text" class="form-control"
+                                                        id="father_name" name="father_name"
+                                                        placeholder="Father's Name"
+                                                        value="{{ old('father_name', $student->father_name ?? '') }}" required>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-md-4">
+                                                <div class="form-group">
+                                                    <label for="father_mobile">Father's Contact No <span style="color:red;">*</span></label>
+                                                    <input type="text" class="form-control"
+                                                        id="father_mobile" name="father_mobile"
+                                                        placeholder="Father's Contact No"
+                                                        value="{{ old('father_mobile', $student->father_mobile ?? '') }}" required>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-md-4">
+                                                <div class="form-group">
+                                                    <label for="father_occupation">Father's Occupation</label>
+                                                    <input type="text" class="form-control"
+                                                        id="father_occupation" name="father_occupation"
+                                                        placeholder="Father's Occupation"
+                                                        value="{{ old('father_occupation', $student->father_occupation ?? '') }}">
+                                                </div>
+                                            </div>
+
+                                            <!-- Additional Guardian Details -->
+                                            <div id="additionalGuardianDetails" class="col-md-12">
+                                                <div class="row">
+                                                    <div class="col-md-4">
+                                                        <div class="form-group">
+                                                            <label for="mother_name">Mother's Name <span style="color:red;">*</span></label>
+                                                            <input type="text" class="form-control"
+                                                                id="mother_name" name="mother_name"
+                                                                placeholder="Mother's Name"
+                                                                value="{{ old('mother_name', $student->mother_name ?? '') }}" required>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="col-md-4">
+                                                        <div class="form-group">
+                                                            <label for="mother_mobile">Mother's Contact No</label>
+                                                            <input type="text" class="form-control"
+                                                                id="mother_mobile" name="mother_mobile"
+                                                                placeholder="Mother's Contact No"
+                                                                value="{{ old('mother_mobile', $student->mother_mobile ?? '') }}">
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="col-md-4">
+                                                        <div class="form-group">
+                                                            <label for="mother_occupation">Mother's Occupation</label>
+                                                            <input type="text" class="form-control"
+                                                                id="mother_occupation" name="mother_occupation"
+                                                                placeholder="Mother's Occupation"
+                                                                value="{{ old('mother_occupation', $student->mother_occupation ?? '') }}">
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="col-md-4">
+                                                        <div class="form-group">
+                                                            <label for="guardian_name">Guardian's Name <span style="color:red;">*</span> (If other than parent)</label>
+                                                            <input type="text" class="form-control"
+                                                                id="guardian_name" name="guardian_name"
+                                                                placeholder="Guardian's Name"
+                                                                value="{{ old('guardian_name', $student->guardian_name ?? '') }}" required>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="col-md-4">
+                                                        <div class="form-group">
+                                                            <label for="guardian_mobile">Guardian's Contact No <span style="color:red;">*</span></label>
+                                                            <input type="text" class="form-control"
+                                                                id="guardian_mobile" name="guardian_mobile"
+                                                                placeholder="Guardian's Contact No"
+                                                                value="{{ old('guardian_mobile', $student->guardian_mobile ?? '') }}" required>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="col-md-4">
+                                                        <div class="form-group">
+                                                            <label for="guardian_relation">Guardian's Relation</label>
+                                                            <select class="form-control" id="guardian_relation" name="guardian_relation">
+                                                                <option value="">Select</option>
+                                                                <option value="Grandfather" {{ old('guardian_relation', $student->guardian_relation ?? '') == 'Grandfather' ? 'selected' : '' }}>Grandfather</option>
+                                                                <option value="Grandmother" {{ old('guardian_relation', $student->guardian_relation ?? '') == 'Grandmother' ? 'selected' : '' }}>Grandmother</option>
+                                                                <option value="Uncle" {{ old('guardian_relation', $student->guardian_relation ?? '') == 'Uncle' ? 'selected' : '' }}>Uncle</option>
+                                                                <option value="Aunt" {{ old('guardian_relation', $student->guardian_relation ?? '') == 'Aunt' ? 'selected' : '' }}>Aunt</option>
+                                                                <option value="Other" {{ old('guardian_relation', $student->guardian_relation ?? '') == 'Other' ? 'selected' : '' }}>Other</option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="col-md-6">
+                                                        <div class="form-group">
+                                                            <label for="guardian_address">Guardian's Address <span style="color:red;">*</span></label>
+                                                            <textarea class="form-control" id="guardian_address" name="guardian_address"
+                                                                placeholder="Guardian's Address" rows="2" required>{{ old('guardian_address', $student->guardian_address ?? '') }}</textarea>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Navigation Buttons -->
+                                    <div class="card-footer text-center bg-transparent">
+                                        <button type="button" class="btn btn-secondary" id="prevStep"
+                                            disabled>Previous</button>
+                                        <button type="button" class="btn btn-primary"
+                                            id="nextStep">Next</button>
+                                        <button type="submit" class="btn btn-success d-none"
+                                            id="submitBtn">Submit</button>
+                                    </div>
                             </div>
-                            </form>
                         </div>
+                        </form>
                     </div>
                 </div>
             </div>
+        </div>
     </section>
 </div>
 
