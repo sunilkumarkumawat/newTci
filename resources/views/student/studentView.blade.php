@@ -88,7 +88,7 @@
                                             <td>{{ $studentAdd -> mobile ?? '' }}</td>
                                             <td>{{ $studentAdd -> email ?? '' }}</td>
                                             <td>{{ $studentAdd -> admission_date ?? '' }}</td>
-                                            <td> {{ $studentAdd -> city_id ?? '' }}</td>
+                                            <td>{{ $studentAdd -> city_id ?? '' }}</td>
                                             <td>
                                                 <button class="btn btn-success btn-sm w-75">Active</button>
                                             </td>

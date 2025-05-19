@@ -19,25 +19,25 @@ use App\Models\User;
 
 Route::post('/loginAuth', function (Request $request) {
     $user = User::where('username', $request->user_name)->first();
-   
+
 
     if (! $user || ! Hash::check($request->password, $user->password)) {
         return response()->json(['message' => 'Invalid credentials'], 401);
     }
 
-       // Laravel login to create session (for Blade)
+    // Laravel login to create session (for Blade)
     Auth::login($user); // ✅ session-based login
-   
+
     $token = $user->createToken('api-token')->plainTextToken;
 
-    return response()->json(['user'=>$user,'token' => $token],200);
+    return response()->json(['user' => $user, 'token' => $token], 200);
 });
 
 
 
 Route::middleware('auth:sanctum')->group(function () {
 
-Route::delete('/common-delete/{model}/{id}', [ApiController::class, 'deleteCommon']);
-
+    Route::delete('/common-delete/{model}/{id}', [ApiController::class, 'deleteCommon']);
+    Route::post('/api/toggle-status/{model}/{id}', [ApiController::class, 'toggleStatus']);
     Route::post('createCommon', [ApiController::class, 'createCommon']);
 });
