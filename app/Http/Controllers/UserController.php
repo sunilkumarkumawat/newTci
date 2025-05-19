@@ -67,11 +67,8 @@ class UserController extends Controller
 
     public function userEdit()
     {
-
-        return view('user/userEdit');
+        return view('user.userEdit');
     }
-
-    // staff panel
 
     public function teacherView()
     {

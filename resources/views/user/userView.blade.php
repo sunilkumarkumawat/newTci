@@ -79,8 +79,8 @@
                                                 <tr>
                                                     <td>{{ $index + 1 ?? ''}}</td>
                                                     <td class="text-center">
-                                                        <img src="{{ asset(env('IMAGE_SHOW_PATH') . 'default_user_image.jpg') }}"
-                                                            class="profileImg" alt="User Image">
+                                                     <img src="{{ $user->image ? url('public/' . $user->image) : url('images/default_user_image.jpg') }}" class="profileImg" alt="User Image">
+
                                                     </td>
                                                     <td>{{ $user->role_id ?? ''}}</td>
                                                     <td>{{ $user->first_name ?? ''}} {{ $user->last_name ?? ''}}</td>

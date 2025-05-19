@@ -101,10 +101,10 @@
         @include('layout.footer')
         <script>
             /*$.ajaxSetup({
-                                                                                                                                                                                                                                                    headers: {
-                                                                                                                                                                                                                                                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                                                                                                                                                                                                                                                    }
-                                                                                                                                                                                                                                                });*/
+                                                                                                                                                                                                                                                                            headers: {
+                                                                                                                                                                                                                                                                                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                                                                                                                                                                                                                                                                            }
+                                                                                                                                                                                                                                                                        });*/
             //var URL  = "{{ url('/') }}";
         </script>
 
@@ -682,11 +682,6 @@
                                         message = 'Payment mode is required';
                                     }
                                     break;
-
-
-
-
-                                    // Add other validations for different fields here
                             }
 
 
@@ -717,24 +712,30 @@
                     if (!validateForm($form)) return;
                     const endpoint = "{{ url('/') }}/api/createCommon";
 
-                    const formData = $form.serialize();
+                    const formData = new FormData(this); // Handles files + inputs
 
-                    $.post(endpoint, formData)
-                        .done(function(response) {
+                    $.ajax({
+                        url: endpoint,
+                        type: 'POST',
+                        data: formData,
+                        processData: false, // Required for FormData
+                        contentType: false, // Required for FormData
+                        success: function(response) {
                             console.log(response);
                             $form[0].reset();
-
-                            toastr.success('Form Submitted Successfully')
-                        })
-                        .fail(function(xhr) {
+                            toastr.success('Form Submitted Successfully');
+                        },
+                        error: function(xhr) {
                             alert('Failed to submit form.');
                             console.error(xhr.responseText);
-                        });
+                        }
+                    });
                 });
             });
         </script>
 
-        
+
+       
 
 
         {{-- convert excel data into array --}}

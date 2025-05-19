@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 
@@ -26,6 +27,7 @@ Route::middleware(['auth'])->group(function () {
     Route::match(['get', 'post'], 'userAdd', 'UserController@userAdd');
     Route::match(['get', 'post'], 'userView', 'UserController@userView');
     Route::match(['get', 'post'], 'userEdit', 'UserController@userEdit');
+
 
     // Student
     Route::match(['get', 'post'], 'studentAdd', 'StudentController@studentAdd');

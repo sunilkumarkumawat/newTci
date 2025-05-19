@@ -132,6 +132,7 @@
                                                 <th>Quantity</th>
                                                 <th>Rate</th>
                                                 <th>Amount</th>
+                                                <th>Attachment</th>
                                                 <th>Actions</th>
                                             </tr>
                                         </thead>
@@ -147,14 +148,15 @@
                                                         <td>{{ $expense->quantity ?? '' }}</td>
                                                         <td>{{ $expense->rate ?? '' }}</td>
                                                         <td>{{ $expense->total_amt ?? '' }}</td>
+                                                        <td class="text-center"><img src="{{ $expense->attachment ? url('public/' . $expense->attachment) : url('images/df-expense.jpg') }}" class="profileImg" alt="User Image"></td>
                                                         <td>
                                                             <div class="btn-group">
-                                                                <a href="#" class="btn-xs">
+                                                                {{-- <a href="#" class="btn-xs">
                                                                     <i class="fa fa-eye  fs-6  text-info"></i>
-                                                                </a>
+                                                                </a> --}}
 
                                                                 <a href="#" class="btn-xs">
-                                                                    <i class="fa fa-edit fs-6 mx-2 text-warning"></i>
+                                                                    <i class="fa fa-edit fs-6 mx-2 text-primary"></i>
                                                                 </a>
                                                                 <a  class=" btn-xs delete-btn" data-modal='Expense' data-id='{{$expense->id}}'>
                                                                     <i class="fa fa-trash fs-6 text-danger"></i></a>

@@ -169,7 +169,7 @@
                                                 <div class="col-md-4">
                                                     <div class="form-group">
                                                         <label>Photo</label>
-                                                        <input type="file" class="form-control" name="stImage" accept="image/*">
+                                                        <input type="file" class="form-control" name="image" accept="image/*">
                                                     </div>
                                                 </div>
                                             </div>

@@ -82,10 +82,8 @@
                                         <tr>
                                             <td>{{ $index + 1 }}</td>
                                             <td class="text-center">
-                                                <img src="{{ asset(env('IMAGE_SHOW_PATH') . 'default_user_image.jpg') }}"
-                                                    class="profileImg" alt="Student Image">
+                                                <img src="{{ $studentAdd->image ? url('public/' . $studentAdd->image) : url('images/default_user_image.jpg') }}" class="profileImg" alt="User Image">
                                             </td>
-
                                             <td>{{ $studentAdd -> student_name ?? '' }}</td>
                                             <td>{{ $studentAdd -> mobile ?? '' }}</td>
                                             <td>{{ $studentAdd -> email ?? '' }}</td>
@@ -97,7 +95,7 @@
                                             <td>
                                                 <a href="{{ url('studentEdit') }}" class="btn-xs"><i
                                                         class="fa fa-edit text-primary"></i></a>
-                                                <a href="#" class=" btn-xs">
+                                                <a class=" btn-xs delete-btn" data-modal="admission" data-id="{{$studentAdd->id}}">
                                                     <i class="fa fa-trash fs-6 text-danger"></i></a>
                                             </td>
                                         </tr>

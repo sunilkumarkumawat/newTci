@@ -115,6 +115,9 @@
 	border-color: #ff5722;
 }
 
+.delete-btn{
+	cursor: pointer;
+}
 .card-header {
 	border-top-left-radius: 0;
 	border-top-right-radius: 0;
@@ -790,7 +793,6 @@ h4 {
 .profileImg {
 	width: 50px;
 	height: 50px;
-	border-radius: 50%;
 }
 
 /* for mobile view button css */

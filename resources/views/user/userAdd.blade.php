@@ -69,7 +69,7 @@
                                 </div>
 
 
-                                <form id="createCommon">
+                                <form id="createCommon" enctype="multipart/form-data">
                                     <input type='hidden' value='User' name='modal_type' />
                                     <input type='hidden' id="branch_id"  name='branch_id' />
                                     <div class="card-body">
@@ -153,7 +153,7 @@
 
                                                     <div class="col-md-4">
                                                         <div class="form-group">
-                                                            <label class="text-danger" for="gender">Gender <span class="text-danger">*</span></label>
+                                                            <label for="gender">Gender <span class="text-danger">*</span></label>
                                                             <select name="gender" id="gender" class="form-control">
                                                                 <option value="M">Male</option>
                                                                 <option value="F">Female</option>
