@@ -66,8 +66,8 @@
                                             <th>Name</th>
                                             <th>Mobile</th>
                                             <th>E-Mail</th>
-                                            <th>User Name</th>
-                                            <th>Password</th>
+                                            <th>Gender</th>
+                                            <th>DOB</th>
                                             <th>Status</th>
                                             <th>Action</th>
                                         </tr>

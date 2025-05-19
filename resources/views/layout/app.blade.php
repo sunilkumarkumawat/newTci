@@ -101,10 +101,10 @@
         @include('layout.footer')
         <script>
             /*$.ajaxSetup({
-                                                                                                                                                                                                                                                                            headers: {
-                                                                                                                                                                                                                                                                                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                                                                                                                                                                                                                                                                            }
-                                                                                                                                                                                                                                                                        });*/
+                                                                                                                                                                                                                                                                                    headers: {
+                                                                                                                                                                                                                                                                                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                                                                                                                                                                                                                                                                                    }
+                                                                                                                                                                                                                                                                                });*/
             //var URL  = "{{ url('/') }}";
         </script>
 
@@ -427,7 +427,7 @@
             });
         </script>
 
-
+        {{-- add data --}}
         <script>
             $(document).ready(function() {
                 $.ajaxSetup({
@@ -735,7 +735,7 @@
         </script>
 
 
-       
+
 
 
         {{-- convert excel data into array --}}

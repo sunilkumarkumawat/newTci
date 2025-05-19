@@ -381,4 +381,40 @@ public function changeStatusCommon(Request $request, $model, $id)
             ], 500); // 500 = Internal Server Error
         }
     }
+
+
+    public function toggleStatusCommon(Request $request, $model, $id)
+    {
+        try {
+            if (!str_contains($model, '\\')) {
+                $model = 'App\\Models\\' . $model;
+            }
+
+            if (!class_exists($model)) {
+                return response()->json(['message' => 'Invalid model type'], 400);
+            }
+
+            $record = $model::find($id);
+
+            if (!$record) {
+                return response()->json(['message' => 'Record not found'], 404);
+            }
+
+            // Check and toggle status
+            $record->status = ($record->status == 1) ? 0 : 1;
+            $record->save();
+
+            $statusText = $record->status == 1 ? 'activated' : 'deactivated';
+
+            return response()->json([
+                'message' => class_basename($model) . " {$statusText} successfully.",
+                'status' => $record->status,
+                'data' => $record
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'error' => 'Error: ' . $e->getMessage()
+            ], 500);
+        }
+    }
 }
