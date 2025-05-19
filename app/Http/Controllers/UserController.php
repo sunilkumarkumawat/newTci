@@ -34,7 +34,7 @@ class UserController extends Controller
     public function userAdd()
     {
 
-        return view('user/userAdd');
+        return view('user/userAdd',['data'=>null]);
     }
     public function userView()
     {
@@ -65,9 +65,27 @@ class UserController extends Controller
         }
     }
 
-    public function userEdit()
+    public function userEdit($id)
     {
-        return view('user.userEdit');
+
+             $api = new ApiController();
+
+            // Simulate request with modal_type = User
+            $fakeRequest = new Request([
+                'modal_type' => 'User',
+                'id' => $id,
+            ]);
+
+            // Call the API method
+            $response = $api->getCommonRow($fakeRequest);
+
+            // Extract data from JSON response
+            $responseData = $response->getData();
+
+              // Check if data exists and is not empty
+            $data = isset($responseData->data) && !empty($responseData->data) ? $responseData->data : [];
+
+        return view('user.userAdd',['data'=>$data]);
     }
 
     public function teacherView()

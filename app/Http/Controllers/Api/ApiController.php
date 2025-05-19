@@ -129,48 +129,140 @@ class ApiController extends BaseController
 
 
 
+    // public function createCommon(Request $request)
+    // {
+    //     $data = collect($request->all())->except('modal_type')->toArray();
+
+    //     $modal = $request->modal_type;
+
+    //     if (!str_contains($modal, '\\')) {
+    //         $modal = 'App\\Models\\' . $modal;
+    //     }
+
+    //     try {
+    //         if (!class_exists($modal)) {
+    //             return response()->json(['message' => 'Invalid modal type'], 400);
+    //         }
+
+    //         $modalName = class_basename($modal); // e.g., 'User'
+
+    //         // 🔐 Handle password
+    //         $this->handlePasswordField($data);
+
+    //         // Handle uploaded files
+    //         foreach ($request->files as $key => $file) {
+    //             if ($file->isValid()) {
+    //                 $data[$key] = $this->handleFileUpload($file, $modalName); // Call the local function
+    //             }
+    //         }
+
+
+
+    //         // Create record
+    //         $record = $modal::create($data);
+
+    //         return response()->json([
+    //             'message' => $modalName . ' created successfully.',
+    //             'data' => $record
+    //         ], 201);
+    //     } catch (\Exception $e) {
+    //         return response()->json([
+    //             'error' => 'Error: ' . $e->getMessage()
+    //         ], 500);
+    //     }
+    // }
+
+
+
     public function createCommon(Request $request)
-    {
-        $data = collect($request->all())->except('modal_type')->toArray();
+{
+    $data = collect($request->all())->except(['modal_type', 'id'])->toArray();
 
-        $modal = $request->modal_type;
+    $modal = $request->modal_type;
 
-        if (!str_contains($modal, '\\')) {
-            $modal = 'App\\Models\\' . $modal;
+    if (!str_contains($modal, '\\')) {
+        $modal = 'App\\Models\\' . $modal;
+    }
+
+    try {
+        if (!class_exists($modal)) {
+            return response()->json(['message' => 'Invalid modal type'], 400);
         }
 
-        try {
-            if (!class_exists($modal)) {
-                return response()->json(['message' => 'Invalid modal type'], 400);
+        $modalName = class_basename($modal); // e.g., 'User'
+
+        // 🔐 Handle password
+        $this->handlePasswordField($data);
+
+        // Handle uploaded files
+        foreach ($request->files as $key => $file) {
+            if ($file->isValid()) {
+                $data[$key] = $this->handleFileUpload($file, $modalName);
+            }
+        }
+
+        // ✅ Check for 'id' to decide between create or update
+        if ($request->filled('id')) {
+            $record = $modal::find($request->id);
+            if (!$record) {
+                return response()->json(['message' => $modalName . ' not found.'], 404);
             }
 
-            $modalName = class_basename($modal); // e.g., 'User'
+            $record->update($data);
 
-            // 🔐 Handle password
-            $this->handlePasswordField($data);
-
-            // Handle uploaded files
-            foreach ($request->files as $key => $file) {
-                if ($file->isValid()) {
-                    $data[$key] = $this->handleFileUpload($file, $modalName); // Call the local function
-                }
-            }
-
-
-
-            // Create record
+            return response()->json([
+                'message' => $modalName . ' updated successfully.',
+                'data' => $record
+            ]);
+        } else {
             $record = $modal::create($data);
 
             return response()->json([
                 'message' => $modalName . ' created successfully.',
                 'data' => $record
             ], 201);
-        } catch (\Exception $e) {
-            return response()->json([
-                'error' => 'Error: ' . $e->getMessage()
-            ], 500);
         }
+    } catch (\Exception $e) {
+        return response()->json([
+            'error' => 'Error: ' . $e->getMessage()
+        ], 500);
     }
+}
+
+
+public function getCommonRow(Request $request)
+{
+    $modal = $request->modal_type;
+    $id = $request->id;
+
+    if (!$modal || !$id) {
+        return response()->json(['message' => 'modal_type and id are required'], 400);
+    }
+
+    if (!str_contains($modal, '\\')) {
+        $modal = 'App\\Models\\' . $modal;
+    }
+
+    try {
+        if (!class_exists($modal)) {
+            return response()->json(['message' => 'Invalid modal type'], 400);
+        }
+
+        $record = $modal::find($id);
+
+        if (!$record) {
+            return response()->json(['message' => 'Record not found'], 404);
+        }
+
+        return response()->json([
+            'data' => $record
+        ]);
+    } catch (\Exception $e) {
+        return response()->json([
+            'error' => 'Error: ' . $e->getMessage()
+        ], 500);
+    }
+}
 
 
     public function deleteCommon(Request $request, $model, $id)

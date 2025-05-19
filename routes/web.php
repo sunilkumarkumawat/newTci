@@ -26,7 +26,7 @@ Route::middleware(['auth'])->group(function () {
     // User Controller
     Route::match(['get', 'post'], 'userAdd', 'UserController@userAdd');
     Route::match(['get', 'post'], 'userView', 'UserController@userView');
-    Route::match(['get', 'post'], 'userEdit', 'UserController@userEdit');
+    Route::match(['get', 'post'], 'userEdit/{id}', 'UserController@userEdit');
 
 
     // Student
