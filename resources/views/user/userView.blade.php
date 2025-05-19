@@ -66,8 +66,8 @@
                                             <th>Name</th>
                                             <th>Mobile</th>
                                             <th>E-Mail</th>
-                                            <th>User Name</th>
-                                            <th>Password</th>
+                                            <th>Gender</th>
+                                            <th>DOB</th>
                                             <th>Status</th>
                                             <th>Action</th>
                                         </tr>
@@ -86,8 +86,8 @@
                                                     <td>{{ $user->first_name ?? ''}} {{ $user->last_name ?? ''}}</td>
                                                     <td>{{ $user->mobile ?? ''}}</td>
                                                     <td>{{ $user->email ?? ''}}</td>
-                                                    <td>{{ $user->userName ?? ''}}</td>
-                                                    <td>{{ $user->password ?? ''}}</td>
+                                                    <td>{{ $user->gender ?? ''}}</td>
+                                                    <td>{{ $user->dob ? \Carbon\Carbon::parse($user->dob)->format('d-m-Y') : '' }}</td>
                                                     <td>
                                                         <button class="btn btn-success btn-sm w-75">Active</button>
                                                     </td>
