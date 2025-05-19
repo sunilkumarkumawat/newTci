@@ -299,6 +299,43 @@ public function getCommonRow(Request $request)
 
 
 
+public function changeStatusCommon(Request $request, $model, $id)
+{
+    try {
+        // If the model string does not include a namespace, prepend App\Models\
+        if (!str_contains($model, '\\')) {
+            $model = 'App\\Models\\' . $model;
+        }
+
+        if (!class_exists($model)) {
+            return response()->json(['message' => 'Invalid model type'], 400);
+        }
+
+        // Attempt to find the record
+        $record = $model::find($id);
+
+        if (!$record) {
+            return response()->json(['message' => 'Record not found'], 404);
+        }
+
+        // Toggle the status
+        $record->status = $record->status == 1 ? 0 : 1;
+        $record->save();
+
+        return response()->json([
+            'message' => class_basename($model) . ' status changed successfully.',
+            'data' => [
+                'id' => $record->id,
+                'status' => $record->status
+            ]
+        ], 200);
+
+    } catch (\Exception $e) {
+        return response()->json([
+            'error' => 'Error: ' . $e->getMessage()
+        ], 500);
+    }
+}
 
 
 

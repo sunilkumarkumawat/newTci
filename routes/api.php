@@ -38,6 +38,7 @@ Route::post('/loginAuth', function (Request $request) {
 Route::middleware('auth:sanctum')->group(function () {
 
 Route::delete('/common-delete/{model}/{id}', [ApiController::class, 'deleteCommon']);
+Route::post('/common-status-change/{model}/{id}', [ApiController::class, 'changeStatusCommon']);
 
     Route::post('createCommon', [ApiController::class, 'createCommon']);
 });

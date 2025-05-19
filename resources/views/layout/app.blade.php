@@ -774,31 +774,52 @@
             });
         </script>
 
-        {{-- delete entry --}}
-        <script>
-            $(document).on('click', '.delete-btn', function() {
-                const model = $(this).data('modal');
-                const id = $(this).data('id');
-                const baseUrl = "{{ url('/') }}";
-                if (confirm('Are you sure you want to delete this item?')) {
-                    const endpoint = `${baseUrl}/api/common-delete/${model}/${id}`;
+{{-- change status --}}
+<script>
+    $(document).on('click', '.status-change-btn', function () {
+        const button = $(this);
+        const model = button.data('modal');
+        const id = button.data('id');
+        const baseUrl = "{{ url('/') }}";
+        const endpoint = `${baseUrl}/api/common-status-change/${model}/${id}`;
 
-                    $.post(endpoint, {
-                            _method: 'DELETE',
-                            _token: $('meta[name="csrf-token"]').attr('content') // Optional for API routes
-                        })
-                        .done(function(response) {
-                            console.log(response);
-                            toastr.success(response.message || 'Item deleted successfully.');
-                            location.reload();
-                        })
-                        .fail(function(xhr) {
-                            toastr.error('Failed to delete item.');
-                            console.error(xhr.responseText);
-                        });
+        if (confirm('Are you sure you want to change the status of this item?')) {
+            $.ajax({
+                url: endpoint,
+                type: 'POST',
+                data: {
+                    _token: $('meta[name="csrf-token"]').attr('content')
+                },
+                success: function (response) {
+                    toastr.success(response.message || 'Status changed successfully.');
+
+                    // Optional: Update the UI without reloading
+                    const statusElement = $(`#status-${model}-${id}`);
+                    // const statusElement = $(`#status-${model}-${id}`);
+                    
+                    if (response.data && response.data.status !== undefined) {
+                        // Update text or toggle classes (example)
+                        const newStatus = response.data.status;
+                        const statusText = newStatus == 1 ? 'Active' : 'Inactive';
+
+                        // Optional: badge styles
+                        const badgeClass = newStatus == 1 ? 'bg-success' : 'bg-danger';
+                        statusElement
+                            .text(statusText)
+                            .removeClass('bg-success bg-danger')
+                            .addClass(badgeClass);
+                    }
+                },
+                error: function (xhr) {
+                    toastr.error('Failed to change status.');
+                    console.error(xhr.responseText);
                 }
             });
-        </script>
+        }
+    });
+</script>
+
+
 
 
         <!-- Common Delete Confirmation Modal -->

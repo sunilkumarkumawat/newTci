@@ -88,9 +88,17 @@
                                                     <td>{{ $user->email ?? ''}}</td>
                                                     <td>{{ $user->userName ?? ''}}</td>
                                                     <td>{{ $user->password ?? ''}}</td>
-                                                    <td>
-                                                        <button class="btn btn-success btn-sm w-75">Active</button>
-                                                    </td>
+                                                  <td>
+    <button 
+        class="btn btn-sm w-75 status-change-btn {{ $user->status == 1 ? 'btn-success' : 'btn-danger' }}" 
+        id="status-User-{{ $user->id }}" 
+        data-modal="User" 
+        data-id="{{ $user->id }}"
+        data-status="{{ $user->status }}"
+    >
+        {{ $user->status == 1 ? 'Active' : 'Inactive' }}
+    </button>
+</td>
                                                     <td>
                                                       <a href="{{ url('userEdit/' . $user->id) }}" class="btn btn-xs">
                                                         <i class="fa fa-edit text-primary"></i>
