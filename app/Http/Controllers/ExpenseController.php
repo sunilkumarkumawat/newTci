@@ -32,55 +32,65 @@ class ExpenseController extends Controller
 
 {
     public function expense()
-    {
-        try {
-            // Create a new instance of the API controller
-            $api = new ApiController();
+{
+    try {
+        $expenseData = $this->getExpenseData();
 
-            // Simulate request with modal_type = User
-            $fakeRequest = new Request([
-                'modal_type' => 'Expense',
-            ]);
-
-            // Call the API method
-            $response = $api->getUsersData($fakeRequest);
-
-            // Extract data from JSON response
-            $responseData = $response->getData();
-
-            // Check if data exists and is not empty
-            $data = isset($responseData->data) && !empty($responseData->data) ? $responseData->data : [];
-
-            // Return view with users
-            return view('expense/expense', ['data' => $data]);
-        } catch (\Exception $e) {
-            // Log the error and show fallback view or message
-
-            return view('expense/expense', ['data' => []])
-                ->with('error', 'Failed to load expense.');
-        }
-
-        return view('expense/expense');
+        return view('expense.expense', [
+            'data' => null,
+            'expenseData' => $expenseData
+        ]);
+    } catch (\Exception $e) {
+        return view('expense.expense', [
+            'data' => null,
+            'expenseData' => [],
+        ])->with('error', 'Failed to load expense.');
     }
+}
 
-    public function expenseedit($id)
-    {
+public function expenseedit($id)
+{
+    try {
         $api = new ApiController();
 
-        // Simulate request with modal_type = User
         $fakeRequest = new Request([
             'modal_type' => 'Expense',
             'id' => $id,
         ]);
 
-        // Call the API method
         $response = $api->getCommonRow($fakeRequest);
-
-        // Extract data from JSON response
         $responseData = $response->getData();
+        $data = isset($responseData->data) && !empty($responseData->data) ? $responseData->data : null;
 
-        // Check if data exists and is not empty
-        $data = isset($responseData->data) && !empty($responseData->data) ? $responseData->data : [];
-        return view('expense.expense', ['data' => $data]);
+        $expenseData = $this->getExpenseData();
+
+        return view('expense.expense', [
+            'data' => $data,
+            'expenseData' => $expenseData
+        ]);
+    } catch (\Exception $e) {
+        return view('expense.expense', [
+            'data' => null,
+            'expenseData' => [],
+        ])->with('error', 'Failed to edit expense.');
     }
+}
+
+private function getExpenseData()
+{
+    $api = new ApiController();
+
+    $fakeRequest = new Request([
+        'modal_type' => 'Expense',
+    ]);
+
+    $response = $api->getUsersData($fakeRequest);
+
+    $responseData = $response->getData();
+
+    return isset($responseData->data) && !empty($responseData->data)
+        ? $responseData->data
+        : [];
+}
+
 }

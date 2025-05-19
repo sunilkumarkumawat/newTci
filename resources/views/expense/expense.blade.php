@@ -162,9 +162,9 @@
                                             </tr>
                                         </thead>
                                         <tbody id="expense-list">
-                                            @if (!empty($data))
-                                                @foreach ($data as $index => $expense)
-                                                    <tr>
+                                            @if (!empty($expenseData))
+                                                @foreach ($expenseData as $index => $expense)
+                                              <tr class="{{ (!empty($isEdit) && isset($data->id, $expense->id) && $data->id == $expense->id) ? 'bg-primary' : '' }}">
                                                         <td>{{ $index + 1}}</td>
                                                         <td>{{ $expense->expense_name ?? '' }}</td>
                                                         <td>

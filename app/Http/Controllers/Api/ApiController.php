@@ -128,140 +128,95 @@ class ApiController extends BaseController
     }
 
 
-
-    // public function createCommon(Request $request)
-    // {
-    //     $data = collect($request->all())->except('modal_type')->toArray();
-
-    //     $modal = $request->modal_type;
-
-    //     if (!str_contains($modal, '\\')) {
-    //         $modal = 'App\\Models\\' . $modal;
-    //     }
-
-    //     try {
-    //         if (!class_exists($modal)) {
-    //             return response()->json(['message' => 'Invalid modal type'], 400);
-    //         }
-
-    //         $modalName = class_basename($modal); // e.g., 'User'
-
-    //         // 🔐 Handle password
-    //         $this->handlePasswordField($data);
-
-    //         // Handle uploaded files
-    //         foreach ($request->files as $key => $file) {
-    //             if ($file->isValid()) {
-    //                 $data[$key] = $this->handleFileUpload($file, $modalName); // Call the local function
-    //             }
-    //         }
-
-
-
-    //         // Create record
-    //         $record = $modal::create($data);
-
-    //         return response()->json([
-    //             'message' => $modalName . ' created successfully.',
-    //             'data' => $record
-    //         ], 201);
-    //     } catch (\Exception $e) {
-    //         return response()->json([
-    //             'error' => 'Error: ' . $e->getMessage()
-    //         ], 500);
-    //     }
-    // }
-
-
-
     public function createCommon(Request $request)
-    {
-        $data = collect($request->all())->except(['modal_type', 'id'])->toArray();
+{
+    $data = collect($request->all())->except(['modal_type', 'id'])->toArray();
 
-        $modal = $request->modal_type;
+    $modal = $request->modal_type;
 
-        if (!str_contains($modal, '\\')) {
-            $modal = 'App\\Models\\' . $modal;
-        }
-
-        try {
-            if (!class_exists($modal)) {
-                return response()->json(['message' => 'Invalid modal type'], 400);
-            }
-
-            $modalName = class_basename($modal); // e.g., 'User'
-
-            // 🔐 Handle password
-            $this->handlePasswordField($data);
-
-            // Handle uploaded files
-            foreach ($request->files as $key => $file) {
-                if ($file->isValid()) {
-                    $data[$key] = $this->handleFileUpload($file, $modalName);
-                }
-            }
-
-            // ✅ Check for 'id' to decide between create or update
-            if ($request->filled('id')) {
-                $record = $modal::find($request->id);
-                if (!$record) {
-                    return response()->json(['message' => $modalName . ' not found.'], 404);
-                }
-
-                $record->update($data);
-
-                return response()->json([
-                    'message' => $modalName . ' updated successfully.',
-                    'data' => $record
-                ]);
-            } else {
-                $record = $modal::create($data);
-
-                return response()->json([
-                    'message' => $modalName . ' created successfully.',
-                    'data' => $record
-                ], 201);
-            }
-        } catch (\Exception $e) {
-            return response()->json([
-                'error' => 'Error: ' . $e->getMessage()
-            ], 500);
-        }
+    if (!str_contains($modal, '\\')) {
+        $modal = 'App\\Models\\' . $modal;
     }
 
-
-    public function getCommonRow(Request $request)
-    {
-        $modal = $request->modal_type;
-        $id = $request->id;
-
-        if (!$modal || !$id) {
-            return response()->json(['message' => 'modal_type and id are required'], 400);
+    try {
+        if (!class_exists($modal)) {
+            return response()->json(['message' => 'Invalid modal type'], 400);
         }
 
-        if (!str_contains($modal, '\\')) {
-            $modal = 'App\\Models\\' . $modal;
-        }
+        $modalName = class_basename($modal); // e.g., 'User'
 
-        try {
-            if (!class_exists($modal)) {
-                return response()->json(['message' => 'Invalid modal type'], 400);
+        // 🔐 Handle password
+        $this->handlePasswordField($data);
+
+        // Handle uploaded files
+        foreach ($request->files as $key => $file) {
+            if ($file->isValid()) {
+                $data[$key] = $this->handleFileUpload($file, $modalName);
             }
+        }
 
-            $record = $modal::find($id);
+        // ✅ Check for 'id' to decide between create or update
+        if ($request->filled('id')) {
+            $record = $modal::find($request->id);
             if (!$record) {
-                return response()->json(['message' => 'Record not found'], 404);
+                return response()->json(['message' => $modalName . ' not found.'], 404);
             }
+
+            $record->update($data);
 
             return response()->json([
+                'message' => $modalName . ' updated successfully.',
                 'data' => $record
             ]);
-        } catch (\Exception $e) {
+        } else {
+            $record = $modal::create($data);
+
             return response()->json([
-                'error' => 'Error: ' . $e->getMessage()
-            ], 500);
+                'message' => $modalName . ' created successfully.',
+                'data' => $record
+            ], 201);
         }
+    } catch (\Exception $e) {
+        return response()->json([
+            'error' => 'Error: ' . $e->getMessage()
+        ], 500);
     }
+}
+
+
+public function getCommonRow(Request $request)
+{
+    $modal = $request->modal_type;
+    $id = $request->id;
+
+    if (!$modal || !$id) {
+        return response()->json(['message' => 'modal_type and id are required'], 400);
+    }
+
+    if (!str_contains($modal, '\\')) {
+        $modal = 'App\\Models\\' . $modal;
+    }
+
+    try {
+        if (!class_exists($modal)) {
+            return response()->json(['message' => 'Invalid modal type'], 400);
+        }
+
+        $record = $modal::find($id);
+
+        if (!$record) {
+            return response()->json(['message' => 'Record not found'], 404);
+        }
+
+        return response()->json([
+            'data' => $record
+        ]);
+    } catch (\Exception $e) {
+        return response()->json([
+            'error' => 'Error: ' . $e->getMessage()
+        ], 500);
+    }
+}
 
 
     public function deleteCommon(Request $request, $model, $id)
@@ -298,42 +253,43 @@ class ApiController extends BaseController
 
 
 
-    public function changeStatusCommon(Request $request, $model, $id)
-    {
-        try {
-            // If the model string does not include a namespace, prepend App\Models\
-            if (!str_contains($model, '\\')) {
-                $model = 'App\\Models\\' . $model;
-            }
-
-            if (!class_exists($model)) {
-                return response()->json(['message' => 'Invalid model type'], 400);
-            }
-
-            // Attempt to find the record
-            $record = $model::find($id);
-
-            if (!$record) {
-                return response()->json(['message' => 'Record not found'], 404);
-            }
-
-            // Toggle the status
-            $record->status = $record->status == 1 ? 0 : 1;
-            $record->save();
-
-            return response()->json([
-                'message' => class_basename($model) . ' status changed successfully.',
-                'data' => [
-                    'id' => $record->id,
-                    'status' => $record->status
-                ]
-            ], 200);
-        } catch (\Exception $e) {
-            return response()->json([
-                'error' => 'Error: ' . $e->getMessage()
-            ], 500);
+public function changeStatusCommon(Request $request, $model, $id)
+{
+    try {
+        // If the model string does not include a namespace, prepend App\Models\
+        if (!str_contains($model, '\\')) {
+            $model = 'App\\Models\\' . $model;
         }
+
+        if (!class_exists($model)) {
+            return response()->json(['message' => 'Invalid model type'], 400);
+        }
+
+        // Attempt to find the record
+        $record = $model::find($id);
+
+        if (!$record) {
+            return response()->json(['message' => 'Record not found'], 404);
+        }
+
+        // Toggle the status
+        $record->status = $record->status == 1 ? 0 : 1;
+        $record->save();
+
+        return response()->json([
+            'message' => class_basename($model) . ' status changed successfully.',
+            'data' => [
+                'id' => $record->id,
+                'status' => $record->status
+            ]
+        ], 200);
+
+    } catch (\Exception $e) {
+        return response()->json([
+            'error' => 'Error: ' . $e->getMessage()
+        ], 500);
     }
+}
 
 
 
@@ -379,4 +335,7 @@ class ApiController extends BaseController
             ], 500); // 500 = Internal Server Error
         }
     }
+
+
+  
 }
