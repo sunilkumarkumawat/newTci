@@ -39,6 +39,7 @@ Route::middleware('auth:sanctum')->group(function () {
 
 Route::delete('/common-delete/{model}/{id}', [ApiController::class, 'deleteCommon']);
 Route::post('/common-status-change/{model}/{id}', [ApiController::class, 'changeStatusCommon']);
+// Route::post('/get-user-data', [ApiController::class, 'getUsersData']);
 
     Route::post('createCommon', [ApiController::class, 'createCommon']);
 });

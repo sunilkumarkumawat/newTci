@@ -64,10 +64,15 @@ Route::middleware(['auth'])->group(function () {
 
 
     // branch
-    Route::match(['get', 'post'], 'branch', 'CommonController@branch');
+    Route::match(['get', 'post'], 'branch', 'BranchController@branch');
+    Route::match(['get', 'post'], 'branchEdit/{id}', 'BranchController@branchEdit');
+    Route::match(['get', 'post'], 'viewBranch', 'BranchController@branchview');
 
     // role
     Route::match(['get', 'post'], 'role', 'CommonController@role');
+    Route::match(['get', 'post'], 'commonView/{modal_type}', 'CommonController@commonView');
+
+
 
 
 

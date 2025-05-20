@@ -64,25 +64,8 @@
                                                 <th>Action</th>
                                             </tr>
                                         </thead>
-                                        <tbody id="branch-list">
-                                            @if (!empty($data))
-                                                @foreach ($data as $index => $role)
-                                                    <tr id="row-{{ $role->id }}">
-                                                        <td>{{ $index + 1 }}</td>
-                                                        <td>{{ $role->role_name ?? '' }}</td>
-                                                        <td>
-                                                            <div class="btn-group">
-                                                                <a href="#" class="btn-xs">
-                                                                    <i class="fa fa-edit fs-6 mx-2 text-primary"></i>
-                                                                </a>
-                                                                <a class=" btn-xs delete-btn" 
-                                                                    data-modal='Role' data-id='{{$role->id}}'>
-                                                                    <i class="fa fa-trash fs-6 text-danger"></i></a>
-                                                            </div>
-                                                        </td>
-                                                    </tr>
-                                                @endforeach
-                                            @endif
+                                        <tbody id="dataContainer">
+                                          
                                         </tbody>
                                     </table>
                                 </div>

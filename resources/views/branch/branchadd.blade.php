@@ -1,5 +1,10 @@
 @extends('layout.app')
 @section('content')
+
+    @php
+        $isEdit = isset($data);
+    @endphp
+
     <div class="content-wrapper">
         <section class="content">
             <div class="container-fluid">
@@ -24,55 +29,61 @@
                             </div>
 
                             <div class="card-body">
-                                <form id="createCommon">
+                                <form id="createCommon" enctype="multipart/form-data">
+                                    @if ($isEdit)
+                                        <input type='hidden' value='{{ $data->id }}' name='id' />
+                                    @endif
                                     <input type='hidden' value='Branch' name='modal_type' />
-                                    <input type="hidden" value="{{ Auth::user()->id }}" name="user_id" />
-                                    <div id="branch-container" class="bg-item mb-3 border p-3 rounded">
-                                        <div class="row">
-                                            <div class="col-sm-6 form-group">
-                                                <label for="branch_code">Branch Code <span class="text-danger">*</span></label>
-                                                <input type="text" class="form-control" name="branch_code"
-                                                    id="branch_code" data-required="true">
-                                            </div>
-                                            <div class="col-sm-6 form-group">
-                                                <label for="branch_name">Branch Name <span class="text-danger">*</span></label>
-                                                <input type="text" class="form-control" id="branch_name"
-                                                    name="branch_name" data-required="true">
-                                            </div>
-                                            <div class="col-sm-6 col-12 form-group">
-                                                <label for="director">Contact Person <span class="text-danger">*</span></label>
-                                                <input type="text" class="form-control " id="contact_person"
-                                                    name="contact_person" data-required="true">
-                                            </div>
-                                            <div class="col-sm-6 form-group">
-                                                <label for="mobile">Mobile Number <span class="text-danger">*</span></label>
-                                                <input type="text" class="form-control" name="mobile" id="mobile"
-                                                    data-required="true" data-type="mobile"
-                                                    oninput="this.value = this.value.replace(/[^0-9]/g, '')">
-                                            </div>
-                                            <div class="col-sm-6 form-group">
-                                                <label for="email">Email</label>
-                                                <input type="text" class="form-control " id="email" name="email">
-                                            </div>
-                                            <div class="col-sm-6 form-group">
-                                                <label for="address">Address</label>
-                                                <input type="text" class="form-control" id="address" name="address">
-                                            </div>
-
-                                            <div class="col-sm-6 form-group">
-                                                <label for="address" for="pin_code">Pin Code</label>
-                                                <input type="text" class="form-control" id="pin_code" name="pin_code">
-                                            </div>
-
-                                            <div class="col-12 col-md-12 ">
-                                                <button type="submit" class="btn btn-primary">Submit</button>
-                                            </div>
+                                    <div class="row">
+                                        <div class="col-sm-6 form-group">
+                                            <label for="branch_code">Branch Code <span class="text-danger">*</span></label>
+                                            <input type="text" class="form-control" name="branch_code" id="branch_code"
+                                                data-required="true"
+                                                value="{{ old('branch_code', $data->branch_code ?? '') }}" />
+                                        </div>
+                                        <div class="col-sm-6 form-group">
+                                            <label for="branch_name">Branch Name <span class="text-danger">*</span></label>
+                                            <input type="text" class="form-control" id="branch_name" name="branch_name"
+                                                data-required="true"
+                                                value="{{ old('branch_name', $data->branch_name ?? '') }}" />
+                                        </div>
+                                        <div class="col-sm-6 col-12 form-group">
+                                            <label for="director">Contact Person <span class="text-danger">*</span></label>
+                                            <input type="text" class="form-control" id="contact_person"
+                                                name="contact_person" data-required="true"
+                                                value="{{ old('contact_person', $data->contact_person ?? '') }}" />
+                                        </div>
+                                        <div class="col-sm-6 form-group">
+                                            <label for="mobile">Mobile Number <span class="text-danger">*</span></label>
+                                            <input type="text" class="form-control" name="mobile" id="mobile"
+                                                data-required="true" data-type="mobile"
+                                                oninput="this.value = this.value.replace(/[^0-9]/g, '')"
+                                                value="{{ old('mobile', $data->mobile ?? '') }}" />
+                                        </div>
+                                        <div class="col-sm-6 form-group">
+                                            <label for="email">Email</label>
+                                            <input type="text" class="form-control" id="email" name="email"
+                                                value="{{ old('email', $data->email ?? '') }}" />
+                                        </div>
+                                        <div class="col-sm-6 form-group">
+                                            <label for="address">Address</label>
+                                            <input type="text" class="form-control" id="address" name="address"
+                                                value="{{ old('address', $data->address ?? '') }}" />
+                                        </div>
+                                        <div class="col-sm-6 form-group">
+                                            <label for="pin_code">Pin Code</label>
+                                            <input type="text" class="form-control" id="pin_code" name="pin_code"
+                                                value="{{ old('pin_code', $data->pin_code ?? '') }}" />
+                                        </div>
+                                        <div class="col-12 col-md-12">
+                                            <button type="submit" class="btn btn-primary">Submit</button>
                                         </div>
                                     </div>
                                 </form>
                             </div>
                         </div>
                     </div>
+
 
                     <!-- Branch View Column -->
                     <div class="col-md-8 col-12">
@@ -97,31 +108,9 @@
                                                 <th>Actions</th>
                                             </tr>
                                         </thead>
-                                        <tbody id="branch-list">
+                                        <tbody id="dataContainer">
 
-                                            <!-- Branch entries will be loaded here -->
-                                            @if (!empty($data))
-                                                @foreach ($data as $index => $branch)
-                                                    <tr>
-                                                        <td>{{ $index + 1 ?? '' }}</td>
-                                                        <td>{{ $branch->branch_code ?? '' }}</td>
-                                                        <td>{{ $branch->branch_name ?? '' }}</td>
-                                                        <td>{{ $branch->contact_person ?? '' }}</td>
-                                                        <td>{{ $branch->mobile ?? '' }}</td>
-                                                        <td>{{ $branch->email ?? '' }}</td>
-                                                        <td>{{ $branch->pin_code ?? '' }}</td>
-                                                        <td>
-                                                            <div class="btn-group">
-                                                                <a href="#" class="btn-xs">
-                                                                    <i class="fa fa-edit fs-6 mx-2 text-primary"></i>
-                                                                </a>
-                                                                <a class=" btn-xs delete-btn" data-modal='branch' data-id='{{$branch->id}}'>
-                                                                    <i class="fa fa-trash fs-6 text-danger"></i></a>
-                                                            </div>
-                                                        </td>
-                                                    </tr>
-                                                @endforeach
-                                            @endif
+                                            
                                         </tbody>
                                     </table>
                                 </div>

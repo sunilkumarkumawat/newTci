@@ -30,9 +30,9 @@
 
                             <div class="card-body">
                                 <form id="createCommon" enctype="multipart/form-data">
-                                    {{-- @if ($isEdit)
+                                    @if ($isEdit)
                                         <input type='hidden' value='{{ $data->id }}' name='id' />
-                                    @endif --}}
+                                    @endif
                                     <input type='hidden' value='Expense' name='modal_type' />
                                     <input type='hidden' id="branch_id" name='branch_id'
                                         value="{{ old('branch_id', $data->branch_id ?? '') }}" />
@@ -161,39 +161,8 @@
                                                 <th>Actions</th>
                                             </tr>
                                         </thead>
-                                        <tbody id="expense-list">
-                                            @if (!empty($expenseData))
-                                                @foreach ($expenseData as $index => $expense)
-                                              <tr class="{{ (!empty($isEdit) && isset($data->id, $expense->id) && $data->id == $expense->id) ? 'bg-primary' : '' }}">
-                                                        <td>{{ $index + 1}}</td>
-                                                        <td>{{ $expense->expense_name ?? '' }}</td>
-                                                        <td>
-                                                            {{ $expense->expense_date ? \Carbon\Carbon::parse($expense->expense_date)->format('d-m-Y') : '' }}
-                                                        </td>
-                                                        <td>{{ $expense->quantity ?? '' }}</td>
-                                                        <td>{{ $expense->rate ?? '' }}</td>
-                                                        <td>{{ $expense->total_amt ?? '' }}</td>
-                                                        <td class="text-center"><img
-                                                                src="{{ $expense->attachment ? url('public/' . $expense->attachment) : url('images/df-expense.png') }}"
-                                                                class="profileImg" alt="User Image"></td>
-                                                        <td>
-                                                            <div class="btn-group">
-                                                                {{-- <a href="#" class="btn-xs">
-                                                                    <i class="fa fa-eye  fs-6  text-info"></i>
-                                                                </a> --}}
-
-                                                                <a href="{{ url('expenseEdit/' . $expense->id) }}"
-                                                                    class="btn btn-xs">
-                                                                    <i class="fa fa-edit text-primary"></i>
-                                                                </a>
-                                                                <a class=" btn-xs delete-btn" data-modal='Expense'
-                                                                    data-id='{{ $expense->id }}'>
-                                                                    <i class="fa fa-trash fs-6 text-danger"></i></a>
-                                                            </div>
-                                                        </td>
-                                                    </tr>
-                                                @endforeach
-                                            @endif
+                                        <tbody id="dataContainer">
+                                        
                                         </tbody>
                                     </table>
                                 </div>

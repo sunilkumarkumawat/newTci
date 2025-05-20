@@ -721,16 +721,40 @@
                         processData: false, // Required for FormData
                         contentType: false, // Required for FormData
                         success: function(response) {
+
                             console.log(response);
                             $form[0].reset();
                             toastr.success('Form Submitted Successfully');
+                        dataGet();
                         },
                         error: function(xhr) {
                             alert('Failed to submit form.');
                             console.error(xhr.responseText);
                         }
                     });
+
+
                 });
+
+
+
+
+                    function dataGet(){
+var modal_type = $('[name="modal_type"]').val();
+
+                        $('#dataContainer').load(`{{ url('/') }}/commonView/${modal_type}`, function(response, status, xhr) {
+    if (status === "error") {
+        alert("Error loading view: " + xhr.status + " " + xhr.statusText);
+        console.error(xhr.responseText);
+    } else {
+        toastr.success("Data Fetched Successfully!");
+    }
+});
+
+}
+dataGet();
+
+
             });
         </script>
 
