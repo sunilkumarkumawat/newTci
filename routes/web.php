@@ -3,6 +3,8 @@
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
+use App\Models\User;
+use Illuminate\Http\Request;
 
 // 🔓 Public Routes
 Route::match(['get', 'post'], 'login', 'Auth\AuthController@getLogin')->name('login');
@@ -14,6 +16,25 @@ Route::get('logout', function () {
     return redirect('/login');
 });
 
+
+
+Route::post('/loginAuth', function (Request $request) {
+    $user = User::where('username', $request->user_name)->first();
+
+
+    if (! $user || ! Hash::check($request->password, $user->password)) {
+        return response()->json(['message' => 'Invalid credentials'], 401);
+    }
+
+    // Laravel login to create session (for Blade)
+     Auth::login($user); // ✅ session-based login
+
+
+    $token = $user->createToken('api-token')->plainTextToken;
+
+    return response()->json(['user' => $user, 'token' => $token], 200);
+});
+
 // 🔐 Protected Routes (Only accessible if logged in)
 Route::middleware(['auth'])->group(function () {
 
@@ -22,6 +43,42 @@ Route::middleware(['auth'])->group(function () {
 
     // Sidebar
     Route::match(['get', 'post'], 'sidebar', 'Auth\AuthController@sidebar');
+
+
+     // branch
+     Route::match(['get', 'post'], 'commonEdit/{modal}/{id}', 'SharesController@commonEdit');
+     Route::match(['get', 'post'], 'createCommon', 'SharesController@createCommon');
+     Route::match(['get', 'post'], 'branch', 'SharesController@branch');
+     Route::match(['get', 'post'], 'role', 'SharesController@role');
+     Route::match(['get', 'post'], 'expense', 'SharesController@expense');
+    Route::match(['get', 'post'], 'commonView/{modal_type}', 'SharesController@commonView');
+    Route::match(['get', 'post'], 'common-status-change/{model}/{id}', 'SharesController@changeStatusCommon');
+    Route::match(['delete'], 'common-delete/{model}/{id}', 'SharesController@deleteCommon');
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     // User Controller
     Route::match(['get', 'post'], 'userAdd', 'UserController@userAdd');
@@ -38,7 +95,6 @@ Route::middleware(['auth'])->group(function () {
     Route::match(['get', 'post'], 'teacherView', 'TeacherController@teacherView');
 
     // Expense
-    Route::match(['get', 'post'], 'expense', 'ExpenseController@expense');
     Route::match(['get', 'post'], 'expenseEdit/{id}', 'ExpenseController@expenseedit');
 
     // Library Management
@@ -63,14 +119,8 @@ Route::middleware(['auth'])->group(function () {
     Route::match(['get', 'post'], 'messageTemplate', 'MessageController@messageTemplate');
 
 
-    // branch
-    Route::match(['get', 'post'], 'branch', 'BranchController@branch');
-    Route::match(['get', 'post'], 'branchEdit/{id}', 'BranchController@branchEdit');
-    Route::match(['get', 'post'], 'viewBranch', 'BranchController@branchview');
 
-    // role
-    Route::match(['get', 'post'], 'role', 'CommonController@role');
-    Route::match(['get', 'post'], 'commonView/{modal_type}', 'CommonController@commonView');
+    // Route::match(['get', 'post'], 'commonView/{modal_type}', 'CommonController@commonView');
 
 
 

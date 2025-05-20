@@ -710,7 +710,7 @@
                     const $form = $(this);
 
                     if (!validateForm($form)) return;
-                    const endpoint = "{{ url('/') }}/api/createCommon";
+                    const endpoint = "{{ url('/') }}/createCommon";
 
                     const formData = new FormData(this); // Handles files + inputs
 
@@ -768,7 +768,7 @@
 
                 if (confirm('Are you sure you want to delete this item?')) {
                     $.ajax({
-                        url: `${baseUrl}/api/common-delete/${modal}/${id}`,
+                        url: `${baseUrl}/common-delete/${modal}/${id}`,
                         type: 'POST',
                         data: {
                             _method: 'DELETE', // Laravel treats this as a DELETE request
@@ -831,7 +831,7 @@
                 const modal = button.data('modal');
                 const id = button.data('id');
                 const baseUrl = "{{ url('/') }}";
-                const endpoint = `${baseUrl}/api/common-status-change/${modal}/${id}`;
+                const endpoint = `${baseUrl}/common-status-change/${modal}/${id}`;
 
                 if (confirm('Are you sure you want to change the status of this item?')) {
                     $.ajax({

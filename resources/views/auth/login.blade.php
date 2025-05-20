@@ -3,7 +3,8 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>School | Dashboard</title>
+  <meta name="csrf-token" content="{{ csrf_token() }}">
+  <title>Library | Dashboard</title>
 
   <!-- Google Font: Source Sans Pro -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
@@ -105,41 +106,48 @@
 
 <!-- ✅ AJAX Script -->
 <script>
-  $(document).ready(function () {
-    $('#loginForm').on('submit', function (e) {
-      e.preventDefault();
+ $(document).ready(function () {
 
+  $.ajaxSetup({
+    headers: {
+      'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+    }
+  });
 
-    var baseUrl = "{{url('/')}}"
-   
+  $('#loginForm').on('submit', function (e) {
+    e.preventDefault();
 
-      $('#login-error').text('');
+    var baseUrl = "{{ url('/') }}";
 
-      $.ajax({
-        url: baseUrl+'/public/api/loginAuth',
-        type: "POST",
-        data: {
-          user_name: $('input[name="user_name"]').val(),
-          password: $('input[name="password"]').val(),
-          _token: '{{ csrf_token() }}'
-        },
-        success: function (response) {
-            window.location.href = response.redirect_to || baseUrl+"/dashboard";
-        },
-        error: function (xhr) {
-          let response = xhr.responseJSON;
-          let errors = response?.errors || {};
-          let errorText = response?.message || "Something went wrong";
+    $('#login-error').text('');
 
-          for (let field in errors) {
-            errorText += "\n" + errors[field][0];
-          }
+    $.ajax({
+      url: baseUrl + '/loginAuth',
+      type: "POST",
+      data: {
+        user_name: $('input[name="user_name"]').val(),
+        password: $('input[name="password"]').val(),
+      },
+      xhrFields: {
+        withCredentials: true
+      },
+      success: function (response) {
+        window.location.href = response.redirect_to || baseUrl + "/dashboard";
+      },
+      error: function (xhr) {
+        let response = xhr.responseJSON;
+        let errors = response?.errors || {};
+        let errorText = response?.message || "Something went wrong";
 
-          $('#login-error').text(errorText);
+        for (let field in errors) {
+          errorText += "\n" + errors[field][0];
         }
-      });
+
+        $('#login-error').text(errorText);
+      }
     });
   });
+});
 </script>
 
 </body>

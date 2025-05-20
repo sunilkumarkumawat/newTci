@@ -31,67 +31,51 @@ use App\Http\Controllers\api\ApiController;
 class ExpenseController extends Controller
 
 {
-    public function expense()
-{
-    try {
-        $expenseData = $this->getExpenseData();
+   
+// public function expenseedit($id)
+// {
+//     try {
+//         $api = new ApiController();
 
-        return view('expense.expense', [
-            'data' => null,
-            'expenseData' => $expenseData
-        ]);
-    } catch (\Exception $e) {
-        return view('expense.expense', [
-            'data' => null,
-            'expenseData' => [],
-        ])->with('error', 'Failed to load expense.');
-    }
-}
+//         $fakeRequest = new Request([
+//             'modal_type' => 'Expense',
+//             'id' => $id,
+//         ]);
 
-public function expenseedit($id)
-{
-    try {
-        $api = new ApiController();
+//         $response = $api->getCommonRow($fakeRequest);
+//         $responseData = $response->getData();
+//         $data = isset($responseData->data) && !empty($responseData->data) ? $responseData->data : null;
 
-        $fakeRequest = new Request([
-            'modal_type' => 'Expense',
-            'id' => $id,
-        ]);
+//         $expenseData = $this->getExpenseData();
 
-        $response = $api->getCommonRow($fakeRequest);
-        $responseData = $response->getData();
-        $data = isset($responseData->data) && !empty($responseData->data) ? $responseData->data : null;
+//         return view('expense.expense', [
+//             'data' => $data,
+//             'expenseData' => $expenseData
+//         ]);
+//     } catch (\Exception $e) {
+//         return view('expense.expense', [
+//             'data' => null,
+//             'expenseData' => [],
+//         ])->with('error', 'Failed to edit expense.');
+//     }
+// }
 
-        $expenseData = $this->getExpenseData();
+// private function getExpenseData()
+// {
+//     $api = new ApiController();
 
-        return view('expense.expense', [
-            'data' => $data,
-            'expenseData' => $expenseData
-        ]);
-    } catch (\Exception $e) {
-        return view('expense.expense', [
-            'data' => null,
-            'expenseData' => [],
-        ])->with('error', 'Failed to edit expense.');
-    }
-}
+//     $fakeRequest = new Request([
+//         'modal_type' => 'Expense',
+//     ]);
 
-private function getExpenseData()
-{
-    $api = new ApiController();
+//     $response = $api->getUsersData($fakeRequest);
 
-    $fakeRequest = new Request([
-        'modal_type' => 'Expense',
-    ]);
+//     $responseData = $response->getData();
 
-    $response = $api->getUsersData($fakeRequest);
-
-    $responseData = $response->getData();
-
-    return isset($responseData->data) && !empty($responseData->data)
-        ? $responseData->data
-        : [];
-}
+//     return isset($responseData->data) && !empty($responseData->data)
+//         ? $responseData->data
+//         : [];
+// }
 
 
 

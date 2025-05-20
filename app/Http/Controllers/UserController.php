@@ -26,7 +26,7 @@ use Redirect;
 use Auth;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Http\Controllers\api\ApiController;
+use App\Http\Controllers\Api\ApiController;
 
 class UserController extends Controller
 

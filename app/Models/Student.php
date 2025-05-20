@@ -5,7 +5,7 @@ use Session;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use DB;
-class Admission extends Model
+class Student extends Model
 {
         use SoftDeletes;
 //	protected $table = "olympiad_results"; //table name

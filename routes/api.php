@@ -41,5 +41,5 @@ Route::delete('/common-delete/{model}/{id}', [ApiController::class, 'deleteCommo
 Route::post('/common-status-change/{model}/{id}', [ApiController::class, 'changeStatusCommon']);
 // Route::post('/get-user-data', [ApiController::class, 'getUsersData']);
 
-    Route::post('createCommon', [ApiController::class, 'createCommon']);
+    // Route::post('createCommon', [ApiController::class, 'createCommon']);
 });
