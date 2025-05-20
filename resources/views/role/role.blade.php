@@ -32,7 +32,7 @@
                                         <div class="row">
                                             <div class="col-md-12 col-12 form-group">
                                                 <label for="name"> Role Name <span class="text-danger">*</span></label>
-                                                <input type="text" class="form-control" id="role_name" name="role_name"
+                                                <input type="text" class="form-control" id="role_name" name="role_name" placeholder="Enter Role Name"
                                                     data-required='true'>
                                             </div>
 

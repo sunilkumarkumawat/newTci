@@ -101,10 +101,10 @@
         @include('layout.footer')
         <script>
             /*$.ajaxSetup({
-                                                                                                                                                                                                                                                                                    headers: {
-                                                                                                                                                                                                                                                                                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                                                                                                                                                                                                                                                                                    }
-                                                                                                                                                                                                                                                                                });*/
+                                                                                                                                                                                                                                                                                                            headers: {
+                                                                                                                                                                                                                                                                                                                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                                                                                                                                                                                                                                                                                                            }
+                                                                                                                                                                                                                                                                                                        });*/
             //var URL  = "{{ url('/') }}";
         </script>
 
@@ -521,7 +521,7 @@
                                         message = 'Contact Person is required.';
                                     }
                                     break;
-                                case 'role_id':
+                                case 'role_name':
                                     if (value === '') {
                                         message = 'Role name is required.';
                                     }
@@ -725,7 +725,7 @@
                             console.log(response);
                             $form[0].reset();
                             toastr.success('Form Submitted Successfully');
-                        dataGet();
+                            dataGet();
                         },
                         error: function(xhr) {
                             alert('Failed to submit form.');
@@ -739,27 +739,53 @@
 
 
 
-                    function dataGet(){
-var modal_type = $('[name="modal_type"]').val();
+                function dataGet() {
+                    var modal_type = $('[name="modal_type"]').val();
 
-                        $('#dataContainer').load(`{{ url('/') }}/commonView/${modal_type}`, function(response, status, xhr) {
-    if (status === "error") {
-        alert("Error loading view: " + xhr.status + " " + xhr.statusText);
-        console.error(xhr.responseText);
-    } else {
-        toastr.success("Data Fetched Successfully!");
-    }
-});
+                    $('#dataContainer').load(`{{ url('/') }}/commonView/${modal_type}`, function(response, status,
+                        xhr) {
+                        if (status === "error") {
+                            alert("Error loading view: " + xhr.status + " " + xhr.statusText);
+                            console.error(xhr.responseText);
+                        } else {
+                            toastr.success("Data Fetched Successfully!");
+                        }
+                    });
 
-}
-dataGet();
+                }
+                dataGet();
 
 
             });
         </script>
 
+        {{-- delete function --}}
+        <script>
+            $(document).on('click', '.delete-btn', function() {
+                const modal = $(this).data('modal'); // get modal name from data attribute
+                const id = $(this).data('id'); // get record ID
+                const baseUrl = "{{ url('/') }}"; // base URL (Blade will output Laravel base URL)
 
-
+                if (confirm('Are you sure you want to delete this item?')) {
+                    $.ajax({
+                        url: `${baseUrl}/api/common-delete/${modal}/${id}`,
+                        type: 'POST',
+                        data: {
+                            _method: 'DELETE', // Laravel treats this as a DELETE request
+                            _token: $('meta[name="csrf-token"]').attr('content') // if CSRF token is needed
+                        },
+                        success: function(res) {
+                            toastr.success(res.message || 'Deleted successfully.');
+                            location.reload(); // refresh the page or remove item from table
+                        },
+                        error: function(xhr) {
+                            toastr.error('Failed to delete.');
+                            console.error(xhr.responseText);
+                        }
+                    });
+                }
+            });
+        </script>
 
 
         {{-- convert excel data into array --}}
@@ -798,50 +824,50 @@ dataGet();
             });
         </script>
 
-{{-- change status --}}
-<script>
-    $(document).on('click', '.status-change-btn', function () {
-        const button = $(this);
-        const model = button.data('modal');
-        const id = button.data('id');
-        const baseUrl = "{{ url('/') }}";
-        const endpoint = `${baseUrl}/api/common-status-change/${model}/${id}`;
+        {{-- change status --}}
+        <script>
+            $(document).on('click', '.status-change-btn', function() {
+                const button = $(this);
+                const modal = button.data('modal');
+                const id = button.data('id');
+                const baseUrl = "{{ url('/') }}";
+                const endpoint = `${baseUrl}/api/common-status-change/${modal}/${id}`;
 
-        if (confirm('Are you sure you want to change the status of this item?')) {
-            $.ajax({
-                url: endpoint,
-                type: 'POST',
-                data: {
-                    _token: $('meta[name="csrf-token"]').attr('content')
-                },
-                success: function (response) {
-                    toastr.success(response.message || 'Status changed successfully.');
+                if (confirm('Are you sure you want to change the status of this item?')) {
+                    $.ajax({
+                        url: endpoint,
+                        type: 'POST',
+                        data: {
+                            _token: $('meta[name="csrf-token"]').attr('content')
+                        },
+                        success: function(response) {
+                            toastr.success(response.message || 'Status changed successfully.');
 
-                    // Optional: Update the UI without reloading
-                    const statusElement = $(`#status-${model}-${id}`);
-                    // const statusElement = $(`#status-${model}-${id}`);
-                    
-                    if (response.data && response.data.status !== undefined) {
-                        // Update text or toggle classes (example)
-                        const newStatus = response.data.status;
-                        const statusText = newStatus == 1 ? 'Active' : 'Inactive';
+                            // Optional: Update the UI without reloading
+                            const statusElement = $(`#status-${modal}-${id}`);
+                            // const statusElement = $(`#status-${modal}-${id}`);
 
-                        // Optional: badge styles
-                        const badgeClass = newStatus == 1 ? 'bg-success' : 'bg-danger';
-                        statusElement
-                            .text(statusText)
-                            .removeClass('bg-success bg-danger')
-                            .addClass(badgeClass);
-                    }
-                },
-                error: function (xhr) {
-                    toastr.error('Failed to change status.');
-                    console.error(xhr.responseText);
+                            if (response.data && response.data.status !== undefined) {
+                                // Update text or toggle classes (example)
+                                const newStatus = response.data.status;
+                                const statusText = newStatus == 1 ? 'Active' : 'Inactive';
+
+                                // Optional: badge styles
+                                const badgeClass = newStatus == 1 ? 'bg-success' : 'bg-danger';
+                                statusElement
+                                    .text(statusText)
+                                    .removeClass('bg-success bg-danger')
+                                    .addClass(badgeClass);
+                            }
+                        },
+                        error: function(xhr) {
+                            toastr.error('Failed to change status.');
+                            console.error(xhr.responseText);
+                        }
+                    });
                 }
             });
-        }
-    });
-</script>
+        </script>
 
 
 

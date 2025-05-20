@@ -37,42 +37,42 @@
                                     <div class="row">
                                         <div class="col-sm-6 form-group">
                                             <label for="branch_code">Branch Code <span class="text-danger">*</span></label>
-                                            <input type="text" class="form-control" name="branch_code" id="branch_code"
+                                            <input type="text" class="form-control" name="branch_code" id="branch_code" placeholder="Enter Branch Code"
                                                 data-required="true"
                                                 value="{{ old('branch_code', $data->branch_code ?? '') }}" />
                                         </div>
                                         <div class="col-sm-6 form-group">
                                             <label for="branch_name">Branch Name <span class="text-danger">*</span></label>
-                                            <input type="text" class="form-control" id="branch_name" name="branch_name"
+                                            <input type="text" class="form-control" id="branch_name" name="branch_name" placeholder="Enter Branch Name"
                                                 data-required="true"
                                                 value="{{ old('branch_name', $data->branch_name ?? '') }}" />
                                         </div>
                                         <div class="col-sm-6 col-12 form-group">
                                             <label for="director">Contact Person <span class="text-danger">*</span></label>
                                             <input type="text" class="form-control" id="contact_person"
-                                                name="contact_person" data-required="true"
+                                                name="contact_person" data-required="true" placeholder="Enter Person Name"
                                                 value="{{ old('contact_person', $data->contact_person ?? '') }}" />
                                         </div>
                                         <div class="col-sm-6 form-group">
                                             <label for="mobile">Mobile Number <span class="text-danger">*</span></label>
                                             <input type="text" class="form-control" name="mobile" id="mobile"
-                                                data-required="true" data-type="mobile"
+                                                data-required="true" data-type="mobile" placeholder="Enter Mobile No"
                                                 oninput="this.value = this.value.replace(/[^0-9]/g, '')"
                                                 value="{{ old('mobile', $data->mobile ?? '') }}" />
                                         </div>
                                         <div class="col-sm-6 form-group">
                                             <label for="email">Email</label>
                                             <input type="text" class="form-control" id="email" name="email"
-                                                value="{{ old('email', $data->email ?? '') }}" />
+                                            placeholder="Enter Email" value="{{ old('email', $data->email ?? '') }}" />
                                         </div>
                                         <div class="col-sm-6 form-group">
                                             <label for="address">Address</label>
                                             <input type="text" class="form-control" id="address" name="address"
-                                                value="{{ old('address', $data->address ?? '') }}" />
+                                            placeholder="Enter Address" value="{{ old('address', $data->address ?? '') }}" />
                                         </div>
                                         <div class="col-sm-6 form-group">
                                             <label for="pin_code">Pin Code</label>
-                                            <input type="text" class="form-control" id="pin_code" name="pin_code"
+                                            <input type="text" class="form-control" id="pin_code" name="pin_code" placeholder="Enter Pin Code"
                                                 value="{{ old('pin_code', $data->pin_code ?? '') }}" />
                                         </div>
                                         <div class="col-12 col-md-12">

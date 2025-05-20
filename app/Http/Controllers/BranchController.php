@@ -73,8 +73,6 @@ class BranchController extends Controller
     }
 
     public function branchview(){
-
-      
         return view('branch.view');
     }
 }
