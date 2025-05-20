@@ -219,20 +219,20 @@ public function getCommonRow(Request $request)
 }
 
 
-    public function deleteCommon(Request $request, $model, $id)
+    public function deleteCommon(Request $request, $modal, $id)
     {
         try {
-            // If the model string does not include a namespace, prepend App\Models\
-            if (!str_contains($model, '\\')) {
-                $model = 'App\\Models\\' . $model;
+            // If the modal string does not include a namespace, prepend App\modals\
+            if (!str_contains($modal, '\\')) {
+                $modal = 'App\\Models\\' . $modal;
             }
 
-            if (!class_exists($model)) {
-                return response()->json(['message' => 'Invalid model type'], 400);
+            if (!class_exists($modal)) {
+                return response()->json(['message' => 'Invalid modal type'], 400);
             }
 
             // Attempt to find and delete the record
-            $record = $model::find($id);
+            $record = $modal::find($id);
 
             if (!$record) {
                 return response()->json(['message' => 'Record not found'], 404);
@@ -241,7 +241,7 @@ public function getCommonRow(Request $request)
             $record->delete();
 
             return response()->json([
-                'message' => class_basename($model) . ' deleted successfully.',
+                'message' => class_basename($modal) . ' deleted successfully.',
                 'data' => $record
             ], 200);
         } catch (\Exception $e) {
@@ -253,20 +253,20 @@ public function getCommonRow(Request $request)
 
 
 
-public function changeStatusCommon(Request $request, $model, $id)
+public function changeStatusCommon(Request $request, $modal, $id)
 {
     try {
-        // If the model string does not include a namespace, prepend App\Models\
-        if (!str_contains($model, '\\')) {
-            $model = 'App\\Models\\' . $model;
+        // If the modal string does not include a namespace, prepend App\modals\
+        if (!str_contains($modal, '\\')) {
+            $modal = 'App\\Models\\' . $modal;
         }
 
-        if (!class_exists($model)) {
-            return response()->json(['message' => 'Invalid model type'], 400);
+        if (!class_exists($modal)) {
+            return response()->json(['message' => 'Invalid modal type'], 400);
         }
 
         // Attempt to find the record
-        $record = $model::find($id);
+        $record = $modal::find($id);
 
         if (!$record) {
             return response()->json(['message' => 'Record not found'], 404);
@@ -277,7 +277,7 @@ public function changeStatusCommon(Request $request, $model, $id)
         $record->save();
 
         return response()->json([
-            'message' => class_basename($model) . ' status changed successfully.',
+            'message' => class_basename($modal) . ' status changed successfully.',
             'data' => [
                 'id' => $record->id,
                 'status' => $record->status
@@ -303,11 +303,11 @@ public function changeStatusCommon(Request $request, $model, $id)
                 $modal = 'App\\Models\\' . $modal;
             }
 
-            // Check if the model class exists
+            // Check if the modal class exists
             if (!class_exists($modal)) {
                 return response()->json([
                     'status' => false,
-                    'message' => 'Invalid model type provided.'
+                    'message' => 'Invalid modal type provided.'
                 ], 400); // 400 = Bad Request
             }
 

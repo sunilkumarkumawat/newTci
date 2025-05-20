@@ -41,7 +41,7 @@
                                             <div class="col-sm-6 col-12">
                                                 <div class="form-group">
                                                     <label for="sr_no">Sr.No.</label>
-                                                    <input type="text" id="sr_no"
+                                                    <input type="text" id="sr_no" placeholder="Enter Sr no"
                                                         class="form-control blockHeight sr-no" name="sr_no"
                                                         value="{{ old('sr_no', $data->sr_no ?? '') }}">
                                                 </div>
@@ -50,7 +50,7 @@
                                                 <div class="form-group">
                                                     <label for="expense_name">Expense Name<span
                                                             style="color:red;">*</span></label>
-                                                    <input type="text" class="form-control blockHeight" id="expense_name"
+                                                    <input type="text" class="form-control blockHeight" id="expense_name" placeholder="Enter Expense Name"
                                                         name="expense_name" data-required="true"
                                                         value="{{ old('expense_name', $data->expense_name ?? '') }}">
                                                 </div>
@@ -68,14 +68,14 @@
                                                 <label for="quantity">Quantity<span style="color:red;">*</span></label>
                                                 <input type="text" class="form-control blockHeight quantity"
                                                     id="quantity" name="quantity" data-required="true"
-                                                    value="{{ old('quantity', $data->quantity ?? '') }}">
+                                                placeholder="Enter Quantity" value="{{ old('quantity', $data->quantity ?? '') }}">
                                             </div>
                                             <div class="col-sm-6 col-12">
                                                 <div class="form-group">
                                                     <label for="rate">Rate<span style="color:red;">*</span></label>
                                                     <input type="text" class="form-control blockHeight rate"
                                                         id="rate" name="rate" data-required="true"
-                                                        value="{{ old('rate', $data->rate ?? '') }}">
+                                                    placeholder="Enter Rate" value="{{ old('rate', $data->rate ?? '') }}">
                                                 </div>
                                             </div>
                                             <div class="col-sm-6 col-12">
@@ -84,7 +84,7 @@
                                                             style="color:red;">*</span></label>
                                                     <input type="text" class="form-control blockHeight total"
                                                         id="total_amt" name="total_amt" data-required="true"
-                                                        value="{{ old('total_amt', $data->total_amt ?? '') }}">
+                                                    placeholder="Total Amount" value="{{ old('total_amt', $data->total_amt ?? '') }}">
                                                 </div>
                                             </div>
                                             <div class="col-sm-6 col-12">

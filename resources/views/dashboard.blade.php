@@ -281,7 +281,7 @@
                                                                             <li class="fs-6"><i
                                                                                     class="fa fa-check text-success mr-2"></i>
                                                                                 Access to
-                                                                                reading rooms (2 hours/day)</li>
+                                                                                reading rooms (2 hrs/day)</li>
                                                                             <li class="fs-6"><i
                                                                                     class="fa fa-check text-success mr-2"></i>
                                                                                 Online reservation system
@@ -327,7 +327,7 @@
                                                                                 member</li>
                                                                             <li class="fs-6"><i
                                                                                     class="fa fa-check text-success mr-2"></i>
-                                                                                Access to reading rooms(5hr/day)</li>
+                                                                                Access to reading rooms(5 hr/day)</li>
                                                                             <li class="fs-6"><i
                                                                                     class="fa fa-check text-success mr-2"></i>
                                                                                 Priority reservation system</li>
