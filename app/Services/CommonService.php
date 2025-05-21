@@ -15,7 +15,6 @@ class CommonService
         if (!str_contains($modal, '\\')) {
             $modal = 'App\\Models\\' . $modal;
         }
-
         try {
             if (!class_exists($modal)) {
                 return response()->json(['message' => 'Invalid modal type'], 400);

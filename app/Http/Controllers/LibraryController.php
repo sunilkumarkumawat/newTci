@@ -8,7 +8,7 @@ Class LibraryController extends Controller
 {
 
     public function cabin(){
-        return view('library_management.cabin');
+        return view('librarycabin.cabin');
     }
 
     public function locker(){

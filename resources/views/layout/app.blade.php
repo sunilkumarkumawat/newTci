@@ -101,10 +101,10 @@
         @include('layout.footer')
         <script>
             /*$.ajaxSetup({
-                                                                                                                                                                                                                                                                                                            headers: {
-                                                                                                                                                                                                                                                                                                                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                                                                                                                                                                                                                                                                                                            }
-                                                                                                                                                                                                                                                                                                        });*/
+                                                                                                                                                                                                                                                                                                                    headers: {
+                                                                                                                                                                                                                                                                                                                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                                                                                                                                                                                                                                                                                                                    }
+                                                                                                                                                                                                                                                                                                                });*/
             //var URL  = "{{ url('/') }}";
         </script>
 
@@ -442,7 +442,7 @@
                 });
 
                 // Apply to multiple forms
-                $('#createCommon').on('submit', function(e) {
+                $('#createCommon, .createCommon').on('submit', function(e) {
                     e.preventDefault();
 
                     // Get branch_id just before submission
@@ -682,6 +682,24 @@
                                         message = 'Payment mode is required';
                                     }
                                     break;
+
+                                case 'cabin_name':
+                                    if (value === '') {
+                                        message = 'Cabin is required';
+                                    }
+                                    break;
+
+                                case 'locker_no':
+                                    if (value === '') {
+                                        message = 'Locker is required';
+                                    }
+                                    break;
+
+                                case 'amount':
+                                    if (value === '') {
+                                        message = 'Amount is required';
+                                    }
+                                    break;
                             }
 
 
@@ -739,20 +757,31 @@
 
 
 
-                function dataGet() {
-                    var modal_type = $('[name="modal_type"]').val();
+              function dataGet() {
+                var baseUrl = "{{url('/')}}"
+    const modalTypes = [];
 
-                    $('#dataContainer').load(`{{ url('/') }}/commonView/${modal_type}`, function(response, status,
-                        xhr) {
-                        if (status === "error") {
-                            alert("Error loading view: " + xhr.status + " " + xhr.statusText);
-                            console.error(xhr.responseText);
-                        } else {
-                            toastr.success("Data Fetched Successfully!");
-                        }
-                    });
+    $('[name="modal_type"]').each(function () {
+        const val = $(this).val();
+        if (val && !modalTypes.includes(val)) {
+            modalTypes.push(val);
+        }
+    });
 
-                }
+
+
+    modalTypes.forEach(modal => {
+        const containerId = `#dataContainer-${modal.toLowerCase()}`;
+
+        $(containerId).load(`${baseUrl}/commonView/${modal}`, function (response, status, xhr) {
+            if (status === "error") {
+                console.error(`Error loading ${modal}: ${xhr.status} ${xhr.statusText}`);
+            } else {
+                toastr.success(`${modal} data fetched successfully!`);
+            }
+        });
+    });
+}
                 dataGet();
 
 

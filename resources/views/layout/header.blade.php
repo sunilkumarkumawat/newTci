@@ -1,5 +1,5 @@
 @php
-$getBranches = Helper::getBranches();
+$getBranch = Helper::getBranches();
 @endphp
 <style>
     .selectDesign {
@@ -91,9 +91,9 @@ $getBranches = Helper::getBranches();
         <!-- Branch Dropdown -->
         <li class="nav-item dropdown">
             <select class="selectDesign form-control-sm" id="headerBranchSelect">
-               @if(!empty($getBranches))
+               @if(!empty($getBranch))
                
-                @foreach($getBranches as $item)
+                @foreach($getBranch as $item)
                 
                 <option value='{{$item->id}}'>{{$item->branch_name ?? ''}}</option>
                 @endforeach

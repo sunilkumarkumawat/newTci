@@ -73,7 +73,7 @@
                                             <th>Action</th>
                                         </tr>
                                     </thead>
-                                    <tbody id="dataContainer">
+                                    <tbody id="dataContainer-user">
                                        
                                       
                                     </tbody>

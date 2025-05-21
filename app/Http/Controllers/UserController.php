@@ -34,7 +34,7 @@ class UserController extends Controller
     public function userAdd()
     {
 
-        return view('user/userAdd',['data'=>null]);
+        return view('user/add',['data'=>null]);
     }
     public function userView()
     {

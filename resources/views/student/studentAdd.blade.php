@@ -80,7 +80,7 @@ $isEdit = isset($student);
                                     @if ($isEdit)
                                     <input type='hidden' value='{{ $student->id }}' name='id' />
                                     @endif
-                                    <input type='hidden' value='Admission' name='modal_type' />
+                                    <input type='hidden' value='student' name='modal_type' />
                                     <input type='hidden' id="branch_id" name='branch_id'
                                         value="{{ old('branch_id', $data->branch_id ?? '') }}" />
 

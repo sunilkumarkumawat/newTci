@@ -63,9 +63,5 @@ public function commonEdit(Request $request,$modal,$id)
         : [];
           
         return view($modal.'/add',compact('data'));
-    }
-
-
-
-    
+    }  
 }

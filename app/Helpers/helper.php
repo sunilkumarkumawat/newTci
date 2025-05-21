@@ -16,13 +16,14 @@ class Helper
 {
     public static function getBranches()
     {
-        $getBranch = Branch::where('user_id',Auth::user()->id)->orderBy('id', 'DESC')->get();
+        $getBranch = Branch::orderBy('id', 'DESC');
+        $getBranch = $getBranch->get();
         return $getBranch;
     }
     public static function getLibrary()
     {
         $getLibrary = Library::orderBy('id', 'DESC');
-        $getLibrary = $getLibrary->whereIn('id', explode(",", Session::get('library_ids')))->get();
+        $getLibrary = $getLibrary->get();
         return $getLibrary;
     }
 
