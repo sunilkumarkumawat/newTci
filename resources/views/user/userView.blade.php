@@ -73,8 +73,20 @@
                                             <th>Action</th>
                                         </tr>
                                     </thead>
-                                    <tbody id="dataContainer-user">
-                                       
+                                    <tbody id="dataContainer-user" class='dataContainer'style="min-height:300px">
+                                       @for($i = 0; $i < 5; $i++)
+<tr>
+  <td class="placeholder-wave" style="padding:16px">
+    <div class="placeholder rounded" style="width:99%; height:20px; background:#0000001f; padding:10px"></div>
+  </td>
+  <td class="placeholder-wave" style="padding:16px">
+    <div class="placeholder rounded" style="width:99%; height:20px; background:#00000038"></div>
+  </td>
+  <td class="placeholder-wave" style="padding:16px" colspan='100%'>
+    <div class="placeholder rounded" style="width:99%; height:20px; background:#00000045"></div>
+  </td>
+</tr>
+@endfor
                                       
                                     </tbody>
                                 </table>

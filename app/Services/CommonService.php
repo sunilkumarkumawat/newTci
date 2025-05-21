@@ -5,9 +5,10 @@ namespace App\Services;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Cache;
 class CommonService
 {
-    public function createCommon($request)
+public function createCommon($request)
 {
     $data = collect($request->all())->except(['modal_type', 'id'])->toArray();
     $modal = $request->modal_type;
@@ -26,7 +27,7 @@ class CommonService
         // 🔐 Handle password field
         $this->handlePasswordField($data);
 
-        // 📂 Handle uploaded files (fixed version)
+        // 📂 Handle uploaded files
         foreach ($request->allFiles() as $key => $file) {
             if ($file->isValid()) {
                 $data[$key] = $this->handleFileUpload($file, $modalName);
@@ -42,12 +43,18 @@ class CommonService
 
             $record->update($data);
 
+            // ❌ Clear cache after update
+            Cache::forget('getAll_' . $modalName);
+
             return response()->json([
                 'message' => $modalName . ' updated successfully.',
                 'data' => $record
             ]);
         } else {
             $record = $modal::create($data);
+
+            // ❌ Clear cache after create
+            Cache::forget('getAll_' . $modalName);
 
             return response()->json([
                 'message' => $modalName . ' created successfully.',
@@ -126,7 +133,9 @@ class CommonService
         }
     }
 
-   public function getAll(string $modal)
+
+
+public function getAll(string $modal)
 {
     if (!$modal) {
         throw new \InvalidArgumentException('modal_type is required');
@@ -140,8 +149,12 @@ class CommonService
         throw new \InvalidArgumentException('Invalid modal type');
     }
 
-    // Order by 'id' in descending order
-    return $modal::orderBy('id', 'desc')->get();
+    $cacheKey = 'getAll_' . class_basename($modal);
+
+    // Cache data for 60 minutes, ordered by id descending
+    return Cache::remember($cacheKey, 60, function () use ($modal) {
+        return $modal::orderBy('id', 'desc')->get();
+    });
 }
 
     private function handlePasswordField(&$data)

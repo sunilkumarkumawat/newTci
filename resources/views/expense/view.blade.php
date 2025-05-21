@@ -1,4 +1,6 @@
-    @if (!empty($data))
+@if (!empty($data) && count($data) > 0)
+
+    
                                                 @foreach ($data as $index => $expense)
                                               <tr class="{{ (!empty($isEdit) && isset($data->id, $expense->id) && $data->id == $expense->id) ? 'bg-primary' : '' }}">
                                                         <td>{{ $index + 1}}</td>
@@ -31,4 +33,7 @@
                                                         </td>
                                                     </tr>
                                                 @endforeach
+
+                                                @else
+                                               @include('common.noDataFound')
                                             @endif

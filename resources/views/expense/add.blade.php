@@ -178,16 +178,7 @@
 </tbody>
                                     </table>
                                 </div>
-                                <div class="mt-3">
-                                    <div class="row">
-                                        <div class="col-md-6">
-                                            <div class="input-group">
-                                                <span class="input-group-text bg-light"><strong>Total:</strong></span>
-                                                <input type="text" class="form-control" id="list_total" readonly>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
+                              
                             </div>
                         </div>
                     </div>
