@@ -85,17 +85,17 @@
                                 </div>
 
                                 <div class="row mb-3">
-                                    <div class="col-md-6 col-12">
+                                    <div class="col-md-12 col-12">
                                         <div class="card">
                                             <div class="card-header bg-light">
                                                 <div class="card-title">
                                                     <h4>Student Management</h4>
                                                 </div>
-                                                <div class="card-tools">
+                                                {{-- <div class="card-tools">
                                                     <a href="{{ url('studentAdd') }}" class="btn btn-primary"><i
                                                             class="fa fa-plus"></i>
                                                         Add</a>
-                                                </div>
+                                                </div> --}}
                                             </div>
                                             <div class="card-body">
                                                 <div class="table-responsive">
@@ -127,220 +127,27 @@
                                         </div>
                                     </div>
 
+
+                                </div>
+
+
+                                {{-- cabin/locker management --}}
+                                <div class="row mb-3">
                                     <div class="col-md-6">
                                         <div class="card">
                                             <div class="card-header bg-light">
                                                 <div class="card-title">
-                                                   <h4>Seating Management</h4>
-                                                </div>
-                                                {{-- <div class="card-tools">
-                                                    <a href="{{url('bill')}}" class="btn btn-light">Assign Seat</a>
-                                                </div> --}}
-                                            </div>
-                                            <div class="card-body">
-                                                <div class="mt-3">
-                                                    <div class="row">
-                                                        <div class="col-md-2 col-3">
-                                                            <div class="seat">
-                                                                <div class="seat-action"></div>
-                                                                S1
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-md-2 col-3">
-                                                            <div class="seat">
-                                                                <div class="seat-action"></div>
-                                                                S2
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-md-2 col-3">
-                                                            <div class="seat">
-                                                                <div class="seat-action"></div>
-                                                                S3
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-md-2 col-3">
-                                                            <div class="seat">
-                                                                <div class="seat-action"></div>
-                                                                S4
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-md-2 col-3">
-                                                            <div class="seat">
-                                                                <div class="seat-action"></div>
-                                                                S5
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-md-2 col-3">
-                                                            <div class="seat">
-                                                                <div class="seat-action"></div>
-                                                                S6
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-md-2 col-3">
-                                                            <div class="seat occupied">
-                                                                <div class="seat-action"></div>
-                                                                S7
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-md-2 col-3">
-                                                            <div class="seat">
-                                                                <div class="seat-action"></div>
-                                                                S8
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-md-2 col-3">
-                                                            <div class="seat">
-                                                                <div class="seat-action"></div>
-                                                                S9
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-md-2 col-3">
-                                                            <div class="seat occupied">
-                                                                <div class="seat-action"></div>
-                                                                S10
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-md-2 col-3">
-                                                            <div class="seat ">
-                                                                <div class="seat-action"></div>
-                                                                S11
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-md-2 col-3">
-                                                            <div class="seat ">
-                                                                <div class="seat-action"></div>
-                                                                S12
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-md-2 col-3">
-                                                            <div class="seat ">
-                                                                <div class="seat-action"></div>
-                                                                S13
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-md-2 col-3">
-                                                            <div class="seat ">
-                                                                <div class="seat-action"></div>
-                                                                S14
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-md-2 col-3">
-                                                            <div class="seat ">
-                                                                <div class="seat-action"></div>
-                                                                S15
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="text-center">
-                                                        <a href="{{ url('billing') }}">View all Seat</a>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                {{-- subscription plan --}}
-                                <div class="row mb-3">
-                                    <div class="col-md-6">
-                                        <div class="card">
-                                            <div class="card-header bg-primary">
-                                                <div class="card-title">
-                                                    <h4>Subscription Plan</h4>
-                                                </div>
-                                                <div class="card-tools">
-                                                    <a href="{{ url('subscription') }}" class="btn btn-primary"><i
-                                                            class="fa fa-plus"></i> Add Plan</a>
+                                                    <h4>Cabin Management</h4>
                                                 </div>
                                             </div>
                                             <div class="card-body">
-                                                {{-- platinum  --}}
                                                 <div class="row">
-                                                    <div class="col-lg-6 col-md-6 col-sm-12">
-                                                        <div class="card mb-3 subscription-plan-card">
-                                                            <div class="card-body">
-                                                                <div
-                                                                    class="d-flex justify-content-between align-items-center">
-                                                                    <div>
-                                                                        <h4 class="font-weight-bold">Platinum</h4>
-                                                                        <p class="text-muted m-0 fs-5">10:00 AM to 10:00 PM
-                                                                        </p>
-                                                                    </div>
-                                                                    <div class="text-right">
-                                                                        <h4 class="font-weight-bold">₹200<span
-                                                                                class="text-muted">/month</span></h4>
-                                                                    </div>
-                                                                </div>
-                                                                <hr>
-                                                                <div class="row">
-                                                                    <div class="col-md-12 col-sm-12">
-                                                                        <ul class="list-unstyled">
-                                                                            <li class="fs-6"><i
-                                                                                    class="fa fa-check text-success mr-2"></i>
-                                                                                2 active member</li>
-                                                                            <li class="fs-6"><i
-                                                                                    class="fa fa-check text-success mr-2"></i>
-                                                                                Access to
-                                                                                reading rooms (2 hrs/day)</li>
-                                                                            <li class="fs-6"><i
-                                                                                    class="fa fa-check text-success mr-2"></i>
-                                                                                Online reservation system
-                                                                            </li>
-                                                                        </ul>
-                                                                    </div>
-                                                                    <div
-                                                                        class="col-md-12 col-sm-12 d-flex align-items-end action-buttons">
-                                                                        <button
-                                                                            class="btn btn-outline-primary action-btn mr-2">Edit</button>
-                                                                        <button
-                                                                            class="btn btn-outline-danger action-btn">Delete</button>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
+                                                    <input type="hidden" name="modal_type" value="librarycabin">
+                                                    <div class="col-md-12 col-12">
 
-                                                    <!-- Premium/gold Plan -->
-                                                    <div class="col-lg-6 col-md-6 col-sm-12">
-                                                        <div class="card mb-3 subscription-plan-card">
-                                                            <div class="card-body">
-                                                                <div
-                                                                    class="d-flex justify-content-between align-items-center">
-                                                                    <div>
-                                                                        <h4 class="font-weight-bold">Gold</h4>
-                                                                        <p class="text-muted mb-0 fs-5">10:00 AM to 10:00
-                                                                            PM</p>
-                                                                    </div>
-                                                                    <div class="text-right">
-                                                                        <h4 class="font-weight-bold">₹300<span
-                                                                                class="text-muted">/month</span></h4>
-                                                                    </div>
-                                                                </div>
-                                                                <hr>
-                                                                <div class="row">
-                                                                    <div class="col-md-12 col-sm-12">
-                                                                        <ul class="list-unstyled">
-                                                                            <li class="fs-6"><i
-                                                                                    class="fa fa-check text-success mr-2"></i>
-                                                                                1
-                                                                                active
-                                                                                member</li>
-                                                                            <li class="fs-6"><i
-                                                                                    class="fa fa-check text-success mr-2"></i>
-                                                                                Access to reading rooms(5 hr/day)</li>
-                                                                            <li class="fs-6"><i
-                                                                                    class="fa fa-check text-success mr-2"></i>
-                                                                                Priority reservation system</li>
-                                                                        </ul>
-                                                                    </div>
-                                                                    <div
-                                                                        class="col-md-12 col-sm-12 d-flex align-items-end action-buttons">
-                                                                        <button
-                                                                            class="btn btn-outline-primary action-btn mr-2">Edit</button>
-                                                                        <button
-                                                                            class="btn btn-outline-danger action-btn">Delete</button>
-                                                                    </div>
-                                                                </div>
+                                                        <div class="cabin-grid">
+                                                            <div class="row" id="dataContainer-librarycabin">
+
                                                             </div>
                                                         </div>
                                                     </div>
@@ -348,15 +155,27 @@
                                             </div>
                                         </div>
                                     </div>
-                                    {{-- <div class="col-md-6">
+                                    <div class="col-md-6 col-12">
                                         <div class="card">
-                                            <div class="card-header">
+                                            <div class="card-header bg-light">
                                                 <div class="card-title">
+                                                    <h4>Locker Management</h4>
+                                                </div>
+                                            </div>
+                                            <div class="card-body">
+                                                <div class="row">
+                                                    <input type="hidden" name="modal_type" value="librarylocker">
+                                                    <div class="col-md-12 col-12">
+                                                        <div class="locker-grid">
+                                                            <div class="row" id="dataContainer-librarylocker">
 
+                                                            </div>
+                                                        </div>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
-                                    </div> --}}
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -378,7 +197,7 @@
 
 
                         {{-- Add students and remider boxes --}}
-                        <div class="row">
+                        {{-- <div class="row">
                             <div class="col-12 col-sm-4 col-md-3">
                                 <a href="/library_assign" class="blink">
                                     <div class="info-box mb-3 text-dark bg-info">
@@ -455,7 +274,7 @@
                             </div>
                         </div>
 
-                        {{-- collection Report --}}
+                    
                         <div>
                             <h5 class="mb-3">Collection Report</h5>
                             <div class="row">
@@ -496,7 +315,7 @@
                             </div>
                         </div>
 
-                        {{-- to do list --}}
+                        
                         <div class="row">
                             <div class="col-md-6 col-12">
                                 <div class="card">
@@ -558,9 +377,9 @@
                                 </div>
                             </div>
                         </div>
-                        {{-- notifications --}}
+                       
                         <div class="row">
-                            {{-- birthday notification --}}
+                          
                             <div class="col-md-5 col-12">
                                 <div class="card card-warning">
                                     <div class="card-header">
@@ -598,7 +417,7 @@
                                 </div>
                             </div>
 
-                            {{-- task notification --}}
+                     
                             <div class="col-md-7 col-12">
                                 <div class="card">
                                     <div class="card-header ui-sortable-handle">
@@ -631,7 +450,7 @@
                             </div>
                         </div>
 
-                        {{-- Due list --}}
+                    
                         <div class="row">
                             <div class="col-md-12">
                                 <div class="card">
@@ -879,7 +698,7 @@
         }
     </style>
 
-    {{-- sixth --}}
+   
 
     <script>
         $(document).ready(function() {
@@ -1178,13 +997,11 @@
     </script>
 
 
-    {{-- seventh --}}
+   
 
     <script>
         $(document).ready(function() {
-            // ChartJS Configuration
-
-            // Area Chart
+      
             var areaChartCanvas = $('#areaChart').get(0).getContext('2d');
             var areaChartData = {
                 labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
@@ -1239,7 +1056,7 @@
                 options: areaChartOptions
             });
 
-            // Line Chart
+   
             var lineChartCanvas = $('#lineChart').get(0).getContext('2d');
             var lineChartOptions = $.extend(true, {}, areaChartOptions);
             var lineChartData = $.extend(true, {}, areaChartData);
@@ -1253,7 +1070,7 @@
                 options: lineChartOptions
             });
 
-            // Donut Chart
+   
             var donutChartCanvas = $('#donutChart').get(0).getContext('2d');
             var donutData = {
                 labels: [
@@ -1275,7 +1092,7 @@
                 options: donutOptions
             });
 
-            // Pie Chart
+ 
             var pieChartCanvas = $('#pieChart').get(0).getContext('2d');
             var pieData = donutData;
             var pieOptions = {
@@ -1289,7 +1106,7 @@
                 options: pieOptions
             });
 
-            // Bar Chart
+   
             var barChartCanvas = $('#barChart').get(0).getContext('2d');
             var barChartData = $.extend(true, {}, areaChartData);
             var temp0 = areaChartData.datasets[0];
@@ -1309,7 +1126,7 @@
                 options: barChartOptions
             });
 
-            // Stacked Bar Chart
+   
             var stackedBarChartCanvas = $('#stackedBarChart').get(0).getContext('2d');
             var stackedBarChartData = $.extend(true, {}, barChartData);
             var stackedBarChartOptions = {
@@ -1331,5 +1148,5 @@
                 options: stackedBarChartOptions
             });
         });
-    </script>
-@endsection
+    </script> --}}
+                    @endsection

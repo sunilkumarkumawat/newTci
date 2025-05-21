@@ -5,7 +5,7 @@
             <div class="container-fluid">
                 <div class="row">
                     <!-- Left section - Add Cabin/Locker Form -->
-                    <div class="col-md-3 col-12">
+                    <div class="col-md-4 col-12">
                         <div class="card card-outline card-orange mr-1">
                             <div class="card-header bg-primary">
                                 <div class="card-title">
@@ -97,11 +97,11 @@
                     </div>
 
                     <!-- Middle section - Cabin Management -->
-                    <div class="col-md-5 col-12">
+                    <div class="col-md-4 col-12">
                         <div class="card card-outline card-orange ml-1">
                             <div class="card-header bg-primary">
                                 <div class="card-title">
-                                    <h4 class="mb-1"><i class="fa fa-door-open"></i> Cabin Management</h4>
+                                    <h4><i class="fa fa-door-open"></i> Cabin Management</h4>
                                 </div>
                             </div>
 

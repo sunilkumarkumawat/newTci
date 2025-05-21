@@ -132,10 +132,10 @@
         @include('layout.footer')
         <script>
             /*$.ajaxSetup({
-                                                                                                                                                                                                                                                                                                                    headers: {
-                                                                                                                                                                                                                                                                                                                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                                                                                                                                                                                                                                                                                                                    }
-                                                                                                                                                                                                                                                                                                                });*/
+                                                                                                                                                                                                                                                                                                                            headers: {
+                                                                                                                                                                                                                                                                                                                                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                                                                                                                                                                                                                                                                                                                            }
+                                                                                                                                                                                                                                                                                                                        });*/
             //var URL  = "{{ url('/') }}";
         </script>
 
@@ -816,16 +816,16 @@
 
 
 
-              function dataGet() {
-                var baseUrl = "{{url('/')}}"
-    const modalTypes = [];
+                function dataGet() {
+                    var baseUrl = "{{ url('/') }}"
+                    const modalTypes = [];
 
-    $('[name="modal_type"]').each(function () {
-        const val = $(this).val();
-        if (val && !modalTypes.includes(val)) {
-            modalTypes.push(val);
-        }
-    });
+                    $('[name="modal_type"]').each(function() {
+                        const val = $(this).val();
+                        if (val && !modalTypes.includes(val)) {
+                            modalTypes.push(val);
+                        }
+                    });
 
 
 
