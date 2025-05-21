@@ -33,6 +33,7 @@ class SharesController extends Controller
         $data = null;
         return view('role.add',compact('data'));
     }
+   
     public function expense()
     {
         $data = null;
