@@ -193,40 +193,22 @@
                                                     </div>
 
                                                     <div class="col-md-4">
-                                                        <div class="form-group">
-                                                            <label for="state_id">State <span
-                                                                    class="text-danger">*</span></label>
-                                                            <select class="form-control" name="state_id" id="state_id"
-                                                                data-required="true">
-                                                                <option value="0"
-                                                                    {{ old('state_id', $data->state_id ?? '') == 0 ? 'selected' : '' }}>
-                                                                    Select</option>
-                                                                <option value="1"
-                                                                    {{ old('state_id', $data->state_id ?? '') == 1 ? 'selected' : '' }}>
-                                                                    State A</option>
-                                                                <option value="2"
-                                                                    {{ old('state_id', $data->state_id ?? '') == 2 ? 'selected' : '' }}>
-                                                                    State B</option>
-                                                            </select>
-                                                        </div>
+                                                        @include('commoninputs.inputs', [
+                                                            'modal' => 'State', // This decides the data source
+                                                            'name' => 'state_id',
+                                                            'selected' => $data->payment_mode_id ?? null,
+                                                            'label' => 'Select State',
+                                                            'required' => false,
+                                                        ])
                                                     </div>
                                                     <div class="col-md-4">
-                                                        <div class="form-group">
-                                                            <label for="city_id">City <span
-                                                                    class="text-danger">*</span></label>
-                                                            <select class="form-control" name="city_id" id="city_id"
-                                                                data-required="true">
-                                                                <option value="0"
-                                                                    {{ old('city_id', $data->city_id ?? '') == 0 ? 'selected' : '' }}>
-                                                                    Select</option>
-                                                                <option value="1"
-                                                                    {{ old('city_id', $data->city_id ?? '') == 1 ? 'selected' : '' }}>
-                                                                    City X</option>
-                                                                <option value="2"
-                                                                    {{ old('city_id', $data->city_id ?? '') == 2 ? 'selected' : '' }}>
-                                                                    City Y</option>
-                                                            </select>
-                                                        </div>
+                                                         @include('commoninputs.inputs', [
+                                                            'modal' => 'City', // This decides the data source
+                                                            'name' => 'city_id',
+                                                            'selected' => $data->city_id ?? null,
+                                                            'label' => 'Select City',
+                                                            'required' => true,
+                                                        ])
                                                     </div>
                                                     <div class="col-md-4">
                                                         <div class="form-group">
@@ -240,22 +222,13 @@
                                                     </div>
 
                                                     <div class="col-md-4">
-                                                        <div class="form-group">
-                                                            <label for="role_id">Role <span
-                                                                    class="text-danger">*</span></label>
-                                                            <select class="form-control" name="role_id" id="role_id"
-                                                                data-required="true">
-                                                                <option value=""
-                                                                    {{ old('role_id', $data->role_id ?? '') == '' ? 'selected' : '' }}>
-                                                                    Select</option>
-                                                                <option value="Manager"
-                                                                    {{ old('role_id', $data->role_id ?? '') == 'Manager' ? 'selected' : '' }}>
-                                                                    Manager</option>
-                                                                <option value="Staff"
-                                                                    {{ old('role_id', $data->role_id ?? '') == 'Staff' ? 'selected' : '' }}>
-                                                                    Staff</option>
-                                                            </select>
-                                                        </div>
+                                                        @include('commoninputs.inputs', [
+                                                            'modal' => 'Role', // This decides the data source
+                                                            'name' => 'role_id',
+                                                            'selected' => $data->role_id ?? null,
+                                                            'label' => 'Select Role',
+                                                            'required' => true,
+                                                        ])
                                                     </div>
                                                     <div class="col-md-4">
                                                         <div class="form-group">

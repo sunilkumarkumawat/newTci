@@ -32,8 +32,8 @@
                                         <div class="row">
                                             <div class="col-md-12 col-12 form-group">
                                                 <label for="name"> Role Name <span class="text-danger">*</span></label>
-                                                <input type="text" class="form-control" id="role_name" name="role_name" placeholder="Enter Role Name"
-                                                    data-required='true'>
+                                                <input type="text" class="form-control" id="role_name" name="name"
+                                                    placeholder="Enter Role Name" data-required='true'>
                                             </div>
 
                                             <div class="col-12 col-md-12 ">
@@ -65,19 +65,23 @@
                                             </tr>
                                         </thead>
                                         <tbody id="dataContainer-role" class='dataContainer'style="min-height:300px">
-                                          @for($i = 0; $i < 2; $i++)
-<tr>
-  <td class="placeholder-wave" style="padding:16px">
-    <div class="placeholder rounded" style="width:99%; height:20px; background:#0000001f; padding:10px"></div>
-  </td>
-  <td class="placeholder-wave" style="padding:16px">
-    <div class="placeholder rounded" style="width:99%; height:20px; background:#00000038"></div>
-  </td>
-  <td class="placeholder-wave" style="padding:16px" colspan='100%'>
-    <div class="placeholder rounded" style="width:99%; height:20px; background:#00000045"></div>
-  </td>
-</tr>
-@endfor
+                                            @for ($i = 0; $i < 2; $i++)
+                                                <tr>
+                                                    <td class="placeholder-wave" style="padding:16px">
+                                                        <div class="placeholder rounded"
+                                                            style="width:99%; height:20px; background:#0000001f; padding:10px">
+                                                        </div>
+                                                    </td>
+                                                    <td class="placeholder-wave" style="padding:16px">
+                                                        <div class="placeholder rounded"
+                                                            style="width:99%; height:20px; background:#00000038"></div>
+                                                    </td>
+                                                    <td class="placeholder-wave" style="padding:16px" colspan='100%'>
+                                                        <div class="placeholder rounded"
+                                                            style="width:99%; height:20px; background:#00000045"></div>
+                                                    </td>
+                                                </tr>
+                                            @endfor
                                         </tbody>
                                     </table>
                                 </div>

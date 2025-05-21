@@ -1,6 +1,5 @@
 @extends('layout.app')
 @section('content')
-
     @php
         $isEdit = isset($data);
     @endphp
@@ -50,8 +49,9 @@
                                                 <div class="form-group">
                                                     <label for="expense_name">Expense Name<span
                                                             style="color:red;">*</span></label>
-                                                    <input type="text" class="form-control blockHeight" id="expense_name" placeholder="Enter Expense Name"
-                                                        name="expense_name" data-required="true"
+                                                    <input type="text" class="form-control blockHeight" id="expense_name"
+                                                        placeholder="Enter Expense Name" name="expense_name"
+                                                        data-required="true"
                                                         value="{{ old('expense_name', $data->expense_name ?? '') }}">
                                                 </div>
                                             </div>
@@ -68,14 +68,16 @@
                                                 <label for="quantity">Quantity<span style="color:red;">*</span></label>
                                                 <input type="text" class="form-control blockHeight quantity"
                                                     id="quantity" name="quantity" data-required="true"
-                                                placeholder="Enter Quantity" value="{{ old('quantity', $data->quantity ?? '') }}">
+                                                    placeholder="Enter Quantity"
+                                                    value="{{ old('quantity', $data->quantity ?? '') }}">
                                             </div>
                                             <div class="col-sm-6 col-12">
                                                 <div class="form-group">
                                                     <label for="rate">Rate<span style="color:red;">*</span></label>
                                                     <input type="text" class="form-control blockHeight rate"
                                                         id="rate" name="rate" data-required="true"
-                                                    placeholder="Enter Rate" value="{{ old('rate', $data->rate ?? '') }}">
+                                                        placeholder="Enter Rate"
+                                                        value="{{ old('rate', $data->rate ?? '') }}">
                                                 </div>
                                             </div>
                                             <div class="col-sm-6 col-12">
@@ -84,29 +86,21 @@
                                                             style="color:red;">*</span></label>
                                                     <input type="text" class="form-control blockHeight total"
                                                         id="total_amt" name="total_amt" data-required="true"
-                                                    placeholder="Total Amount" value="{{ old('total_amt', $data->total_amt ?? '') }}">
+                                                        placeholder="Total Amount"
+                                                        value="{{ old('total_amt', $data->total_amt ?? '') }}">
                                                 </div>
                                             </div>
                                             <div class="col-sm-6 col-12">
-                                                <div class="form-group">
-                                                    <label for="payment_mode_id">Payment Mode<span
-                                                            style="color:red;">*</span></label>
-                                                    <select class="form-control" id="payment_mode_id" name="payment_mode_id"
-                                                        readonly data-required="true">
-                                                        <option value="1"
-                                                            {{ old('payment_mode_id', $data->payment_mode_id ?? '') == 1 ? 'selected' : '' }}>
-                                                            Cash</option>
-                                                        <option value="2"
-                                                            {{ old('payment_mode_id', $data->payment_mode_id ?? '') == 2 ? 'selected' : '' }}>
-                                                            Card</option>
-                                                        <option value="3"
-                                                            {{ old('payment_mode_id', $data->payment_mode_id ?? '') == 3 ? 'selected' : '' }}>
-                                                            Bank Transfer</option>
-                                                        <option value="4"
-                                                            {{ old('payment_mode_id', $data->payment_mode_id ?? '') == 4 ? 'selected' : '' }}>
-                                                            UPI</option>
-                                                    </select>
-                                                </div>
+
+
+                                                @include('commoninputs.inputs', [
+                                                    'modal' => 'PaymentMode', // This decides the data source
+                                                    'name' => 'payment_mode_id',
+                                                    'selected' => $data->payment_mode_id ?? null,
+                                                    'label' => 'Payment Mode',
+                                                    'required' => false,
+                                                ])
+
                                             </div>
                                             <div class="col-sm-6 col-12">
                                                 <div class="form-group">
@@ -161,24 +155,28 @@
                                                 <th>Actions</th>
                                             </tr>
                                         </thead>
-                                     <tbody id="dataContainer-expense" class='dataContainer'style="min-height:300px">
-@for($i = 0; $i < 6; $i++)
-<tr>
-  <td class="placeholder-wave" style="padding:16px">
-    <div class="placeholder rounded" style="width:99%; height:20px; background:#0000001f; padding:10px"></div>
-  </td>
-  <td class="placeholder-wave" style="padding:16px">
-    <div class="placeholder rounded" style="width:99%; height:20px; background:#00000038"></div>
-  </td>
-  <td class="placeholder-wave" style="padding:16px" colspan='100%'>
-    <div class="placeholder rounded" style="width:99%; height:20px; background:#00000045"></div>
-  </td>
-</tr>
-@endfor
-</tbody>
+                                        <tbody id="dataContainer-expense" class='dataContainer'style="min-height:300px">
+                                            @for ($i = 0; $i < 6; $i++)
+                                                <tr>
+                                                    <td class="placeholder-wave" style="padding:16px">
+                                                        <div class="placeholder rounded"
+                                                            style="width:99%; height:20px; background:#0000001f; padding:10px">
+                                                        </div>
+                                                    </td>
+                                                    <td class="placeholder-wave" style="padding:16px">
+                                                        <div class="placeholder rounded"
+                                                            style="width:99%; height:20px; background:#00000038"></div>
+                                                    </td>
+                                                    <td class="placeholder-wave" style="padding:16px" colspan='100%'>
+                                                        <div class="placeholder rounded"
+                                                            style="width:99%; height:20px; background:#00000045"></div>
+                                                    </td>
+                                                </tr>
+                                            @endfor
+                                        </tbody>
                                     </table>
                                 </div>
-                              
+
                             </div>
                         </div>
                     </div>

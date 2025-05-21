@@ -1,8 +1,8 @@
-  @if (!empty($data))
+@if (!empty($data) && count($data) > 0)
                                                 @foreach ($data as $index => $role)
                                                     <tr id="row-{{ $role->id }}">
                                                         <td>{{ $index + 1 }}</td>
-                                                        <td>{{ $role->role_name ?? '' }}</td>
+                                                        <td>{{ $role->name ?? '' }}</td>
                                                         <td>
                                                             <div class="btn-group">
                                                                 <a href="#" class="btn-xs">
@@ -15,4 +15,6 @@
                                                         </td>
                                                     </tr>
                                                 @endforeach
+                                                 @else
+                                               @include('common.noDataFound')
                                             @endif
