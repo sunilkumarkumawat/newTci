@@ -4,61 +4,63 @@ namespace App\Services;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
-
+use Illuminate\Support\Facades\Storage;
 class CommonService
 {
     public function createCommon($request)
-    {
-        $data = collect($request->all())->except(['modal_type', 'id'])->toArray();
-        $modal = $request->modal_type;
+{
+    $data = collect($request->all())->except(['modal_type', 'id'])->toArray();
+    $modal = $request->modal_type;
 
-        if (!str_contains($modal, '\\')) {
-            $modal = 'App\\Models\\' . $modal;
-        }
-        try {
-            if (!class_exists($modal)) {
-                return response()->json(['message' => 'Invalid modal type'], 400);
-            }
-
-            $modalName = class_basename($modal);
-
-            // 🔐 Handle password field
-            $this->handlePasswordField($data);
-
-            // 📂 Handle uploaded files
-            foreach ($request->files as $key => $file) {
-                if ($file->isValid()) {
-                    $data[$key] = $this->handleFileUpload($file, $modalName);
-                }
-            }
-
-            // ✅ Update if ID exists
-            if ($request->filled('id')) {
-                $record = $modal::find($request->id);
-                if (!$record) {
-                    return response()->json(['message' => $modalName . ' not found.'], 404);
-                }
-
-                $record->update($data);
-
-                return response()->json([
-                    'message' => $modalName . ' updated successfully.',
-                    'data' => $record
-                ]);
-            } else {
-                $record = $modal::create($data);
-
-                return response()->json([
-                    'message' => $modalName . ' created successfully.',
-                    'data' => $record
-                ], 201);
-            }
-        } catch (\Exception $e) {
-            return response()->json([
-                'error' => 'Error: ' . $e->getMessage()
-            ], 500);
-        }
+    if (!str_contains($modal, '\\')) {
+        $modal = 'App\\Models\\' . $modal;
     }
+
+    try {
+        if (!class_exists($modal)) {
+            return response()->json(['message' => 'Invalid modal type'], 400);
+        }
+
+        $modalName = class_basename($modal);
+
+        // 🔐 Handle password field
+        $this->handlePasswordField($data);
+
+        // 📂 Handle uploaded files (fixed version)
+        foreach ($request->allFiles() as $key => $file) {
+            if ($file->isValid()) {
+                $data[$key] = $this->handleFileUpload($file, $modalName);
+            }
+        }
+
+        // ✅ Update if ID exists
+        if ($request->filled('id')) {
+            $record = $modal::find($request->id);
+            if (!$record) {
+                return response()->json(['message' => $modalName . ' not found.'], 404);
+            }
+
+            $record->update($data);
+
+            return response()->json([
+                'message' => $modalName . ' updated successfully.',
+                'data' => $record
+            ]);
+        } else {
+            $record = $modal::create($data);
+
+            return response()->json([
+                'message' => $modalName . ' created successfully.',
+                'data' => $record
+            ], 201);
+        }
+    } catch (\Exception $e) {
+        return response()->json([
+            'error' => 'Error: ' . $e->getMessage()
+        ], 500);
+    }
+}
+
 
     public function deleteCommon(Request $request, $modal, $id)
     {
@@ -124,22 +126,23 @@ class CommonService
         }
     }
 
-    public function getAll(string $modal)
-    {
-        if (!$modal) {
-            throw new \InvalidArgumentException('modal_type is required');
-        }
-
-        if (!str_contains($modal, '\\')) {
-            $modal = 'App\\Models\\' . $modal;
-        }
-
-        if (!class_exists($modal)) {
-            throw new \InvalidArgumentException('Invalid modal type');
-        }
-
-        return $modal::all();
+   public function getAll(string $modal)
+{
+    if (!$modal) {
+        throw new \InvalidArgumentException('modal_type is required');
     }
+
+    if (!str_contains($modal, '\\')) {
+        $modal = 'App\\Models\\' . $modal;
+    }
+
+    if (!class_exists($modal)) {
+        throw new \InvalidArgumentException('Invalid modal type');
+    }
+
+    // Order by 'id' in descending order
+    return $modal::orderBy('id', 'desc')->get();
+}
 
     private function handlePasswordField(&$data)
     {
@@ -152,7 +155,9 @@ class CommonService
     {
         $filename = time() . '_' . Str::random(10) . '.' . $file->getClientOriginalExtension();
         $path = $file->storeAs('public/' . $folder, $filename);
-        return str_replace('public/', 'storage/', $path);
+
+      
+        return str_replace('public/', 'storage/app/public/', $path);
     }
 
      public function commonEdit(Request $request,$modal,$id)

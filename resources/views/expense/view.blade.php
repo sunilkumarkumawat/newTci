@@ -9,9 +9,11 @@
                                                         <td>{{ $expense->quantity ?? '' }}</td>
                                                         <td>{{ $expense->rate ?? '' }}</td>
                                                         <td>{{ $expense->total_amt ?? '' }}</td>
-                                                        <td class="text-center"><img
-                                                                src="{{ $expense->attachment ? url('public/' . $expense->attachment) : url('images/df-expense.png') }}"
-                                                                class="profileImg" alt="User Image"></td>
+                                                        <td class="text-center">
+                                                       <img src="{{ $expense->attachment ? asset($expense->attachment) : asset('defaultImages/attachment.png') }}"
+     class="profileImg" alt="Expense File"
+     onerror="this.onerror=null; this.src='{{ asset('defaultImages/attachment.png') }}';">
+                                                       </td>
                                                         <td>
                                                             <div class="btn-group">
                                                                 {{-- <a href="#" class="btn-xs">

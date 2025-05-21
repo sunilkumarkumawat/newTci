@@ -79,6 +79,37 @@
         padding-bottom: 5px;
         margin-bottom: 20px;
     }
+
+
+    .placeholder-wave {
+  position: relative;
+  overflow: hidden;
+}
+
+.placeholder-wave::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -150%;
+  width: 200%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.5),
+    transparent
+  );
+  animation: placeholder-wave 1.5s infinite;
+}
+
+@keyframes placeholder-wave {
+  0% {
+    left: -150%;
+  }
+  100% {
+    left: 150%;
+  }
+}
 </style>
 
 
@@ -445,6 +476,34 @@
                 $('#createCommon, .createCommon').on('submit', function(e) {
                     e.preventDefault();
 
+
+       $('.dataContainer').each(function () {
+  const $row = $(`
+    <tr class="placeholder-row" style="display:none">
+      <td class="placeholder-wave" style="padding:16px">
+        <div class="placeholder rounded" style="width:99%; height:20px; background:#0000001f; padding:10px"></div>
+      </td>
+      <td class="placeholder-wave" style="padding:16px">
+        <div class="placeholder rounded" style="width:99%; height:20px; background:#00000038"></div>
+      </td>
+      <td class="placeholder-wave" style="padding:16px" colspan="100%">
+        <div class="placeholder rounded" style="width:99%; height:20px; background:#00000045"></div>
+      </td>
+    </tr>
+  `);
+
+  // Prepend and fade in
+  $(this).prepend($row);
+  $row.fadeIn(300);
+
+  // Fade out after a short delay, then remove
+  setTimeout(() => {
+    $row.fadeOut(500, function () {
+      $(this).remove();
+    });
+  }, 500); // Adjust delay as needed (1500ms = 1.5s)
+});
+
                     // Get branch_id just before submission
                     const selectedBranchId = $('#headerBranchSelect').val();
                     $('#branch_id').val(selectedBranchId); // set it again
@@ -770,17 +829,23 @@
 
 
 
-    modalTypes.forEach(modal => {
-        const containerId = `#dataContainer-${modal.toLowerCase()}`;
+modalTypes.forEach(modal => {
+    const containerId = `#dataContainer-${modal.toLowerCase()}`;
+    const url = `${baseUrl}/commonView/${modal}`;
 
-        $(containerId).load(`${baseUrl}/commonView/${modal}`, function (response, status, xhr) {
-            if (status === "error") {
-                console.error(`Error loading ${modal}: ${xhr.status} ${xhr.statusText}`);
-            } else {
-                toastr.success(`${modal} data fetched successfully!`);
-            }
+    $.get(url, function (data) {
+        const $container = $(containerId);
+
+        // Hide, update, then fade in
+        $container.fadeOut(100, function () {
+            $container.html(data).fadeIn(200);
         });
+
+        toastr.success(`${modal} data fetched successfully!`);
+    }).fail(function (xhr) {
+        console.error(`Error loading ${modal}: ${xhr.status} ${xhr.statusText}`);
     });
+});
 }
                 dataGet();
 
@@ -960,6 +1025,14 @@
             </div>
         </div>
 
+
+        <style>
+            .loader{
+                width:'70px';
+                height:'70px';
+
+            }
+            </style>
 </body>
 
 </html>
