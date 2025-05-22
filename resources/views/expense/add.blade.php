@@ -101,45 +101,6 @@
                                                 ])
 
 
-                                                @include('commoninputs.inputs', [
-                                                    'modal' => 'Country',
-                                                    'name' => 'country_id',
-                                                    'selected' => $data->country_id ?? null,
-                                                    'label' => 'Country',
-                                                    'required' => true,
-                                                    'attributes' => [
-                                                        'data-dependent' => 'state_id',
-                                                        'data-url' => url('/get-dependent-options'),
-                                                        'data-modal' => 'State',
-                                                        'data-field' => 'country_id',
-                                                    ],
-                                                ])
-
-
-                                                @include('commoninputs.dependentInputs', [
-                                                    'modal' => 'State',
-                                                    'name' => 'state_id',
-                                                    'selected' => $data->state_id ?? null,
-                                                    'label' => 'State',
-                                                    'required' => true,
-                                                    'isRequestSent' => isset($data->country_id),
-                                                    'dependentId' => $data->country_id ?? null,
-                                                    'attributes' => [
-                                                        'data-dependent' => 'city_id',
-                                                        'data-url' => url('/get-dependent-options'),
-                                                        'data-modal' => 'City',
-                                                        'data-field' => 'state_id',
-                                                    ],
-                                                ])
-                                                @include('commoninputs.dependentInputs', [
-                                                    'modal' => 'City',
-                                                    'name' => 'city_id',
-                                                    'selected' => $data->city_id ?? null,
-                                                    'label' => 'City',
-                                                    'required' => true,
-                                                    'isRequestSent' => isset($data->state_id),
-                                                    'dependentId' => $data->state_id ?? null,
-                                                ])
                                             </div>
                                             <div class="col-sm-6 col-12">
                                                 <div class="form-group">
@@ -195,23 +156,7 @@
                                             </tr>
                                         </thead>
                                         <tbody id="dataContainer-expense" class='dataContainer'style="min-height:300px">
-                                            @for ($i = 0; $i < 6; $i++)
-                                                <tr>
-                                                    <td class="placeholder-wave" style="padding:16px">
-                                                        <div class="placeholder rounded"
-                                                            style="width:99%; height:20px; background:#0000001f; padding:10px">
-                                                        </div>
-                                                    </td>
-                                                    <td class="placeholder-wave" style="padding:16px">
-                                                        <div class="placeholder rounded"
-                                                            style="width:99%; height:20px; background:#00000038"></div>
-                                                    </td>
-                                                    <td class="placeholder-wave" style="padding:16px" colspan='100%'>
-                                                        <div class="placeholder rounded"
-                                                            style="width:99%; height:20px; background:#00000045"></div>
-                                                    </td>
-                                                </tr>
-                                            @endfor
+                                            @include('commoninputs.loadskeletan',['loopCount'=>6])
                                         </tbody>
                                     </table>
                                 </div>

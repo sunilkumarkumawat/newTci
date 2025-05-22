@@ -11,7 +11,7 @@
             <td>{{ $branch->pin_code ?? '' }}</td>
             <td>
                 <div class="btn-group">
-                    <a href="{{ url('branchEdit/' . $branch->id) }}" class="btn-xs">
+                    <a href="{{ url('commonEdit/Branch/' . $branch->id) }}" class="btn-xs">
                         <i class="fa fa-edit fs-6 mx-2 text-primary"></i>
                     </a>
                     <a class=" btn-xs delete-btn" data-modal='branch' data-id='{{ $branch->id }}'>

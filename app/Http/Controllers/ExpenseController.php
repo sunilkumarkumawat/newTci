@@ -31,51 +31,44 @@ use App\Http\Controllers\api\ApiController;
 class ExpenseController extends Controller
 
 {
-   
-// public function expenseedit($id)
-// {
-//     try {
-//         $api = new ApiController();
+    public function expenseEdit($id)
+    {
+        $api = new ApiController();
 
-//         $fakeRequest = new Request([
-//             'modal_type' => 'Expense',
-//             'id' => $id,
-//         ]);
+        // Simulate request with modal_type = User
+        $fakeRequest = new Request([
+            'modal_type' => 'Expense',
+            'id' => $id,
+        ]);
 
-//         $response = $api->getCommonRow($fakeRequest);
-//         $responseData = $response->getData();
-//         $data = isset($responseData->data) && !empty($responseData->data) ? $responseData->data : null;
+        // Call the API method
+        $response = $api->getCommonRow($fakeRequest);
 
-//         $expenseData = $this->getExpenseData();
+        // Extract data from JSON response
+        $responseData = $response->getData();
 
-//         return view('expense.expense', [
-//             'data' => $data,
-//             'expenseData' => $expenseData
-//         ]);
-//     } catch (\Exception $e) {
-//         return view('expense.add', [
-//             'data' => null,
-//             'expenseData' => [],
-//         ])->with('error', 'Failed to edit expense.');
-//     }
-// }
+        // Check if data exists and is not empty
+        $data = isset($responseData->data) && !empty($responseData->data) ? $responseData->data : [];
 
-// private function getExpenseData()
-// {
-//     $api = new ApiController();
+        return view('expense.add', ['data' => $data]);
+    }
 
-//     $fakeRequest = new Request([
-//         'modal_type' => 'Expense',
-//     ]);
+    // private function getExpenseData()
+    // {
+    //     $api = new ApiController();
 
-//     $response = $api->getUsersData($fakeRequest);
+    //     $fakeRequest = new Request([
+    //         'modal_type' => 'Expense',
+    //     ]);
 
-//     $responseData = $response->getData();
+    //     $response = $api->getUsersData($fakeRequest);
 
-//     return isset($responseData->data) && !empty($responseData->data)
-//         ? $responseData->data
-//         : [];
-// }
+    //     $responseData = $response->getData();
+
+    //     return isset($responseData->data) && !empty($responseData->data)
+    //         ? $responseData->data
+    //         : [];
+    // }
 
 
 

@@ -537,8 +537,12 @@
                                     if (value === '') {
                                         message = 'Role name is required.';
                                     }
-                                    break;
 
+                                case 'role_id':
+                                    if (value === '') {
+                                        message = 'Role is required.';
+                                    }
+                                    break;
                                 case 'first_name':
                                     if (value === '') {
                                         message = 'First Name is required.';
@@ -566,6 +570,12 @@
                                 case 'password':
                                     if (value === '') {
                                         message = 'Password is required.';
+                                    }
+                                    break;
+
+                                case 'country_id':
+                                    if (value === '') {
+                                        message = 'Country is required';
                                     }
                                     break;
 
@@ -623,7 +633,7 @@
                                     }
                                     break;
 
-                                case 'gender':
+                                case 'gender_id':
                                     if (value === '') {
                                         message = 'Gender is required';
                                     }
@@ -752,6 +762,11 @@
                         contentType: false, // Required for FormData
                         success: function(response) {
 
+                            if(response.method == 'update')
+                        {
+                            window.location.href = "{{url('/')}}/"+(response.modal).toLowerCase();
+                            return
+                        }
                             console.log(response);
                             $form[0].reset();
                             toastr.success('Form Submitted Successfully');

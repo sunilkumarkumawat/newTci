@@ -23,7 +23,7 @@
                                                                     <i class="fa fa-eye  fs-6  text-info"></i>
                                                                 </a> --}}
 
-                    <a href="{{ url('expenseEdit/' . $expense->id) }}" class="btn btn-xs">
+                    <a href="{{ url('commonEdit/Expense/' . $expense->id) }}" class="btn btn-xs">
                         <i class="fa fa-edit text-primary"></i>
                     </a>
                     <a class=" btn-xs delete-btn" data-modal='Expense' data-id='{{ $expense->id }}'>

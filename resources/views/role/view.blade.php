@@ -5,7 +5,7 @@
             <td>{{ $role->name ?? '' }}</td>
             <td>
                 <div class="btn-group">
-                    <a href="#" class="btn-xs">
+                    <a href="{{ url('commonEdit/Role/' . $role->id) }}"  class="btn btn-xs">
                         <i class="fa fa-edit fs-6 mx-2 text-primary"></i>
                     </a>
                     <a class=" btn-xs delete-btn" data-modal='Role' data-id='{{ $role->id }}'>

@@ -21,7 +21,7 @@
                   </button>
               </td>
               <td>
-                  <a href="{{ url('studentEdit/' . $studentAdd->id) }}" class="btn btn-xs"><i
+                  <a href="{{ url('commonEdit/Student/' . $studentAdd->id) }}" class="btn btn-xs"><i
                           class="fa fa-edit text-primary"></i></a>
                   <a class=" btn-xs delete-btn" data-modal="Student" data-id="{{ $studentAdd->id }}">
                       <i class="fa fa-trash fs-6 text-danger"></i></a>

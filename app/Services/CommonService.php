@@ -48,7 +48,9 @@ public function createCommon($request)
 
             return response()->json([
                 'message' => $modalName . ' updated successfully.',
-                'data' => $record
+                'data' => $record,
+                'modal' =>$modalName,
+                'method'=>'update'
             ]);
         } else {
             $record = $modal::create($data);
@@ -58,7 +60,9 @@ public function createCommon($request)
 
             return response()->json([
                 'message' => $modalName . ' created successfully.',
-                'data' => $record
+                'data' => $record,
+                'modal' =>$modalName,
+                'method'=>'create'
             ], 201);
         }
     } catch (\Exception $e) {
@@ -80,6 +84,8 @@ public function createCommon($request)
                 return response()->json(['message' => 'Invalid modal type'], 400);
             }
 
+                 $modalName = class_basename($modal);
+
             $record = $modal::find($id);
 
             if (!$record) {
@@ -88,6 +94,8 @@ public function createCommon($request)
 
             $record->delete();
 
+
+             Cache::forget('getAll_' . $modalName);
             return response()->json([
                 'message' => class_basename($modal) . ' deleted successfully.',
                 'data' => $record

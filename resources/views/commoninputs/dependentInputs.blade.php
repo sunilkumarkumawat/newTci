@@ -15,7 +15,7 @@
 <div class="form-group">
     @if (!empty($label))
         <label for="{{ $name }}">
-            {{ $label }}{{$dependentId}}
+            {{ $label }}
             @if($isRequired)
                 <span class="text-danger">*</span>
             @endif

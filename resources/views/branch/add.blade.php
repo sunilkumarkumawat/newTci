@@ -41,10 +41,10 @@
                                                 value="{{ old('branch_code', $data->branch_code ?? '') }}" />
                                         </div>
                                         <div class="col-sm-6 form-group">
-                                            <label for="branch_name">Branch Name <span class="text-danger">*</span></label>
-                                            <input type="text" class="form-control" id="branch_name" name="name"
+                                            <label for="name">Branch Name <span class="text-danger">*</span></label>
+                                            <input type="text" class="form-control" id="name" name="name"
                                                 placeholder="Enter Branch Name" data-required="true"
-                                                value="{{ old('branch_name', $data->branch_name ?? '') }}" />
+                                                value="{{ old('name', $data->name ?? '') }}" />
                                         </div>
                                         <div class="col-sm-6 col-12 form-group">
                                             <label for="director">Contact Person <span class="text-danger">*</span></label>
@@ -110,23 +110,7 @@
                                             </tr>
                                         </thead>
                                         <tbody id="dataContainer-branch" class='dataContainer'style="min-height:300px">
-                                            @for ($i = 0; $i < 4; $i++)
-                                                <tr>
-                                                    <td class="placeholder-wave" style="padding:16px">
-                                                        <div class="placeholder rounded"
-                                                            style="width:99%; height:20px; background:#0000001f; padding:10px">
-                                                        </div>
-                                                    </td>
-                                                    <td class="placeholder-wave" style="padding:16px">
-                                                        <div class="placeholder rounded"
-                                                            style="width:99%; height:20px; background:#00000038"></div>
-                                                    </td>
-                                                    <td class="placeholder-wave" style="padding:16px" colspan='100%'>
-                                                        <div class="placeholder rounded"
-                                                            style="width:99%; height:20px; background:#00000045"></div>
-                                                    </td>
-                                                </tr>
-                                            @endfor
+                                            @include('commoninputs.loadskeletan',['loopCount'=>6])
 
                                         </tbody>
                                     </table>

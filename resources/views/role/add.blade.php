@@ -1,5 +1,10 @@
 @extends('layout.app')
 @section('content')
+    @php
+        $isEdit = isset($data);
+    @endphp
+
+
     <div class="content-wrapper">
         <section class="content">
             <div class="container-fluid">
@@ -25,15 +30,18 @@
 
                             <div class="card-body">
                                 <form id="createCommon" data-modal="Role">
+                                    @if ($isEdit)
+                                        <input type='hidden' value='{{ $data->id }}' name='id' />
+                                    @endif
+                                    <input type='hidden' value='Role' name='modal_type' />
+                                    <input type="hidden" value="{{ Auth::user()->id }}" name="user_id" />
+                                    <input type='hidden' id="branch_id" name='branch_id' />
                                     <div id="expense-container" class="bg-item mb-3 border p-3 rounded">
-                                        <input type='hidden' value='Role' name='modal_type' />
-                                        <input type="hidden" value="{{ Auth::user()->id }}" name="user_id" />
-                                        <input type='hidden' id="branch_id" name='branch_id' />
                                         <div class="row">
                                             <div class="col-md-12 col-12 form-group">
                                                 <label for="name"> Role Name <span class="text-danger">*</span></label>
-                                                <input type="text" class="form-control" id="role_name" name="name"
-                                                    placeholder="Enter Role Name" data-required='true'>
+                                                <input type="text" class="form-control" id="role_name" name="name" placeholder="Enter Role Name" data-required='true'
+                                                 value="{{ old('name', $data->name ?? '') }}">     
                                             </div>
 
                                             <div class="col-12 col-md-12 ">
@@ -65,23 +73,7 @@
                                             </tr>
                                         </thead>
                                         <tbody id="dataContainer-role" class='dataContainer'style="min-height:300px">
-                                            @for ($i = 0; $i < 2; $i++)
-                                                <tr>
-                                                    <td class="placeholder-wave" style="padding:16px">
-                                                        <div class="placeholder rounded"
-                                                            style="width:99%; height:20px; background:#0000001f; padding:10px">
-                                                        </div>
-                                                    </td>
-                                                    <td class="placeholder-wave" style="padding:16px">
-                                                        <div class="placeholder rounded"
-                                                            style="width:99%; height:20px; background:#00000038"></div>
-                                                    </td>
-                                                    <td class="placeholder-wave" style="padding:16px" colspan='100%'>
-                                                        <div class="placeholder rounded"
-                                                            style="width:99%; height:20px; background:#00000045"></div>
-                                                    </td>
-                                                </tr>
-                                            @endfor
+                                           @include('commoninputs.loadskeletan',['loopCount'=>6])
                                         </tbody>
                                     </table>
                                 </div>

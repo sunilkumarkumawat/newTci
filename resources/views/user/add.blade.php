@@ -164,6 +164,16 @@
                                                     </div>
 
                                                     <div class="col-md-4">
+                                                        @include('commoninputs.inputs',[
+                                                            'modal' => 'Gender',
+                                                            'name' => 'gender_id',
+                                                            'selected' => $data->gender_id ?? null,
+                                                            'label' => 'Gender',
+                                                            'required' => true,
+                                                        ])
+                                                    </div>
+
+                                                    <div class="col-md-4">
                                                         <div class="form-group">
                                                             <label for="father_name">Father
                                                                 Name <span class="text-danger">*</span></label>
@@ -175,39 +185,49 @@
                                                     </div>
 
                                                     <div class="col-md-4">
-                                                        <div class="form-group">
-                                                            <label for="gender">Gender <span
-                                                                    class="text-danger">*</span></label>
-                                                            <select name="gender" id="gender" class="form-control">
-                                                                <option value="M"
-                                                                    {{ old('gender', $data->gender ?? '') == 'M' ? 'selected' : '' }}>
-                                                                    Male</option>
-                                                                <option value="F"
-                                                                    {{ old('gender', $data->gender ?? '') == 'F' ? 'selected' : '' }}>
-                                                                    Female</option>
-                                                                <option value="other"
-                                                                    {{ old('gender', $data->gender ?? '') == 'other' ? 'selected' : '' }}>
-                                                                    Other</option>
-                                                            </select>
-                                                        </div>
+                                                        @include('commoninputs.inputs', [
+                                                            'modal' => 'Country', // This decides the data source
+                                                            'name' => 'country_id',
+                                                            'selected' => $data->country_id ?? null,
+                                                            'label' => 'Country',
+                                                            'required' => true,
+                                                            'attributes' => [
+                                                                'data-dependent' => 'state_id',
+                                                                'data-url' => url('/get-dependent-options'),
+                                                                'data-modal' => 'State',
+                                                                'data-field' => 'country_id',
+                                                            ],
+                                                        ])
                                                     </div>
 
                                                     <div class="col-md-4">
-                                                        @include('commoninputs.inputs', [
-                                                            'modal' => 'State', // This decides the data source
+                                                        @include('commoninputs.dependentInputs', [
+                                                            'modal' => 'State',
                                                             'name' => 'state_id',
-                                                            'selected' => $data->payment_mode_id ?? null,
-                                                            'label' => 'Select State',
-                                                            'required' => false,
+                                                            'selected' => $data->state_id ?? null,
+                                                            'label' => 'State',
+                                                            'required' => true,
+                                                            'isRequestSent' => isset($data->country_id),
+                                                            'dependentId' => $data->country_id ?? null,
+                                                            'foreignKey' => 'country_id',
+                                                            'attributes' => [
+                                                                'data-dependent' => 'city_id',
+                                                                'data-url' => url('/get-dependent-options'),
+                                                                'data-modal' => 'City',
+                                                                'data-field' => 'state_id',
+                                                            ],
                                                         ])
                                                     </div>
                                                     <div class="col-md-4">
-                                                         @include('commoninputs.inputs', [
-                                                            'modal' => 'City', // This decides the data source
+                                                        @include('commoninputs.dependentInputs', [
+                                                            'modal' => 'City',
                                                             'name' => 'city_id',
                                                             'selected' => $data->city_id ?? null,
-                                                            'label' => 'Select City',
+                                                            'label' => 'City',
                                                             'required' => true,
+                                                            'isRequestSent' => isset($data->state_id),
+                                                            'dependentId' => $data->state_id ?? null,
+                                                            'foreignKey' => 'state_id',
                                                         ])
                                                     </div>
                                                     <div class="col-md-4">
@@ -226,7 +246,7 @@
                                                             'modal' => 'Role', // This decides the data source
                                                             'name' => 'role_id',
                                                             'selected' => $data->role_id ?? null,
-                                                            'label' => 'Select Role',
+                                                            'label' => 'Role',
                                                             'required' => true,
                                                         ])
                                                     </div>
