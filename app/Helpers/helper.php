@@ -21,8 +21,9 @@ class Helper
         $getBranch = $getBranch->get();
         return $getBranch;
     }
-   public static function getModalData($modal, $dependentId = null, $foreignKey = 'state_id')
+   public static function getModalData($modal, $dependentId = null, $foreignKey = null)
 {
+    
     // Build fully qualified class name if not already
     if (!str_contains($modal, '\\')) {
         $modal = 'App\\Models\\' . $modal;

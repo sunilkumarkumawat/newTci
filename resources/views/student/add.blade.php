@@ -319,6 +319,7 @@
                                                                 'required' => true,
                                                                 'isRequestSent' => isset($student->country_id),
                                                                 'dependentId' => $student->country_id ?? null,
+                                                                'foreignKey' => 'country_id',
                                                                 'attributes' => [
                                                                     'data-dependent' => 'city_id',
                                                                     'data-url' => url('/get-dependent-options'),
@@ -337,6 +338,7 @@
                                                                 'required' => true,
                                                                 'isRequestSent' => isset($student->state_id),
                                                                 'dependentId' => $student->state_id ?? null,
+                                                                 'foreignKey' => 'state_id'
                                                             ])
                                                         </div>
 

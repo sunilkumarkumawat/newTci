@@ -8,14 +8,14 @@
 
     // Send second parameter only if request is to be sent
     $options = $isRequestSent
-        ? \App\Helpers\Helper::getModalData($modal ?? '', $dependentId ?? null)
+        ? \App\Helpers\Helper::getModalData($modal ?? '', $dependentId ?? null, $foreignKey ?? null)
         : [];
 @endphp
 
 <div class="form-group">
     @if (!empty($label))
         <label for="{{ $name }}">
-            {{ $label }}
+            {{ $label }}{{$dependentId}}
             @if($isRequired)
                 <span class="text-danger">*</span>
             @endif

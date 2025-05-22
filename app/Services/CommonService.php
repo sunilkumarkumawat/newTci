@@ -218,6 +218,8 @@ public function getAll(string $modal)
     $value = $request->input('value');    // selected state_id value
 
 
+
+
   
     if (!class_exists($modelClass = "\\App\\Models\\$modal")) {
         return response()->json([], 400);
