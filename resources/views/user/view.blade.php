@@ -3,9 +3,9 @@
              <tr>
                  <td>{{ $index + 1 ?? '' }}</td>
                  <td class="text-center">
-                <img src="{{ $user->image ? asset($user->image) : asset('defaultImages/imageError.png') }}"
-     class="profileImg" alt="User Image"
-     onerror="this.onerror=null; this.src='{{ asset('defaultImages/imageError.png') }}';" />
+                     <img src="{{ $user->image ? asset($user->image) : asset('defaultImages/imageError.png') }}"
+                         class="profileImg" alt="User Image"
+                         onerror="this.onerror=null; this.src='{{ asset('defaultImages/imageError.png') }}';" />
 
                  </td>
                  <td>{{ $user->role_id ?? '' }}</td>
@@ -31,4 +31,6 @@
                  </td>
              </tr>
          @endforeach
+     @else
+         @include('common.noDataFound')
      @endif

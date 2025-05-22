@@ -53,7 +53,7 @@ class ExpenseController extends Controller
 //             'expenseData' => $expenseData
 //         ]);
 //     } catch (\Exception $e) {
-//         return view('expense.expense', [
+//         return view('expense.add', [
 //             'data' => null,
 //             'expenseData' => [],
 //         ])->with('error', 'Failed to edit expense.');

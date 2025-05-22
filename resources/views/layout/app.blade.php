@@ -570,7 +570,7 @@
                                         message = 'Branch code is required.';
                                     }
                                     break;
-                                case 'branch_name':
+                                case 'name':
                                     if (value === '') {
                                         message = 'Branch name is required.';
                                     }
@@ -580,7 +580,7 @@
                                         message = 'Contact Person is required.';
                                     }
                                     break;
-                                case 'role_name':
+                                case 'name':
                                     if (value === '') {
                                         message = 'Role name is required.';
                                     }

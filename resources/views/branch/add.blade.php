@@ -1,6 +1,5 @@
 @extends('layout.app')
 @section('content')
-
     @php
         $isEdit = isset($data);
     @endphp
@@ -37,14 +36,14 @@
                                     <div class="row">
                                         <div class="col-sm-6 form-group">
                                             <label for="branch_code">Branch Code <span class="text-danger">*</span></label>
-                                            <input type="text" class="form-control" name="branch_code" id="branch_code" placeholder="Enter Branch Code"
-                                                data-required="true"
+                                            <input type="text" class="form-control" name="branch_code" id="branch_code"
+                                                placeholder="Enter Branch Code" data-required="true"
                                                 value="{{ old('branch_code', $data->branch_code ?? '') }}" />
                                         </div>
                                         <div class="col-sm-6 form-group">
                                             <label for="branch_name">Branch Name <span class="text-danger">*</span></label>
-                                            <input type="text" class="form-control" id="branch_name" name="branch_name" placeholder="Enter Branch Name"
-                                                data-required="true"
+                                            <input type="text" class="form-control" id="branch_name" name="name"
+                                                placeholder="Enter Branch Name" data-required="true"
                                                 value="{{ old('branch_name', $data->branch_name ?? '') }}" />
                                         </div>
                                         <div class="col-sm-6 col-12 form-group">
@@ -63,16 +62,18 @@
                                         <div class="col-sm-6 form-group">
                                             <label for="email">Email</label>
                                             <input type="text" class="form-control" id="email" name="email"
-                                            placeholder="Enter Email" value="{{ old('email', $data->email ?? '') }}" />
+                                                placeholder="Enter Email" value="{{ old('email', $data->email ?? '') }}" />
                                         </div>
                                         <div class="col-sm-6 form-group">
                                             <label for="address">Address</label>
                                             <input type="text" class="form-control" id="address" name="address"
-                                            placeholder="Enter Address" value="{{ old('address', $data->address ?? '') }}" />
+                                                placeholder="Enter Address"
+                                                value="{{ old('address', $data->address ?? '') }}" />
                                         </div>
                                         <div class="col-sm-6 form-group">
                                             <label for="pin_code">Pin Code</label>
-                                            <input type="text" class="form-control" id="pin_code" name="pin_code" placeholder="Enter Pin Code"
+                                            <input type="text" class="form-control" id="pin_code" name="pin_code"
+                                                placeholder="Enter Pin Code"
                                                 value="{{ old('pin_code', $data->pin_code ?? '') }}" />
                                         </div>
                                         <div class="col-12 col-md-12">
@@ -109,20 +110,24 @@
                                             </tr>
                                         </thead>
                                         <tbody id="dataContainer-branch" class='dataContainer'style="min-height:300px">
-@for($i = 0; $i < 4; $i++)
-<tr>
-  <td class="placeholder-wave" style="padding:16px">
-    <div class="placeholder rounded" style="width:99%; height:20px; background:#0000001f; padding:10px"></div>
-  </td>
-  <td class="placeholder-wave" style="padding:16px">
-    <div class="placeholder rounded" style="width:99%; height:20px; background:#00000038"></div>
-  </td>
-  <td class="placeholder-wave" style="padding:16px" colspan='100%'>
-    <div class="placeholder rounded" style="width:99%; height:20px; background:#00000045"></div>
-  </td>
-</tr>
-@endfor
-                                            
+                                            @for ($i = 0; $i < 4; $i++)
+                                                <tr>
+                                                    <td class="placeholder-wave" style="padding:16px">
+                                                        <div class="placeholder rounded"
+                                                            style="width:99%; height:20px; background:#0000001f; padding:10px">
+                                                        </div>
+                                                    </td>
+                                                    <td class="placeholder-wave" style="padding:16px">
+                                                        <div class="placeholder rounded"
+                                                            style="width:99%; height:20px; background:#00000038"></div>
+                                                    </td>
+                                                    <td class="placeholder-wave" style="padding:16px" colspan='100%'>
+                                                        <div class="placeholder rounded"
+                                                            style="width:99%; height:20px; background:#00000045"></div>
+                                                    </td>
+                                                </tr>
+                                            @endfor
+
                                         </tbody>
                                     </table>
                                 </div>

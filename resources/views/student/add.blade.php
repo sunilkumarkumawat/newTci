@@ -26,9 +26,7 @@ $isEdit = isset($student);
                         <div class="card-tools">
                             <a href="{{ url('studentView') }}" class="btn btn-primary  btn-sm"><i class="fa fa-eye"></i>
                                 <span class="Display_none_mobile"> {{ __('common.View') }} </span></a>
-                            {{-- <a href="{{ url('studentDashboard') }}" class="btn btn-primary btn-sm"><i
-                                class="fa fa-arrow-left"></i> <span class="Display_none_mobile">
-                                {{ __('common.Back') }} </span></a> --}}
+                           
                         </div>
                     </div>
 
@@ -111,15 +109,13 @@ $isEdit = isset($student);
                                                 </div>
 
                                                 <div class="col-md-4">
-                                                    <div class="form-group">
-                                                        <label for="gender">Gender <span style="color:red;">*</span></label>
-                                                        <select class="form-control" id="gender" name="gender" data-required="true">
-                                                            <option value="">Select</option>
-                                                            <option value="1" {{ old('gender', $student->gender ?? '') == '1' ? 'selected' : '' }}>Male</option>
-                                                            <option value="2" {{ old('gender', $student->gender ?? '') == '2' ? 'selected' : '' }}>Female</option>
-                                                            <option value="3" {{ old('gender', $student->gender ?? '') == '3' ? 'selected' : '' }}>Other</option>
-                                                        </select>
-                                                    </div>
+                                                    @include('commoninputs.inputs', [
+                                                            'modal' => 'Gender', // This decides the data source
+                                                            'name' => 'gender_id',
+                                                            'selected' => $data->gender_id ?? null,
+                                                            'label' => 'Select Gender',
+                                                            'required' => true,
+                                                        ])
                                                 </div>
 
                                                 <div class="col-md-4">
@@ -238,15 +234,13 @@ $isEdit = isset($student);
                                                     </div>
 
                                                     <div class="col-md-3">
-                                                        <div class="form-group">
-                                                            <label for="blood_group">Blood Group</label>
-                                                            <select class="form-control" id="blood_group" name="blood_group">
-                                                                <option value="">Select</option>
-                                                                @foreach(['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'] as $group)
-                                                                <option value="{{ $group }}" {{ old('blood_group', $student->blood_group ?? '') == $group ? 'selected' : '' }}>{{ $group }}</option>
-                                                                @endforeach
-                                                            </select>
-                                                        </div>
+                                                         @include('commoninputs.inputs', [
+                                                            'modal' => 'BloodGroup', // This decides the data source
+                                                            'name' => 'bloodgroup_id',
+                                                            'selected' => $data->bloodgroup_id ?? null,
+                                                            'label' => 'Select Blood Group',
+                                                            'required' => false,
+                                                        ])
                                                     </div>
 
                                                     <div class="col-md-12 mb-2 mt-3">
@@ -254,27 +248,23 @@ $isEdit = isset($student);
                                                     </div>
 
                                                     <div class="col-md-3">
-                                                        <div class="form-group">
-                                                            <label for="country">Country</label>
-                                                            <select class="form-control" name="country" id="country">
-                                                                <option value="">Select</option>
-                                                                <option value="1" {{ old('country', $student->country ?? '') == '1' ? 'selected' : '' }}>India</option>
-                                                                <option value="2" {{ old('country', $student->country ?? '') == '2' ? 'selected' : '' }}>USA</option>
-                                                                <option value="3" {{ old('country', $student->country ?? '') == '3' ? 'selected' : '' }}>UK</option>
-                                                            </select>
-                                                        </div>
+                                                        @include('commoninputs.inputs', [
+                                                            'modal' => 'Country', // This decides the data source
+                                                            'name' => 'country_id',
+                                                            'selected' => $data->country_id ?? null,
+                                                            'label' => 'Select Country',
+                                                            'required' => false,
+                                                        ])
                                                     </div>
 
                                                     <div class="col-md-3">
-                                                        <div class="form-group">
-                                                            <label for="state_id">State<span style="color:red;">*</span></label>
-                                                            <select class="form-control" id="state_id" name="state_id" data-required="true">
-                                                                <option value="">Select</option>
-                                                                <option value="1" {{ old('state_id', $student->state_id ?? '') == '1' ? 'selected' : '' }}>Rajasthan</option>
-                                                                <option value="2" {{ old('state_id', $student->state_id ?? '') == '2' ? 'selected' : '' }}>Delhi</option>
-                                                                <option value="3" {{ old('state_id', $student->state_id ?? '') == '3' ? 'selected' : '' }}>Gujarat</option>
-                                                            </select>
-                                                        </div>
+                                                        @include('commoninputs.inputs', [
+                                                            'modal' => 'State', // This decides the data source
+                                                            'name' => 'state_id',
+                                                            'selected' => $data->state_id ?? null,
+                                                            'label' => 'Select State',
+                                                            'required' => true,
+                                                        ])
                                                     </div>
 
                                                     <div class="col-md-3">
@@ -305,8 +295,7 @@ $isEdit = isset($student);
                                                         <div class="form-group">
                                                             <label for="pincode">Pin Code</label>
                                                             <input type="text" class="form-control" id="pincode" name="pincode"
-                                                                placeholder="Pin Code" value="{{ old('pincode', $student->pincode ?? '') }}"
-                                                                maxlength="6" onkeypress="javascript:return isNumber(event)">
+                                                                placeholder="Pin Code" value="{{ old('pincode', $student->pincode ?? '') }}">
                                                         </div>
                                                     </div>
                                                 </div>

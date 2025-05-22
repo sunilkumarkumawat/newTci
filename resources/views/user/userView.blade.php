@@ -58,7 +58,7 @@
 
                             <div class="table-responsive">
                                 <table class="table table-bordered table-striped mt-4">
-                                     <input type='hidden' value="User" name='modal_type'/>
+                                    <input type='hidden' value="User" name='modal_type' />
                                     <thead>
                                         <tr class="bg-light">
                                             <th>SR.NO</th>
@@ -74,20 +74,24 @@
                                         </tr>
                                     </thead>
                                     <tbody id="dataContainer-user" class='dataContainer'style="min-height:300px">
-                                       @for($i = 0; $i < 5; $i++)
-<tr>
-  <td class="placeholder-wave" style="padding:16px">
-    <div class="placeholder rounded" style="width:99%; height:20px; background:#0000001f; padding:10px"></div>
-  </td>
-  <td class="placeholder-wave" style="padding:16px">
-    <div class="placeholder rounded" style="width:99%; height:20px; background:#00000038"></div>
-  </td>
-  <td class="placeholder-wave" style="padding:16px" colspan='100%'>
-    <div class="placeholder rounded" style="width:99%; height:20px; background:#00000045"></div>
-  </td>
-</tr>
-@endfor
-                                      
+                                        @for ($i = 0; $i < 6; $i++)
+                                            <tr>
+                                                <td class="placeholder-wave" style="padding:16px">
+                                                    <div class="placeholder rounded"
+                                                        style="width:99%; height:20px; background:#0000001f; padding:10px">
+                                                    </div>
+                                                </td>
+                                                <td class="placeholder-wave" style="padding:16px">
+                                                    <div class="placeholder rounded"
+                                                        style="width:99%; height:20px; background:#00000038"></div>
+                                                </td>
+                                                <td class="placeholder-wave" style="padding:16px" colspan='100%'>
+                                                    <div class="placeholder rounded"
+                                                        style="width:99%; height:20px; background:#00000045"></div>
+                                                </td>
+                                            </tr>
+                                        @endfor
+
                                     </tbody>
                                 </table>
                             </div>

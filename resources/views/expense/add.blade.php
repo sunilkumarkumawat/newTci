@@ -98,7 +98,7 @@
                                                     'name' => 'payment_mode_id',
                                                     'selected' => $data->payment_mode_id ?? null,
                                                     'label' => 'Payment Mode',
-                                                    'required' => false,
+                                                    'required' => true,
                                                 ])
 
                                             </div>

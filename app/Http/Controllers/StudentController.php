@@ -31,7 +31,7 @@ class StudentController extends Controller
 
 {
    public function studentAdd(){
-    return view('student/studentAdd');
+    return view('student.add');
    }
 
    public function studentView(){
@@ -84,7 +84,7 @@ class StudentController extends Controller
               // Check if data exists and is not empty
             $data = isset($responseData->data) && !empty($responseData->data) ? $responseData->data : [];
 
-        return view('student.studentAdd',['student'=>$data]);
+        return view('student.add',['student'=>$data]);
     
    }
 }    
