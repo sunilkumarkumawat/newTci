@@ -3,8 +3,9 @@
           <tr>
               <td>{{ $index + 1 }}</td>
               <td class="text-center">
-                  <img src="{{ $studentAdd->image ? url('public/' . $studentAdd->image) : url('images/default_user_image.jpg') }}"
-                      class="profileImg" alt="User Image">
+                <img src="{{ $studentAdd->image ? asset($studentAdd->image) : asset('defaultImages/imageError.png') }}"
+                         class="profileImg" alt="Student Image"
+                         onerror="this.onerror=null; this.src='{{ asset('defaultImages/imageError.png') }}';" />
               </td>
               <td>{{ $studentAdd->student_name ?? '' }}</td>
               <td>{{ $studentAdd->mobile ?? '' }}</td>

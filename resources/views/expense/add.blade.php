@@ -92,7 +92,6 @@
                                             </div>
                                             <div class="col-sm-6 col-12">
 
-
                                                 @include('commoninputs.inputs', [
                                                     'modal' => 'PaymentMode', // This decides the data source
                                                     'name' => 'payment_mode_id',
