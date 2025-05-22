@@ -82,34 +82,33 @@
 
 
     .placeholder-wave {
-  position: relative;
-  overflow: hidden;
-}
+        position: relative;
+        overflow: hidden;
+    }
 
-.placeholder-wave::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: -150%;
-  width: 200%;
-  height: 100%;
-  background: linear-gradient(
-    90deg,
-    transparent,
-    rgba(255, 255, 255, 0.5),
-    transparent
-  );
-  animation: placeholder-wave 1.5s infinite;
-}
+    .placeholder-wave::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: -150%;
+        width: 200%;
+        height: 100%;
+        background: linear-gradient(90deg,
+                transparent,
+                rgba(255, 255, 255, 0.5),
+                transparent);
+        animation: placeholder-wave 1.5s infinite;
+    }
 
-@keyframes placeholder-wave {
-  0% {
-    left: -150%;
-  }
-  100% {
-    left: 150%;
-  }
-}
+    @keyframes placeholder-wave {
+        0% {
+            left: -150%;
+        }
+
+        100% {
+            left: 150%;
+        }
+    }
 </style>
 
 
@@ -132,10 +131,10 @@
         @include('layout.footer')
         <script>
             /*$.ajaxSetup({
-                                                                                                                                                                                                                                                                                                                            headers: {
-                                                                                                                                                                                                                                                                                                                                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                                                                                                                                                                                                                                                                                                                            }
-                                                                                                                                                                                                                                                                                                                        });*/
+                                                                                                                                                                                                                                                                                                                                    headers: {
+                                                                                                                                                                                                                                                                                                                                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                                                                                                                                                                                                                                                                                                                                    }
+                                                                                                                                                                                                                                                                                                                                });*/
             //var URL  = "{{ url('/') }}";
         </script>
 
@@ -431,8 +430,8 @@
                     e.preventDefault();
 
 
-       $('.dataContainer').each(function () {
-  const $row = $(`
+                    $('.dataContainer').each(function() {
+                        const $row = $(`
     <tr class="placeholder-row" style="display:none">
       <td class="placeholder-wave" style="padding:16px">
         <div class="placeholder rounded" style="width:99%; height:20px; background:#0000001f; padding:10px"></div>
@@ -446,17 +445,17 @@
     </tr>
   `);
 
-  // Prepend and fade in
-  $(this).prepend($row);
-  $row.fadeIn(300);
+                        // Prepend and fade in
+                        $(this).prepend($row);
+                        $row.fadeIn(300);
 
-  // Fade out after a short delay, then remove
-  setTimeout(() => {
-    $row.fadeOut(500, function () {
-      $(this).remove();
-    });
-  }, 500); // Adjust delay as needed (1500ms = 1.5s)
-});
+                        // Fade out after a short delay, then remove
+                        setTimeout(() => {
+                            $row.fadeOut(500, function() {
+                                $(this).remove();
+                            });
+                        }, 500); // Adjust delay as needed (1500ms = 1.5s)
+                    });
 
                     // Get branch_id just before submission
                     const selectedBranchId = $('#headerBranchSelect').val();
@@ -783,24 +782,24 @@
 
 
 
-modalTypes.forEach(modal => {
-    const containerId = `#dataContainer-${modal.toLowerCase()}`;
-    const url = `${baseUrl}/commonView/${modal}`;
+                    modalTypes.forEach(modal => {
+                        const containerId = `#dataContainer-${modal.toLowerCase()}`;
+                        const url = `${baseUrl}/commonView/${modal}`;
 
-    $.get(url, function (data) {
-        const $container = $(containerId);
+                        $.get(url, function(data) {
+                            const $container = $(containerId);
 
-        // Hide, update, then fade in
-        $container.fadeOut(100, function () {
-            $container.html(data).fadeIn(200);
-        });
+                            // Hide, update, then fade in
+                            $container.fadeOut(100, function() {
+                                $container.html(data).fadeIn(200);
+                            });
 
-        toastr.success(`${modal} data fetched successfully!`);
-    }).fail(function (xhr) {
-        console.error(`Error loading ${modal}: ${xhr.status} ${xhr.statusText}`);
-    });
-});
-}
+                            toastr.success(`${modal} data fetched successfully!`);
+                        }).fail(function(xhr) {
+                            console.error(`Error loading ${modal}: ${xhr.status} ${xhr.statusText}`);
+                        });
+                    });
+                }
                 dataGet();
 
 
@@ -919,51 +918,52 @@ modalTypes.forEach(modal => {
 
         {{-- change dependent --}}
 
-<script>
-    $(document).ready(function () {
-        $('select[data-dependent]').on('change', function () {
-            let $parent = $(this);
-            let dependentId = $parent.data('dependent');
-            let baseUrl = $parent.data('url');
-            let modal = $parent.data('modal');
-            let field = $parent.data('field');
-            let value = $parent.val();
+        <script>
+            $(document).ready(function() {
+                $('select[data-dependent]').on('change', function() {
+                    let $parent = $(this);
+                    let dependentId = $parent.data('dependent');
+                    let baseUrl = $parent.data('url');
+                    let modal = $parent.data('modal');
+                    let field = $parent.data('field');
+                    let value = $parent.val();
 
-            if (!dependentId || !baseUrl || !modal || !field) return;
+                    if (!dependentId || !baseUrl || !modal || !field) return;
 
-            let $child = $('#' + dependentId);
-            $child.html('<option>Loading...</option>');
+                    let $child = $('#' + dependentId);
+                    $child.html('<option>Loading...</option>');
 
-            if (value) {
-                $.ajax({
-                    url: baseUrl,
-                    type: 'GET',
-                    data: {
-                        modal: modal,
-                        field: field,
-                        value: value
-                    },
-                    success: function (data) {
-                        let options = `<option value="">Select ${capitalize(modal)}</option>`;
-                        $.each(data, function (key, val) {
-                            options += `<option value="${key}">${val}</option>`;
+                    if (value) {
+                        $.ajax({
+                            url: baseUrl,
+                            type: 'GET',
+                            data: {
+                                modal: modal,
+                                field: field,
+                                value: value
+                            },
+                            success: function(data) {
+                                let options =
+                                    `<option value="">Select ${capitalize(modal)}</option>`;
+                                $.each(data, function(key, val) {
+                                    options += `<option value="${key}">${val}</option>`;
+                                });
+                                $child.html(options);
+                            },
+                            error: function() {
+                                $child.html('<option value="">Error loading</option>');
+                            }
                         });
-                        $child.html(options);
-                    },
-                    error: function () {
-                        $child.html('<option value="">Error loading</option>');
+                    } else {
+                        $child.html(`<option value="">Select ${capitalize(modal)}</option>`);
+                    }
+
+                    function capitalize(str) {
+                        return str.charAt(0).toUpperCase() + str.slice(1);
                     }
                 });
-            } else {
-                $child.html(`<option value="">Select ${capitalize(modal)}</option>`);
-            }
-
-            function capitalize(str) {
-                return str.charAt(0).toUpperCase() + str.slice(1);
-            }
-        });
-    });
-</script>
+            });
+        </script>
 
 
         <!-- Common Delete Confirmation Modal -->
@@ -1027,12 +1027,12 @@ modalTypes.forEach(modal => {
 
 
         <style>
-            .loader{
-                width:'70px';
-                height:'70px';
+            .loader {
+                width: '70px';
+                height: '70px';
 
             }
-            </style>
+        </style>
 </body>
 
 </html>

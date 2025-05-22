@@ -71,7 +71,7 @@ class StudentController extends Controller
 
             // Simulate request with modal_type = User
             $fakeRequest = new Request([
-                'modal_type' => 'Admission',
+                'modal_type' => 'Student',
                 'id' => $id,
             ]);
 

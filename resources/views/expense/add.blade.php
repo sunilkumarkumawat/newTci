@@ -101,45 +101,45 @@
                                                 ])
 
 
-                                            @include('commoninputs.inputs', [
-    'modal' => 'Country',
-    'name' => 'country_id',
-    'selected' => $data->country_id ?? null,
-    'label' => 'Country',
-    'required' => true,
-    'attributes' => [
-        'data-dependent' => 'state_id',
-        'data-url' => url('/get-dependent-options'),
-        'data-modal' => 'State',
-        'data-field' => 'country_id'
-    ]
-])
-                                         
+                                                @include('commoninputs.inputs', [
+                                                    'modal' => 'Country',
+                                                    'name' => 'country_id',
+                                                    'selected' => $data->country_id ?? null,
+                                                    'label' => 'Country',
+                                                    'required' => true,
+                                                    'attributes' => [
+                                                        'data-dependent' => 'state_id',
+                                                        'data-url' => url('/get-dependent-options'),
+                                                        'data-modal' => 'State',
+                                                        'data-field' => 'country_id',
+                                                    ],
+                                                ])
 
-@include('commoninputs.dependentInputs', [
-    'modal' => 'State',  
-    'name' => 'state_id',
-    'selected' => $data->state_id ?? null,
-    'label' => 'State',
-    'required' => true,
-    'isRequestSent' => isset($data->country_id),
-    'dependentId' => $data->country_id ?? null,
-     'attributes' => [
-        'data-dependent' => 'city_id',
-        'data-url' => url('/get-dependent-options'),
-        'data-modal' => 'City',
-        'data-field' => 'state_id'
-    ]
-])
-@include('commoninputs.dependentInputs', [
-    'modal' => 'City',
-    'name' => 'city_id',
-    'selected' => $data->city_id ?? null,
-    'label' => 'City',
-    'required' => true,
-    'isRequestSent' => isset($data->state_id),
-    'dependentId' => $data->state_id ?? null
-])
+
+                                                @include('commoninputs.dependentInputs', [
+                                                    'modal' => 'State',
+                                                    'name' => 'state_id',
+                                                    'selected' => $data->state_id ?? null,
+                                                    'label' => 'State',
+                                                    'required' => true,
+                                                    'isRequestSent' => isset($data->country_id),
+                                                    'dependentId' => $data->country_id ?? null,
+                                                    'attributes' => [
+                                                        'data-dependent' => 'city_id',
+                                                        'data-url' => url('/get-dependent-options'),
+                                                        'data-modal' => 'City',
+                                                        'data-field' => 'state_id',
+                                                    ],
+                                                ])
+                                                @include('commoninputs.dependentInputs', [
+                                                    'modal' => 'City',
+                                                    'name' => 'city_id',
+                                                    'selected' => $data->city_id ?? null,
+                                                    'label' => 'City',
+                                                    'required' => true,
+                                                    'isRequestSent' => isset($data->state_id),
+                                                    'dependentId' => $data->state_id ?? null,
+                                                ])
                                             </div>
                                             <div class="col-sm-6 col-12">
                                                 <div class="form-group">
