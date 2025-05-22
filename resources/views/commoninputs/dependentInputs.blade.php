@@ -3,8 +3,13 @@
     $label = $label ?? ucfirst(str_replace('_', ' ', $name));
     $selectedValue = old($name, $selected ?? '');
     $isRequired = $required ?? false;
-    $options = \App\Helpers\Helper::getModalData($modal ?? '');
+    $isRequestSent = $isRequestSent ?? false;
     $attributes = $attributes ?? [];
+
+    // Send second parameter only if request is to be sent
+    $options = $isRequestSent
+        ? \App\Helpers\Helper::getModalData($modal ?? '', $dependentId ?? null)
+        : [];
 @endphp
 
 <div class="form-group">

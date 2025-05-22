@@ -21,30 +21,33 @@ class Helper
         $getBranch = $getBranch->get();
         return $getBranch;
     }
-       public static function getModalData($modal)
-    {
-        // Build fully qualified class name if not already
-        if (!str_contains($modal, '\\')) {
-            $modal = 'App\\Models\\' . $modal;
-        }
-
-        // Check if class exists
-        if (!class_exists($modal)) {
-            return [];
-        }
-
-        try {
-            // Fetch all records from the model
-            $data = $modal::all();
-
-            // Build a simple id => name array
-            // Assumes each model has 'id' and 'name' fields
-            return $data->pluck('name', 'id')->toArray();
-        } catch (\Exception $e) {
-            // Log or handle error if needed
-            return [];
-        }
+   public static function getModalData($modal, $dependentId = null, $foreignKey = 'state_id')
+{
+    // Build fully qualified class name if not already
+    if (!str_contains($modal, '\\')) {
+        $modal = 'App\\Models\\' . $modal;
     }
+
+    // Check if class exists
+    if (!class_exists($modal)) {
+        return [];
+    }
+
+    try {
+        $query = $modal::query();
+
+        // If a dependent ID is provided, apply where condition
+        if ($dependentId !== null) {
+            $query->where($foreignKey, $dependentId);
+        }
+
+        // Build id => name array (assumes 'id' and 'name' fields exist)
+        return $query->pluck('name', 'id')->toArray();
+    } catch (\Exception $e) {
+        // Optional: log error
+        return [];
+    }
+}
 
     public static function getLibrary()
     {

@@ -65,4 +65,15 @@ public function commonEdit(Request $request,$modal,$id)
           
         return view($modal.'/add',compact('data'));
     }  
+public function getDependentOptions(Request $request)
+    {
+        $data =  $this->commonService->getDependentOptions($request);
+
+     return response()->json($data);
+     
+          
+    }  
+
+
+
 }

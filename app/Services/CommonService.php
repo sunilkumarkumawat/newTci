@@ -209,4 +209,23 @@ public function getAll(string $modal)
             ], 500);
         }
     }
+
+
+    public function getDependentOptions($request)
+{
+    $modal = $request->input('modal');    // e.g., City
+    $field = $request->input('field');    // e.g., state_id
+    $value = $request->input('value');    // selected state_id value
+
+
+  
+    if (!class_exists($modelClass = "\\App\\Models\\$modal")) {
+        return response()->json([], 400);
+    }
+
+
+    $options = $modelClass::where($field, $value)->pluck('name', 'id');
+
+    return $options;
+}
 }

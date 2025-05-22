@@ -272,52 +272,6 @@
             })
         </script>
 
-        <script>
-            $('#country_id').on('change', function(e) {
-                var baseurl = "{{ url('/') }}";
-                var country_id = $(this).val();
-                $.ajax({
-                    headers: {
-                        'X-CSRF-TOKEN': jQuery('meta[name="csrf-token"]').attr('content')
-                    },
-                    url: baseurl + '/countryData/' + country_id,
-                    success: function(data) {
-                        $("#state_id").html(data);
-                    }
-                });
-
-            });
-            $('#state_id').on('change', function(e) {
-                var baseurl = "{{ url('/') }}";
-                var state_id = $(this).val();
-                $.ajax({
-                    headers: {
-                        'X-CSRF-TOKEN': jQuery('meta[name="csrf-token"]').attr('content')
-                    },
-                    url: baseurl + '/stateData/' + state_id,
-                    success: function(data) {
-                        $("#city_id").html(data);
-                    }
-                });
-
-            });
-
-            $('#class_type_id').on('change', function(e) {
-                var baseurl = "{{ url('/') }}";
-                var class_type_id = $(this).val();
-                $.ajax({
-                    headers: {
-                        'X-CSRF-TOKEN': jQuery('meta[name="csrf-token"]').attr('content')
-                    },
-                    url: baseurl + '/subjectGetData/' + class_type_id,
-                    success: function(data) {
-                        $("#subject_id").html(data);
-                    }
-                });
-            });
-        </script>
-
-
 
         <script>
             var timer2 = "5:01";
@@ -963,7 +917,53 @@ modalTypes.forEach(modal => {
             });
         </script>
 
+        {{-- change dependent --}}
 
+<script>
+    $(document).ready(function () {
+        $('select[data-dependent]').on('change', function () {
+            let $parent = $(this);
+            let dependentId = $parent.data('dependent');
+            let baseUrl = $parent.data('url');
+            let modal = $parent.data('modal');
+            let field = $parent.data('field');
+            let value = $parent.val();
+
+            if (!dependentId || !baseUrl || !modal || !field) return;
+
+            let $child = $('#' + dependentId);
+            $child.html('<option>Loading...</option>');
+
+            if (value) {
+                $.ajax({
+                    url: baseUrl,
+                    type: 'GET',
+                    data: {
+                        modal: modal,
+                        field: field,
+                        value: value
+                    },
+                    success: function (data) {
+                        let options = `<option value="">Select ${capitalize(modal)}</option>`;
+                        $.each(data, function (key, val) {
+                            options += `<option value="${key}">${val}</option>`;
+                        });
+                        $child.html(options);
+                    },
+                    error: function () {
+                        $child.html('<option value="">Error loading</option>');
+                    }
+                });
+            } else {
+                $child.html(`<option value="">Select ${capitalize(modal)}</option>`);
+            }
+
+            function capitalize(str) {
+                return str.charAt(0).toUpperCase() + str.slice(1);
+            }
+        });
+    });
+</script>
 
 
         <!-- Common Delete Confirmation Modal -->
