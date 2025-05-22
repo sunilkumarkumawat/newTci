@@ -1,5 +1,5 @@
 @php
-$getBranch = Helper::getBranches();
+    $getBranch = Helper::getBranches();
 @endphp
 <style>
     .selectDesign {
@@ -76,7 +76,7 @@ $getBranch = Helper::getBranches();
         </li>
 
 
-      
+
 
 
         <!-- Language Switcher -->
@@ -91,13 +91,11 @@ $getBranch = Helper::getBranches();
         <!-- Branch Dropdown -->
         <li class="nav-item dropdown">
             <select class="selectDesign form-control-sm" id="headerBranchSelect">
-               @if(!empty($getBranch))
-               
-                @foreach($getBranch as $item)
-                
-                <option value='{{$item->id}}'>{{$item->branch_name ?? ''}}</option>
-                @endforeach
-            @endif
+                @if (!empty($getBranch))
+                   @foreach ($getBranch as $item)
+                        <option value='{{ $item->id }}'>{{ $item->branch_name ?? '' }}</option>
+                    @endforeach
+                @endif
             </select>
         </li>
 
