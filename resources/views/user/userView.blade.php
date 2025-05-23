@@ -74,7 +74,7 @@
                                         </tr>
                                     </thead>
                                     <tbody id="dataContainer-user" class='dataContainer'style="min-height:300px">
-                                        @include('commoninputs.loadskeletan',['loopCount'=>6])
+                                        @include('common.loadskeletan',['loopCount'=>6])
 
                                     </tbody>
                                 </table>

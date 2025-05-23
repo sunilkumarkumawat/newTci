@@ -8,7 +8,7 @@
 
     // Send second parameter only if request is to be sent
     $options = $isRequestSent
-        ? \App\Helpers\Helper::getModalData($modal ?? '', $dependentId ?? null, $foreignKey ?? null)
+        ? \App\Helpers\helper::getModalData($modal ?? '', $dependentId ?? null, $foreignKey ?? null)
         : [];
 @endphp
 

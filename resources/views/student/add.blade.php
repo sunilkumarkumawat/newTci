@@ -35,10 +35,10 @@
                                 <div class="text-center py-4 ">
                                     <div class="card-body  d-flex flex-column justify-content-center align-items-center">
                                         <img id="profilePreview"
-                                            src="{{ asset(env('IMAGE_SHOW_PATH') . 'Excel/excel.jpg') }}"
+                                            src="{{ asset('defaultImages/excel.jpg') }}"
                                             class="img-fluid mb-3  border-dark p-2 larger shadow"
                                             style="width: 120px; height: 120px; object-fit: cover; border-radius:10px"
-                                            alt="User Profile">
+                                            alt="Excel Upload">
 
                                         <div class="custom-file mt-3 col-md-8 col-12    ">
                                             <input type="file" name="profile_photo" class="form-control bg-white"

@@ -75,7 +75,7 @@
                                     </thead>
                                     <tbody id='dataContainer-student'
                                     class="dataContainer" style="min-height: 300px">
-                                         @include('commoninputs.loadskeletan',['loopCount'=>5])
+                                         @include('common.loadskeletan',['loopCount'=>5])
                                     </tbody>
                                 </table>
                             </div>

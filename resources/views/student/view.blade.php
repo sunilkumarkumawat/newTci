@@ -2,10 +2,16 @@
       @foreach ($data as $index => $studentAdd)
           <tr>
               <td>{{ $index + 1 }}</td>
-              <td class="text-center">
-                <img src="{{ $studentAdd->image ? asset($studentAdd->image) : asset('defaultImages/imageError.png') }}"
-                         class="profileImg" alt="Student Image"
-                         onerror="this.onerror=null; this.src='{{ asset('defaultImages/imageError.png') }}';" />
+              <td>
+                  @include('common.imageViewer', [
+                      'modal' => 'Student',
+                      'id' => $studentAdd->id,
+                      'field' => 'image',
+                      'defaultImage' => 'defaultImages/imageError.png',
+                      'alt' => 'Student Photo',
+                  ])
+
+
               </td>
               <td>{{ $studentAdd->student_name ?? '' }}</td>
               <td>{{ $studentAdd->mobile ?? '' }}</td>

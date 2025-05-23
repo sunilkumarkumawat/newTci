@@ -110,8 +110,7 @@
                                             </tr>
                                         </thead>
                                         <tbody id="dataContainer-branch" class='dataContainer'style="min-height:300px">
-                                            @include('commoninputs.loadskeletan',['loopCount'=>6])
-
+                                            @include('common.loadskeletan',['loopCount'=>6])
                                         </tbody>
                                     </table>
                                 </div>

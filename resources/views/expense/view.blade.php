@@ -12,10 +12,15 @@
             <td>{{ $expense->quantity ?? '' }}</td>
             <td>{{ $expense->rate ?? '' }}</td>
             <td>{{ $expense->total_amt ?? '' }}</td>
-            <td class="text-center">
-                <img src="{{ $expense->attachment ? asset($expense->attachment) : asset('defaultImages/attachment.png') }}"
-                    class="profileImg" alt="Expense File"
-                    onerror="this.onerror=null; this.src='{{ asset('defaultImages/attachment.png') }}';">
+            <td>
+                 @include('common.imageViewer', [
+                      'modal' => 'Expense',
+                      'id' => $expense->id,
+                      'field' => 'attachment',
+                      'defaultImage' => 'defaultImages/attachment.png',
+                      'alt' => 'Expense Photo',
+                  ])
+
             </td>
             <td>
                 <div class="btn-group">

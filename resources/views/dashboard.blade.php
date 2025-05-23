@@ -142,7 +142,7 @@
                                             </div>
                                             <div class="card-body">
                                                 <div class="row">
-                                                    <input type="hidden" name="modal_type" value="librarycabin">
+                                                    <input type="hidden" name="modal_type" value="LibraryCabin">
                                                     <div class="col-md-12 col-12">
 
                                                         <div class="cabin-grid">
@@ -164,7 +164,7 @@
                                             </div>
                                             <div class="card-body">
                                                 <div class="row">
-                                                    <input type="hidden" name="modal_type" value="librarylocker">
+                                                    <input type="hidden" name="modal_type" value="LibraryLocker">
                                                     <div class="col-md-12 col-12">
                                                         <div class="locker-grid">
                                                             <div class="row" id="dataContainer-librarylocker">

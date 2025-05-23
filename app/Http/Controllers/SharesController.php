@@ -63,7 +63,7 @@ public function commonEdit(Request $request,$modal,$id)
        ? $responseData->data
         : [];
           
-        return view($modal.'/add',compact('data'));
+       return view(strtolower($modal) . '/add', compact('data'));
     }  
 public function getDependentOptions(Request $request)
     {

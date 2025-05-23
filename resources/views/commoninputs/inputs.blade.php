@@ -3,7 +3,7 @@
     $label = $label ?? ucfirst(str_replace('_', ' ', $name));
     $selectedValue = old($name, $selected ?? '');
     $isRequired = $required ?? false;
-    $options = \App\Helpers\Helper::getModalData($modal ?? '');
+    $options = \App\Helpers\helper::getModalData($modal ?? '');
     $attributes = $attributes ?? [];
 @endphp
 
