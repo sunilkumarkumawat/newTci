@@ -140,37 +140,4 @@
         </section>
     </div>
 
-    <!-- The Modal (keep the same) -->
-    <div class="modal" id="Modal_id">
-        <div class="modal-dialog">
-            <div class="modal-content" style="background: #555b5beb;">
-                <div class="modal-header">
-                    <h4 class="modal-title text-white">Delete Confirmation</h4>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"><i class="fa fa-times"
-                            aria-hidden="true"></i></button>
-                </div>
-                <form action="item_delete" method="post">
-                    <div class="modal-body">
-                        <input type="hidden" id="delete_id" name="delete_id">
-                        <input type="hidden" id="delete_type" name="delete_type">
-                        <h5 class="text-white">Are you sure you want to delete?</h5>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-default waves-effect remove-data-from-delete-form"
-                            data-bs-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-danger waves-effect waves-light">Delete</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-
-    <!-- Success message alert -->
-    <div class="alert alert-success alert-dismissible fade" id="successAlert" role="alert"
-        style="position: fixed; top: 20px; right: 20px; z-index: 9999; display: none;">
-        <strong>Success!</strong> <span id="successMessage"></span>
-        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-        </button>
-    </div>
-@endsection
+   @endsection

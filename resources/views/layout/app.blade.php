@@ -131,10 +131,10 @@
         @include('layout.footer')
         <script>
             /*$.ajaxSetup({
-                                                                                                                                                                                                                                                                                                                                    headers: {
-                                                                                                                                                                                                                                                                                                                                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                                                                                                                                                                                                                                                                                                                                    }
-                                                                                                                                                                                                                                                                                                                                });*/
+                                                                                                                                                                                                                                                                                                                                                            headers: {
+                                                                                                                                                                                                                                                                                                                                                                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                                                                                                                                                                                                                                                                                                                                                            }
+                                                                                                                                                                                                                                                                                                                                                        });*/
             //var URL  = "{{ url('/') }}";
         </script>
 
@@ -432,18 +432,18 @@
 
                     $('.dataContainer').each(function() {
                         const $row = $(`
-    <tr class="placeholder-row" style="display:none">
-      <td class="placeholder-wave" style="padding:16px">
-        <div class="placeholder rounded" style="width:99%; height:20px; background:#0000001f; padding:10px"></div>
-      </td>
-      <td class="placeholder-wave" style="padding:16px">
-        <div class="placeholder rounded" style="width:99%; height:20px; background:#00000038"></div>
-      </td>
-      <td class="placeholder-wave" style="padding:16px" colspan="100%">
-        <div class="placeholder rounded" style="width:99%; height:20px; background:#00000045"></div>
-      </td>
-    </tr>
-  `);
+                                    <tr class="placeholder-row" style="display:none">
+                                    <td class="placeholder-wave" style="padding:16px">
+                                        <div class="placeholder rounded" style="width:99%; height:20px; background:#0000001f; padding:10px"></div>
+                                    </td>
+                                    <td class="placeholder-wave" style="padding:16px">
+                                        <div class="placeholder rounded" style="width:99%; height:20px; background:#00000038"></div>
+                                    </td>
+                                    <td class="placeholder-wave" style="padding:16px" colspan="100%">
+                                        <div class="placeholder rounded" style="width:99%; height:20px; background:#00000045"></div>
+                                    </td>
+                                    </tr>
+                                `);
 
                         // Prepend and fade in
                         $(this).prepend($row);
@@ -722,6 +722,11 @@
                                         message = 'Amount is required';
                                     }
                                     break;
+                                case 'plan_name':
+                                    if (value === '') {
+                                        message = 'Plan Name is required';
+                                    }
+                                    break;
                             }
 
 
@@ -748,7 +753,6 @@
                     }
 
                     const $form = $(this);
-
                     if (!validateForm($form)) return;
                     const endpoint = "{{ url('/') }}/createCommon";
 
@@ -762,11 +766,11 @@
                         contentType: false, // Required for FormData
                         success: function(response) {
 
-                            if(response.method == 'update')
-                        {
-                            window.location.href = "{{url('/')}}/"+(response.modal).toLowerCase();
-                            return
-                        }
+                            if (response.method == 'update') {
+                                window.location.href = "{{ url('/') }}/" + (response.modal)
+                                    .toLowerCase();
+                                return
+                            }
                             console.log(response);
                             $form[0].reset();
                             toastr.success('Form Submitted Successfully');
