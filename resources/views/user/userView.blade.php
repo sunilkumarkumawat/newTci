@@ -57,7 +57,7 @@
                             </div>
 
                             <div class="table-responsive">
-                                <table class="table table-bordered table-striped mt-4">
+                                <table id='dataContainer' class="table table-bordered table-striped mt-4">
                                     <input type='hidden' value="User" name='modal_type' />
                                     <thead>
                                         <tr class="bg-light">

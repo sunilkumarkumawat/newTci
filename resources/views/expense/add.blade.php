@@ -142,7 +142,7 @@
                             </div>
                             <div class="card-body">
                                 <div class="table-responsive">
-                                    <table class="table table-bordered table-striped">
+                                    <table id='dataContainer'class="table table-bordered table-striped">
                                         <thead>
                                             <tr class="bg-light">
                                                 <th>Sr.No</th>

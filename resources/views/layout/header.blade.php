@@ -69,66 +69,42 @@
       </li> -->
 
         <!-- Student View Button -->
-        <li class="nav-item">
+        <!-- <li class="nav-item">
             <a href="{{ url('studentView') }}">
                 <button type="button" class="btn btn-primary btn-head">Student View</button>
             </a>
-        </li>
+        </li> -->
 
 
 
 
-
-        <!-- Language Switcher -->
-        {{-- <li class="nav-item dropdown">
-            <select class="selectDesign form-control-sm">
-                <option selected>English</option>
-                <option>Hindi</option>
-                <option>French</option>
-            </select>
-        </li> --}}
-
-        <!-- Branch Dropdown -->
-        <li class="nav-item dropdown">
-            <select class="selectDesign form-control-sm" id="headerBranchSelect">
-                @if (!empty($getBranch))
-                   @foreach ($getBranch as $item)
-                        <option value='{{ $item->id }}'>{{ $item->branch_name ?? '' }}</option>
-                    @endforeach
-                @endif
-            </select>
-        </li>
 
         <!-- Session Dropdown -->
-        {{-- <li class="nav-item dropdown">
-            <select class="selectDesign form-control-sm">
-                <option value="1">2023 - 2024</option>
-                <option value="2">2024 - 2025</option>
-                <option value="3">2025 - 2026</option>
-            </select>
-        </li> --}}
+<li class="nav-item dropdown">
+    <label for="sessionSelect" class="mr-1 mb-0" style="font-weight: 500; color:black">Session</label>
+    <select id="sessionSelect" class="selectDesign form-control-sm">
+        <option value="1">2023 - 2024</option>
+        <option value="2">2024 - 2025</option>
+        <option value="3">2025 - 2026</option>
+    </select>
+</li>
 
-        <!-- Refresh -->
-        {{-- <li class="nav-item dropdown">
-            <a href="#">
-                <button type="button" class="btn btn-success btn-head">Refresh!</button>
-            </a>
-        </li> --}}
+      
 
         <!-- User Profile -->
         <li class="nav-item dropdown">
             <a class="user-panel  dropdown-toggle" data-toggle="dropdown" href="#">
-                <img class="img-circle" src="{{ asset(env('IMAGE_SHOW_PATH') . 'default_user_image.jpg') }}"
+                <img class="img-circle" src="{{ asset('/defaultImages/user.png') }}"
                     alt="User Image">
             </a>
             <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
                 <div class="dropdown-item border-bottom">
                     <div class="d-flex align-items-center">
-                        <img class="mr-3" src="{{ asset(env('IMAGE_SHOW_PATH') . 'default_user_image.jpg') }}"
+                        <img class="mr-3" src="{{ asset('/defaultImages/user.png') }}"
                             alt="User Image" width="50">
                         <div>
-                            <h5 class="mb-0">John Doe</h5>
-                            <p class="mb-0">Admin</p>
+                            <h5 class="mb-0">{{Auth::user()->first_name ?? ''}} {{Auth::user()->last_name ?? ''}}</h5>
+                            <p class="mb-0">{{Auth::user()->role_name ?? ''}}</p>
                         </div>
                     </div>
                 </div>

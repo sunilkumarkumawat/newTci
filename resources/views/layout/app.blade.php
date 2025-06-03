@@ -34,7 +34,29 @@
     <link rel="stylesheet" href="https://adminlte.io/themes/v3/plugins/summernote/summernote-bs4.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
     <script src="{{ URL::asset('public/assets/school/js/jquery.min.js') }}"></script>
+    <!-- <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css"> -->
+<script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
     <!--<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>-->
+
+
+
+
+
+
+
+<!-- Buttons extension -->
+<link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.4.1/css/buttons.dataTables.min.css">
+<script src="https://cdn.datatables.net/buttons/2.4.1/js/dataTables.buttons.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.html5.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.print.min.js"></script>
+
+<!-- JSZip and pdfmake for Excel/PDF export -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/pdfmake.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/vfs_fonts.js"></script>
+
+
+
 </head>
 <style>
     .centered_flex {
@@ -420,10 +442,10 @@
                     }
                 });
 
-                $('#headerBranchSelect').on('change', function() {
-                    const selectedBranchId = $(this).val();
-                    $('#branch_id').val(selectedBranchId); // sync to form
-                });
+                // $('#headerBranchSelect').on('change', function() {
+                //     const selectedBranchId = $(this).val();
+                //     $('#branch_id').val(selectedBranchId); // sync to form
+                // });
 
                 // Apply to multiple forms
                 $('#createCommon, .createCommon').on('submit', function(e) {
@@ -457,9 +479,9 @@
                         }, 500); // Adjust delay as needed (1500ms = 1.5s)
                     });
 
-                    // Get branch_id just before submission
-                    const selectedBranchId = $('#headerBranchSelect').val();
-                    $('#branch_id').val(selectedBranchId); // set it again
+                    // // Get branch_id just before submission
+                    // const selectedBranchId = $('#headerBranchSelect').val();
+                    // $('#branch_id').val(selectedBranchId); // set it again
 
 
                     function validateForm($form) {
@@ -788,37 +810,69 @@
 
 
 
-                function dataGet() {
-                    var baseUrl = "{{ url('/') }}"
-                    const modalTypes = [];
+              function dataGet() {
+    var baseUrl = "{{ url('/') }}";
+    const modalTypes = [];
 
-                    $('[name="modal_type"]').each(function() {
-                        const val = $(this).val();
-                        if (val && !modalTypes.includes(val)) {
-                            modalTypes.push(val);
-                        }
-                    });
+    $('[name="modal_type"]').each(function () {
+        const val = $(this).val();
+        if (val && !modalTypes.includes(val)) {
+            modalTypes.push(val);
+        }
+    });
+
+    modalTypes.forEach(modal => {
+        const containerId = `#dataContainer-${modal.toLowerCase()}`;
+        const url = `${baseUrl}/commonView/${modal}`;
+
+        $.get(url, function (data) {
+            const $container = $(containerId);
+
+            $container.fadeOut(100, function () {
+                $container.html(data).fadeIn(200);
+
+                // Wait for new content to be inserted before initializing DataTable
+                // const table = $container.find('table');
+                const table = $("#dataContainer");
 
 
 
-                    modalTypes.forEach(modal => {
-                        const containerId = `#dataContainer-${modal.toLowerCase()}`;
-                        const url = `${baseUrl}/commonView/${modal}`;
-
-                        $.get(url, function(data) {
-                            const $container = $(containerId);
-
-                            // Hide, update, then fade in
-                            $container.fadeOut(100, function() {
-                                $container.html(data).fadeIn(200);
-                            });
-
-                            toastr.success(`${modal} data fetched successfully!`);
-                        }).fail(function(xhr) {
-                            console.error(`Error loading ${modal}: ${xhr.status} ${xhr.statusText}`);
-                        });
-                    });
+                // Check if a DataTable is already initialized, destroy it
+                if ($.fn.DataTable.isDataTable(table)) {
+                    table.DataTable().destroy();
                 }
+
+                // Initialize DataTable with pagination
+                table.DataTable({
+                    pageLength: 10,
+                    lengthChange: true,
+                    searching: true,
+                    ordering: true,
+                    paging: true,
+                    dom: 'Bfrtip',
+                    buttons: [
+                        {
+                            extend: 'excelHtml5',
+                            text: 'Export to Excel',
+                            title: `${modal} Report`
+                        },
+                        {
+                            extend: 'pdfHtml5',
+                            text: 'Export to PDF',
+                            orientation: 'landscape',
+                            pageSize: 'A4',
+                            title: `${modal} Report`
+                        }
+                    ]
+                });
+
+                toastr.success(`${modal} data fetched successfully!`);
+            });
+        }).fail(function (xhr) {
+            console.error(`Error loading ${modal}: ${xhr.status} ${xhr.statusText}`);
+        });
+    });
+}
                 dataGet();
 
 
@@ -853,6 +907,16 @@
             });
         </script>
 
+  {{-- permission giving area --}}
+        <script>
+$(document).on('click', '.open-permission-modal', function () {
+    const roleId = $(this).data('id');
+ const url = `{{ url('/set-permission-view') }}/${roleId}`;
+
+    $('#permissionContainer').load(url);
+});
+
+</script>
 
         {{-- convert excel data into array --}}
         <script>
@@ -984,6 +1048,38 @@
             });
         </script>
 
+  {{-- change selected branch --}}
+<script>
+
+$('#headerBranchSelect').on('change', function () {
+    const selectedBranchId = $(this).val();
+
+    if (!selectedBranchId) return; // do nothing if empty
+
+    $.ajax({
+        url: "{{ url('/') }}/set-current-branch",
+        type: "POST",
+        data: {
+            currentSelectedBranch: selectedBranchId,
+            _token: "{{ csrf_token() }}"
+        },
+        success: function (response) {
+            if (response.status === 'success') {
+                toastr.success('Branch changed successfully');
+             
+                location.reload(); 
+            } else {
+                toastr.error('Failed to change branch');
+            }
+        },
+        error: function (xhr) {
+            console.error(xhr.responseText);
+            toastr.error('Error while updating branch');
+        }
+    });
+});
+
+</script>
 
         <!-- Common Delete Confirmation Modal -->
         <div class="modal fade" id="deleteConfirmModal" tabindex="-1" aria-labelledby="deleteModalLabel"

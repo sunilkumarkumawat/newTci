@@ -10,7 +10,7 @@
                             <div class="card-header bg-primary">
                                 <div class="card-title">
                                     <h4>
-                                        <i class="fa fa-book"></i> &nbsp; Library Admin Dashboard
+                                        <i class="fa fa-book"></i> &nbsp; Admin Dashboard
                                     </h4>
                                 </div>
                                 <div class="card-tools">
@@ -18,8 +18,8 @@
                                 </div>
                             </div>
                             <div class="card-body ">
-                                {{-- book  --}}
-                                <div class="row mb-3">
+                            
+                                <!-- <div class="row mb-3">
                                     <div class="col-md-9 col-12">
                                         <div class="card">
                                             <div class="card-header bg-primary">
@@ -128,55 +128,11 @@
                                     </div>
 
 
-                                </div>
+                                </div> -->
 
 
-                                {{-- cabin/locker management --}}
-                                <div class="row mb-3">
-                                    <div class="col-md-6">
-                                        <div class="card">
-                                            <div class="card-header bg-light">
-                                                <div class="card-title">
-                                                    <h4>Cabin Management</h4>
-                                                </div>
-                                            </div>
-                                            <div class="card-body">
-                                                <div class="row">
-                                                    <input type="hidden" name="modal_type" value="LibraryCabin">
-                                                    <div class="col-md-12 col-12">
-
-                                                        <div class="cabin-grid">
-                                                            <div class="row" id="dataContainer-librarycabin">
-
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-6 col-12">
-                                        <div class="card">
-                                            <div class="card-header bg-light">
-                                                <div class="card-title">
-                                                    <h4>Locker Management</h4>
-                                                </div>
-                                            </div>
-                                            <div class="card-body">
-                                                <div class="row">
-                                                    <input type="hidden" name="modal_type" value="LibraryLocker">
-                                                    <div class="col-md-12 col-12">
-                                                        <div class="locker-grid">
-                                                            <div class="row" id="dataContainer-librarylocker">
-
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
+                           
+                           
                             </div>
                         </div>
 

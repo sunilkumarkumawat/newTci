@@ -16,7 +16,7 @@
                  <td>{{ $user->first_name ?? '' }} {{ $user->last_name ?? '' }}</td>
                  <td>{{ $user->mobile ?? '' }}</td>
                  <td>{{ $user->email ?? '' }}</td>
-                 <td>{{ $user->gender ?? '' }}</td>
+                 <td>{{ $user->gender_id ?? '' }}</td>
                  <td>{{ $user->dob ?? '' }}</td>
                  <td>
                      <button

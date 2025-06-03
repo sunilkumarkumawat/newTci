@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Services\CommonService;
+use Auth;
+use Illuminate\Support\Facades\Artisan;
 
 class SharesController extends Controller
 {
@@ -17,6 +19,8 @@ class SharesController extends Controller
     // List branches
     public function commonView(Request $request)
     {
+
+      
 
         $modal = $request->modal_type ?? '';
         $data = $this->commonService->getAll($modal);
@@ -73,6 +77,44 @@ public function getDependentOptions(Request $request)
      
           
     }  
+public function setPermissionView(Request $request)
+{
+
+ $data = null;
+        return view('permission.view',compact('data'));
+
+}
+public function setCurrentBranch(Request $request)
+{
+    $branchId = $request->input('currentSelectedBranch');
+
+    if ($branchId) {
+        // Set session
+        session(['currentSelectedBranch' => $branchId]);
+
+        // Find and update user
+        $user = \App\Models\User::find(Auth::id());
+
+        if ($user) {
+            $user->selectedBranchId = $branchId;
+            $user->save();
+
+            // Re-login user with updated info
+            Auth::login($user);
+
+              Artisan::call('cache:clear');
+            Artisan::call('config:clear');
+            Artisan::call('route:clear');
+            Artisan::call('view:clear');
+
+            return response()->json(['status' => 'success']);
+        }
+
+        return response()->json(['status' => 'error', 'message' => 'User not found']);
+    }
+
+    return response()->json(['status' => 'error', 'message' => 'No branch selected']);
+}
 
 
 

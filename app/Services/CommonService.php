@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Cache;
+use Auth;
 class CommonService
 {
 public function createCommon($request)
@@ -149,22 +150,39 @@ public function getAll(string $modal)
         throw new \InvalidArgumentException('modal_type is required');
     }
 
+    // Save the base model name for later comparisons
+    $baseModalName = $modal;
+
+    // Append full namespace if not provided
     if (!str_contains($modal, '\\')) {
         $modal = 'App\\Models\\' . $modal;
     }
 
+    // Check if the model class exists
     if (!class_exists($modal)) {
         throw new \InvalidArgumentException('Invalid modal type');
     }
 
     $cacheKey = 'getAll_' . class_basename($modal);
 
-    // Cache data for 60 minutes, ordered by id descending
-    return Cache::remember($cacheKey, 60, function () use ($modal) {
-        return $modal::orderBy('id', 'desc')->get();
+    return Cache::remember($cacheKey, 60, function () use ($modal, $baseModalName) {
+        $query = $modal::orderBy('id', 'desc');
+
+        // Skip branch filtering for 'branch' and 'role' models
+        if (!in_array($baseModalName, ['Branch', 'Role'])) {
+            if (Auth::check()) {
+                $user = Auth::user();
+                if ($user->role_id != 1) {
+                    $query->where('branch_id', $user->selectedBranchId);
+                } elseif ($user->role_id == 1 && $user->selectedBranchId !== null && $user->selectedBranchId !== '' && $user->selectedBranchId != -1) {
+                    $query->where('branch_id', $user->selectedBranchId);
+                }
+            }
+        }
+
+        return $query->get();
     });
 }
-
     private function handlePasswordField(&$data)
     {
         if (isset($data['password'])) {

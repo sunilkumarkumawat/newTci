@@ -78,14 +78,29 @@
                                         <input type='hidden' value='{{ $data->id }}' name='id' />
                                     @endif
                                     <input type='hidden' value='User' name='modal_type' />
-                                    <input type='hidden' id="branch_id" name='branch_id'
-                                        value="{{ old('branch_id', $data->branch_id ?? '') }}" />
+                                  
                                     <div class="card-body">
                                         <div class="bg-item border p-3 rounded">
                                             <!-- Step 1: Basic Details -->
                                             <div id="step-1" class="wizard-step">
                                                 <h5><i class="fa fa-user"></i> Basic Details</h5>
                                                 <div class="row">
+                                                 @if(Auth::user()->selectedBranchId != '-1')
+    <input type='hidden' id="branch_id" name='branch_id'
+           value="{{ old('branch_id', $data->branch_id ?? Auth::user()->selectedBranchId) }}" />
+@else
+    <div class="col-md-4 col-12">
+        <div class="form-group">
+            @include('commoninputs.inputs',[
+                'modal' => 'Branch',
+                'name' => 'branch_id',
+                'selected' => $isEdit ? ($data->branch_id ?? null) : Auth::user()->selectedBranchId,
+                'label' => 'Branch',
+                'required' => true,
+            ])
+        </div>
+    </div>
+@endif
                                                     <div class="col-md-4 col-12">
                                                         <div class="form-group">
                                                             <label for="first_name">First Name <span
@@ -250,14 +265,7 @@
                                                             'required' => true,
                                                         ])
                                                     </div>
-                                                    <div class="col-md-4">
-                                                        <div class="form-group">
-                                                            <label>Salary</label>
-                                                            <input type="text" class="form-control"
-                                                                placeholder="Salary" name="salary"
-                                                                value="{{ old('salary', $data->salary ?? '') }}">
-                                                        </div>
-                                                    </div>
+                                               
                                                     <div class="col-md-4">
                                                         <div class="form-group">
                                                             <label>Photo</label>

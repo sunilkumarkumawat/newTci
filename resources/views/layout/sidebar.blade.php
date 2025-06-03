@@ -6,8 +6,8 @@
      <!-- Brand Logo -->
      <a href="/">
          <div class="top_brand_section">
-             <img src={{ asset(env('IMAGE_SHOW_PATH') . 'Sidebar\brand-logo.png') }} alt="Brand Logo" class="brand_img">
-             <p class="brand_title">Rukmani Software School</p>
+             <img src={{ asset('/defaultImages/organization/logo.jpeg') }} alt="Brand Logo" class="brand_img">
+             <p class="brand_title">Tci Edu Hub</p>
          </div>
      </a>
 
@@ -220,6 +220,7 @@
      .brand_img {
          width: 45px;
          height: 40px;
+         border-radius: 50%;
      }
 
      .brand_title {

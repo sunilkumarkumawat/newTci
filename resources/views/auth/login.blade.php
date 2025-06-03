@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="csrf-token" content="{{ csrf_token() }}">
-  <title>Library | Dashboard</title>
+  <title>Tci | Dashboard</title>
 
   <!-- Google Font: Source Sans Pro -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
@@ -47,13 +47,21 @@
   </style>
 </head>
 
-<body class="hold-transition login-page" style="background-image: url('https://images.unsplash.com/photo-1599725427295-6ed79ff8dbef?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8c2Nob29sJTIwYnVpbGRpbmd8ZW58MHx8MHx8&w=1000&q=80'); background-repeat: no-repeat; background-size: 100% 100%;">
+<body class="hold-transition login-page" style="position: relative; margin: 0;">
+  <div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+              background-image: url('{{ asset('/defaultImages/organization/banner.jpg') }}');
+              background-repeat: no-repeat; background-size: 100% 100%; z-index: -2;">
+  </div>
 
-<div class="login-box">
+  <div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+              background-color: rgba(0, 0, 0, 0.4); z-index: -1;">
+  </div>
+
+<div class="login-box ">
   <div class="card card1 mt-4">
-    <div class="card-body login-card-body">
-      <center><img src="{{ asset('public/images/header-logo.png') }}" width="60%"></center>
-      <h1 class="pt-3 pb-3 text-center">Welcome to School</h1>
+    <div class="card-body login-card-body  ">
+      <center  class='pt-4'><img src="{{ asset('/defaultImages/organization/logo.jpeg') }}"style="border-radius:100px;opacity:0.8"  width="60%"></center>
+      <h3 class="pt-3 pb-3 text-center">Welcome to Tci Edu.Hub</h3>
 
       <!-- ✅ AJAX Login Form -->
       <form id="loginForm">
@@ -78,16 +86,16 @@
 
         <div class="row">
           <div class="col-10">
-            <div class="icheck-primary">
+            <!-- <div class="icheck-primary">
               <input type="checkbox" id="remember">
               <label for="remember">I'm a Student</label>
-            </div>
+            </div> -->
           </div><br><br>
           <div class="col-4"></div>
           <div class="col-4">
             <button type="submit" class="btn btn-primary btn-block">Sign In</button>
           </div>
-          <div class="col-4"></div>
+         
         </div>
       </form>
 
