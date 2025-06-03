@@ -124,7 +124,7 @@ Route::middleware(['auth'])->group(function () {
 
     // Route::match(['get', 'post'], 'commonView/{modal_type}', 'CommonController@commonView');
 
-
+    Route::match(['get', 'post'], 'role/permission/{id}', 'SharesController@savePermission');
 
 
 

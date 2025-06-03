@@ -1,5 +1,4 @@
 @php
-    $getBranch = Helper::getBranches();
     $sidebarData = Helper::getSidebar();
 @endphp
 <style>
@@ -62,7 +61,7 @@
         @foreach($sidebarData as $index => $menu)
             @if(!empty($menu['status']))
                 <a class="dropdown-item sidebar-module-link" href="#" data-module-index="{{ $index }}">
-                    {{ $menu['title'] }}
+                   <i class="{{ $menu['icon'] }}"></i> &nbsp; {{ $menu['title'] }}
                 </a>
             @endif
         @endforeach
@@ -112,14 +111,30 @@
         <!-- User Profile -->
         <li class="nav-item dropdown">
             <a class="user-panel  dropdown-toggle" data-toggle="dropdown" href="#">
-                <img class="img-circle" src="{{ asset('/defaultImages/user.png') }}"
-                    alt="User Image">
+                <!-- <img class="img-circle" src="{{ asset('/defaultImages/user.png') }}"
+                    alt="User Image"> -->
+                    @include('common.imageViewer', [
+                        'modal' => 'User',
+                        'id' => Auth::user()->id,
+                        'field' => 'image',
+                        'defaultImage' => 'defaultImages/user.png',
+                        'alt' => 'User Image',
+                        'class' => 'img-circle',
+                    ])
             </a>
             <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
                 <div class="dropdown-item border-bottom">
                     <div class="d-flex align-items-center">
-                        <img class="mr-3" src="{{ asset('/defaultImages/user.png') }}"
-                            alt="User Image" width="50">
+                        <!-- <img class="mr-3" src="{{ asset('/defaultImages/user.png') }}"
+                            alt="User Image" width="50"> -->
+                            @include('common.imageViewer', [
+                                'modal' => 'User',
+                                'id' => Auth::user()->id,
+                                'field' => 'image',
+                                'defaultImage' => 'defaultImages/user.png',
+                                'alt' => 'User Image',
+                                'class' => 'mr-2'
+                            ])
                         <div>
                             <h5 class="mb-0">{{Auth::user()->first_name ?? ''}} {{Auth::user()->last_name ?? ''}}</h5>
                             <p class="mb-0">{{Auth::user()->role_name ?? ''}}</p>

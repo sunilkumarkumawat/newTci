@@ -21,6 +21,36 @@ use Illuminate\Http\Request;
 class SettingsController extends Controller
 
 {
+
+    public function settingView()
+    {
+        try {
+            // Create a new instance of the API controller
+            $api = new ApiController();
+
+            // Simulate request with modal_type = User
+            $fakeRequest = new Request([
+                'modal_type' => 'Setting',
+            ]);
+
+            // Call the API method
+            $response = $api->getUsersData($fakeRequest);
+
+            // Extract data from JSON response
+            $responseData = $response->getData();
+
+            // Check if data exists and is not empty
+            $data = isset($responseData->data) && !empty($responseData->data) ? $responseData->data : [];
+            // Return view with users
+            return view('setting.view', ['data' => $data]);
+        } catch (\Exception $e) {
+            // Log the error and show fallback view or message
+
+            return view('sessing.view', ['data' => []])
+                ->with('error', 'Failed to load setting data.');
+        }
+    }
+
     public function settings_dashboard (){
     
         return view('settings.settings_dashboard');
