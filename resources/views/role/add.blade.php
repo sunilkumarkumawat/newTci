@@ -80,8 +80,19 @@
                             </div>
                         </div>
                     </div>
-                <div class="col-md-12" id="permissionContainer">
-
+                <div class="col-md-12 p-0" id="permissionContainer">
+                    <div class="col-md-12 col-12">
+                        <div class="card card-outline card-orange">
+                            <div class="card-header bg-light">
+                                <div class="card-title">
+                                    <h4><i class="fa fa-user-circle"></i> &nbsp;Assign Permission</h4>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 </div>
             </div>

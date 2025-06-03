@@ -171,9 +171,9 @@
                                                     <div class="col-md-4">
                                                         <div class="form-group">
                                                             <label for="dob">DOB <span
-                                                                    class="text-danger">*</span></label>
+                                                                    class="text-danger"></span></label>
                                                             <input type="date" class="form-control" name="dob"
-                                                                id="dob" data-required="true"
+                                                                id="dob" data-required="false"
                                                                 value="{{ old('dob', $data->dob ?? '') }}">
                                                         </div>
                                                     </div>
@@ -181,29 +181,29 @@
                                                     <div class="col-md-4">
                                                         @include('commoninputs.inputs',[
                                                             'modal' => 'Gender',
-                                                            'name' => 'gender_id',
-                                                            'selected' => $data->gender_id ?? null,
+                                                            'name' => 'gender',
+                                                            'selected' => $data->gender ?? null,
                                                             'label' => 'Gender',
-                                                            'required' => true,
+                                                            'required' => false,
                                                         ])
                                                     </div>
 
                                                     <div class="col-md-4">
                                                         <div class="form-group">
                                                             <label for="father_name">Father
-                                                                Name <span class="text-danger">*</span></label>
+                                                                Name <span class="text-danger"></span></label>
                                                             <input type="text" class="form-control" name="father_name"
                                                                 id="father_name" placeholder="Father Name"
-                                                                data-required="true"
+                                                                data-required="false"
                                                                 value="{{ old('father_name', $data->father_name ?? '') }}">
                                                         </div>
                                                     </div>
 
-                                                    <div class="col-md-4">
+                                                    <!-- <div class="col-md-4">
                                                         @include('commoninputs.inputs', [
                                                             'modal' => 'Country', // This decides the data source
                                                             'name' => 'country_id',
-                                                            'selected' => $data->country_id ?? null,
+                                                            'selected' => 101,
                                                             'label' => 'Country',
                                                             'required' => true,
                                                             'attributes' => [
@@ -213,7 +213,7 @@
                                                                 'data-field' => 'country_id',
                                                             ],
                                                         ])
-                                                    </div>
+                                                    </div> -->
 
                                                     <div class="col-md-4">
                                                         @include('commoninputs.dependentInputs', [
@@ -221,9 +221,9 @@
                                                             'name' => 'state_id',
                                                             'selected' => $data->state_id ?? null,
                                                             'label' => 'State',
-                                                            'required' => true,
-                                                            'isRequestSent' => isset($data->country_id),
-                                                            'dependentId' => $data->country_id ?? null,
+                                                            'required' => false,
+                                                            'isRequestSent' => 101,
+                                                            'dependentId' => 101,
                                                             'foreignKey' => 'country_id',
                                                             'attributes' => [
                                                                 'data-dependent' => 'city_id',
@@ -239,7 +239,7 @@
                                                             'name' => 'city_id',
                                                             'selected' => $data->city_id ?? null,
                                                             'label' => 'City',
-                                                            'required' => true,
+                                                            'required' => false,
                                                             'isRequestSent' => isset($data->state_id),
                                                             'dependentId' => $data->state_id ?? null,
                                                             'foreignKey' => 'state_id',
@@ -248,10 +248,10 @@
                                                     <div class="col-md-4">
                                                         <div class="form-group">
                                                             <label for="address">Address <span
-                                                                    class="text-danger">*</span></label>
+                                                                    class="text-danger"></span></label>
                                                             <input type="text" class="form-control"
                                                                 placeholder="Address" name="address" id="address"
-                                                                data-required="true"
+                                                                data-required="false"
                                                                 value="{{ old('address', $data->address ?? '') }}">
                                                         </div>
                                                     </div>
