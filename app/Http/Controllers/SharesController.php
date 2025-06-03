@@ -44,6 +44,12 @@ class SharesController extends Controller
         return view('expense.add',compact('data'));
     }
     
+    public function setting()
+    {
+        $data = null;
+        return view('setting.add',compact('data'));
+    }
+
      public function createCommon(Request $request)
     {
         return $this->commonService->createCommon($request);

@@ -49,6 +49,7 @@ Route::middleware(['auth'])->group(function () {
      Route::match(['get', 'post'], 'branch', 'SharesController@branch');
      Route::match(['get', 'post'], 'role', 'SharesController@role');
      Route::match(['get', 'post'], 'expense', 'SharesController@expense');
+     Route::match(['get', 'post'], 'setting', 'SharesController@setting');
     Route::match(['get', 'post'], 'commonView/{modal_type}', 'SharesController@commonView');
     Route::match(['get', 'post'], 'common-status-change/{model}/{id}', 'SharesController@changeStatusCommon');
     Route::match(['delete'], 'common-delete/{model}/{id}', 'SharesController@deleteCommon');
