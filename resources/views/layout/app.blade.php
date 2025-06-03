@@ -1,5 +1,5 @@
 @php
-    $setting = DB::table('settings')->get()->first();
+$setting = DB::table('settings')->get()->first();
 @endphp
 
 <!DOCTYPE html>
@@ -35,7 +35,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
     <script src="{{ URL::asset('public/assets/school/js/jquery.min.js') }}"></script>
     <!-- <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css"> -->
-<script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
     <!--<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>-->
 
 
@@ -44,16 +44,16 @@
 
 
 
-<!-- Buttons extension -->
-<link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.4.1/css/buttons.dataTables.min.css">
-<script src="https://cdn.datatables.net/buttons/2.4.1/js/dataTables.buttons.min.js"></script>
-<script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.html5.min.js"></script>
-<script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.print.min.js"></script>
+    <!-- Buttons extension -->
+    <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.4.1/css/buttons.dataTables.min.css">
+    <script src="https://cdn.datatables.net/buttons/2.4.1/js/dataTables.buttons.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.html5.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.print.min.js"></script>
 
-<!-- JSZip and pdfmake for Excel/PDF export -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/pdfmake.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/vfs_fonts.js"></script>
+    <!-- JSZip and pdfmake for Excel/PDF export -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/pdfmake.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/vfs_fonts.js"></script>
 
 
 
@@ -135,7 +135,7 @@
 
 
 @php
-    $cur_route = Route::getFacadeRoot()->current()->uri();
+$cur_route = Route::getFacadeRoot()->current()->uri();
 @endphp
 
 <body class="sidebar-mini layout-fixed sidebar-collapse">
@@ -144,9 +144,9 @@
 
         @include('layout.header')
         @if (Session()->get('role_id') == 3)
-            @include('layout.student_sidebar')
+        @include('layout.student_sidebar')
         @else
-            @include('layout.sidebar')
+        @include('layout.sidebar')
         @endif
         @include('layout.message')
         @yield('content')
@@ -448,8 +448,10 @@
                 // });
 
                 // Apply to multiple forms
-                $('#createCommon, .createCommon').on('submit', function(e) {
+                $(document).on('submit', '#createCommon, .createCommon', function(e) {
                     e.preventDefault();
+
+
 
 
                     $('.dataContainer').each(function() {
@@ -767,6 +769,11 @@
                     }
 
 
+                    let currentStep = $(this).attr('data-step') || 1; // Get current step from data attribute or default to 1
+                    let totalSteps = $(this).attr('data-total_steps') || 1; // Get current step from data attribute or default to 1
+
+               
+
                     // Optional helper to format field names like "mobile_no" to "Mobile No"
                     function formatFieldName(name) {
                         return name
@@ -777,6 +784,13 @@
                     const $form = $(this);
                     if (!validateForm($form)) return;
                     const endpoint = "{{ url('/') }}/createCommon";
+
+
+
+
+                         if (currentStep !== totalSteps) {
+                        return
+                    }
 
                     const formData = new FormData(this); // Handles files + inputs
 
@@ -789,8 +803,10 @@
                         success: function(response) {
 
                             if (response.method == 'update') {
-                                window.location.href = "{{ url('/') }}/" + (response.modal)
-                                    .toLowerCase();
+                                // window.location.href = "{{ url('/') }}/" + (response.modal)
+                                //     .toLowerCase();
+
+                                alert('done');
                                 return
                             }
                             console.log(response);
@@ -810,76 +826,75 @@
 
 
 
-              function dataGet() {
-    var baseUrl = "{{ url('/') }}";
-    const modalTypes = [];
+                function dataGet() {
+                    var baseUrl = "{{ url('/') }}";
+                    const modalTypes = [];
 
 
 
 
-    $('[name="modal_type"]').each(function () {
-        const val = $(this).val();
-        if (val && !modalTypes.includes(val)) {
-            modalTypes.push(val);
-        }
-    });
-
-
-   
-
-    modalTypes.forEach(modal => {
-        const containerId = `#dataContainer-${modal.toLowerCase()}`;
-        const url = `${baseUrl}/commonView/${modal}`;
-
-
-       
-        $.get(url, function (data) {
-            const $container = $(containerId);
-
-            $container.fadeOut(100, function () {
-                $container.html(data).fadeIn(200);
-
-                // Wait for new content to be inserted before initializing DataTable
-                // const table = $container.find('table');
-                const table = $container.find('table'); 
-
-
-                // Check if a DataTable is already initialized, destroy it
-                if ($.fn.DataTable.isDataTable(table)) {
-                    table.DataTable().destroy();
-                }
-
-                // Initialize DataTable with pagination
-                table.DataTable({
-                    pageLength: 10,
-                    lengthChange: true,
-                    searching: true,
-                    ordering: true,
-                    paging: true,
-                    dom: 'Bfrtip',
-                    buttons: [
-                        {
-                            extend: 'excelHtml5',
-                            text: 'Export to Excel',
-                            title: `${modal} Report`
-                        },
-                        {
-                            extend: 'pdfHtml5',
-                            text: 'Export to PDF',
-                            orientation: 'landscape',
-                            pageSize: 'A4',
-                            title: `${modal} Report`
+                    $('[name="modal_type"]').each(function() {
+                        const val = $(this).val();
+                        if (val && !modalTypes.includes(val)) {
+                            modalTypes.push(val);
                         }
-                    ]
-                });
+                    });
 
-                toastr.success(`${modal} data fetched successfully!`);
-            });
-        }).fail(function (xhr) {
-            console.error(`Error loading ${modal}: ${xhr.status} ${xhr.statusText}`);
-        });
-    });
-}
+
+
+
+                    modalTypes.forEach(modal => {
+                        const containerId = `#dataContainer-${modal.toLowerCase()}`;
+                        const url = `${baseUrl}/commonView/${modal}`;
+
+
+
+                        $.get(url, function(data) {
+                            const $container = $(containerId);
+
+                            $container.fadeOut(100, function() {
+                                $container.html(data).fadeIn(200);
+
+                                // Wait for new content to be inserted before initializing DataTable
+                                // const table = $container.find('table');
+                                const table = $container.find('table');
+
+
+                                // Check if a DataTable is already initialized, destroy it
+                                if ($.fn.DataTable.isDataTable(table)) {
+                                    table.DataTable().destroy();
+                                }
+
+                                // Initialize DataTable with pagination
+                                table.DataTable({
+                                    pageLength: 10,
+                                    lengthChange: true,
+                                    searching: true,
+                                    ordering: true,
+                                    paging: true,
+                                    dom: 'Bfrtip',
+                                    buttons: [{
+                                            extend: 'excelHtml5',
+                                            text: 'Export to Excel',
+                                            title: `${modal} Report`
+                                        },
+                                        {
+                                            extend: 'pdfHtml5',
+                                            text: 'Export to PDF',
+                                            orientation: 'landscape',
+                                            pageSize: 'A4',
+                                            title: `${modal} Report`
+                                        }
+                                    ]
+                                });
+
+                                toastr.success(`${modal} data fetched successfully!`);
+                            });
+                        }).fail(function(xhr) {
+                            console.error(`Error loading ${modal}: ${xhr.status} ${xhr.statusText}`);
+                        });
+                    });
+                }
                 dataGet();
 
 
@@ -914,16 +929,15 @@
             });
         </script>
 
-  {{-- permission giving area --}}
+        {{-- permission giving area --}}
         <script>
-$(document).on('click', '.open-permission-modal', function () {
-    const roleId = $(this).data('id');
- const url = `{{ url('/set-permission-view') }}/${roleId}`;
+            $(document).on('click', '.open-permission-modal', function() {
+                const roleId = $(this).data('id');
+                const url = `{{ url('/set-permission-view') }}/${roleId}`;
 
-    $('#permissionContainer').load(url);
-});
-
-</script>
+                $('#permissionContainer').load(url);
+            });
+        </script>
 
         {{-- convert excel data into array --}}
         <script>
@@ -1055,74 +1069,72 @@ $(document).on('click', '.open-permission-modal', function () {
             });
         </script>
 
-  {{-- change selected branch --}}
-<script>
+        {{-- change selected branch --}}
+        <script>
+            $('#headerBranchSelect').on('change', function() {
+                const selectedBranchId = $(this).val();
 
-$('#headerBranchSelect').on('change', function () {
-    const selectedBranchId = $(this).val();
+                if (!selectedBranchId) return; // do nothing if empty
 
-    if (!selectedBranchId) return; // do nothing if empty
+                $.ajax({
+                    url: "{{ url('/') }}/set-current-branch",
+                    type: "POST",
+                    data: {
+                        currentSelectedBranch: selectedBranchId,
+                        _token: "{{ csrf_token() }}"
+                    },
+                    success: function(response) {
+                        if (response.status === 'success') {
+                            toastr.success('Branch changed successfully');
 
-    $.ajax({
-        url: "{{ url('/') }}/set-current-branch",
-        type: "POST",
-        data: {
-            currentSelectedBranch: selectedBranchId,
-            _token: "{{ csrf_token() }}"
-        },
-        success: function (response) {
-            if (response.status === 'success') {
-                toastr.success('Branch changed successfully');
-             
-                location.reload(); 
-            } else {
-                toastr.error('Failed to change branch');
-            }
-        },
-        error: function (xhr) {
-            console.error(xhr.responseText);
-            toastr.error('Error while updating branch');
-        }
-    });
-});
+                            location.reload();
+                        } else {
+                            toastr.error('Failed to change branch');
+                        }
+                    },
+                    error: function(xhr) {
+                        console.error(xhr.responseText);
+                        toastr.error('Error while updating branch');
+                    }
+                });
+            });
+        </script>
+        <script>
+            document.addEventListener('change', function(e) {
+                if (e.target.classList.contains('check-all-type')) {
+                    const type = e.target.getAttribute('data-type');
+                    const isChecked = e.target.checked;
 
-</script>
-<script>
-document.addEventListener('change', function (e) {
-    if (e.target.classList.contains('check-all-type')) {
-        const type = e.target.getAttribute('data-type');
-        const isChecked = e.target.checked;
+                    document.querySelectorAll(`input[type="checkbox"][value$=".${type}"]`).forEach(cb => {
+                        cb.checked = isChecked;
+                    });
+                }
+            });
+        </script>
 
-        document.querySelectorAll(`input[type="checkbox"][value$=".${type}"]`).forEach(cb => {
-            cb.checked = isChecked;
-        });
-    }
-});
-</script>
+        <script>
+            $(document).on('submit', '#permissionForm', function(e) {
+                e.preventDefault();
 
-<script>
-$(document).on('submit', '#permissionForm', function (e) {
-    e.preventDefault();
+                const form = $(this);
+                const url = form.attr('action');
+                const formData = form.serialize();
 
-    const form = $(this);
-    const url = form.attr('action');
-    const formData = form.serialize();
-
-    $.ajax({
-        url: url,
-        method: 'POST',
-        data: formData,
-        success: function (response) {
-            toastr.success('Permissions saved successfully!');
-            // Optionally reload or update content
-        },
-        error: function (xhr) {
-            toastr.error('Something went wrong while saving permissions.');
-            console.error(xhr.responseText);
-        }
-    });
-});
-</script>
+                $.ajax({
+                    url: url,
+                    method: 'POST',
+                    data: formData,
+                    success: function(response) {
+                        toastr.success('Permissions saved successfully!');
+                        // Optionally reload or update content
+                    },
+                    error: function(xhr) {
+                        toastr.error('Something went wrong while saving permissions.');
+                        console.error(xhr.responseText);
+                    }
+                });
+            });
+        </script>
 
         <!-- Common Delete Confirmation Modal -->
         <div class="modal fade" id="deleteConfirmModal" tabindex="-1" aria-labelledby="deleteModalLabel"
@@ -1159,7 +1171,8 @@ $(document).on('submit', '#permissionForm', function (e) {
 
                         <div class="col-md-12">
                             <p id="whatsapp_error_message" class="error_message_whatsapp">
-                                {{ Session::get('whatsapp_error') ?? '' }}</p>
+                                {{ Session::get('whatsapp_error') ?? '' }}
+                            </p>
                             <input type="hidden" id="whatsapp_error_respose_id"
                                 value="{{ Session::get('whatsapp_error_respose_id') ?? '' }}">
                         </div>

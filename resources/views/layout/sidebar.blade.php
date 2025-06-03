@@ -9,7 +9,7 @@ $getSetting = Helper::getSetting();
  <!-- Main Sidebar Container -->
  <aside class="main-sidebar bg-light d-none d-md-block" id="sidebar">
      <!-- Brand Logo -->
-     <a href="{{ url('/') }}">
+     <a href="{{ url('/dashboard') }}">
          <div class="top_brand_section">
             @include('common.imageViewer', [
                 'modal' => 'Setting',

@@ -38,7 +38,7 @@
     @endif -->
 </div>
 
-{{-- Modal --}}
+<!-- {{-- Modal --}}
 @if (!$isDefault)
     <div class="modal fade" id="{{ $imageId }}" tabindex="-1" aria-labelledby="{{ $imageId }}Label"
         aria-hidden="true">
@@ -54,4 +54,4 @@
             </div>
         </div>
     </div>
-@endif
+@endif -->
