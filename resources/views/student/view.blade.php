@@ -13,7 +13,7 @@
 
 
               </td>
-              <td>{{ $studentAdd->student_name ?? '' }}</td>
+              <td>{{ $studentAdd->name ?? '' }}</td>
               <td>{{ $studentAdd->mobile ?? '' }}</td>
               <td>{{ $studentAdd->email ?? '' }}</td>
               <td>{{ $studentAdd->admission_date ?? '' }}</td>

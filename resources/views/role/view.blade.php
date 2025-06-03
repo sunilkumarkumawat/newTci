@@ -4,11 +4,15 @@
             <td>{{ $index + 1 }}</td>
             <td>{{ $role->name ?? '' }}</td>
             <td>
-   @if(!in_array($role->id, [1, 2,3]))
+   @if(!in_array($role->id, [1, 2, 3]))
     <div class="btn-group">
         <a href="{{ url('commonEdit/Role/' . $role->id) }}" class="btn btn-xs">
             <i class="fa fa-edit fs-6 mx-2 text-primary"></i>
         </a>
+    <a  class="btn btn-xs open-permission-modal" data-id='{{$role->id}}'>
+            <i class="fa fa-lock fs-6  text-info"></i>
+        </a>
+        
         <a class="btn-xs delete-btn" data-modal='Role' data-id='{{ $role->id }}'>
             <i class="fa fa-trash fs-6 text-danger"></i>
         </a>

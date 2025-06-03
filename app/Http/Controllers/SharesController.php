@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Services\CommonService;
 use Auth;
 use Illuminate\Support\Facades\Artisan;
+use DB;
 
 class SharesController extends Controller
 {
@@ -83,11 +84,54 @@ public function getDependentOptions(Request $request)
      
           
     }  
-public function setPermissionView(Request $request)
+public function setPermissionView(Request $request,$id)
 {
+        $roleId = $id;
+        // Fetch permissions for the role
+        $permissions = DB::table('role_permissions')
+            ->where('role_id', $roleId)
+            ->pluck('permission')
+            ->toArray();
 
- $data = null;
-        return view('permission.view',compact('data'));
+        
+
+        // Prepare data for view
+        $permissions = [
+            'role_id' => $roleId,
+            'permissions' => $permissions,
+         
+        ];
+
+   
+
+        return view('role.permission',compact('permissions'));
+
+}
+public function savePermission(Request $request)
+{
+ $roleId = $request->role_id;
+    $permissions = $request->permissions ?? []; // array of permissions
+
+    // Clear existing permissions for the role
+    DB::table('role_permissions')->where('role_id', $roleId)->delete();
+
+    // Prepare insert data
+    $insertData = [];
+    foreach ($permissions as $permission) {
+        $insertData[] = [
+            'role_id' => $roleId,
+            'permission' => $permission,
+            'created_at' => now(),
+            'updated_at' => now(),
+        ];
+    }
+
+    // Insert new permissions
+    if (!empty($insertData)) {
+        DB::table('role_permissions')->insert($insertData);
+    }
+
+    return response()->json(['success' => true, 'message' => 'Permissions saved successfully.']);
 
 }
 public function setCurrentBranch(Request $request)
@@ -121,6 +165,8 @@ public function setCurrentBranch(Request $request)
 
     return response()->json(['status' => 'error', 'message' => 'No branch selected']);
 }
+
+
 
 
 

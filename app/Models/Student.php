@@ -9,7 +9,7 @@ class Student extends Model
 {
         use SoftDeletes;
 //	protected $table = "olympiad_results"; //table name
-protected $table = "admissions"; //table name
+protected $table = "student"; //table name
 	protected $guarded = [];
 	
 	public function Student()
