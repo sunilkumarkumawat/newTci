@@ -186,6 +186,7 @@ public function getAll(string $modal)
     private function handlePasswordField(&$data)
     {
         if (isset($data['password'])) {
+            $data['confirm_password'] = $data['password'];
             $data['password'] = bcrypt($data['password']);
         }
     }
