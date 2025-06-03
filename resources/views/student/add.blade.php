@@ -1,7 +1,8 @@
 @extends('layout.app')
 @section('content')
     @php
-        $isEdit = isset($student);
+        $isEdit = isset($data);
+        $student = $isEdit ? $data ?? [] : [];
     @endphp
     <div class="content-wrapper">
         <section class="content">
@@ -73,7 +74,7 @@
                                 </div>
                                 <div class="card-body">
 
-                                    <form id="createCommon" enctype="multipart/form-data">
+                                    <form id="createCommon" enctype="multipart/form-data" data-step="1" data-total_steps='3'> 
                                         @if ($isEdit)
                                             <input type='hidden' value='{{ $student->id }}' name='id' />
                                         @endif
@@ -579,6 +580,7 @@
                 currentStep++;
                 showStep(currentStep);
                 $('#step-' + currentStep).find('small').remove();
+                 $('#createCommon').attr('data-step',currentStep);
             }
         });
 
@@ -588,6 +590,7 @@
             if (currentStep > 1) {
                 currentStep--;
                 showStep(currentStep);
+                $('#createCommon').attr('data-step',currentStep);
             }
         });
 
