@@ -1087,6 +1087,42 @@ $('#headerBranchSelect').on('change', function () {
 });
 
 </script>
+<script>
+document.addEventListener('change', function (e) {
+    if (e.target.classList.contains('check-all-type')) {
+        const type = e.target.getAttribute('data-type');
+        const isChecked = e.target.checked;
+
+        document.querySelectorAll(`input[type="checkbox"][value$=".${type}"]`).forEach(cb => {
+            cb.checked = isChecked;
+        });
+    }
+});
+</script>
+
+<script>
+$(document).on('submit', '#permissionForm', function (e) {
+    e.preventDefault();
+
+    const form = $(this);
+    const url = form.attr('action');
+    const formData = form.serialize();
+
+    $.ajax({
+        url: url,
+        method: 'POST',
+        data: formData,
+        success: function (response) {
+            toastr.success('Permissions saved successfully!');
+            // Optionally reload or update content
+        },
+        error: function (xhr) {
+            toastr.error('Something went wrong while saving permissions.');
+            console.error(xhr.responseText);
+        }
+    });
+});
+</script>
 
         <!-- Common Delete Confirmation Modal -->
         <div class="modal fade" id="deleteConfirmModal" tabindex="-1" aria-labelledby="deleteModalLabel"
