@@ -20,55 +20,67 @@ class Helper
     public static function getSidebar(){
 $sidebarMenu = [
     [
-        'title' => 'User Management',
+        'title' => 'Dashboard',
         'status' => true,
         'icon' => 'fa fa-desktop',
+         'route'  => 'dashboard',
+    ],
+    [
+        'title' => 'User Management',
+        'status' => true,
+        'icon' => 'fa fa-users',
         'subItems' => [
             [
                 'title' => 'Add User',
                 'status' => true,
                 'route'  => 'userAdd',
-                'icon'   => 'fa fa-user-plus',
+                'icon'   => 'fa fa-plus',
             ],
             [
                 'title' => 'View User',
                 'status' => true,
                 'route'  => 'userView',
-                'icon'   => 'fa fa-users',
-                // Example of a sub-sub-menu:
-                'subItems' => [
-                    [
-                        'title' => 'View Active Users',
-                        'status' => true,
-                        'route'  => 'viewActiveUser',
-                        'icon'   => 'fa fa-user-check',
-                    ],
-                    [
-                        'title' => 'View Inactive Users',
-                        'status' => true,
-                        'route'  => 'viewInactiveUser',
-                        'icon'   => 'fa fa-user-times',
-                    ],
-                ],
+                'icon'   => 'fa fa-eye',
             ],
+            // [
+            //     'title' => 'View User',
+            //     'status' => true,
+            //     'route'  => 'userView',
+            //     'icon'   => 'fa fa-eye',
+            //     // Example of a sub-sub-menu:
+            //     'subItems' => [
+            //         [
+            //             'title' => 'View Active Users',
+            //             'status' => true,
+            //             'route'  => 'viewActiveUser',
+            //             'icon'   => 'fa fa-user-check',
+            //         ],
+            //         [
+            //             'title' => 'View Inactive Users',
+            //             'status' => true,
+            //             'route'  => 'viewInactiveUser',
+            //             'icon'   => 'fa fa-user-times',
+            //         ],
+            //     ],
+            // ],
         ],
     ],
     [
         'title' => 'Student Management',
         'status' => true,
-        'icon' => 'fa fa-graduation-cap',
+        'icon' => 'fa fa-person',
         'subItems' => [
             [
                 'title' => 'Add New Student',
                 'status' => true,
                 'route'  => 'studentAdd',
-                'icon'   => 'fa fa-user-plus',
+                'icon'   => 'fa fa-plus',
             ],
             [
                 'title' => 'View Students',
                 'status' => true,
                 'route'  => 'studentView',
-                'icon'   => 'fa fa-users',
+                'icon'   => 'fa fa-eye',
             ],
         ],
     ],

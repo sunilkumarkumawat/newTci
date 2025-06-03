@@ -82,6 +82,9 @@ function renderSidebarMenu($items) {
  <div class="sidebar-overlay" id="sidebarOverlay"></div>
 
  <style>
+    .nav-treeview{
+        margin-left: 22px;
+    }
      .brand_img {
          width: 40px;
          height: 40px;
