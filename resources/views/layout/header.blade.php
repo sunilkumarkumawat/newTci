@@ -1,5 +1,6 @@
 @php
     $getBranch = Helper::getBranches();
+    $sidebarData = Helper::getSidebar();
 @endphp
 <style>
     .selectDesign {
@@ -50,6 +51,23 @@
         <li class="nav-item ml-1">
             <a class="nav-link border border-0" href="javascript:void(0);" id="sidebarToggle"><i class="fa fa-bars"></i></a>
         </li>
+    </ul>
+    <ul class="navbar-nav">
+        <!-- Sidebar Titles Dropdown -->
+<li class="nav-item dropdown">
+    <a class="nav-link dropdown-toggle" href="#" id="sidebarMenuDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="font-weight: 500; color:black">
+        M
+    </a>
+    <div class="dropdown-menu" aria-labelledby="sidebarMenuDropdown">
+        @foreach($sidebarData as $index => $menu)
+            @if(!empty($menu['status']))
+                <a class="dropdown-item sidebar-module-link" href="#" data-module-index="{{ $index }}">
+                    {{ $menu['title'] }}
+                </a>
+            @endif
+        @endforeach
+    </div>
+</li>
     </ul>
 
     <ul class="navbar-nav ml-auto flex_centerd_profile">
@@ -149,4 +167,21 @@
         sidebar.classList.toggle('w-auto');
         sidebar.style.zIndex = '1050'; // Keep above main content
     });
+</script>
+
+
+<script>
+document.querySelectorAll('.sidebar-module-link').forEach(function(link) {
+    link.addEventListener('click', function(e) {
+        e.preventDefault();
+        var index = this.getAttribute('data-module-index');
+        // Hide all module groups
+        document.querySelectorAll('.sidebar-module-group').forEach(function(group) {
+            group.style.display = 'none';
+        });
+        // Show the selected module group
+        var selected = document.querySelector('.sidebar-module-group[data-module-index="' + index + '"]');
+        if(selected) selected.style.display = 'block';
+    });
+});
 </script>

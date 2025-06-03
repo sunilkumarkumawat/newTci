@@ -15,6 +15,170 @@ use Session;
 use Illuminate\Support\Facades\Auth;
 class Helper
 {
+
+
+    public static function getSidebar(){
+$sidebarMenu = [
+    [
+        'title' => 'User Management',
+        'status' => true,
+        'icon' => 'fa fa-user-circle-o',
+        'subItems' => [
+            [
+                'title' => 'Add User',
+                'status' => true,
+                'route'  => 'userAdd',
+                'icon'   => 'fa fa-user-circle-o',
+            ],
+            [
+                'title' => 'View User',
+                'status' => true,
+                'route'  => 'userView',
+                'icon'   => 'fa fa-user-circle-o',
+                // Example of a sub-sub-menu:
+                'subItems' => [
+                    [
+                        'title' => 'View Active Users',
+                        'status' => true,
+                        'route'  => 'viewActiveUser',
+                        'icon'   => 'fa fa-user-check',
+                    ],
+                    [
+                        'title' => 'View Inactive Users',
+                        'status' => true,
+                        'route'  => 'viewInactiveUser',
+                        'icon'   => 'fa fa-user-times',
+                    ],
+                ],
+            ],
+        ],
+    ],
+    [
+        'title' => 'Student Management',
+        'status' => true,
+        'icon' => 'fa fa-user-circle-o',
+        'subItems' => [
+            [
+                'title' => 'Add New Student',
+                'status' => true,
+                'route'  => 'admissionAdd',
+                'icon'   => 'fa fa-user-circle-o',
+            ],
+            [
+                'title' => 'View Students',
+                'status' => true,
+                'route'  => 'admissionView',
+                'icon'   => 'fa fa-user-circle-o',
+            ],
+        ],
+    ],
+    [
+        'title' => 'Question Bank Management',
+        'status' => true,
+        'icon' => 'fa fa-user-circle-o',
+        'subItems' => [
+            [
+                'title' => 'Dashboard',
+                'status' => true,
+                'route'  => 'questionBankManagement',
+                'icon'   => 'fa fa-user-circle-o',
+            ],
+            [
+                'title' => 'Subjects/ Streams',
+                'status' => true,
+                'route'  => 'subjects',
+                'icon'   => 'fa fa-user-circle-o',
+            ],
+            [
+                'title' => 'Topics/ Subtopics',
+                'status' => true,
+                'route'  => 'add_topic',
+                'icon'   => 'fa fa-user-circle-o',
+            ],
+            [
+                'title' => 'Add New Question',
+                'status' => true,
+                'route'  => 'add/question',
+                'icon'   => 'fa fa-user-circle-o',
+            ],
+            [
+                'title' => 'Question List',
+                'status' => true,
+                'route'  => 'view/question',
+                'icon'   => 'fa fa-user-circle-o',
+            ],
+        ],
+    ],
+    [
+        'title' => 'Exam Paper Creator',
+        'status' => true,
+        'icon' => 'fa fa-user-circle-o',
+        'subItems' => [
+            [
+                'title' => 'Create New Exam',
+                'status' => true,
+                'route'  => 'addExamNeet',
+                'icon'   => 'fa fa-user-circle-o',
+            ],
+            [
+                'title' => 'Exam List',
+                'status' => true,
+                'route'  => 'view/exam',
+                'icon'   => 'fa fa-user-circle-o',
+            ],
+        ],
+    ],
+    [
+        'title' => 'Master Management',
+        'status' => true,
+        'icon' => 'fa fa-user-circle-o',
+        'subItems' => [
+            [
+                'title' => 'Batch',
+                'status' => true,
+                'route'  => 'addBatch',
+                'icon'   => 'fa fa-user-circle-o',
+            ],
+            [
+                'title' => 'Class',
+                'status' => true,
+                'route'  => 'add_class',
+                'icon'   => 'fa fa-user-circle-o',
+            ],
+            [
+                'title' => 'Role',
+                'status' => true,
+                'route'  => 'role_add',
+                'icon'   => 'fa fa-user-circle-o',
+            ],
+        ],
+    ],
+    [
+        'title' => 'Institute Management',
+        'status' => true,
+        'icon' => 'fa fa-user-circle-o',
+        'subItems' => [
+            [
+                'title' => 'View Setting',
+                'status' => true,
+                'route'  => 'viewSetting',
+                'icon'   => 'fa fa-user-circle-o',
+            ],
+        ],
+    ],
+];
+
+
+  return $sidebarMenu;
+    }
+
+    public static function getPaymentMode()
+    {
+        $getPaymentMode = PaymentMode::orderBy('id', 'DESC');
+        $getPaymentMode = $getPaymentMode->get();
+        return $getPaymentMode;
+
+}
     public static function getBranches()
     {
         $getBranch = Branch::orderBy('id', 'DESC');

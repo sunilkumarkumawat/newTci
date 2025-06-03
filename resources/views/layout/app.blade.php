@@ -814,6 +814,9 @@
     var baseUrl = "{{ url('/') }}";
     const modalTypes = [];
 
+
+
+
     $('[name="modal_type"]').each(function () {
         const val = $(this).val();
         if (val && !modalTypes.includes(val)) {
@@ -821,10 +824,15 @@
         }
     });
 
+
+   
+
     modalTypes.forEach(modal => {
         const containerId = `#dataContainer-${modal.toLowerCase()}`;
         const url = `${baseUrl}/commonView/${modal}`;
 
+
+       
         $.get(url, function (data) {
             const $container = $(containerId);
 
@@ -833,8 +841,7 @@
 
                 // Wait for new content to be inserted before initializing DataTable
                 // const table = $container.find('table');
-                const table = $("#dataContainer");
-
+                const table = $container.find('table'); 
 
 
                 // Check if a DataTable is already initialized, destroy it

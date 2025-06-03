@@ -1,3 +1,7 @@
+@php
+$sidebarData = Helper::getSidebar();
+@endphp
+ 
  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
      integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg=="
      crossorigin="anonymous" referrerpolicy="no-referrer" />
@@ -11,207 +15,59 @@
          </div>
      </a>
 
-     <!-- Sidebar -->
-     <div class="sidebar">
-         <!-- Sidebar Menu -->
-         <nav class="mt-2">
-             <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu"
-                 data-accordion="false">
-
-                 <!-- Dashboard -->
-                 <li class="nav-item">
-                     <a href="{{ url('dashboard') }}" class="nav-link">
-                         <i class="fa fa-dashboard nav-icon"></i>
-                         <p>Dashboard</p>
-                     </a>
-                 </li>
-
-                 <!-- Branch -->
-                 <li class="nav-item has-treeview">
-                     <a href="{{ url('branch') }}" class="nav-link">
-                         <i class="fa fa-code-branch nav-icon"></i>
-                         <p>Branch</p>
-                     </a>
-                 </li>
-
-                  <!-- Role -->
-                 <li class="nav-item has-treeview">
-                     <a href="{{ url('role') }}" class="nav-link">
-                         <i class="fa fa-user-circle nav-icon"></i>
-                         <p> Role</p>
-                     </a>
-                 </li>
-
-                 <!-- USER MENU -->
-                 <li class="nav-item has-treeview">
-                     <a href="#" class="nav-link">
-                         <i class="fa fa-user nav-icon"></i>
-                         <p> User <i class="fa fa-angle-left right "></i> </p>
-                     </a>
-                     <ul class="nav nav-treeview">
-                         <li class="nav-item">
-                             <a href="{{ url('userAdd') }}" class="nav-link">
-                                 <i class="fa fa-plus-circle nav-icon"></i>
-                                 <p>Add User</p>
-                             </a>
-                         </li>
-                         <li class="nav-item">
-                             <a href="{{ url('userView') }}" class="nav-link">
-                                 <i class="fa fa-eye nav-icon"></i>
-                                 <p>View List</p>
-                             </a>
-                         </li>
-                     </ul>
-                 </li>
-
-                 <!-- STUDENT MENU -->
-                 <li class="nav-item has-treeview">
-                     <a href="#" class="nav-link">
-                         <i class="fa fa-graduation-cap nav-icon"></i>
-                         <p>
-                             Student
-                             <i class="fa fa-angle-left right"></i>
-                         </p>
-                     </a>
-                     <ul class="nav nav-treeview">
-                         <li class="nav-item">
-                             <a href="{{ url('studentAdd') }}" class="nav-link">
-                                 <i class="fa fa-plus-circle nav-icon"></i>
-                                 <p>Add Student</p>
-                             </a>
-                         </li>
-                         <li class="nav-item">
-                             <a href="{{ url('studentView') }}" class="nav-link">
-                                 <i class="fa fa-eye nav-icon"></i>
-                                 <p>View List</p>
-                             </a>
-                         </li>
-                     </ul>
-                 </li>
-
-                 {{-- message --}}
-                 <li class="nav-item has-treeview">
-                     <a href="#" class="nav-link">
-                         <i class="fa fa-envelope nav-icon"></i>
-                         <p>
-                             Message
-                             <i class="fa fa-angle-left right"></i>
-                         </p>
-                     </a>
-                     <ul class="nav nav-treeview">
-                         <li class="nav-item">
-                             <a href="{{ url('messageTypeAdd') }}" class="nav-link">
-                                 <i class="fa fa-plus-circle nav-icon"></i>
-                                 <p>Add Message</p>
-                             </a>
-                         </li>
-                         <li class="nav-item">
-                             <a href="{{ url('messageTemplate') }}" class="nav-link">
-                                 <i class="fa fa-envelope-square nav-icon"></i>
-                                 <p>Message Template</p>
-                             </a>
-                         </li>
-                     </ul>
-                 </li>
-
-                 <!-- Expense MENU -->
-                 <li class="nav-item has-treeview">
-                     <a href="{{ url('expense') }}" class="nav-link">
-                         <i class="fa fa-credit-card nav-icon"></i>
-                         <p>Expense</p>
-                     </a>
-                 </li>
-
-                 <!-- library Management -->
-                 <li class="nav-item has-treeview">
-                     <a href="#" class="nav-link">
-                         <i class="fa fa-eraser nav-icon"></i>
-                         <p>
-                             Library Management
-                             <i class="fa fa-angle-left right"></i>
-                         </p>
-                     </a>
-                     <ul class="nav nav-treeview">
-                         <li class="nav-item">
-                             <a href="{{ url('cabin') }}" class="nav-link">
-                                 <i class="fa fa-home nav-icon"></i>
-                                 <p>Cabin</p>
-                             </a>
-                         </li>
-                         <li class="nav-item">
-                             <a href="{{ url('locker') }}" class="nav-link">
-                                 <i class="fa fa-lock nav-icon"></i>
-                                 <p>Locker</p>
-                             </a>
-                         </li>
-                         <li class="nav-item">
-                             <a href="{{ url('subscription') }}" class="nav-link">
-                                 <i class="fa fa-bookmark nav-icon"></i>
-                                 <p>Subscription</p>
-                             </a>
-                         </li>
-                         <li class="nav-item">
-                             <a href="{{ url('billing') }}" class="nav-link">
-                                 <i class="fa fa-file-text nav-icon"></i>
-                                 <p>Bill</p>
-                             </a>
-                         </li>
-                         <li class="nav-item">
-                             <a href="{{ url('due') }}" class="nav-link">
-                                 <i class="fa fa-list nav-icon"></i>
-                                 <p>Due List</p>
-                             </a>
-                         </li>
-                         <li class="nav-item">
-                             <a href="{{ url('wallet') }}" class="nav-link">
-                                 <i class="fa fa-money nav-icon"></i>
-                                 <p>Wallet</p>
-                             </a>
-                         </li>
-                     </ul>
-                 </li>
-
-                 {{-- Book management --}}
-                 <li class="nav-item has-treeview">
-                     <a href="#" class="nav-link">
-                         <i class="fa fa-book nav-icon"></i>
-                         <p>
-                             Book Management
-                             <i class="fa fa-angle-left right"></i>
-                         </p>
-                     </a>
-                     <ul class="nav nav-treeview">
-                         <li class="nav-item">
-                             <a href="{{ url('bookAdd') }}" class="nav-link">
-                                 <i class="fa fa-plus nav-icon"></i>
-                                 <p>Book Add</p>
-                             </a>
-                         </li>
-                         <li class="nav-item">
-                             <a href="{{ url('bookAssign') }}" class="nav-link">
-                                 <i class="fa fa-book nav-icon"></i>
-                                 <p>Book Assign</p>
-                             </a>
-                         </li>
-                     </ul>
-                 </li>
-
-                 <!-- Log Out -->
-                 <li class="nav-item">
-                     <a href="{{ url('login') }}" class="nav-link text-danger">
-                         <i class="fa fa-sign-out nav-icon"></i>
-                         <p>Log Out</p>
-                     </a>
-                 </li>
-             </ul>
-         </nav>
-     </div>
+  @php
+// Recursive function to render sidebar menu and submenus
+function renderSidebarMenu($items) {
+    foreach ($items as $item) {
+        if (!empty($item['status'])) {
+            $hasSub = !empty($item['subItems']) && is_array($item['subItems']) && count($item['subItems']);
+            echo '<li class="nav-item'.($hasSub ? ' has-treeview' : '').'">';
+            echo '<a href="'.($hasSub ? '#' : (isset($item['route']) ? url($item['route']) : '#')).'" class="nav-link">';
+            echo '<i class="nav-icon '.$item['icon'].'"></i>';
+            echo '<p>';
+            echo $item['title'];
+            if ($hasSub) {
+                echo '<i class="fa fa-angle-left right"></i>';
+            }
+            echo '</p>';
+            echo '</a>';
+            if ($hasSub) {
+                echo '<ul class="nav nav-treeview">';
+                renderSidebarMenu($item['subItems']);
+                echo '</ul>';
+            }
+            echo '</li>';
+        }
+    }
+}
+@endphp
+<!-- Reset Menu Button -->
+<button id="resetSidebarMenu" class="btn btn-sm btn-secondary w-100 mb-2">
+    Reset Menu
+</button>
+<!-- Sidebar -->
+<div class="sidebar">
+    <!-- Sidebar Menu -->
+    <nav class="mt-2">
+        <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+            @foreach($sidebarData as $index => $menu)
+                @if(!empty($menu['status']))
+                    <li class="nav-item sidebar-module-group" data-module-index="{{ $index }}" style="display:none;">
+                        <ul class="nav flex-column">
+                            @php renderSidebarMenu([$menu]); @endphp
+                        </ul>
+                    </li>
+                @endif
+            @endforeach
+        </ul>
+    </nav>
+</div>
  </aside>
 
  <!-- Toggle button -->
- <button class="mobile-sidebar-toggle d-md-none" id="sidebarToggleBtn">
-     <i class="fa fa-bars"></i>
- </button>
+<button id="resetSidebarMenu" class="btn btn-sm btn-secondary w-100 mb-2" style="display:none;">
+    Reset Menu
+</button>
 
  <!-- Overlay -->
  <div class="sidebar-overlay" id="sidebarOverlay"></div>
@@ -418,3 +274,61 @@
          }
      });
  </script>
+
+
+<script>
+    // Optional: Toggle collapse without Bootstrap JS
+    document.querySelectorAll('.sidebar-dropdown-toggle').forEach(function(toggle) {
+        toggle.addEventListener('click', function(e) {
+            e.preventDefault();
+            var target = document.querySelector(this.getAttribute('href'));
+            if (target) {
+                target.classList.toggle('show');
+            }
+        });
+    });
+</script>
+
+
+<script>
+function updateResetMenuVisibility() {
+    const groups = document.querySelectorAll('.sidebar-module-group');
+    const resetBtn = document.getElementById('resetSidebarMenu');
+    // Show button only if at least one group is hidden
+    const anyHidden = Array.from(groups).some(group => group.style.display === 'none');
+    if (resetBtn) {
+        resetBtn.style.display = anyHidden ? 'block' : 'none';
+    }
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    // Show all modules by default
+    document.querySelectorAll('.sidebar-module-group').forEach(function(group) {
+        group.style.display = 'block';
+    });
+    updateResetMenuVisibility();
+
+    // Dropdown click: show only selected module
+    document.querySelectorAll('.sidebar-module-link').forEach(function(link) {
+        link.addEventListener('click', function(e) {
+            e.preventDefault();
+            var index = this.getAttribute('data-module-index');
+            document.querySelectorAll('.sidebar-module-group').forEach(function(group) {
+                group.style.display = 'none';
+            });
+            var selected = document.querySelector('.sidebar-module-group[data-module-index="' + index + '"]');
+            if(selected) selected.style.display = 'block';
+            updateResetMenuVisibility();
+        });
+    });
+
+    // Reset Menu functionality
+    document.getElementById('resetSidebarMenu').addEventListener('click', function() {
+        document.querySelectorAll('.sidebar-module-group').forEach(function(group) {
+            group.style.display = 'block';
+        });
+        updateResetMenuVisibility();
+    });
+});
+
+</script>
