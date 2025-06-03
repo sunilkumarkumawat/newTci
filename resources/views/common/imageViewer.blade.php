@@ -19,11 +19,11 @@
 
 <div class="position-relative d-inline-block">
     <div data-bs-toggle="modal" data-bs-target="#{{ $imageId }}"  title="View Image" style="cursor: pointer">
-    <img src="{{ $imageUrl }}" class="profileImg rounded" alt="{{ $alt ?? 'Image' }}"
+    <img src="{{ $imageUrl }}" class="profileImg rounded {{ $class ?? '' }}" alt="{{ $alt ?? 'Image' }}"
         style="{{ $style ?? 'max-height: 150px;' }}"
         onerror="this.onerror=null; this.src='{{ asset($defaultImagePath) }}';" />
     </div>
-    @if (!$isDefault)
+    <!-- @if (!$isDefault)
         {{-- View Icon --}}
         <a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#{{ $imageId }}" class="position-absolute"
             style=" right: -50%; top: 7%" title="View Image">
@@ -35,7 +35,7 @@
             title="Download Image">
             <i class="fa fa-download" style="font-size: 15px; color: #002C54;"></i>
         </a>
-    @endif
+    @endif -->
 </div>
 
 {{-- Modal --}}

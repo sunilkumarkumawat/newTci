@@ -22,19 +22,19 @@ $sidebarMenu = [
     [
         'title' => 'User Management',
         'status' => true,
-        'icon' => 'fa fa-user-circle-o',
+        'icon' => 'fa fa-desktop',
         'subItems' => [
             [
                 'title' => 'Add User',
                 'status' => true,
                 'route'  => 'userAdd',
-                'icon'   => 'fa fa-user-circle-o',
+                'icon'   => 'fa fa-user-plus',
             ],
             [
                 'title' => 'View User',
                 'status' => true,
                 'route'  => 'userView',
-                'icon'   => 'fa fa-user-circle-o',
+                'icon'   => 'fa fa-users',
                 // Example of a sub-sub-menu:
                 'subItems' => [
                     [
@@ -56,113 +56,113 @@ $sidebarMenu = [
     [
         'title' => 'Student Management',
         'status' => true,
-        'icon' => 'fa fa-user-circle-o',
+        'icon' => 'fa fa-graduation-cap',
         'subItems' => [
             [
                 'title' => 'Add New Student',
                 'status' => true,
                 'route'  => 'admissionAdd',
-                'icon'   => 'fa fa-user-circle-o',
+                'icon'   => 'fa fa-user-plus',
             ],
             [
                 'title' => 'View Students',
                 'status' => true,
                 'route'  => 'admissionView',
-                'icon'   => 'fa fa-user-circle-o',
+                'icon'   => 'fa fa-users',
             ],
         ],
     ],
     [
-        'title' => 'Question Bank Management',
+        'title' => 'Question Bank',
         'status' => true,
-        'icon' => 'fa fa-user-circle-o',
+        'icon' => 'fa fa-check-square',
         'subItems' => [
             [
                 'title' => 'Dashboard',
                 'status' => true,
                 'route'  => 'questionBankManagement',
-                'icon'   => 'fa fa-user-circle-o',
+                'icon'   => 'fa fa-cog',
             ],
             [
                 'title' => 'Subjects/ Streams',
                 'status' => true,
                 'route'  => 'subjects',
-                'icon'   => 'fa fa-user-circle-o',
+                'icon'   => 'fa fa-cog',
             ],
             [
                 'title' => 'Topics/ Subtopics',
                 'status' => true,
                 'route'  => 'add_topic',
-                'icon'   => 'fa fa-user-circle-o',
+                'icon'   => 'fa fa-cog',
             ],
             [
                 'title' => 'Add New Question',
                 'status' => true,
                 'route'  => 'add/question',
-                'icon'   => 'fa fa-user-circle-o',
+                'icon'   => 'fa fa-cog',
             ],
             [
                 'title' => 'Question List',
                 'status' => true,
                 'route'  => 'view/question',
-                'icon'   => 'fa fa-user-circle-o',
+                'icon'   => 'fa fa-cog',
             ],
         ],
     ],
     [
         'title' => 'Exam Paper Creator',
         'status' => true,
-        'icon' => 'fa fa-user-circle-o',
+        'icon' => 'fa fa-calendar-check',
         'subItems' => [
             [
                 'title' => 'Create New Exam',
                 'status' => true,
                 'route'  => 'addExamNeet',
-                'icon'   => 'fa fa-user-circle-o',
+                'icon'   => 'fa fa-cog',
             ],
             [
                 'title' => 'Exam List',
                 'status' => true,
                 'route'  => 'view/exam',
-                'icon'   => 'fa fa-user-circle-o',
+                'icon'   => 'fa fa-cog',
             ],
         ],
     ],
     [
         'title' => 'Master Management',
         'status' => true,
-        'icon' => 'fa fa-user-circle-o',
+        'icon' => 'fa fa-sitemap',
         'subItems' => [
             [
                 'title' => 'Batch',
                 'status' => true,
                 'route'  => 'addBatch',
-                'icon'   => 'fa fa-user-circle-o',
+                'icon'   => 'fa fa-cog',
             ],
             [
                 'title' => 'Class',
                 'status' => true,
                 'route'  => 'add_class',
-                'icon'   => 'fa fa-user-circle-o',
+                'icon'   => 'fa fa-cog',
             ],
             [
                 'title' => 'Role',
                 'status' => true,
                 'route'  => 'role_add',
-                'icon'   => 'fa fa-user-circle-o',
+                'icon'   => 'fa fa-cog',
             ],
         ],
     ],
     [
         'title' => 'Institute Management',
         'status' => true,
-        'icon' => 'fa fa-user-circle-o',
+        'icon' => 'fa fa-cog',
         'subItems' => [
             [
                 'title' => 'View Setting',
                 'status' => true,
-                'route'  => 'viewSetting',
-                'icon'   => 'fa fa-user-circle-o',
+                'route'  => 'setting',
+                'icon'   => 'fa fa-cog',
             ],
         ],
     ],

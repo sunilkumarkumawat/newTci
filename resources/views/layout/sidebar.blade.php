@@ -1,5 +1,6 @@
 @php
 $sidebarData = Helper::getSidebar();
+$getSetting = Helper::getSetting();
 @endphp
  
  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
@@ -8,9 +9,17 @@ $sidebarData = Helper::getSidebar();
  <!-- Main Sidebar Container -->
  <aside class="main-sidebar bg-light d-none d-md-block" id="sidebar">
      <!-- Brand Logo -->
-     <a href="/">
+     <a href="{{ url('/') }}">
          <div class="top_brand_section">
-             <img src={{ asset('/defaultImages/organization/logo.jpeg') }} alt="Brand Logo" class="brand_img">
+            @include('common.imageViewer', [
+                'modal' => 'Setting',
+                'id' => $getSetting->id,
+                'field' => 'left_logo',
+                'defaultImage' => 'defaultImages/imageError.png',
+                'alt' => 'Setting Image',
+                'class' => 'brand_img'
+            ])
+             <!-- <img src={{ asset('/defaultImages/organization/logo.jpeg') }} alt="Brand Logo" class="brand_img"> -->
              <p class="brand_title">Tci Edu Hub</p>
          </div>
      </a>
@@ -22,7 +31,7 @@ function renderSidebarMenu($items) {
         if (!empty($item['status'])) {
             $hasSub = !empty($item['subItems']) && is_array($item['subItems']) && count($item['subItems']);
             echo '<li class="nav-item'.($hasSub ? ' has-treeview' : '').'">';
-            echo '<a href="'.($hasSub ? '#' : (isset($item['route']) ? url($item['route']) : '#')).'" class="nav-link">';
+            echo '<a href="'.($hasSub ? '#' : (isset($item['route']) ? url($item['route']) : '#')).'" class="nav-link '. ( (isset($item['route']) && url($item['route']) == url()->current()) ? 'active' : '' ) . '">';
             echo '<i class="nav-icon '.$item['icon'].'"></i>';
             echo '<p>';
             echo $item['title'];
@@ -74,7 +83,7 @@ function renderSidebarMenu($items) {
 
  <style>
      .brand_img {
-         width: 45px;
+         width: 40px;
          height: 40px;
          border-radius: 50%;
      }

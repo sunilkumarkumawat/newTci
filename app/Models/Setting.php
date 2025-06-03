@@ -9,6 +9,9 @@ class Setting extends Model
         use SoftDeletes;
 	protected $table = "settings"; //table name
 	
+     // Allow all fields to be mass assignable
+    protected $guarded = [];
+    
 	public function City()
     {
         return $this->belongsTo('App\Models\City','city_id');
