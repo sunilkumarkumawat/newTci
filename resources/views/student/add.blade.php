@@ -77,7 +77,7 @@
                                         @if ($isEdit)
                                             <input type='hidden' value='{{ $student->id }}' name='id' />
                                         @endif
-                                        <input type='hidden' value='student' name='modal_type' />
+                                        <input type='hidden' value='Student' name='modal_type' />
                                         <input type='hidden' id="branch_id" name='branch_id'
                                             value="{{ old('branch_id', $data->branch_id ?? '') }}" />
 
@@ -93,18 +93,18 @@
                                                         <div class="form-group">
                                                             <label>Admission No.</label>
                                                             <input type="text" class="form-control" id="admissionNo"
-                                                                name="admission_no" placeholder="Admission No."
-                                                                value="{{ old('admission_no', $student->admission_no ?? '') }}">
+                                                                name="admissionNo" placeholder="Admission No."
+                                                                value="{{ old('admissionNo', $student->admissionNo ?? '') }}">
                                                         </div>
                                                     </div>
 
                                                     <div class="col-md-4">
                                                         <div class="form-group">
-                                                            <label for="student_name">Student Name <span
+                                                            <label for="name">Student Name <span
                                                                     style="color:red;">*</span></label>
-                                                            <input type="text" name="student_name" id="student_name"
+                                                            <input type="text" name="name" id="name"
                                                                 class="form-control invalid"
-                                                                value="{{ old('student_name', $student->student_name ?? '') }}"
+                                                                value="{{ old('name', $student->name ?? '') }}"
                                                                 placeholder="Student Name" data-required="true">
                                                         </div>
                                                     </div>
@@ -114,7 +114,7 @@
                                                             'modal' => 'Gender', // This decides the data source
                                                             'name' => 'gender_id',
                                                             'selected' => $student->gender_id ?? null,
-                                                            'label' => 'Select Gender',
+                                                            'label' => 'Gender',
                                                             'required' => true,
                                                         ])
                                                     </div>
@@ -164,32 +164,27 @@
 
                                                     <div class="col-md-4">
                                                         <div class="form-group">
-                                                            <label for="admission_date">Date Of Admission</label>
+                                                            <label for="admission_date">Date Of Admission  <span
+                                                                    style="color:red;">*</span></label>
                                                             <input type="date" class="form-control"
                                                                 id="admission_date" name="admission_date"
-                                                                value="{{ old('admission_date', $student->admission_date ?? '') }}">
+                                                                data-required="true"
+                                                                value="{{ old('admission_date', $student->admission_date ?? date('Y-m-d')) }}">
                                                         </div>
                                                     </div>
 
                                                     <div class="col-md-4">
                                                         <div class="form-group">
-                                                            <label for="student_address">Students Address <span
+                                                            <label for="address">Students Address <span
                                                                     style="color:red;">*</span></label>
                                                             <input type="text" class="form-control"
-                                                                id="student_address" name="student_address"
+                                                                id="address" name="address"
                                                                 placeholder="Students Address" data-required="true"
-                                                                value="{{ old('student_address', $student->student_address ?? '') }}">
+                                                                value="{{ old('address', $student->address ?? '') }}">
                                                         </div>
                                                     </div>
 
-                                                    <div class="col-md-4">
-                                                        <div class="form-group">
-                                                            <label>Photo</label>
-                                                            <input type="file" class="form-control" name="image"
-                                                                accept="image/*">
-                                                            <!-- No value for file inputs for security reasons -->
-                                                        </div>
-                                                    </div>
+                                                    
                                                 </div>
                                             </div>
 
@@ -200,11 +195,11 @@
                                                 <div class="row">
                                                     <div id="additionalDetailsSection" class="col-md-12">
                                                         <div class="row">
-                                                            <div class="col-md-12 mb-2">
+                                                            <!-- <div class="col-md-12 mb-2">
                                                                 <h6 class="text-primary">Personal Information</h6>
-                                                            </div>
+                                                            </div> -->
 
-                                                            <div class="col-md-3">
+                                                            <!-- <div class="col-md-3">
                                                                 <div class="form-group">
                                                                     <label for="religion">Religion<span
                                                                             style="color:red;">*</span></label>
@@ -237,9 +232,9 @@
                                                                             Other</option>
                                                                     </select>
                                                                 </div>
-                                                            </div>
+                                                            </div> -->
 
-                                                            <div class="col-md-3">
+                                                            <!-- <div class="col-md-3">
                                                                 <div class="form-group">
                                                                     <label for="category">Category<span
                                                                             style="color:red;">*</span></label>
@@ -269,18 +264,18 @@
                                                                             Other</option>
                                                                     </select>
                                                                 </div>
-                                                            </div>
+                                                            </div> -->
 
-                                                            <div class="col-md-3">
+                                                            <!-- <div class="col-md-3">
                                                                 <div class="form-group">
                                                                     <label for="caste">Caste</label>
                                                                     <input type="text" class="form-control"
                                                                         id="caste" name="caste" placeholder="Caste"
                                                                         value="{{ old('caste', $student->caste ?? '') }}">
                                                                 </div>
-                                                            </div>
+                                                            </div> -->
 
-                                                            <div class="col-md-3">
+                                                            <!-- <div class="col-md-3">
                                                                 @include('commoninputs.inputs', [
                                                                     'modal' => 'BloodGroup', // This decides the data source
                                                                     'name' => 'bloodgroup_id',
@@ -288,13 +283,13 @@
                                                                     'label' => 'Select Blood Group',
                                                                     'required' => false,
                                                                 ])
-                                                            </div>
+                                                            </div> -->
 
                                                             <div class="col-md-12 mb-2 mt-3">
                                                                 <h6 class="text-primary">Location Information</h6>
                                                             </div>
 
-                                                            <div class="col-md-3">
+                                                            <!-- <div class="col-md-3">
                                                                 @include('commoninputs.inputs', [
                                                                     'modal' => 'Country', // This decides the data source
                                                                     'name' => 'country_id',
@@ -309,7 +304,7 @@
                                                                         'data-field' => 'country_id',
                                                                     ],
                                                                 ])
-                                                            </div>
+                                                            </div> -->
 
                                                             <div class="col-md-3">
                                                                 @include('commoninputs.dependentInputs', [
@@ -318,8 +313,8 @@
                                                                     'selected' => $student->state_id ?? null,
                                                                     'label' => 'State',
                                                                     'required' => true,
-                                                                    'isRequestSent' => isset($student->country_id),
-                                                                    'dependentId' => $student->country_id ?? null,
+                                                                    'isRequestSent' => 101,
+                                                                    'dependentId' => 101,
                                                                     'foreignKey' => 'country_id',
                                                                     'attributes' => [
                                                                         'data-dependent' => 'city_id',
@@ -344,7 +339,7 @@
                                                                 ])
                                                             </div>
 
-                                                            <div class="col-md-3">
+                                                            <!-- <div class="col-md-3">
                                                                 <div class="form-group">
                                                                     <label for="village">Village/City</label>
                                                                     <select class="form-control" id="village"
@@ -361,7 +356,7 @@
                                                                             Mansarovar</option>
                                                                     </select>
                                                                 </div>
-                                                            </div>
+                                                            </div> -->
 
                                                             <div class="col-md-3">
                                                                 <div class="form-group">
@@ -370,6 +365,15 @@
                                                                         id="pincode" name="pincode"
                                                                         placeholder="Pin Code"
                                                                         value="{{ old('pincode', $student->pincode ?? '') }}">
+                                                                </div>
+                                                            </div>
+
+                                                            <div class="col-md-4">
+                                                                <div class="form-group">
+                                                                    <label>Photo</label>
+                                                                    <input type="file" class="form-control" name="image"
+                                                                        accept="image/*">
+                                                                    <!-- No value for file inputs for security reasons -->
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -389,7 +393,7 @@
                                                             <input type="text" class="form-control" id="father_name"
                                                                 name="father_name" placeholder="Father's Name"
                                                                 value="{{ old('father_name', $student->father_name ?? '') }}"
-                                                                required>
+                                                                data-required="true">
                                                         </div>
                                                     </div>
 
@@ -400,11 +404,11 @@
                                                             <input type="text" class="form-control" id="father_mobile"
                                                                 name="father_mobile" placeholder="Father's Contact No"
                                                                 value="{{ old('father_mobile', $student->father_mobile ?? '') }}"
-                                                                required>
+                                                                data-required="true">
                                                         </div>
                                                     </div>
 
-                                                    <div class="col-md-4">
+                                                    <!-- <div class="col-md-4">
                                                         <div class="form-group">
                                                             <label for="father_occupation">Father's Occupation</label>
                                                             <input type="text" class="form-control"
@@ -412,7 +416,7 @@
                                                                 placeholder="Father's Occupation"
                                                                 value="{{ old('father_occupation', $student->father_occupation ?? '') }}">
                                                         </div>
-                                                    </div>
+                                                    </div> -->
 
                                                     <!-- Additional Guardian Details -->
                                                     <div id="additionalGuardianDetails" class="col-md-12">
@@ -425,11 +429,11 @@
                                                                         id="mother_name" name="mother_name"
                                                                         placeholder="Mother's Name"
                                                                         value="{{ old('mother_name', $student->mother_name ?? '') }}"
-                                                                        required>
+                                                                        data-required="true">
                                                                 </div>
                                                             </div>
 
-                                                            <div class="col-md-4">
+                                                            <!-- <div class="col-md-4">
                                                                 <div class="form-group">
                                                                     <label for="mother_mobile">Mother's Contact No</label>
                                                                     <input type="text" class="form-control"
@@ -437,9 +441,9 @@
                                                                         placeholder="Mother's Contact No"
                                                                         value="{{ old('mother_mobile', $student->mother_mobile ?? '') }}">
                                                                 </div>
-                                                            </div>
+                                                            </div> -->
 
-                                                            <div class="col-md-4">
+                                                            <!-- <div class="col-md-4">
                                                                 <div class="form-group">
                                                                     <label for="mother_occupation">Mother's
                                                                         Occupation</label>
@@ -448,9 +452,9 @@
                                                                         placeholder="Mother's Occupation"
                                                                         value="{{ old('mother_occupation', $student->mother_occupation ?? '') }}">
                                                                 </div>
-                                                            </div>
+                                                            </div> -->
 
-                                                            <div class="col-md-4">
+                                                            <!-- <div class="col-md-4">
                                                                 <div class="form-group">
                                                                     <label for="guardian_name">Guardian's Name <span
                                                                             style="color:red;">*</span> (If other than
@@ -458,12 +462,13 @@
                                                                     <input type="text" class="form-control"
                                                                         id="guardian_name" name="guardian_name"
                                                                         placeholder="Guardian's Name"
+                                                                        
                                                                         value="{{ old('guardian_name', $student->guardian_name ?? '') }}"
                                                                         required>
                                                                 </div>
-                                                            </div>
+                                                            </div> -->
 
-                                                            <div class="col-md-4">
+                                                            <!-- <div class="col-md-4">
                                                                 <div class="form-group">
                                                                     <label for="guardian_mobile">Guardian's Contact No
                                                                         <span style="color:red;">*</span></label>
@@ -473,9 +478,9 @@
                                                                         value="{{ old('guardian_mobile', $student->guardian_mobile ?? '') }}"
                                                                         required>
                                                                 </div>
-                                                            </div>
+                                                            </div> -->
 
-                                                            <div class="col-md-4">
+                                                            <!-- <div class="col-md-4">
                                                                 <div class="form-group">
                                                                     <label for="guardian_relation">Guardian's
                                                                         Relation</label>
@@ -499,16 +504,16 @@
                                                                             Other</option>
                                                                     </select>
                                                                 </div>
-                                                            </div>
+                                                            </div> -->
 
-                                                            <div class="col-md-6">
+                                                            <!-- <div class="col-md-6">
                                                                 <div class="form-group">
                                                                     <label for="guardian_address">Guardian's Address <span
                                                                             style="color:red;">*</span></label>
                                                                     <textarea class="form-control" id="guardian_address" name="guardian_address" placeholder="Guardian's Address"
                                                                         rows="2" required>{{ old('guardian_address', $student->guardian_address ?? '') }}</textarea>
                                                                 </div>
-                                                            </div>
+                                                            </div> -->
                                                         </div>
                                                     </div>
                                                 </div>

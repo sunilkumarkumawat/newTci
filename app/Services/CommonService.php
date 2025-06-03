@@ -45,7 +45,7 @@ public function createCommon($request)
             $record->update($data);
 
             // ❌ Clear cache after update
-            // Cache::forget('getAll_' . $modalName);
+            Cache::forget('getAll_' . $modalName);
 
             return response()->json([
                 'message' => $modalName . ' updated successfully.',
@@ -57,7 +57,7 @@ public function createCommon($request)
             $record = $modal::create($data);
 
             // ❌ Clear cache after create
-            // Cache::forget('getAll_' . $modalName);
+            Cache::forget('getAll_' . $modalName);
 
             return response()->json([
                 'message' => $modalName . ' created successfully.',
@@ -96,7 +96,7 @@ public function createCommon($request)
             $record->delete();
 
 
-            //  Cache::forget('getAll_' . $modalName);
+             Cache::forget('getAll_' . $modalName);
             return response()->json([
                 'message' => class_basename($modal) . ' deleted successfully.',
                 'data' => $record
@@ -163,21 +163,25 @@ public function getAll(string $modal)
         throw new \InvalidArgumentException('Invalid modal type');
     }
 
-    $query = $modal::orderBy('id', 'desc');
+    $cacheKey = 'getAll_' . class_basename($modal);
 
-    // Skip branch filtering for 'Branch' and 'Role' models
-    if (!in_array($baseModalName, ['Branch', 'Role'])) {
-        if (Auth::check()) {
-            $user = Auth::user();
-            if ($user->role_id != 1) {
-                $query->where('branch_id', $user->selectedBranchId);
-            } elseif ($user->role_id == 1 && $user->selectedBranchId !== null && $user->selectedBranchId !== '' && $user->selectedBranchId != -1) {
-                $query->where('branch_id', $user->selectedBranchId);
+    return Cache::remember($cacheKey, 60, function () use ($modal, $baseModalName) {
+        $query = $modal::orderBy('id', 'desc');
+
+        // Skip branch filtering for 'branch' and 'role' models
+        if (!in_array($baseModalName, ['Branch', 'Role'])) {
+            if (Auth::check()) {
+                $user = Auth::user();
+                if ($user->role_id != 1) {
+                    $query->where('branch_id', $user->selectedBranchId);
+                } elseif ($user->role_id == 1 && $user->selectedBranchId !== null && $user->selectedBranchId !== '' && $user->selectedBranchId != -1) {
+                    $query->where('branch_id', $user->selectedBranchId);
+                }
             }
         }
-    }
 
-    return $query->get();
+        return $query->get();
+    });
 }
     private function handlePasswordField(&$data)
     {
@@ -220,7 +224,6 @@ public function getAll(string $modal)
             }
 
 
-          
 
             return response()->json([
                 'data' => $record

@@ -61,13 +61,13 @@ $sidebarMenu = [
             [
                 'title' => 'Add New Student',
                 'status' => true,
-                'route'  => 'admissionAdd',
+                'route'  => 'studentAdd',
                 'icon'   => 'fa fa-user-plus',
             ],
             [
                 'title' => 'View Students',
                 'status' => true,
-                'route'  => 'admissionView',
+                'route'  => 'studentView',
                 'icon'   => 'fa fa-users',
             ],
         ],
