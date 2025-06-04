@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 // 🔓 Public Routes
 Route::match(['get', 'post'], 'login', 'Auth\AuthController@getLogin')->name('login');
@@ -12,7 +13,15 @@ Route::get('/', function () {
     return redirect('/login');
 });
 Route::get('logout', function () {
-    Auth::logout();
+ 
+      DB::table('login_logs')->insert([
+    'user_id' => Auth::id(),
+    'category' => 2,
+    'type' => 'users', // or 'student' / 'teacher' accordingly
+    'time_at' => now(),
+]);
+
+   Auth::logout();
     return redirect('/login');
 });
 
@@ -29,6 +38,13 @@ Route::post('/loginAuth', function (Request $request) {
 //   session(['currentSelectedBranch' => $user->selectedBranchId ?? null]);
     // Laravel login to create session (for Blade)
      Auth::login($user); // ✅ session-based login
+
+  DB::table('login_logs')->insert([
+    'user_id' => $user->id,
+    'category' => 1,
+    'type' => 'users', // or 'student' / 'teacher' accordingly
+    'time_at' => now(),
+]);
 
     return response()->json(['user' => $user], 200);
 });

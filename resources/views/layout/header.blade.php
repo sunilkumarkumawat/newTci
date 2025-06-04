@@ -147,7 +147,7 @@
                 <a href="change_password.html" class="dropdown-item border-bottom">
                     <i class="fa fa-key mr-2"></i> Change Password
                 </a>
-                <a href="logout.html" class="dropdown-item border-bottom text-danger">
+                <a href="{{url('/logout')}}" class="dropdown-item border-bottom text-danger">
                     <i class="fa fa-sign-out mr-2"></i> Log Out
                 </a>
             </div>
