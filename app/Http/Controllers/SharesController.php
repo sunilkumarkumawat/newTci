@@ -84,29 +84,44 @@ public function getDependentOptions(Request $request)
      
           
     }  
-public function setPermissionView(Request $request,$id)
+public function setPermissionView(Request $request, $roleId, $userId = null)
 {
-        $roleId = $id;
-        // Fetch permissions for the role
-        $permissions = DB::table('role_permissions')
-            ->where('role_id', $roleId)
+    $finalPermissions = [];
+
+    if (!empty($userId)) {
+        // Check for user-specific permissions
+        $userPermissions = DB::table('user_permissions')
+            ->where('user_id', $userId)
             ->pluck('permission')
             ->toArray();
 
-        
+        if (!empty($userPermissions)) {
+            $finalPermissions = $userPermissions;
+        } else {
+            // Fallback to role permissions if user has no specific permissions
+            $finalPermissions = DB::table('role_permissions')
+                ->where('role_id', $roleId)
+                ->pluck('permission')
+                ->toArray();
+        }
+    } else {
+        // Only role permissions when no userId is provided
+        $finalPermissions = DB::table('role_permissions')
+            ->where('role_id', $roleId)
+            ->pluck('permission')
+            ->toArray();
+    }
 
-        // Prepare data for view
-        $permissions = [
-            'role_id' => $roleId,
-            'permissions' => $permissions,
-         
-        ];
+    // Pass to view
+    $permissions = [
+        'role_id' => $roleId,
+        'user_id' => $userId,
+        'permissions' => $finalPermissions,
+    ];
 
-   
-
-        return view('role.permission',compact('permissions'));
-
+    return view('role.permission', compact('permissions'));
 }
+
 public function savePermission(Request $request)
 {
  $roleId = $request->role_id;

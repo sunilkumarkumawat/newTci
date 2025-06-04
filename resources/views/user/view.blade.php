@@ -1,4 +1,9 @@
-     @if (!empty($data))
+    @php
+    $permissions = Helper::getPermissions();
+  
+    @endphp
+    
+    @if (!empty($data))
          @foreach ($data as $index => $user)
              <tr>
                  <td>{{ $index + 1 ?? '' }}</td>
@@ -27,11 +32,15 @@
                      </button>
                  </td>
                  <td>
-                     <a href="{{ url('commonEdit/User/' . $user->id) }}" class="btn btn-xs">
+                    @if(in_array('user_management.edit', $permissions)  || Auth::user()->role_id == 1)
+                     <a href="{{ url('commonEdit/User/' . $user->id) }}" class="user_management.edit btn btn-xs">
                          <i class="fa fa-edit text-primary"></i>
                      </a>
-                     <a class=" btn-xs delete-btn" data-modal='User' data-id='{{ $user->id }}'>
+                     @endif
+                     @if(in_array('user_management.delete', $permissions)  || Auth::user()->role_id == 1)
+                     <a class=" btn-xs delete-btn user_management.delete" data-modal='User' data-id='{{ $user->id }}'>
                          <i class="fa fa-trash fs-6 text-danger"></i></a>
+                         @endif
                  </td>
              </tr>
          @endforeach

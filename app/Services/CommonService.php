@@ -7,13 +7,40 @@ use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Cache;
 use Auth;
+use DB;
 class CommonService
 {
+
+
+    private function savePermission($userId, array $permissions = [])
+{
+    // Clear existing permissions for the role
+    DB::table('user_permissions')->where('id', $userId)->delete();
+
+    // Prepare insert data
+    $insertData = [];
+    foreach ($permissions as $permission) {
+        $insertData[] = [
+            'user_id' => $userId,
+            'permission' => $permission,
+            'created_at' => now(),
+            'updated_at' => now(),
+        ];
+    }
+
+    // Insert new permissions
+    if (!empty($insertData)) {
+        DB::table('user_permissions')->insert($insertData);
+    }
+
+    return true;
+}
 public function createCommon($request)
 {
     $data = collect($request->all())->except(['modal_type', 'id'])->toArray();
     $modal = $request->modal_type;
 
+    
     if (!str_contains($modal, '\\')) {
         $modal = 'App\\Models\\' . $modal;
     }
@@ -23,49 +50,65 @@ public function createCommon($request)
             return response()->json(['message' => 'Invalid modal type'], 400);
         }
 
-        $modalName = class_basename($modal);
+    $modalName = class_basename($modal);
 
-        // 🔐 Handle password field
-        $this->handlePasswordField($data);
+// 🔐 Handle password field
+$this->handlePasswordField($data);
 
-        // 📂 Handle uploaded files
-        foreach ($request->allFiles() as $key => $file) {
-            if ($file->isValid()) {
-                $data[$key] = $this->handleFileUpload($file, $modalName);
-            }
-        }
 
-        // ✅ Update if ID exists
-        if ($request->filled('id')) {
-            $record = $modal::find($request->id);
-            if (!$record) {
-                return response()->json(['message' => $modalName . ' not found.'], 404);
-            }
+  $permissions = null; // Initialize permissions variable
+// 🧹 Unset permissions if User model
+if ($modalName === 'User' && isset($data['permissions'])) {
+    $permissions = $data['permissions']; // Save temporarily
+    unset($data['permissions']);
+}
 
-            $record->update($data);
+// 📂 Handle uploaded files
+foreach ($request->allFiles() as $key => $file) {
+    if ($file->isValid()) {
+        $data[$key] = $this->handleFileUpload($file, $modalName);
+    }
+}
 
-            // ❌ Clear cache after update
-            Cache::forget('getAll_' . $modalName);
+// ✅ Update if ID exists
+if ($request->filled('id')) {
+    $record = $modal::find($request->id);
+    if (!$record) {
+        return response()->json(['message' => $modalName . ' not found.'], 404);
+    }
 
-            return response()->json([
-                'message' => $modalName . ' updated successfully.',
-                'data' => $record,
-                'modal' =>$modalName,
-                'method'=>'update'
-            ]);
-        } else {
-            $record = $modal::create($data);
+    $record->update($data);
 
-            // ❌ Clear cache after create
-            Cache::forget('getAll_' . $modalName);
+    // 🔗 Save permissions
+    if ($modalName === 'User' && isset($permissions)) {
+      $this->savePermission($record->id, $permissions ?? []);
+    }
 
-            return response()->json([
-                'message' => $modalName . ' created successfully.',
-                'data' => $record,
-                'modal' =>$modalName,
-                'method'=>'create'
-            ], 201);
-        }
+    Cache::forget('getAll_' . $modalName);
+
+    return response()->json([
+        'message' => $modalName . ' updated successfully.',
+        'data' => $record,
+        'modal' => $modalName,
+        'method' => 'update'
+    ]);
+} else {
+    $record = $modal::create($data);
+
+    // 🔗 Save permissions
+    if ($modalName === 'User' && isset($permissions)) {
+       $this->savePermission($record->id, $permissions ?? []);
+    }
+
+    Cache::forget('getAll_' . $modalName);
+
+    return response()->json([
+        'message' => $modalName . ' created successfully.',
+        'data' => $record,
+        'modal' => $modalName,
+        'method' => 'create'
+    ], 201);
+}
     } catch (\Exception $e) {
         return response()->json([
             'error' => 'Error: ' . $e->getMessage()

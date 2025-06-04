@@ -933,7 +933,9 @@ $cur_route = Route::getFacadeRoot()->current()->uri();
         <script>
             $(document).on('click', '.open-permission-modal', function() {
                 const roleId = $(this).data('id');
-                const url = `{{ url('/set-permission-view') }}/${roleId}`;
+                const userId = null;
+
+                const url = `{{ url('/set-permission-view') }}/${roleId}/${userId}`;
 
                 $('#permissionContainer').load(url);
             });

@@ -64,9 +64,9 @@
                                   </tr>
                                   @endforeach
                               </tbody>
-                              <tfoot>
+                              <tfoot  >
                                   <tr>
-                                      <td colspan="100%" class='text-center'><button type='submit'class=' m-1 btn btn-xs bg-primary'>Submit </button></td>
+                                      <td colspan="100%" class='text-center'><button type='submit'class=' role-footer-submit m-1 btn btn-xs bg-primary' style='display: none'>Submit </button></td>
                                   </tr>
                           </table>
 

@@ -75,7 +75,7 @@ $isEdit = isset($data);
 
                             <form id="createCommon" enctype="multipart/form-data"  data-step="1" data-total_steps='3'>
                                 @if ($isEdit)
-                                <input type='hidden' value='{{ $data->id }}' name='id' />
+                                <input type='hidden' value='{{ $data->id }}' id="user_id" name='id' />
                                 @endif
                                 <input type='hidden' value='User' name='modal_type' />
 
@@ -280,9 +280,11 @@ $isEdit = isset($data);
 
                                         <!-- Step 3: Permissions -->
                                         <div id="step-3" class="wizard-step d-none">
-                                            <h5><i class="fa fa-lock"></i> User Permissions</h5>
+                                       
                                             <div class="row">
-                                                {{-- Permissions content here (if needed) --}}
+                                                 <div class="col-md-12 p-0" id="permissionContainer">
+     <h5><i class="fa fa-lock"></i> User Permissions</h5>
+                </div>
                                             </div>
                                         </div>
 
@@ -351,6 +353,14 @@ $isEdit = isset($data);
             showStep(currentStep);
             $('#step-' + currentStep).find('small').remove();
             $('#createCommon').attr('data-step', currentStep);
+
+            if(currentStep == 3){
+                 const roleId = $("#role_id").val();
+                 const userId = $("#user_id").val() || null;
+                const url = `{{ url('/set-permission-view') }}/${roleId}/${userId}`;
+
+                $('#permissionContainer').load(url);
+            }
         }
     });
 

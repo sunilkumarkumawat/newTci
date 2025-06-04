@@ -89,6 +89,12 @@
     </div>
 
 
+    <style>
+
+.role-footer-submit{
+display:block !important;
+}
+</style>
 
 
 
