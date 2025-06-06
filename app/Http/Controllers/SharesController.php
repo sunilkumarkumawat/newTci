@@ -18,16 +18,34 @@ class SharesController extends Controller
     }
 
     // List branches
-    public function commonView(Request $request)
-    {
+  public function commonView(Request $request)
+{
+    $modal = $request->modal_type ?? '';
+    $modalLower = strtolower($modal);
 
-      
+    if ($modalLower === 'batches') {
+        // Example: filter by category and join with exam_patterns
+        $query = DB::table('batches')
+            ->leftJoin('exam_patterns', 'batches.category_id', '=', 'exam_patterns.id')
+            ->leftJoin('sessions', 'batches.session_id', '=', 'sessions.id')
+            ->select(
+                'batches.*',
+                'exam_patterns.name as exam_pattern_name',
+                'sessions.name as session_name'
+            );
 
-        $modal = $request->modal_type ?? '';
+        // Optional: filter by category if provided
+        if ($request->filled('category')) {
+            $query->where('batches.category', $request->input('category'));
+        }
+
+        $data = $query->get();
+    } else {
         $data = $this->commonService->getAll($modal);
-        $modal = strtolower($modal); 
-        return view($modal.'/view', compact('data'));
     }
+
+    return view($modalLower . '/view', compact('data'));
+}
     public function branch()
     {
         $data = null;
@@ -37,6 +55,11 @@ class SharesController extends Controller
     {
         $data = null;
         return view('role.add',compact('data'));
+    }
+    public function batches()
+    {
+        $data = null;
+        return view('batches.add',compact('data'));
     }
    
     public function expense()

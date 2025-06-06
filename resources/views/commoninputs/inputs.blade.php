@@ -4,11 +4,12 @@
     $selectedValue = old($name, $selected ?? '');
     $isRequired = $required ?? false;
     $options = \App\Helpers\helper::getModalData($modal ?? '');
+    $labelBoolean = $labelBoolean ?? true;
     $attributes = $attributes ?? [];
 @endphp
 
 <div class="form-group">
-    @if (!empty($label))
+    @if (!empty($label) && $labelBoolean != false)
         <label for="{{ $name }}">
             {{ $label }}
             @if($isRequired)

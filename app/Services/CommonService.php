@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Cache;
 use Auth;
 use DB;
+use Session;
 class CommonService
 {
 
@@ -228,7 +229,7 @@ public function getAll(string $modal)
             }
         }
 
-        return $query->get();
+        return $query->where('session_id',Session::get('current_session'))->get();
     });
 }
     private function handlePasswordField(&$data)

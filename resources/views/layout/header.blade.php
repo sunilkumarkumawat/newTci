@@ -1,5 +1,5 @@
 @php
-    $sidebarData = Helper::getSidebar();
+$sidebarData = Helper::getSidebar();
 @endphp
 <style>
     .selectDesign {
@@ -53,20 +53,20 @@
     </ul>
     <ul class="navbar-nav">
         <!-- Sidebar Titles Dropdown -->
-<li class="nav-item dropdown">
-    <a class="nav-link dropdown-toggle" href="#" id="sidebarMenuDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="font-weight: 500; color:black">
-        M
-    </a>
-    <div class="dropdown-menu" aria-labelledby="sidebarMenuDropdown">
-        @foreach($sidebarData as $index => $menu)
-            @if(!empty($menu['status']))
+        <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="sidebarMenuDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="font-weight: 500; color:black">
+                M
+            </a>
+            <div class="dropdown-menu" aria-labelledby="sidebarMenuDropdown">
+                @foreach($sidebarData as $index => $menu)
+                @if(!empty($menu['status']))
                 <a class="dropdown-item sidebar-module-link" href="#" data-module-index="{{ $index }}">
-                   <i class="{{ $menu['icon'] }}"></i> &nbsp; {{ $menu['title'] }}
+                    <i class="{{ $menu['icon'] }}"></i> &nbsp; {{ $menu['title'] }}
                 </a>
-            @endif
-        @endforeach
-    </div>
-</li>
+                @endif
+                @endforeach
+            </div>
+        </li>
     </ul>
 
     <ul class="navbar-nav ml-auto flex_centerd_profile">
@@ -97,44 +97,47 @@
 
 
         <!-- Session Dropdown -->
-<li class="nav-item dropdown">
-    <label for="sessionSelect" class="mr-1 mb-0" style="font-weight: 500; color:black">Session</label>
-    <select id="sessionSelect" class="selectDesign form-control-sm">
-        <option value="1">2023 - 2024</option>
-        <option value="2">2024 - 2025</option>
-        <option value="3">2025 - 2026</option>
-    </select>
-</li>
+        <li class="nav-item dropdown">
+            <label for="sessionSelect" class="mr-1" style="font-weight: 500; color:black">Current Session : </label>
+            @include('commoninputs.inputs', [
+            'modal' => 'Sessions', // This decides the data source
+            'name' => 'sessionSelect',
+            'selected' => Session::get('current_session'),
+            'label' => 'Session',
+            'required' => false,
+            'labelBoolean' => false
+            ])
+        </li>
 
-      
+
 
         <!-- User Profile -->
         <li class="nav-item dropdown">
             <a class="user-panel  dropdown-toggle" data-toggle="dropdown" href="#">
                 <!-- <img class="img-circle" src="{{ asset('/defaultImages/user.png') }}"
                     alt="User Image"> -->
-                    @include('common.imageViewer', [
-                        'modal' => 'User',
-                        'id' => Auth::user()->id,
-                        'field' => 'image',
-                        'defaultImage' => 'defaultImages/user.png',
-                        'alt' => 'User Image',
-                        'class' => 'img-circle',
-                    ])
+                @include('common.imageViewer', [
+                'modal' => 'User',
+                'id' => Auth::user()->id,
+                'field' => 'image',
+                'defaultImage' => 'defaultImages/user.png',
+                'alt' => 'User Image',
+                'class' => 'img-circle',
+                ])
             </a>
             <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
                 <div class="dropdown-item border-bottom">
                     <div class="d-flex align-items-center">
                         <!-- <img class="mr-3" src="{{ asset('/defaultImages/user.png') }}"
                             alt="User Image" width="50"> -->
-                            @include('common.imageViewer', [
-                                'modal' => 'User',
-                                'id' => Auth::user()->id,
-                                'field' => 'image',
-                                'defaultImage' => 'defaultImages/user.png',
-                                'alt' => 'User Image',
-                                'class' => 'mr-2'
-                            ])
+                        @include('common.imageViewer', [
+                        'modal' => 'User',
+                        'id' => Auth::user()->id,
+                        'field' => 'image',
+                        'defaultImage' => 'defaultImages/user.png',
+                        'alt' => 'User Image',
+                        'class' => 'mr-2'
+                        ])
                         <div>
                             <h5 class="mb-0">{{Auth::user()->first_name ?? ''}} {{Auth::user()->last_name ?? ''}}</h5>
                             <p class="mb-0">{{Auth::user()->role_name ?? ''}}</p>
@@ -186,17 +189,17 @@
 
 
 <script>
-document.querySelectorAll('.sidebar-module-link').forEach(function(link) {
-    link.addEventListener('click', function(e) {
-        e.preventDefault();
-        var index = this.getAttribute('data-module-index');
-        // Hide all module groups
-        document.querySelectorAll('.sidebar-module-group').forEach(function(group) {
-            group.style.display = 'none';
+    document.querySelectorAll('.sidebar-module-link').forEach(function(link) {
+        link.addEventListener('click', function(e) {
+            e.preventDefault();
+            var index = this.getAttribute('data-module-index');
+            // Hide all module groups
+            document.querySelectorAll('.sidebar-module-group').forEach(function(group) {
+                group.style.display = 'none';
+            });
+            // Show the selected module group
+            var selected = document.querySelector('.sidebar-module-group[data-module-index="' + index + '"]');
+            if (selected) selected.style.display = 'block';
         });
-        // Show the selected module group
-        var selected = document.querySelector('.sidebar-module-group[data-module-index="' + index + '"]');
-        if(selected) selected.style.display = 'block';
     });
-});
 </script>

@@ -255,14 +255,20 @@ public static function getSidebar()
         $modal = 'App\\Models\\' . $modal;
     }
 
+
+  
+
     // Check if class exists
     if (!class_exists($modal)) {
         return [];
     }
 
+    
     try {
         $query = $modal::query();
 
+
+        
         // If a dependent ID is provided, apply where condition
         if ($dependentId !== null) {
             $query->where($foreignKey, $dependentId);

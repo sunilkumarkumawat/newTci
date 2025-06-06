@@ -806,7 +806,8 @@ $cur_route = Route::getFacadeRoot()->current()->uri();
                                 // window.location.href = "{{ url('/') }}/" + (response.modal)
                                 //     .toLowerCase();
 
-                                alert('done');
+                                dataGet();
+                                toastr.success('Data Updated Successfully');
                                 return
                             }
                             console.log(response);

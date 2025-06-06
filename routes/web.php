@@ -35,9 +35,15 @@ Route::post('/loginAuth', function (Request $request) {
         return response()->json(['message' => 'Invalid credentials'], 401);
     }
 
-//   session(['currentSelectedBranch' => $user->selectedBranchId ?? null]);
-    // Laravel login to create session (for Blade)
+
+   $currentSession = DB::table('settings')
+    ->where('id', 1)
+    ->value('current_active_session_id');
+
+   
      Auth::login($user); // ✅ session-based login
+
+     session(['current_session' => $currentSession]);
 
   DB::table('login_logs')->insert([
     'user_id' => $user->id,
@@ -73,6 +79,7 @@ Route::middleware(['auth'])->group(function () {
     Route::match(['get','post'], '/get-dependent-options', 'SharesController@getDependentOptions');
     Route::match(['get','post'], '/set-current-branch', 'SharesController@setCurrentBranch');
     Route::match(['get','post'], '/set-permission-view/{roleId}/{userId}', 'SharesController@setPermissionView');
+    Route::match(['get','post'], '/batches', 'SharesController@batches');
 
     
 
