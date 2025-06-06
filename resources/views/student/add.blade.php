@@ -3,6 +3,7 @@
     @php
         $isEdit = isset($data);
         $student = $isEdit ? $data ?? [] : [];
+        $permissions = Helper::getPermissions();
     @endphp
     <div class="content-wrapper">
         <section class="content">
@@ -24,9 +25,10 @@
                                 <h4><i class="fa fa-address-book"></i> Students Admission</h4>
                             </div>
                             <div class="card-tools">
+                                @if(in_array('student_management.view', $permissions)  || Auth::user()->role_id == 1)
                                 <a href="{{ url('studentView') }}" class="btn btn-primary  btn-sm"><i class="fa fa-eye"></i>
                                     <span class="Display_none_mobile"> {{ __('common.View') }} </span></a>
-
+                                @endif
                             </div>
                         </div>
 

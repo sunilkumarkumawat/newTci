@@ -31,7 +31,7 @@
                       {{ $studentAdd->status == 1 ? 'Active' : 'Inactive' }}
                   </button>
                 @else
-                    {{ $studentAdd->status == 1 ? 'Active' : 'Inactive' }}
+                    <span class="{{ $studentAdd->status == 1 ? 'text-success' : 'text-danger' }}">{{ $studentAdd->status == 1 ? 'Active' : 'Inactive' }}</span>
                 @endif
               </td>
               <td>
