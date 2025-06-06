@@ -82,6 +82,12 @@ function renderSidebarMenu($items) {
                 @endif
             @endforeach
 
+            <li class="nav-item">
+                <a href="{{url('/logout')}}" class="nav-link">
+                    <i class="nav-icon fa fa-sign-out text-danger"></i>
+                    <p class="text-danger">Logout</p>
+                </a>
+            </li>
         </ul>
     </nav>
 </div>

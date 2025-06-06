@@ -1,15 +1,16 @@
 <?php
 
-namespace App\Models\exam\digital;
+namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Session;
-class TopicDigital extends Model
+class Topic extends Model
 {
        use SoftDeletes;
-	protected $table = "topics_digital"; //table name
-	
+	protected $table = "topics"; //table name
+
+    protected $guarded = [];
 
     public function ClassTypes()
     {

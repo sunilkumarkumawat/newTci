@@ -20,8 +20,8 @@
                 <div class="row">
                     <!-- Add Batch Column -->
                     <div class="col-md-4 col-12">
-                        <div class="card card-outline card-success">
-                            <div class="card-header bg-success">
+                        <div class="card card-outline card-orange">
+                            <div class="card-header bg-primary">
                                 <div class="card-title">
                                     <h4><i class="fa fa-layer-group"></i> &nbsp;Add Batch</h4>
                                 </div>
@@ -36,20 +36,28 @@
                                    
                              
                                       <input type='hidden' value="{{Session::get('current_session')}}" name='session_id' />
-                                    <div class="form-group">
-                                        <label for="name">Batch Name <span class="text-danger">*</span></label>
-                                        <input type="text" class="form-control" id="name" name="name" placeholder="Enter Batch Name" data-required="true"
-                                        
-                                         value="{{ old('name', $data->name ?? '') }}">     
+                                    <div class="row">
+                                        <div class="col-md-12 col-12 ">
+                                            <div class="form-group">
+                                                <label for="name">Batch Name <span class="text-danger">*</span></label>
+                                                <input type="text" class="form-control" id="name" name="name" placeholder="Enter Batch Name" data-required="true"
+                                                
+                                                value="{{ old('name', $data->name ?? '') }}">     
+                                            </div>
+                                        </div>
+                                        <div class="col-md-12 col-12 ">
+                                        @include('commoninputs.inputs', [
+                                                        'modal' => 'ExamPattern', // This decides the data source
+                                                        'name' => 'category_id',
+                                                        'selected' => $data->category_id ?? null,
+                                                        'label' => 'Category',
+                                                        'required' => true,
+                                                        ])
+                                        </div>
+                                        <div class="col-md-12 col-12 text-center mt-2">
+                                            <button type="submit" class="btn btn-primary text-center">Submit</button>
+                                        </div>
                                     </div>
-                                    @include('commoninputs.inputs', [
-                                                    'modal' => 'ExamPattern', // This decides the data source
-                                                    'name' => 'category_id',
-                                                    'selected' => $data->category_id ?? null,
-                                                    'label' => 'Category',
-                                                    'required' => true,
-                                                    ])
-                                    <button type="submit" class="btn btn-success">Add Batch</button>
                                 </form>
                             </div>
                         </div>

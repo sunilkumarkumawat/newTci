@@ -55,15 +55,31 @@
                                                 ])
                                             </div>
                                             <div class="col-md-12 col-12 ">
-                                                @include('commoninputs.dependentInputs', [
-                                                    'modal' => 'Subject',
+                                                @include('commoninputs.inputs', [
+                                                    'modal' => 'Subject', 
                                                     'name' => 'subject_id',
                                                     'selected' => $data->subject_id ?? null,
                                                     'label' => 'Subject',
                                                     'required' => true,
-                                                    'isRequestSent' => isset($data->subject_id),
-                                                    'dependentId' => $data->class_type_id ?? null,
-                                                    'foreignKey' => 'class_type_id',
+                                                    'attributes' => [
+                                                        'data-dependent' => 'chapter_id',
+                                                        'data-url' => url(
+                                                            '/get-dependent-options'),
+                                                        'data-modal' => 'Chapter',
+                                                        'data-field' => 'subject_id',
+                                                    ],
+                                                ])
+                                            </div>
+                                            <div class="col-md-12 col-12 ">
+                                                @include('commoninputs.dependentInputs', [
+                                                    'modal' => 'Chapter',
+                                                    'name' => 'chapter_id',
+                                                    'selected' => $data->chapter_id ?? null,
+                                                    'label' => 'Chapter',
+                                                    'required' => true,
+                                                    'isRequestSent' => isset($data->chapter_id),
+                                                    'dependentId' => $data->subject_id ?? null,
+                                                    'foreignKey' => 'chapter_id',
                                                 ])
                                             </div>
                                             <div class="col-md-12 col-12 form-group">
