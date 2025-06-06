@@ -135,9 +135,9 @@
                                                         <div class="form-group">
                                                             <label for="mobile">Mobile No. <span
                                                                     style="color:red;">*</span></label>
-                                                            <input type="text" class="form-control" id="mobile"
+                                                            <input type="tel" class="form-control" id="mobile"
                                                                 name="mobile" placeholder="Mobile No."
-                                                                data-required="true"
+                                                                data-required="true" onkeypress="javascript:return isNumber(event)" maxlength="10" minlength="10"
                                                                 value="{{ old('mobile', $student->mobile ?? '') }}">
                                                         </div>
                                                     </div>
@@ -156,9 +156,9 @@
                                                         <div class="form-group">
                                                             <label for="aadhaar">Aadhaar No. <span
                                                                     style="color:red;">*</span></label>
-                                                            <input type="text" class="form-control" id="aadhaar"
+                                                            <input type="tel" class="form-control" id="aadhaar"
                                                                 name="aadhaar" placeholder="Aadhaar No."
-                                                                data-required="true"
+                                                                data-required="true" onkeypress="javascript:return isNumber(event)" maxlength="12" minlength="12"
                                                                 value="{{ old('aadhaar', $student->aadhaar ?? '') }}">
                                                         </div>
                                                     </div>
@@ -362,9 +362,9 @@
                                                             <div class="col-md-3">
                                                                 <div class="form-group">
                                                                     <label for="pincode">Pin Code</label>
-                                                                    <input type="text" class="form-control"
+                                                                    <input type="tel" class="form-control"
                                                                         id="pincode" name="pincode"
-                                                                        placeholder="Pin Code"
+                                                                        placeholder="Pin Code" onkeypress="javascript:return isNumber(event)" 
                                                                         value="{{ old('pincode', $student->pincode ?? '') }}">
                                                                 </div>
                                                             </div>
@@ -373,6 +373,14 @@
                                                                 <div class="form-group">
                                                                     <label>Photo</label>
                                                                     <input type="file" class="form-control" name="image"
+                                                                        accept="image/*">
+                                                                    <!-- No value for file inputs for security reasons -->
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-4">
+                                                                <div class="form-group">
+                                                                    <label>Aadhaar Image</label>
+                                                                    <input type="file" class="form-control" name="aadhaar_image"
                                                                         accept="image/*">
                                                                     <!-- No value for file inputs for security reasons -->
                                                                 </div>
@@ -402,10 +410,10 @@
                                                         <div class="form-group">
                                                             <label for="father_mobile">Father's Contact No <span
                                                                     style="color:red;">*</span></label>
-                                                            <input type="text" class="form-control" id="father_mobile"
+                                                            <input type="tel" class="form-control" id="father_mobile"
                                                                 name="father_mobile" placeholder="Father's Contact No"
                                                                 value="{{ old('father_mobile', $student->father_mobile ?? '') }}"
-                                                                data-required="true">
+                                                                data-required="true" onkeypress="javascript:return isNumber(event)" maxlength="10" minlegth="10">
                                                         </div>
                                                     </div>
 

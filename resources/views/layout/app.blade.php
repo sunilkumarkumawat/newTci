@@ -549,7 +549,7 @@ $cur_route = Route::getFacadeRoot()->current()->uri();
                                     break;
                                 case 'name':
                                     if (value === '') {
-                                        message = 'Branch name is required.';
+                                        message = 'Name is required.';
                                     }
                                     break;
                                 case 'contact_person':
