@@ -83,6 +83,9 @@
                                         <input type='hidden' value='Student' name='modal_type' />
                                         <input type='hidden' id="branch_id" name='branch_id'
                                             value="{{ old('branch_id', $data->branch_id ?? '') }}" />
+                                        <input type="hidden" id="session_id" name="session_id"
+                                                value="{{ old('session_id', $data->session_id ?? Session::get('current_session')) }}" />
+
 
                                         @csrf
 
@@ -113,6 +116,27 @@
                                                     </div>
 
                                                     <div class="col-md-4">
+                                                        <div class="form-group">
+                                                            <label for="mobile">Mobile No. <span
+                                                                    style="color:red;">*</span></label>
+                                                            <input type="tel" class="form-control" id="mobile"
+                                                                name="mobile" placeholder="Mobile No."
+                                                                data-required="true" onkeypress="javascript:return isNumber(event)" maxlength="10" minlength="10"
+                                                                value="{{ old('mobile', $student->mobile ?? '') }}">
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="col-md-4">
+                                                        @include('commoninputs.inputs', [
+                                                            'modal' => 'Batches', // This decides the data source
+                                                            'name' => 'class_type_id',
+                                                            'selected' => $student->class_type_id ?? null,
+                                                            'label' => 'Batch',
+                                                            'required' => true,
+                                                        ])
+                                                    </div>
+
+                                                    <div class="col-md-4">
                                                         @include('commoninputs.inputs', [
                                                             'modal' => 'Gender', // This decides the data source
                                                             'name' => 'gender_id',
@@ -133,14 +157,15 @@
                                                         </div>
                                                     </div>
 
+                                                    
                                                     <div class="col-md-4">
                                                         <div class="form-group">
-                                                            <label for="mobile">Mobile No. <span
+                                                            <label for="admission_date">Date Of Admission  <span
                                                                     style="color:red;">*</span></label>
-                                                            <input type="tel" class="form-control" id="mobile"
-                                                                name="mobile" placeholder="Mobile No."
-                                                                data-required="true" onkeypress="javascript:return isNumber(event)" maxlength="10" minlength="10"
-                                                                value="{{ old('mobile', $student->mobile ?? '') }}">
+                                                            <input type="date" class="form-control"
+                                                                id="admission_date" name="admission_date"
+                                                                data-required="true"
+                                                                value="{{ old('admission_date', $student->admission_date ?? date('Y-m-d')) }}">
                                                         </div>
                                                     </div>
 
@@ -151,28 +176,6 @@
                                                             <input type="email" class="form-control" id="email"
                                                                 name="email" placeholder="Email" data-required="true"
                                                                 value="{{ old('email', $student->email ?? '') }}">
-                                                        </div>
-                                                    </div>
-
-                                                    <div class="col-md-4">
-                                                        <div class="form-group">
-                                                            <label for="aadhaar">Aadhaar No. <span
-                                                                    style="color:red;">*</span></label>
-                                                            <input type="tel" class="form-control" id="aadhaar"
-                                                                name="aadhaar" placeholder="Aadhaar No."
-                                                                data-required="true" onkeypress="javascript:return isNumber(event)" maxlength="12" minlength="12"
-                                                                value="{{ old('aadhaar', $student->aadhaar ?? '') }}">
-                                                        </div>
-                                                    </div>
-
-                                                    <div class="col-md-4">
-                                                        <div class="form-group">
-                                                            <label for="admission_date">Date Of Admission  <span
-                                                                    style="color:red;">*</span></label>
-                                                            <input type="date" class="form-control"
-                                                                id="admission_date" name="admission_date"
-                                                                data-required="true"
-                                                                value="{{ old('admission_date', $student->admission_date ?? date('Y-m-d')) }}">
                                                         </div>
                                                     </div>
 
@@ -315,7 +318,7 @@
                                                                     'name' => 'state_id',
                                                                     'selected' => $student->state_id ?? null,
                                                                     'label' => 'State',
-                                                                    'required' => true,
+                                                                    'required' => false,
                                                                     'isRequestSent' => 101,
                                                                     'dependentId' => 101,
                                                                     'foreignKey' => 'country_id',
@@ -335,7 +338,7 @@
                                                                     'name' => 'city_id',
                                                                     'selected' => $student->city_id ?? null,
                                                                     'label' => 'City',
-                                                                    'required' => true,
+                                                                    'required' => false,
                                                                     'isRequestSent' => isset($student->state_id),
                                                                     'dependentId' => $student->state_id ?? null,
                                                                     'foreignKey' => 'state_id',
@@ -371,6 +374,15 @@
                                                                 </div>
                                                             </div>
 
+                                                            <div class="col-md-4">
+                                                                <div class="form-group">
+                                                                    <label for="aadhaar">Aadhaar No. </label>
+                                                                    <input type="tel" class="form-control" id="aadhaar"
+                                                                        name="aadhaar" placeholder="Aadhaar No."
+                                                                        data-required="false" onkeypress="javascript:return isNumber(event)" maxlength="12" minlength="12"
+                                                                        value="{{ old('aadhaar', $student->aadhaar ?? '') }}">
+                                                                </div>
+                                                            </div>
                                                             <div class="col-md-4">
                                                                 <div class="form-group">
                                                                     <label>Photo</label>

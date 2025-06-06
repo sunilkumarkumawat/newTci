@@ -118,15 +118,9 @@ public static function getSidebar()
             'status' => true,
             'icon' => 'fa fa-check-square',
             'subItems' => [
+                
                 [
-                    'title' => 'Dashboard',
-                    'className' => 'question_bank.dashboard',
-                    'status' => true,
-                    'route' => 'questionBankManagement',
-                    'icon' => 'fa fa-circle',
-                ],
-                [
-                    'title' => 'Subjects/ Streams',
+                    'title' => 'Subjects',
                     'className' => 'question_bank.add',
                     'status' => true,
                     'route' => 'subject',
@@ -140,10 +134,10 @@ public static function getSidebar()
                     'icon' => 'fa fa-circle',
                 ],
                 [
-                    'title' => 'Topics/ Subtopics',
+                    'title' => 'Topics',
                     'className' => 'question_bank.add',
                     'status' => true,
-                    'route' => 'add_topic',
+                    'route' => 'topics',
                     'icon' => 'fa fa-circle',
                 ],
                 [
