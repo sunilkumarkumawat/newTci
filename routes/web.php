@@ -57,6 +57,7 @@ Route::middleware(['auth'])->group(function () {
 
     // Sidebar
     Route::match(['get', 'post'], 'sidebar', 'Auth\AuthController@sidebar');
+   
 
 
      // branch
