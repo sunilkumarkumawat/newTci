@@ -13,27 +13,27 @@
                     <div class="col-md-12 col-12">
                         <ul class="breadcrumb">
                             <li class="breadcrumb-item"><a href="{{ url('dashboard') }}">Dashboard</a></li>
-                            <li class="breadcrumb-item">Chapter</li>
+                            <li class="breadcrumb-item">Topic</li>
                         </ul>
                     </div>
                 </div>
 
                 <div class="row">
-                    <!-- Chapter Form Column -->
+                    <!-- Topic Form Column -->
                     <div class="col-md-4 col-12">
                         <div class="card card-outline card-orange">
                             <div class="card-header bg-primary">
                                 <div class="card-title">
-                                    <h4><i class="fa fa-user-circle-o"></i> &nbsp;Add Chapter</h4>
+                                    <h4><i class="fa fa-user-circle-o"></i> &nbsp;Add Topic</h4>
                                 </div>
                             </div>
 
                             <div class="card-body">
-                                <form id="createCommon" data-modal="Chapter">
+                                <form id="createCommon" data-modal="Topic">
                                     @if ($isEdit)
                                         <input type='hidden' value="{{ $data->id ?? '' }}" name='id' />
                                     @endif
-                                    <input type='hidden' value='Chapter' name='modal_type' />
+                                    <input type='hidden' value='Topic' name='modal_type' />
                                     <!-- <input type="hidden" value="{{ Auth::user()->id }}" name="user_id" /> -->
                                     <!-- <input type='hidden' id="branch_id" name='branch_id' /> -->
                                     <div id="expense-container" class="bg-item mb-3 border p-3 rounded">
@@ -67,8 +67,8 @@
                                                 ])
                                             </div>
                                             <div class="col-md-12 col-12 form-group">
-                                                <label for="name"> Chapter Name <span class="text-danger">*</span></label>
-                                                <input type="text" class="form-control" id="name" name="name" placeholder="Enter Chapter Name" data-required='true'
+                                                <label for="name"> Topic Name <span class="text-danger">*</span></label>
+                                                <input type="text" class="form-control" id="name" name="name" placeholder="Enter Topic Name" data-required='true'
                                                  value="{{ old('name', $data->name ?? '') }}">     
                                             </div>
                                             
@@ -83,12 +83,12 @@
                         </div>
                     </div>
 
-                    <!-- Chapter View Column -->
+                    <!-- Topic View Column -->
                     <div class="col-md-8 col-12">
                         <div class="card card-outline card-orange">
                             <div class="card-header bg-light">
                                 <div class="card-title">
-                                    <h4><i class="fa fa-user-circle"></i> &nbsp;View Chapter</h4>
+                                    <h4><i class="fa fa-user-circle"></i> &nbsp;View Topic</h4>
                                 </div>
                             </div>
                             <div class="card-body">
@@ -97,13 +97,14 @@
                                         <thead>
                                             <tr class="bg-light">
                                                 <th>SR. NO.</th>
-                                                <th>Chapter</th>
+                                                <th>Topic</th>
                                                 <th>Class</th>
                                                 <th>Subject</th>
+                                                <th>Chapter</th>
                                                 <th>Action</th>
                                             </tr>
                                         </thead>
-                                        <tbody id="dataContainer-chapter" class='dataContainer'style="min-height:300px">
+                                        <tbody id="dataContainer-topic" class='dataContainer'style="min-height:300px">
                                            @include('common.loadskeletan',['loopCount'=>6])
                                         </tbody>
                                     </table>
