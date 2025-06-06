@@ -662,7 +662,21 @@ $cur_route = Route::getFacadeRoot()->current()->uri();
                                         message = 'Gender is required';
                                     }
                                     break;
-
+                                case 'class_type_id':
+                                    if (value === '') {
+                                        message = 'Class is required';
+                                    }
+                                    break;
+                                case 'subject_id':
+                                    if (value === '') {
+                                        message = 'Class is required';
+                                    }
+                                    break;
+                                case 'category_id':
+                                    if (value === '') {
+                                        message = 'Category is required';
+                                    }
+                                    break;
                                 case 'religion':
                                     if (value === '') {
                                         message = 'Religion is required';
@@ -746,6 +760,7 @@ $cur_route = Route::getFacadeRoot()->current()->uri();
                                         message = 'Amount is required';
                                     }
                                     break;
+                                
                                 case 'plan_name':
                                     if (value === '') {
                                         message = 'Plan Name is required';
