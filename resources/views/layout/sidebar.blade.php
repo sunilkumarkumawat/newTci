@@ -59,15 +59,29 @@ function renderSidebarMenu($items) {
     <!-- Sidebar Menu -->
     <nav class="mt-2">
         <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+
+            <!-- Dashboard Link -->
+            <li class="nav-item">
+                <a href="{{url('/dashboard')}}" class="nav-link {{ request()->is('dashboard') ? 'active' : '' }}">
+                    <i class="nav-icon fas fa-th"></i>
+                    <p>Dashboard</p>
+                </a>
+            </li>
+
+            <!-- Permanent Modules Label -->
+            <li class="nav-header">Modules</li>
+
+            <!-- Dynamic Sidebar Modules -->
             @foreach($sidebarData as $index => $menu)
                 @if(!empty($menu['status']))
-                    <li class="nav-item sidebar-module-group" data-module-index="{{ $index }}" style="display:none;">
+                    <li class="nav-item sidebar-module-group" data-module-index="{{ $index }}">
                         <ul class="nav flex-column">
                             @php renderSidebarMenu([$menu]); @endphp
                         </ul>
                     </li>
                 @endif
             @endforeach
+
         </ul>
     </nav>
 </div>

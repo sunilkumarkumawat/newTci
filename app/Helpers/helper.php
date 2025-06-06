@@ -52,13 +52,13 @@ public static function getSidebar()
     $allowedPermissions = array_map('strtolower', $allPermissions);
 
     $sidebarMenu = [
-        [
-            'title' => 'Dashboard',
-            'className' => 'dashboard',
-            'status' => true,
-            'icon' => 'fa fa-desktop',
-            'route' => 'dashboard',
-        ],
+        // [
+        //     'title' => 'Dashboard',
+        //     'className' => 'dashboard.view',
+        //     'status' => true,
+        //     'icon' => 'fa fa-desktop',
+        //     'route' => 'dashboard',
+        // ],
         [
             'title' => 'User Management',
             'className' => 'user_management',

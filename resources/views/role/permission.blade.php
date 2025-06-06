@@ -10,9 +10,7 @@
                       </div>
                   </div>
                   @php
-                  $permissionTypes = ['add', 'edit', 'view', 'delete', 'approve', 'export', 'print'];
-
-
+                  $permissionTypes = ['add', 'edit', 'view', 'delete','status' ,'approve', 'export', 'print'];
                   @endphp
                   {{-- Usage in your permission area --}}
                   <div class="card-body">

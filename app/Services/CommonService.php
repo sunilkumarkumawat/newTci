@@ -14,8 +14,13 @@ class CommonService
 
     private function savePermission($userId, array $permissions = [])
 {
+
+   
     // Clear existing permissions for the role
-    DB::table('user_permissions')->where('id', $userId)->delete();
+    DB::table('user_permissions')->where('user_id', $userId)->delete();
+
+
+
 
     // Prepare insert data
     $insertData = [];

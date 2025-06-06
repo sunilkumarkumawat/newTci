@@ -1,6 +1,9 @@
 {{-- first  --}}
 @extends('layout.app')
 @section('content')
+    @php
+    $permissions = Helper::getPermissions();
+    @endphp
     <div class="content-wrapper">
         <section class="content">
             <div class="container-fluid">
@@ -19,6 +22,26 @@
                             </div>
                             <div class="card-body ">
                             
+
+                            <div class="row">
+
+                              @if(in_array('user_management.view', $permissions)  || Auth::user()->role_id == 1)
+                <div class="col-6 col-sm-3 col-md-2">
+                    <a href="#">
+                        <div class="info-box mb-3 text-dark">
+                            <span class="info-box-icon bg-success elevation-1"><i class="fa fa-graduation-cap"></i></span>
+                            <div class="info-box-content">
+                                <span class="info-box-text">TOTAL STUDENTS</span>
+                                <span class="info-box-number">21</span>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+
+                @endif
+         
+        
+  </div>
                                 <!-- <div class="row mb-3">
                                     <div class="col-md-9 col-12">
                                         <div class="card">
