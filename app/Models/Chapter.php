@@ -10,6 +10,8 @@ class Chapter extends Model
        use SoftDeletes;
 	protected $table = "chapters"; //table name
 	
+    protected $guarded = [];
+    
        public static function countSubject(){
         $data=Subject::whereNull('deleted_at')->count();
         if($data){
