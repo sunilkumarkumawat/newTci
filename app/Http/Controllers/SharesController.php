@@ -51,6 +51,18 @@ class SharesController extends Controller
         return view('setting.add',compact('data'));
     }
 
+    public function subject()
+    {
+        $data = null;
+        return view('subject.add',compact('data'));
+    }
+
+    public function chapter()
+    {
+        $data = null;
+        return view('chapter.add',compact('data'));
+    }
+
      public function createCommon(Request $request)
     {
         return $this->commonService->createCommon($request);

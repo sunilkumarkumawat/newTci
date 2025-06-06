@@ -5,13 +5,11 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Session;
-class Subject extends Model
+class Chapter extends Model
 {
        use SoftDeletes;
-	protected $table = "subject"; //table name
+	protected $table = "chapters"; //table name
 	
-    protected $guarded = [];
-    
        public static function countSubject(){
         $data=Subject::whereNull('deleted_at')->count();
         if($data){
@@ -19,9 +17,10 @@ class Subject extends Model
         }
         return 0;
     }	
-      public function ClassTypes()
+
+    public function ClassTypes()
     {
         return $this->belongsTo('App\Models\ClassType','class_type_id');
     }
-	
+    
 }

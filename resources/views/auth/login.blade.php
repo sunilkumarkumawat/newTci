@@ -14,7 +14,7 @@
   <link rel="stylesheet" href="{{ asset('public/assets/school/css/icheck-bootstrap.min.css') }}">
   <!-- Theme style -->
   <link rel="stylesheet" href="{{ asset('public/assets/school/css/adminlte.min.css') }}">
-
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
   <style>
     .login-card-body, .register-card-body {
       background-color: #00000000;
@@ -30,7 +30,7 @@
     }
 
     span {
-      color: #09c5f2;
+      color: white;
     }
 
     .btn.btn-primary {
@@ -43,6 +43,9 @@
       border: 1px solid #ffffff;
       background: transparent;
       color: #ffffff;
+    }
+    .pointer{
+      cursor: pointer;
     }
   </style>
 </head>
@@ -62,27 +65,28 @@
     <div class="card-body login-card-body  ">
       <center  class='pt-4'><img src="{{ asset('/defaultImages/organization/logo.jpeg') }}"style="border-radius:100px;opacity:0.8"  width="60%"></center>
       <h3 class="pt-3 pb-3 text-center">Welcome to Tci Edu.Hub</h3>
-
+    @include('layout.message')
       <!-- ✅ AJAX Login Form -->
       <form id="loginForm">
         @csrf
         <div class="input-group mb-3">
-          <input type="text" name="user_name" class="form-control" placeholder="User Name">
+          <input type="text" name="user_name" class="form-control @error('user_name') is-invalid @enderror" placeholder="User  Name" value="{{old('user_name')}}">
           <div class="input-group-append">
-            <div class="input-group-text">
-              <span>&#9993;</span>
-            </div>
+              <div class="input-group-text">
+                  <span><i class="fa fa-envelope"></i></span>
+              </div>
           </div>
-        </div>
+      </div>
 
-        <div class="input-group mb-3">
-          <input type="password" name="password" class="form-control" placeholder="Password">
+      <!-- Password input -->
+      <div class="input-group mb-3">
+          <input type="password" id="password" name="password" class="form-control @error('password') is-invalid @enderror" placeholder="Password" value="{{ old('password') }}">
           <div class="input-group-append">
-            <div class="input-group-text">
-              <span>&#128274;</span>
-            </div>
+              <div class="input-group-text">
+                  <span class="toggle-password pointer"><i class="fa fa-eye"></i></span>
+              </div>
           </div>
-        </div>
+      </div>
 
         <div class="row">
           <div class="col-10">
@@ -155,6 +159,19 @@
       }
     });
   });
+
+    $(".toggle-password").click(function() {
+        var passwordInput = $("#password");
+        var icon = $(this).find("i");
+
+        if (passwordInput.attr("type") === "password") {
+          passwordInput.attr("type", "text");
+          icon.removeClass("fa-eye").addClass("fa-eye-slash");
+        } else {
+          passwordInput.attr("type", "password");
+          icon.removeClass("fa-eye-slash").addClass("fa-eye");
+        }
+    });
 });
 </script>
 
