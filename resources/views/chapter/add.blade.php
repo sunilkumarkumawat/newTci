@@ -69,10 +69,12 @@
                                             <tr class="bg-light">
                                                 <th>SR. NO.</th>
                                                 <th>Chapter</th>
+                                                <th>Class</th>
+                                                <th>Subject</th>
                                                 <th>Action</th>
                                             </tr>
                                         </thead>
-                                        <tbody id="dataContainer-Chapter" class='dataContainer'style="min-height:300px">
+                                        <tbody id="dataContainer-chapter" class='dataContainer'style="min-height:300px">
                                            @include('common.loadskeletan',['loopCount'=>6])
                                         </tbody>
                                     </table>

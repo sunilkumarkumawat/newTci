@@ -106,6 +106,10 @@
     </select>
 </li>
 
+<li class="nav-item dropdown">
+    <a href="{{ url()->current() }}" class="btn btn-success btn-xs"><i class="fa fa-refresh"></i></a>
+</li>
+
       
 
         <!-- User Profile -->

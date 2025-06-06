@@ -10,6 +10,7 @@ use App\Models\User;
 use App\Models\Sessions;
 use App\Models\Sidebar;
 use App\Models\PaymentMode;
+use App\Models\Question;
 use DB;
 use Session;
 use Illuminate\Support\Facades\Auth;
@@ -89,9 +90,9 @@ public static function getSidebar()
             'subItems' => [
                 [
                     'title' => 'Batch',
-                    'className' => 'batch.add',
+                    'className' => 'student_management.add',
                     'status' => true,
-                    'route' => 'batch',
+                    'route' => 'batches',
                     'icon' => 'fa fa-circle',
                 ],
                 [
@@ -126,9 +127,16 @@ public static function getSidebar()
                 ],
                 [
                     'title' => 'Subjects/ Streams',
-                    'className' => 'subject.add',
+                    'className' => 'question_bank.add',
                     'status' => true,
                     'route' => 'subject',
+                    'icon' => 'fa fa-circle',
+                ],
+                [
+                    'title' => 'Chapter',
+                    'className' => 'question_bank.add',
+                    'status' => true,
+                    'route' => 'chapter',
                     'icon' => 'fa fa-circle',
                 ],
                 [
@@ -343,4 +351,55 @@ public static function getSiderbar(){
     return $getSidebar;
 
 }
+
+public static function getCount($model)
+{
+    try {
+        $modelClass = 'App\\Models\\' . $model;
+
+        if (!class_exists($modelClass)) {
+            return 0;
+        }
+
+        return $modelClass::count();
+    } catch (\Exception $e) {
+        // Log the error if needed
+        return 0;
+    }
+}
+
+public static function getName($model, $id)
+{
+    try {
+        $modelClass = 'App\\Models\\' . $model;
+
+        if (!class_exists($modelClass)) {
+            return [];
+        }
+
+        return $modelClass::find($id);
+    } catch (\Exception $e) {
+        // Log the error if needed
+        return [];
+    }
+}
+
+public static function getThisCount($model, $column, $id)
+{
+    
+    try {
+        $modelClass = 'App\\Models\\' . $model;
+
+        if (!class_exists($modelClass)) {
+            return 0;
+        }
+
+        return $modelClass::where($column, $id)->count();
+    } catch (\Exception $e) {
+        return 0;
+    }
+}
+
+
+
 }

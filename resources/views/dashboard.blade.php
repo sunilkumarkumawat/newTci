@@ -1,9 +1,10 @@
-{{-- first  --}}
+
 @extends('layout.app')
 @section('content')
-    @php
+@php
     $permissions = Helper::getPermissions();
-    @endphp
+@endphp
+
     <div class="content-wrapper">
         <section class="content">
             <div class="container-fluid">
@@ -13,7 +14,7 @@
                             <div class="card-header bg-primary">
                                 <div class="card-title">
                                     <h4>
-                                        <i class="fa fa-book"></i> &nbsp; Admin Dashboard
+                                        <i class="fa fa-desktop"></i> &nbsp; Admin Dashboard
                                     </h4>
                                 </div>
                                 <div class="card-tools">
@@ -25,23 +26,36 @@
 
                             <div class="row">
 
-                              @if(in_array('user_management.view', $permissions)  || Auth::user()->role_id == 1)
-                <div class="col-6 col-sm-3 col-md-2">
-                    <a href="#">
-                        <div class="info-box mb-3 text-dark">
-                            <span class="info-box-icon bg-success elevation-1"><i class="fa fa-graduation-cap"></i></span>
-                            <div class="info-box-content">
-                                <span class="info-box-text">TOTAL STUDENTS</span>
-                                <span class="info-box-number">21</span>
-                            </div>
-                        </div>
-                    </a>
-                </div>
+                                @if(in_array('student_management.view', $permissions)  || Auth::user()->role_id == 1)
+                                    <div class="col-6 col-sm-3 col-md-3">
+                                        <a href="{{ url('studentView') }}">
+                                            <div class="info-box mb-3 text-dark">
+                                                <span class="info-box-icon bg-success elevation-1"><i class="fa fa-graduation-cap"></i></span>
+                                                <div class="info-box-content">
+                                                    <span class="info-box-text">TOTAL STUDENTS</span>
+                                                    <span class="info-box-number mt-n1">{{ Helper::getCount('Student') ?? '0' }}</span>
+                                                </div>
+                                            </div>
+                                        </a>
+                                    </div>
+                                @endif
 
-                @endif
-         
-        
-  </div>
+                                @if(in_array('user_management.view', $permissions)  || Auth::user()->role_id == 1)
+                                    <div class="col-6 col-sm-3 col-md-3">
+                                        <a href="{{ url('studentView') }}">
+                                            <div class="info-box mb-3 text-dark">
+                                                <span class="info-box-icon bg-success elevation-1"><i class="fa fa-graduation-cap"></i></span>
+                                                <div class="info-box-content">
+                                                    <span class="info-box-text">TOTAL USERS</span>
+                                                    <span class="info-box-number mt-n1">{{ Helper::getCount('User') ?? '0' }}</span>
+                                                </div>
+                                            </div>
+                                        </a>
+                                    </div>
+                                @endif
+                                    
+                                    
+                            </div>
                                 <!-- <div class="row mb-3">
                                     <div class="col-md-9 col-12">
                                         <div class="card">
@@ -114,11 +128,11 @@
                                                 <div class="card-title">
                                                     <h4>Student Management</h4>
                                                 </div>
-                                                {{-- <div class="card-tools">
+                                                 <div class="card-tools">
                                                     <a href="{{ url('studentAdd') }}" class="btn btn-primary"><i
                                                             class="fa fa-plus"></i>
                                                         Add</a>
-                                                </div> --}}
+                                                </div> 
                                             </div>
                                             <div class="card-body">
                                                 <div class="table-responsive">
@@ -160,102 +174,8 @@
                         </div>
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-                        {{-- Add students and remider boxes --}}
-                        {{-- <div class="row">
-                            <div class="col-12 col-sm-4 col-md-3">
-                                <a href="/library_assign" class="blink">
-                                    <div class="info-box mb-3 text-dark bg-info">
-                                        <input type="hidden" class="form-control" id="filter" name="filter"
-                                            value="active_user">
-                                        <span class="info-box-icon bg-dark elevation-1">
-                                            <i class="fa fa-plus"></i>
-                                        </span>
-                                        <div class="info-box-content">
-                                            <button type="submit" class="btn btn-info">
-                                                <span>New Enrollment</span>
-                                            </button>
-                                            <span class="info-box-number">
-                                                Click here to add new students.
-                                            </span>
-                                        </div>
-                                    </div>
-                                </a>
-                            </div>
-                            <div class="col-12 col-sm-6 col-md-3">
-                                <form id="myForm" action="/library_student_view" method="post">
-                                    <input type="hidden" class="form-control" id="filter" name="filter"
-                                        value="overdue_till_14_days">
-                                    <div class="info-box mb-3 text-dark">
-                                        <span class="info-box-icon bg-danger elevation-1"><i
-                                                class="fa fa-clock-o"></i></span>
-                                        <div class="info-box-content">
-                                            <button type="submit" class="bg-white"
-                                                style="border:hidden;text-align:left">
-                                                <span class="info-box-text">OverDue [Within 14Days]</span>
-                                            </button>
-                                            <span class="info-box-number">
-                                                <span class='badge badge-info'>Locker : <span
-                                                        class='isBlink'>30</span></span>
-                                                <span class='badge badge-info'>Library : <span
-                                                        class='isBlink'>60</span></span>
-                                            </span>
-                                        </div>
-                                    </div>
-                                </form>
-                            </div>
-
-                            <div class="col-12 col-sm-6 col-md-3">
-                                <form id="myForm" action="/library_student_view" method="post">
-                                    <input type="hidden" class="form-control" id="filter" name="filter"
-                                        value="due_3_days">
-                                    <div class="info-box mb-3 text-dark">
-                                        <span class="info-box-icon bg-danger elevation-1"><i
-                                                class="fa fa-clock-o"></i></span>
-                                        <div class="info-box-content">
-                                            <button type="submit" class="bg-white"
-                                                style="border:hidden;text-align:left">
-                                                <span class="info-box-text">DueDate [Within 3Days]</span>
-                                            </button>
-                                            <span class="info-box-number">
-                                                <span class='badge badge-info'>Locker : <span
-                                                        class='isBlink'>18</span></span>
-                                                <span class='badge badge-info'>Library : <span
-                                                        class='isBlink'>40</span></span>
-                                            </span>
-                                        </div>
-                                    </div>
-                                </form>
-                            </div>
-                            <div class="col-12 col-sm-6 col-md-3">
-                                <div class="info-box mb-3 text-dark">
-                                    <span class="info-box-icon bg-success elevation-1"><i
-                                            class="fa fa-credit-card"></i></span>
-                                    <div class="info-box-content">
-                                        <span class="info-box-text">Today EXPENSES</span>
-                                        <span class="info-box-number">1,200/-</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                    
-                        <div>
-                            <h5 class="mb-3">Collection Report</h5>
+                    <div>
+                            <!-- <h5 class="mb-3">Collection Report</h5>
                             <div class="row">
                                 <div class="col-12 col-sm-6 col-md-2">
                                     <div class="info-box mb-3 text-dark">
@@ -291,11 +211,11 @@
                                         </div>
                                     </div>
                                 </div>
-                            </div>
+                            </div> -->
                         </div>
 
                         
-                        <div class="row">
+                        <!-- <div class="row">
                             <div class="col-md-6 col-12">
                                 <div class="card">
                                     <div class="card-header ui-sortable-handle">
@@ -427,10 +347,10 @@
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        </div> -->
 
                     
-                        <div class="row">
+                        <!-- <div class="row">
                             <div class="col-md-12">
                                 <div class="card">
                                     <div class="card-header">
@@ -489,9 +409,9 @@
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        </div> -->
 
-                        <div class="modal fade exampleModal" id="exampleModal" tabindex="-1" role="dialog"
+                        <!-- <div class="modal fade exampleModal" id="exampleModal" tabindex="-1" role="dialog"
                             aria-labelledby="exampleModalLabel" aria-hidden="true">
                             <div class="modal-dialog modal-lg" role="document">
                                 <div class="modal-content">
@@ -508,624 +428,628 @@
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        </div> -->
                     </div>
+                </div>
+            </div>
         </section>
     </div>
 
-    <link rel="stylesheet" href="https://adminlte.io/themes/v3/plugins/fullcalendar/main.css">
-    <script src="https://adminlte.io/themes/v3/plugins/fullcalendar/main.js"></script>
+    <!-- <link rel="stylesheet" href="https://adminlte.io/themes/v3/plugins/fullcalendar/main.css">
+    <script src="https://adminlte.io/themes/v3/plugins/fullcalendar/main.js"></script> -->
 
     <script>
         function sendMessages() {
-            var formData = new FormData();
-            var checkboxes = document.querySelectorAll('input.checkbox_id');
-            checkboxes.forEach(function(checkbox) {
-                if (checkbox.checked) {
-                    var mobile = checkbox.getAttribute('data-mobile');
-                    var message = checkbox.getAttribute('data-pendings');
-                    var id = checkbox.value;
-                    formData.append('mobile[]', mobile);
-                    formData.append('message[]', message);
-                    formData.append('id[]', id);
-                }
-            });
+            // var formData = new FormData();
+            // var checkboxes = document.querySelectorAll('input.checkbox_id');
+            // checkboxes.forEach(function(checkbox) {
+            //     if (checkbox.checked) {
+            //         var mobile = checkbox.getAttribute('data-mobile');
+            //         var message = checkbox.getAttribute('data-pendings');
+            //         var id = checkbox.value;
+            //         formData.append('mobile[]', mobile);
+            //         formData.append('message[]', message);
+            //         formData.append('id[]', id);
+            //     }
+            // });
 
-            $.ajax({
-                url: '/sendRemainderMessages',
-                type: 'POST',
-                data: formData,
-                processData: false,
-                contentType: false,
-                success: function(data) {
-                    toastr.success('Remainders Sent Successfully');
-                },
-                error: function(data) {
-                    toastr.error('An error occurred. Please try again.');
-                }
-            });
+            // $.ajax({
+            //     url: '/sendRemainderMessages',
+            //     type: 'POST',
+            //     data: formData,
+            //     processData: false,
+            //     contentType: false,
+            //     success: function(data) {
+            //         toastr.success('Remainders Sent Successfully');
+            //     },
+            //     error: function(data) {
+            //         toastr.error('An error occurred. Please try again.');
+            //     }
+            // });
         }
 
-        $(document).ready(function() {
-            function createButton() {
-                return $('<button>', {
-                    text: 'Send Reminder Message',
-                    class: 'btn btn-primary',
-                    click: function(event) {
-                        event.preventDefault();
-                        sendMessages();
-                    }
-                });
-            }
+    //     $(document).ready(function() {
+    //         function createButton() {
+    //             return $('<button>', {
+    //                 text: 'Send Reminder Message',
+    //                 class: 'btn btn-primary',
+    //                 click: function(event) {
+    //                     event.preventDefault();
+    //                     sendMessages();
+    //                 }
+    //             });
+    //         }
 
-            function toggleButton() {
-                if ($('#checkbox_select_all').is(':checked') || $('.checkbox_id:checked').length > 0) {
-                    if ($('#example12_wrapper .col-md-6:eq(1) .btn').length === 0) {
-                        $('#example12_wrapper .col-md-6:eq(1)').append(createButton());
-                    }
-                } else {
-                    $('#example12_wrapper .col-md-6:eq(1) .btn').remove();
-                }
-            }
+    //         function toggleButton() {
+    //             if ($('#checkbox_select_all').is(':checked') || $('.checkbox_id:checked').length > 0) {
+    //                 if ($('#example12_wrapper .col-md-6:eq(1) .btn').length === 0) {
+    //                     $('#example12_wrapper .col-md-6:eq(1)').append(createButton());
+    //                 }
+    //             } else {
+    //                 $('#example12_wrapper .col-md-6:eq(1) .btn').remove();
+    //             }
+    //         }
 
-            $('#checkbox_select_all').on('change', function() {
-                $('.checkbox_id').prop('checked', $(this).prop('checked'));
-                toggleButton();
-            });
+    //         $('#checkbox_select_all').on('change', function() {
+    //             $('.checkbox_id').prop('checked', $(this).prop('checked'));
+    //             toggleButton();
+    //         });
 
-            $(document).on('change', '.checkbox_id', function() {
-                toggleButton();
-            });
+    //         $(document).on('change', '.checkbox_id', function() {
+    //             toggleButton();
+    //         });
 
-            toggleButton();
+    //         toggleButton();
 
-            function generateLibraryReminder(studentName, Admission_No, libraryName, amount, plans, librarian,
-                libraryMobile) {
-                var messageTemplate =
-                    `Dear *${studentName}*
-      Reg. No.~ 
-      ${Admission_No}
-      आपकी लाइब्रेरी की सदस्यता का माह पूर्ण हो चुका हैं। कृप्या  सदस्यता शुल्क जमा करें।
-       फ़ीस जमा करने की अंतिम तारीख़ से तीन दिवस के भीतर फ़ीस जमा करने की कृपा करें।🙏🏻
-      👉🏻फ़ीस जमा करते समय अपना आईडी कार्ड साथ में लाना अनिवार्य हैं। 
-      👉🏻 फ़ीस में किसी कारणवश विलंब होने की स्थिति में आप हमें फ़ोन और मेसेज के माध्यम से सूचित कर दें, ताकि हम जानकारी अपडेट कर सकें। (इसी स्थिति में तारीख़ में संसोधन किया जाएगा)T&C
+    //         function generateLibraryReminder(studentName, Admission_No, libraryName, amount, plans, librarian,
+    //             libraryMobile) {
+    //             var messageTemplate =
+    //                 `Dear *${studentName}*
+    //   Reg. No.~ 
+    //   ${Admission_No}
+    //   आपकी लाइब्रेरी की सदस्यता का माह पूर्ण हो चुका हैं। कृप्या  सदस्यता शुल्क जमा करें।
+    //    फ़ीस जमा करने की अंतिम तारीख़ से तीन दिवस के भीतर फ़ीस जमा करने की कृपा करें।🙏🏻
+    //   👉🏻फ़ीस जमा करते समय अपना आईडी कार्ड साथ में लाना अनिवार्य हैं। 
+    //   👉🏻 फ़ीस में किसी कारणवश विलंब होने की स्थिति में आप हमें फ़ोन और मेसेज के माध्यम से सूचित कर दें, ताकि हम जानकारी अपडेट कर सकें। (इसी स्थिति में तारीख़ में संसोधन किया जाएगा)T&C
       
-      _${plans}_
+    //   _${plans}_
       
-      आप ऑनलाइन माध्यम से भी फ़ीस जमा कर सकते हैं:- 📲
-      9479468878@ybl
+    //   आप ऑनलाइन माध्यम से भी फ़ीस जमा कर सकते हैं:- 📲
+    //   9479468878@ybl
       
-                       《धन्यवाद》
-      कृप्या अपने एक्सपीरिएंस शेयर करे📃
-                             *****
-      https://g.co/kgs/eyZ1BKT
+    //                    《धन्यवाद》
+    //   कृप्या अपने एक्सपीरिएंस शेयर करे📃
+    //                          *****
+    //   https://g.co/kgs/eyZ1BKT
       
-                       📱संपर्क करें-
+    //                    📱संपर्क करें-
       
-      ${libraryName}
-      ${libraryMobile}`;
-                return messageTemplate;
-            }
+    //   ${libraryName}
+    //   ${libraryMobile}`;
+    //             return messageTemplate;
+    //         }
 
-            $('tr').each(function() {
-                var studentName = $(this).find('td.student_name').text().trim();
-                var Admission_No = $(this).find('td.admissionNo').text().trim();
-                var libraryName = "Bright Future Library";
-                var amount = "₹1000";
-                var plans = "Monthly Plan";
-                var librarian = "Mr. Ajay Sharma";
-                var libraryMobile = "9876543210";
-                var messageId = generateLibraryReminder(studentName, Admission_No, libraryName, amount,
-                    plans, librarian, libraryMobile);
-                $(this).find('input.checkbox_id').attr('data-pendings', messageId);
-            });
-        });
+    //         $('tr').each(function() {
+    //             var studentName = $(this).find('td.student_name').text().trim();
+    //             var Admission_No = $(this).find('td.admissionNo').text().trim();
+    //             var libraryName = "Bright Future Library";
+    //             var amount = "₹1000";
+    //             var plans = "Monthly Plan";
+    //             var librarian = "Mr. Ajay Sharma";
+    //             var libraryMobile = "9876543210";
+    //             var messageId = generateLibraryReminder(studentName, Admission_No, libraryName, amount,
+    //                 plans, librarian, libraryMobile);
+    //             $(this).find('input.checkbox_id').attr('data-pendings', messageId);
+    //         });
+    //     });
+    // </script>
+
+     <script>
+    //     $(function() {
+    //         $("#example12").DataTable({
+    //             "autoWidth": false,
+    //             "lengthMenu": [25, 50, 100, 200, 500],
+    //             "buttons": ["copy", "csv", "excel", "pdf", "print"]
+    //         }).buttons().container().appendTo('#example12_wrapper .col-md-6:eq(0)');
+    //     });
+    // </script>
+
+     <script>
+    //     $(document).ready(function() {
+    //         $(".data").click(function() {
+    //             var id = $(this).data("id");
+    //             var library_plan_id = $(this).data("library_plan_id");
+    //             $.ajax({
+    //                 type: 'post',
+    //                 url: '/library_due_amount_new',
+    //                 data: {
+    //                     admission_id: id,
+    //                     library_plan_id: library_plan_id
+    //                 },
+    //                 dataType: 'json',
+    //                 success: function(response) {
+    //                     $(".response").html(response.html);
+    //                 }
+    //             });
+    //         });
+    //     });
+    </script>
+
+    <!-- // <style>
+    //     .blink {
+    //         animation: blink-animation 4s infinite step-start;
+    //     }
+
+    //     @keyframes blink-animation {
+    //         0% {
+    //             opacity: 1;
+    //         }
+
+    //         5% {
+    //             opacity: 0.1;
+    //         }
+
+    //         100% {
+    //             opacity: 1;
+    //         }
+    //     }
+
+    //     .blink2 {
+    //         animation: blink-animation 0.5s infinite step-start;
+    //     }
+    // </style> -->
+
+   
+
+     <script>
+    //     $(document).ready(function() {
+    //         // $('.isBlink').each(function() {
+    //         //     if ($(this).text().trim() > 0) {
+    //         //         $(this).closest('.badge').addClass('bg-danger blink2');
+    //         //     }
+    //         // });
+
+    //         // var BASEURL = "http://localhost";
+
+    //         // $.ajax({
+    //         //     headers: {
+    //         //         'X-CSRF-TOKEN': 'STATIC_CSRF_TOKEN'
+    //         //     },
+    //         //     url: BASEURL + '/check_library_renew',
+    //         //     type: 'GET',
+    //         //     success: function(data) {
+    //         //         if (data.status === true) {
+    //         //             toastr.info('Seats Cleared Successfully');
+    //         //         }
+    //         //     },
+    //         //     error: function(jqXHR, textStatus, errorThrown) {
+    //         //         console.error('Error: ', textStatus, errorThrown);
+    //         //         toastr.error('An error occurred. Please try again.');
+    //         //     }
+    //         // });
+    //     });
+    // </script>
+
+     <script>
+    //     $(function() {
+    //         function ini_events(ele) {
+    //             ele.each(function() {
+    //                 var eventObject = {
+    //                     title: $.trim($(this).text())
+    //                 };
+
+    //                 $(this).data('eventObject', eventObject);
+    //                 $(this).draggable({
+    //                     zIndex: 1070,
+    //                     revert: true,
+    //                     revertDuration: 0
+    //                 });
+    //             });
+    //         }
+
+    //         ini_events($('#external-events div.external-event'));
+
+    //         var date = new Date();
+    //         var d = date.getDate(),
+    //             m = date.getMonth(),
+    //             y = date.getFullYear();
+
+    //         var Calendar = FullCalendar.Calendar;
+    //         var Draggable = FullCalendar.Draggable;
+
+    //         var containerEl = document.getElementById('external-events');
+    //         var checkbox = document.getElementById('drop-remove');
+    //         var calendarEl = document.getElementById('calendar');
+
+    //         new Draggable(containerEl, {
+    //             itemSelector: '.external-event',
+    //             eventData: function(eventEl) {
+    //                 return {
+    //                     title: eventEl.innerText,
+    //                     backgroundColor: window.getComputedStyle(eventEl).getPropertyValue(
+    //                         'background-color'),
+    //                     borderColor: window.getComputedStyle(eventEl).getPropertyValue(
+    //                         'background-color'),
+    //                     textColor: window.getComputedStyle(eventEl).getPropertyValue('color'),
+    //                 };
+    //             }
+    //         });
+
+    //         var calendar = new Calendar(calendarEl, {
+    //             headerToolbar: {
+    //                 left: 'prev,next today',
+    //                 center: 'title',
+    //                 right: 'dayGridMonth,timeGridWeek,timeGridDay'
+    //             },
+    //             themeSystem: 'bootstrap',
+    //             events: [{
+    //                     title: 'All Day Event',
+    //                     start: new Date(y, m, 1),
+    //                     backgroundColor: '#f56954',
+    //                     borderColor: '#f56954',
+    //                     allDay: true
+    //                 },
+    //                 {
+    //                     title: 'Long Event',
+    //                     start: new Date(y, m, d - 5),
+    //                     end: new Date(y, m, d - 2),
+    //                     backgroundColor: '#f39c12',
+    //                     borderColor: '#f39c12'
+    //                 },
+    //                 {
+    //                     title: 'Meeting',
+    //                     start: new Date(y, m, d, 10, 30),
+    //                     allDay: false,
+    //                     backgroundColor: '#0073b7',
+    //                     borderColor: '#0073b7'
+    //                 },
+    //                 {
+    //                     title: 'Lunch',
+    //                     start: new Date(y, m, d, 12, 0),
+    //                     end: new Date(y, m, d, 14, 0),
+    //                     allDay: false,
+    //                     backgroundColor: '#00c0ef',
+    //                     borderColor: '#00c0ef'
+    //                 },
+    //                 {
+    //                     title: 'Birthday Party',
+    //                     start: new Date(y, m, d + 1, 19, 0),
+    //                     end: new Date(y, m, d + 1, 22, 30),
+    //                     allDay: false,
+    //                     backgroundColor: '#00a65a',
+    //                     borderColor: '#00a65a'
+    //                 },
+    //                 {
+    //                     title: 'Click for Google',
+    //                     start: new Date(y, m, 28),
+    //                     end: new Date(y, m, 29),
+    //                     url: 'https://www.google.com/',
+    //                     backgroundColor: '#3c8dbc',
+    //                     borderColor: '#3c8dbc'
+    //                 }
+    //             ],
+    //             editable: true,
+    //             droppable: true,
+    //             drop: function(info) {
+    //                 if (checkbox.checked) {
+    //                     info.draggedEl.parentNode.removeChild(info.draggedEl);
+    //                 }
+    //             }
+    //         });
+
+    //         calendar.render();
+
+    //         var currColor = '#3c8dbc';
+
+    //         $('#color-chooser > li > a').click(function(e) {
+    //             e.preventDefault();
+    //             currColor = $(this).css('color');
+    //             $('#add-new-event').css({
+    //                 'background-color': currColor,
+    //                 'border-color': currColor
+    //             });
+    //         });
+
+    //         $('#add-new-event').click(function(e) {
+    //             e.preventDefault();
+    //             var val = $('#new-event').val();
+    //             if (val.length === 0) return;
+
+    //             var event = $('<div />');
+    //             event.css({
+    //                 'background-color': currColor,
+    //                 'border-color': currColor,
+    //                 'color': '#fff'
+    //             }).addClass('external-event').text(val);
+
+    //             $('#external-events').prepend(event);
+    //             ini_events(event);
+    //             $('#new-event').val('');
+    //         });
+    //     });
     </script>
 
     <script>
-        $(function() {
-            $("#example12").DataTable({
-                "autoWidth": false,
-                "lengthMenu": [25, 50, 100, 200, 500],
-                "buttons": ["copy", "csv", "excel", "pdf", "print"]
-            }).buttons().container().appendTo('#example12_wrapper .col-md-6:eq(0)');
-        });
+    //     $(document).on('click', ".add_task", function() {
+    //         var task = $('#task').val();
+    //         var data = {
+    //             task: task
+    //         };
+
+    //         $.ajaxSetup({
+    //             headers: {
+    //                 'X-CSRF-TOKEN': 'STATIC_CSRF_TOKEN'
+    //             }
+    //         });
+
+    //         $.ajax({
+    //             type: "POST",
+    //             url: "/add/task",
+    //             data: data,
+    //             dataType: "html",
+    //             success: function() {
+    //                 toastr.success('Task Added Successfully.');
+    //             }
+    //         });
+    //     });
+
+    //     $(document).on('click', ".task_status", function() {
+    //         var id = $(this).data('id');
+    //         var status = $(this).data('status');
+
+    //         $.ajax({
+    //             url: '/status/task',
+    //             type: 'POST',
+    //             headers: {
+    //                 'X-CSRF-TOKEN': 'STATIC_CSRF_TOKEN'
+    //             },
+    //             data: {
+    //                 status: status,
+    //                 id: id
+    //             },
+    //             success: function() {
+    //                 toastr.success('Record Saved Successfully.');
+    //             }
+    //         });
+    //     });
+
+    //     $(document).on('click', ".task_delete", function() {
+    //         var task_id = $(this).data('id');
+    //         var data = {
+    //             task_id: task_id
+    //         };
+
+    //         $.ajaxSetup({
+    //             headers: {
+    //                 'X-CSRF-TOKEN': 'STATIC_CSRF_TOKEN'
+    //             }
+    //         });
+
+    //         $.ajax({
+    //             type: "POST",
+    //             url: "/delete/task",
+    //             data: data,
+    //             dataType: "html",
+    //             success: function() {
+    //                 $("#task_li").remove();
+    //                 toastr.success('Task Deleted Successfully.');
+    //             }
+    //         });
+    //     });
+    // </script>
+
+     <script>
+    //     $(function() {
+    //         var areaChartCanvas = $('#areaChart').get(0).getContext('2d');
+
+    //         var areaChartData = {
+    //             labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
+    //             datasets: [{
+    //                     label: 'Digital Goods',
+    //                     backgroundColor: 'rgba(60,141,188,0.9)',
+    //                     borderColor: 'rgba(60,141,188,0.8)',
+    //                     pointRadius: false,
+    //                     pointColor: '#3b8bba',
+    //                     pointStrokeColor: 'rgba(60,141,188,1)',
+    //                     pointHighlightFill: '#fff',
+    //                     pointHighlightStroke: 'rgba(60,141,188,1)',
+    //                     data: [28, 48, 40, 19, 86, 27, 90]
+    //                 },
+    //                 {
+    //                     label: 'Electronics',
+    //                     backgroundColor: 'rgba(210, 214, 222, 1)',
+    //                     borderColor: 'rgba(210, 214, 222, 1)',
+    //                     pointRadius: false,
+    //                     pointColor: 'rgba(210, 214, 222, 1)',
+    //                     pointStrokeColor: '#c1c7d1',
+    //                     pointHighlightFill: '#fff',
+    //                     pointHighlightStroke: 'rgba(220,220,220,1)',
+    //                     data: [65, 59, 80, 81, 56, 55, 40]
+    //                 }
+    //             ]
+    //         };
+
+    //         var areaChartOptions = {
+    //             maintainAspectRatio: false,
+    //             responsive: true,
+    //             legend: {
+    //                 display: false
+    //             },
+    //             scales: {
+    //                 xAxes: [{
+    //                     gridLines: {
+    //                         display: false
+    //                     }
+    //                 }],
+    //                 yAxes: [{
+    //                     gridLines: {
+    //                         display: false
+    //                     }
+    //                 }]
+    //             }
+    //         };
+
+    //         new Chart(areaChartCanvas, {
+    //             type: 'line',
+    //             data: areaChartData,
+    //             options: areaChartOptions
+    //         });
+    //     });
     </script>
 
-    <script>
-        $(document).ready(function() {
-            $(".data").click(function() {
-                var id = $(this).data("id");
-                var library_plan_id = $(this).data("library_plan_id");
-                $.ajax({
-                    type: 'post',
-                    url: '/library_due_amount_new',
-                    data: {
-                        admission_id: id,
-                        library_plan_id: library_plan_id
-                    },
-                    dataType: 'json',
-                    success: function(response) {
-                        $(".response").html(response.html);
-                    }
-                });
-            });
-        });
-    </script>
-
-    <style>
-        .blink {
-            animation: blink-animation 4s infinite step-start;
-        }
-
-        @keyframes blink-animation {
-            0% {
-                opacity: 1;
-            }
-
-            5% {
-                opacity: 0.1;
-            }
-
-            100% {
-                opacity: 1;
-            }
-        }
-
-        .blink2 {
-            animation: blink-animation 0.5s infinite step-start;
-        }
-    </style>
 
    
 
     <script>
-        $(document).ready(function() {
-            $('.isBlink').each(function() {
-                if ($(this).text().trim() > 0) {
-                    $(this).closest('.badge').addClass('bg-danger blink2');
-                }
-            });
-
-            var BASEURL = "http://localhost";
-
-            $.ajax({
-                headers: {
-                    'X-CSRF-TOKEN': 'STATIC_CSRF_TOKEN'
-                },
-                url: BASEURL + '/check_library_renew',
-                type: 'GET',
-                success: function(data) {
-                    if (data.status === true) {
-                        toastr.info('Seats Cleared Successfully');
-                    }
-                },
-                error: function(jqXHR, textStatus, errorThrown) {
-                    console.error('Error: ', textStatus, errorThrown);
-                    toastr.error('An error occurred. Please try again.');
-                }
-            });
-        });
-    </script>
-
-    <script>
-        $(function() {
-            function ini_events(ele) {
-                ele.each(function() {
-                    var eventObject = {
-                        title: $.trim($(this).text())
-                    };
-
-                    $(this).data('eventObject', eventObject);
-                    $(this).draggable({
-                        zIndex: 1070,
-                        revert: true,
-                        revertDuration: 0
-                    });
-                });
-            }
-
-            ini_events($('#external-events div.external-event'));
-
-            var date = new Date();
-            var d = date.getDate(),
-                m = date.getMonth(),
-                y = date.getFullYear();
-
-            var Calendar = FullCalendar.Calendar;
-            var Draggable = FullCalendar.Draggable;
-
-            var containerEl = document.getElementById('external-events');
-            var checkbox = document.getElementById('drop-remove');
-            var calendarEl = document.getElementById('calendar');
-
-            new Draggable(containerEl, {
-                itemSelector: '.external-event',
-                eventData: function(eventEl) {
-                    return {
-                        title: eventEl.innerText,
-                        backgroundColor: window.getComputedStyle(eventEl).getPropertyValue(
-                            'background-color'),
-                        borderColor: window.getComputedStyle(eventEl).getPropertyValue(
-                            'background-color'),
-                        textColor: window.getComputedStyle(eventEl).getPropertyValue('color'),
-                    };
-                }
-            });
-
-            var calendar = new Calendar(calendarEl, {
-                headerToolbar: {
-                    left: 'prev,next today',
-                    center: 'title',
-                    right: 'dayGridMonth,timeGridWeek,timeGridDay'
-                },
-                themeSystem: 'bootstrap',
-                events: [{
-                        title: 'All Day Event',
-                        start: new Date(y, m, 1),
-                        backgroundColor: '#f56954',
-                        borderColor: '#f56954',
-                        allDay: true
-                    },
-                    {
-                        title: 'Long Event',
-                        start: new Date(y, m, d - 5),
-                        end: new Date(y, m, d - 2),
-                        backgroundColor: '#f39c12',
-                        borderColor: '#f39c12'
-                    },
-                    {
-                        title: 'Meeting',
-                        start: new Date(y, m, d, 10, 30),
-                        allDay: false,
-                        backgroundColor: '#0073b7',
-                        borderColor: '#0073b7'
-                    },
-                    {
-                        title: 'Lunch',
-                        start: new Date(y, m, d, 12, 0),
-                        end: new Date(y, m, d, 14, 0),
-                        allDay: false,
-                        backgroundColor: '#00c0ef',
-                        borderColor: '#00c0ef'
-                    },
-                    {
-                        title: 'Birthday Party',
-                        start: new Date(y, m, d + 1, 19, 0),
-                        end: new Date(y, m, d + 1, 22, 30),
-                        allDay: false,
-                        backgroundColor: '#00a65a',
-                        borderColor: '#00a65a'
-                    },
-                    {
-                        title: 'Click for Google',
-                        start: new Date(y, m, 28),
-                        end: new Date(y, m, 29),
-                        url: 'https://www.google.com/',
-                        backgroundColor: '#3c8dbc',
-                        borderColor: '#3c8dbc'
-                    }
-                ],
-                editable: true,
-                droppable: true,
-                drop: function(info) {
-                    if (checkbox.checked) {
-                        info.draggedEl.parentNode.removeChild(info.draggedEl);
-                    }
-                }
-            });
-
-            calendar.render();
-
-            var currColor = '#3c8dbc';
-
-            $('#color-chooser > li > a').click(function(e) {
-                e.preventDefault();
-                currColor = $(this).css('color');
-                $('#add-new-event').css({
-                    'background-color': currColor,
-                    'border-color': currColor
-                });
-            });
-
-            $('#add-new-event').click(function(e) {
-                e.preventDefault();
-                var val = $('#new-event').val();
-                if (val.length === 0) return;
-
-                var event = $('<div />');
-                event.css({
-                    'background-color': currColor,
-                    'border-color': currColor,
-                    'color': '#fff'
-                }).addClass('external-event').text(val);
-
-                $('#external-events').prepend(event);
-                ini_events(event);
-                $('#new-event').val('');
-            });
-        });
-    </script>
-
-    <script>
-        $(document).on('click', ".add_task", function() {
-            var task = $('#task').val();
-            var data = {
-                task: task
-            };
-
-            $.ajaxSetup({
-                headers: {
-                    'X-CSRF-TOKEN': 'STATIC_CSRF_TOKEN'
-                }
-            });
-
-            $.ajax({
-                type: "POST",
-                url: "/add/task",
-                data: data,
-                dataType: "html",
-                success: function() {
-                    toastr.success('Task Added Successfully.');
-                }
-            });
-        });
-
-        $(document).on('click', ".task_status", function() {
-            var id = $(this).data('id');
-            var status = $(this).data('status');
-
-            $.ajax({
-                url: '/status/task',
-                type: 'POST',
-                headers: {
-                    'X-CSRF-TOKEN': 'STATIC_CSRF_TOKEN'
-                },
-                data: {
-                    status: status,
-                    id: id
-                },
-                success: function() {
-                    toastr.success('Record Saved Successfully.');
-                }
-            });
-        });
-
-        $(document).on('click', ".task_delete", function() {
-            var task_id = $(this).data('id');
-            var data = {
-                task_id: task_id
-            };
-
-            $.ajaxSetup({
-                headers: {
-                    'X-CSRF-TOKEN': 'STATIC_CSRF_TOKEN'
-                }
-            });
-
-            $.ajax({
-                type: "POST",
-                url: "/delete/task",
-                data: data,
-                dataType: "html",
-                success: function() {
-                    $("#task_li").remove();
-                    toastr.success('Task Deleted Successfully.');
-                }
-            });
-        });
-    </script>
-
-    <script>
-        $(function() {
-            var areaChartCanvas = $('#areaChart').get(0).getContext('2d');
-
-            var areaChartData = {
-                labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
-                datasets: [{
-                        label: 'Digital Goods',
-                        backgroundColor: 'rgba(60,141,188,0.9)',
-                        borderColor: 'rgba(60,141,188,0.8)',
-                        pointRadius: false,
-                        pointColor: '#3b8bba',
-                        pointStrokeColor: 'rgba(60,141,188,1)',
-                        pointHighlightFill: '#fff',
-                        pointHighlightStroke: 'rgba(60,141,188,1)',
-                        data: [28, 48, 40, 19, 86, 27, 90]
-                    },
-                    {
-                        label: 'Electronics',
-                        backgroundColor: 'rgba(210, 214, 222, 1)',
-                        borderColor: 'rgba(210, 214, 222, 1)',
-                        pointRadius: false,
-                        pointColor: 'rgba(210, 214, 222, 1)',
-                        pointStrokeColor: '#c1c7d1',
-                        pointHighlightFill: '#fff',
-                        pointHighlightStroke: 'rgba(220,220,220,1)',
-                        data: [65, 59, 80, 81, 56, 55, 40]
-                    }
-                ]
-            };
-
-            var areaChartOptions = {
-                maintainAspectRatio: false,
-                responsive: true,
-                legend: {
-                    display: false
-                },
-                scales: {
-                    xAxes: [{
-                        gridLines: {
-                            display: false
-                        }
-                    }],
-                    yAxes: [{
-                        gridLines: {
-                            display: false
-                        }
-                    }]
-                }
-            };
-
-            new Chart(areaChartCanvas, {
-                type: 'line',
-                data: areaChartData,
-                options: areaChartOptions
-            });
-        });
-    </script>
-
-
-   
-
-    <script>
-        $(document).ready(function() {
+        // $(document).ready(function() {
       
-            var areaChartCanvas = $('#areaChart').get(0).getContext('2d');
-            var areaChartData = {
-                labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
-                datasets: [{
-                        label: 'Digital Goods',
-                        backgroundColor: 'rgba(60,141,188,0.9)',
-                        borderColor: 'rgba(60,141,188,0.8)',
-                        pointRadius: false,
-                        pointColor: '#3b8bba',
-                        pointStrokeColor: 'rgba(60,141,188,1)',
-                        pointHighlightFill: '#fff',
-                        pointHighlightStroke: 'rgba(60,141,188,1)',
-                        data: [28, 48, 40, 19, 86, 27, 90]
-                    },
-                    {
-                        label: 'Electronics',
-                        backgroundColor: 'rgba(210, 214, 222, 1)',
-                        borderColor: 'rgba(210, 214, 222, 1)',
-                        pointRadius: false,
-                        pointColor: 'rgba(210, 214, 222, 1)',
-                        pointStrokeColor: '#c1c7d1',
-                        pointHighlightFill: '#fff',
-                        pointHighlightStroke: 'rgba(220,220,220,1)',
-                        data: [65, 59, 80, 81, 56, 55, 40]
-                    },
-                ]
-            };
+        //     var areaChartCanvas = $('#areaChart').get(0).getContext('2d');
+        //     var areaChartData = {
+        //         labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
+        //         datasets: [{
+        //                 label: 'Digital Goods',
+        //                 backgroundColor: 'rgba(60,141,188,0.9)',
+        //                 borderColor: 'rgba(60,141,188,0.8)',
+        //                 pointRadius: false,
+        //                 pointColor: '#3b8bba',
+        //                 pointStrokeColor: 'rgba(60,141,188,1)',
+        //                 pointHighlightFill: '#fff',
+        //                 pointHighlightStroke: 'rgba(60,141,188,1)',
+        //                 data: [28, 48, 40, 19, 86, 27, 90]
+        //             },
+        //             {
+        //                 label: 'Electronics',
+        //                 backgroundColor: 'rgba(210, 214, 222, 1)',
+        //                 borderColor: 'rgba(210, 214, 222, 1)',
+        //                 pointRadius: false,
+        //                 pointColor: 'rgba(210, 214, 222, 1)',
+        //                 pointStrokeColor: '#c1c7d1',
+        //                 pointHighlightFill: '#fff',
+        //                 pointHighlightStroke: 'rgba(220,220,220,1)',
+        //                 data: [65, 59, 80, 81, 56, 55, 40]
+        //             },
+        //         ]
+        //     };
 
-            var areaChartOptions = {
-                maintainAspectRatio: false,
-                responsive: true,
-                legend: {
-                    display: false
-                },
-                scales: {
-                    xAxes: [{
-                        gridLines: {
-                            display: false,
-                        }
-                    }],
-                    yAxes: [{
-                        gridLines: {
-                            display: false,
-                        }
-                    }]
-                }
-            };
+        //     var areaChartOptions = {
+        //         maintainAspectRatio: false,
+        //         responsive: true,
+        //         legend: {
+        //             display: false
+        //         },
+        //         scales: {
+        //             xAxes: [{
+        //                 gridLines: {
+        //                     display: false,
+        //                 }
+        //             }],
+        //             yAxes: [{
+        //                 gridLines: {
+        //                     display: false,
+        //                 }
+        //             }]
+        //         }
+        //     };
 
-            new Chart(areaChartCanvas, {
-                type: 'line',
-                data: areaChartData,
-                options: areaChartOptions
-            });
-
-   
-            var lineChartCanvas = $('#lineChart').get(0).getContext('2d');
-            var lineChartOptions = $.extend(true, {}, areaChartOptions);
-            var lineChartData = $.extend(true, {}, areaChartData);
-            lineChartData.datasets[0].fill = false;
-            lineChartData.datasets[1].fill = false;
-            lineChartOptions.datasetFill = false;
-
-            new Chart(lineChartCanvas, {
-                type: 'line',
-                data: lineChartData,
-                options: lineChartOptions
-            });
+        //     new Chart(areaChartCanvas, {
+        //         type: 'line',
+        //         data: areaChartData,
+        //         options: areaChartOptions
+        //     });
 
    
-            var donutChartCanvas = $('#donutChart').get(0).getContext('2d');
-            var donutData = {
-                labels: [
-                    'Chrome', 'IE', 'FireFox', 'Safari', 'Opera', 'Navigator'
-                ],
-                datasets: [{
-                    data: [700, 500, 400, 600, 300, 100],
-                    backgroundColor: ['#f56954', '#00a65a', '#f39c12', '#00c0ef', '#3c8dbc', '#d2d6de'],
-                }]
-            };
-            var donutOptions = {
-                maintainAspectRatio: false,
-                responsive: true,
-            };
+        //     var lineChartCanvas = $('#lineChart').get(0).getContext('2d');
+        //     var lineChartOptions = $.extend(true, {}, areaChartOptions);
+        //     var lineChartData = $.extend(true, {}, areaChartData);
+        //     lineChartData.datasets[0].fill = false;
+        //     lineChartData.datasets[1].fill = false;
+        //     lineChartOptions.datasetFill = false;
 
-            new Chart(donutChartCanvas, {
-                type: 'doughnut',
-                data: donutData,
-                options: donutOptions
-            });
+        //     new Chart(lineChartCanvas, {
+        //         type: 'line',
+        //         data: lineChartData,
+        //         options: lineChartOptions
+        //     });
+
+   
+        //     var donutChartCanvas = $('#donutChart').get(0).getContext('2d');
+        //     var donutData = {
+        //         labels: [
+        //             'Chrome', 'IE', 'FireFox', 'Safari', 'Opera', 'Navigator'
+        //         ],
+        //         datasets: [{
+        //             data: [700, 500, 400, 600, 300, 100],
+        //             backgroundColor: ['#f56954', '#00a65a', '#f39c12', '#00c0ef', '#3c8dbc', '#d2d6de'],
+        //         }]
+        //     };
+        //     var donutOptions = {
+        //         maintainAspectRatio: false,
+        //         responsive: true,
+        //     };
+
+        //     new Chart(donutChartCanvas, {
+        //         type: 'doughnut',
+        //         data: donutData,
+        //         options: donutOptions
+        //     });
 
  
-            var pieChartCanvas = $('#pieChart').get(0).getContext('2d');
-            var pieData = donutData;
-            var pieOptions = {
-                maintainAspectRatio: false,
-                responsive: true,
-            };
+        //     var pieChartCanvas = $('#pieChart').get(0).getContext('2d');
+        //     var pieData = donutData;
+        //     var pieOptions = {
+        //         maintainAspectRatio: false,
+        //         responsive: true,
+        //     };
 
-            new Chart(pieChartCanvas, {
-                type: 'pie',
-                data: pieData,
-                options: pieOptions
-            });
-
-   
-            var barChartCanvas = $('#barChart').get(0).getContext('2d');
-            var barChartData = $.extend(true, {}, areaChartData);
-            var temp0 = areaChartData.datasets[0];
-            var temp1 = areaChartData.datasets[1];
-            barChartData.datasets[0] = temp1;
-            barChartData.datasets[1] = temp0;
-
-            var barChartOptions = {
-                responsive: true,
-                maintainAspectRatio: false,
-                datasetFill: false
-            };
-
-            new Chart(barChartCanvas, {
-                type: 'bar',
-                data: barChartData,
-                options: barChartOptions
-            });
+        //     new Chart(pieChartCanvas, {
+        //         type: 'pie',
+        //         data: pieData,
+        //         options: pieOptions
+        //     });
 
    
-            var stackedBarChartCanvas = $('#stackedBarChart').get(0).getContext('2d');
-            var stackedBarChartData = $.extend(true, {}, barChartData);
-            var stackedBarChartOptions = {
-                responsive: true,
-                maintainAspectRatio: false,
-                scales: {
-                    xAxes: [{
-                        stacked: true,
-                    }],
-                    yAxes: [{
-                        stacked: true
-                    }]
-                }
-            };
+        //     var barChartCanvas = $('#barChart').get(0).getContext('2d');
+        //     var barChartData = $.extend(true, {}, areaChartData);
+        //     var temp0 = areaChartData.datasets[0];
+        //     var temp1 = areaChartData.datasets[1];
+        //     barChartData.datasets[0] = temp1;
+        //     barChartData.datasets[1] = temp0;
 
-            new Chart(stackedBarChartCanvas, {
-                type: 'bar',
-                data: stackedBarChartData,
-                options: stackedBarChartOptions
-            });
-        });
-    </script> --}}
-                    @endsection
+        //     var barChartOptions = {
+        //         responsive: true,
+        //         maintainAspectRatio: false,
+        //         datasetFill: false
+        //     };
+
+        //     new Chart(barChartCanvas, {
+        //         type: 'bar',
+        //         data: barChartData,
+        //         options: barChartOptions
+        //     });
+
+   
+        //     var stackedBarChartCanvas = $('#stackedBarChart').get(0).getContext('2d');
+        //     var stackedBarChartData = $.extend(true, {}, barChartData);
+        //     var stackedBarChartOptions = {
+        //         responsive: true,
+        //         maintainAspectRatio: false,
+        //         scales: {
+        //             xAxes: [{
+        //                 stacked: true,
+        //             }],
+        //             yAxes: [{
+        //                 stacked: true
+        //             }]
+        //         }
+        //     };
+
+        //     new Chart(stackedBarChartCanvas, {
+        //         type: 'bar',
+        //         data: stackedBarChartData,
+        //         options: stackedBarChartOptions
+        //     });
+        // });
+    </script> 
+
+
+@endsection
