@@ -24,12 +24,16 @@
                  <td>{{ $user->gender_id ?? '' }}</td>
                  <td>{{ $user->dob ?? '' }}</td>
                  <td>
+                    @if(in_array('user_management.status', $permissions)  || Auth::user()->role_id == 1)
                      <button
-                         class="btn btn-sm w-75 status-change-btn {{ $user->status == 1 ? 'btn-success' : 'btn-danger' }}"
+                         class="user_management.status btn btn-sm w-75 status-change-btn {{ $user->status == 1 ? 'btn-success' : 'btn-danger' }}"
                          id="status-User-{{ $user->id }}" data-modal="User" data-id="{{ $user->id }}"
                          data-status="{{ $user->status }}">
                          {{ $user->status == 1 ? 'Active' : 'Inactive' }}
                      </button>
+                    @else
+                        {{ $user->status == 1 ? 'Active' : 'Inactive' }}
+                    @endif
                  </td>
                  <td>
                     @if(in_array('user_management.edit', $permissions)  || Auth::user()->role_id == 1)

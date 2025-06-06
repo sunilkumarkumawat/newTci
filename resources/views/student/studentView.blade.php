@@ -1,5 +1,8 @@
 @extends('layout.app')
 @section('content')
+@php
+    $permissions = Helper::getPermissions();
+@endphp
     <div class="content-wrapper">
         <section class="content">
             <div class="container-fluid">
@@ -20,8 +23,10 @@
                                 <h4><i class="fa fa-desktop"></i> &nbsp;View Student</h4>
                             </div>
                             <div class="card-tools">
-                                <a href="{{ url('studentAdd') }}" class="btn btn-primary  btn-sm"><i class="fa fa-plus"></i>
+                                @if(in_array('student_management.`add`', $permissions)  || Auth::user()->role_id == 1)
+                                <a href="{{ url('studentAdd') }}" class="student_management.add btn btn-primary  btn-sm"><i class="fa fa-plus"></i>
                                     <span class="Display_none_mobile"> {{ __('common.Add') }} </span></a>
+                                @endif
                                 {{-- <a href="{{ url('studentAdd') }}" class="btn btn-primary btn-sm"><i
                                 class="fa fa-arrow-left"></i> <span class="Display_none_mobile"> {{ __('common.Back') }}
                             </span></a> --}}

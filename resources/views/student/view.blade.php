@@ -1,3 +1,7 @@
+@php
+    $permissions = Helper::getPermissions();
+@endphp  
+  
   @if (!empty($data))
       @foreach ($data as $index => $studentAdd)
           <tr>
@@ -19,18 +23,26 @@
               <td>{{ $studentAdd->admission_date ?? '' }}</td>
               <td>{{ $studentAdd->city_id ?? '' }}</td>
               <td>
+                @if(in_array('student_management.status', $permissions)  || Auth::user()->role_id == 1)
                   <button
-                      class="btn btn-sm w-75 status-change-btn {{ $studentAdd->status == 1 ? 'btn-success' : 'btn-danger' }}"
+                      class="student_management.status btn btn-sm w-75 status-change-btn {{ $studentAdd->status == 1 ? 'btn-success' : 'btn-danger' }}"
                       id="status-Student-{{ $studentAdd->id }}" data-modal="Student" data-id="{{ $studentAdd->id }}"
                       data-status="{{ $studentAdd->status }}">
                       {{ $studentAdd->status == 1 ? 'Active' : 'Inactive' }}
                   </button>
+                @else
+                    {{ $studentAdd->status == 1 ? 'Active' : 'Inactive' }}
+                @endif
               </td>
               <td>
-                  <a href="{{ url('commonEdit/Student/' . $studentAdd->id) }}" class="btn btn-xs"><i
+                @if(in_array('student_management.edit', $permissions)  || Auth::user()->role_id == 1)
+                  <a href="{{ url('commonEdit/Student/' . $studentAdd->id) }}" class="student_management.edit btn btn-xs"><i
                           class="fa fa-edit text-primary"></i></a>
-                  <a class=" btn-xs delete-btn" data-modal="Student" data-id="{{ $studentAdd->id }}">
+                @endif
+                @if(in_array('student_management.delete', $permissions)  || Auth::user()->role_id == 1)
+                  <a class="student_management.delete btn-xs delete-btn" data-modal="Student" data-id="{{ $studentAdd->id }}">
                       <i class="fa fa-trash fs-6 text-danger"></i></a>
+                @endif
               </td>
           </tr>
       @endforeach
