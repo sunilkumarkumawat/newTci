@@ -98,6 +98,9 @@ $sidebarData = Helper::getSidebar();
 
         <!-- Session Dropdown -->
         <li class="nav-item dropdown">
+            <form id='sessionForm' method="POST" action="{{ url('set-session') }}" class="d-flex align-items-center">
+                @csrf
+            
             <label for="sessionSelect" class="mr-1" style="font-weight: 500; color:black">Current Session : </label>
             @include('commoninputs.inputs', [
             'modal' => 'Sessions', // This decides the data source
@@ -105,8 +108,12 @@ $sidebarData = Helper::getSidebar();
             'selected' => Session::get('current_session'),
             'label' => 'Session',
             'required' => false,
-            'labelBoolean' => false
+            'labelBoolean' => false,
+            'emptyOption' => false,
+
             ])
+
+            </form>
         </li>
 
 
@@ -181,6 +188,18 @@ $sidebarData = Helper::getSidebar();
     </div>
 </div>
 
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    var sessionSelect = document.querySelector('[name="sessionSelect"]');
+    if(sessionSelect) {
+        
+        sessionSelect.addEventListener('change', function() {
+            document.getElementById('sessionForm').submit();
+        });
+    }
+});
+</script>
 <script>
     document.getElementById('sidebarToggle').addEventListener('click', function() {
         var sidebar = document.getElementById('sidebar');

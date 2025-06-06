@@ -5,6 +5,7 @@
     $isRequired = $required ?? false;
     $options = \App\Helpers\helper::getModalData($modal ?? '');
     $labelBoolean = $labelBoolean ?? true;
+    $emptyOption = $emptyOption ?? true;
     $attributes = $attributes ?? [];
 @endphp
 
@@ -28,7 +29,9 @@
             {{ $attr }}="{{ $val }}"
         @endforeach
     >
+    @if ($emptyOption)
         <option value="">Select {{ $label }}</option>
+        @endif
         @foreach ($options as $key => $value)
             <option value="{{ $key }}" {{ $selectedValue == $key ? 'selected' : '' }}>
                 {{ $value }}

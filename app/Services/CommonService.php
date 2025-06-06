@@ -228,8 +228,17 @@ public function getAll(string $modal)
                 }
             }
         }
+ $modalLower = strtolower($baseModalName);
 
-        return $query->where('session_id',Session::get('current_session'))->get();
+
+           $sessionFilterModules = ['chapter','topic'];
+
+    if (!in_array($modalLower, $sessionFilterModules))
+    {
+      
+    $query->where('session_id',Session::get('current_session'));
+    }
+        return $query->get();
     });
 }
     private function handlePasswordField(&$data)

@@ -64,7 +64,11 @@ Route::middleware(['auth'])->group(function () {
     // Sidebar
     Route::match(['get', 'post'], 'sidebar', 'Auth\AuthController@sidebar');
    
-
+    Route::post('/set-session', function (\Illuminate\Http\Request $request) {
+    $sessionId = $request->input('sessionSelect');
+    session(['current_session' => $sessionId]);
+      return redirect()->back();
+})->name('set.session');
 
      // branch
      Route::match(['get', 'post'], 'commonEdit/{modal}/{id}', 'SharesController@commonEdit');

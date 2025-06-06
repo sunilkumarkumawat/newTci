@@ -7,7 +7,7 @@ use App\Services\CommonService;
 use Auth;
 use Illuminate\Support\Facades\Artisan;
 use DB;
-
+use Session;
 class SharesController extends Controller
 {
     protected $commonService;
@@ -22,6 +22,8 @@ class SharesController extends Controller
 {
     $modal = $request->modal_type ?? '';
     $modalLower = strtolower($modal);
+
+   
 
     if ($modalLower === 'batches') {
         // Example: filter by category and join with exam_patterns
@@ -38,6 +40,9 @@ class SharesController extends Controller
         if ($request->filled('category')) {
             $query->where('batches.category', $request->input('category'));
         }
+
+
+         
 
         $data = $query->get();
     } else {
