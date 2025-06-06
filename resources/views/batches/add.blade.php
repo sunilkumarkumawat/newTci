@@ -27,7 +27,7 @@
                                 </div>
                             </div>
                             <div class="card-body">
-                                <form id="createCommon" data-modal="Role">
+                                <form class="createCommon" data-modal="Role">
                                     @csrf
                                     @if ($isEdit)
                                         <input type='hidden' value='{{ $data->id }}' name='id' />

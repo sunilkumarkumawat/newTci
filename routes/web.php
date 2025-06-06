@@ -89,8 +89,7 @@ Route::middleware(['auth'])->group(function () {
 
 
 
-
-
+ Route::match(['get','post'], '/chapters/data', 'SharesController@chaptersData');
 
 
 

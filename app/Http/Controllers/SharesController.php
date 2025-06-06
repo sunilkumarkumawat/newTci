@@ -8,6 +8,7 @@ use Auth;
 use Illuminate\Support\Facades\Artisan;
 use DB;
 use Session;
+use Yajra\DataTables\Facades\DataTables;
 class SharesController extends Controller
 {
     protected $commonService;
@@ -223,6 +224,27 @@ public function setCurrentBranch(Request $request)
 
 
 
+public function chaptersData (Request $request)
+{
+    $query = DB::table('chapters')
+        ->leftJoin('subject', 'chapters.subject_id', '=', 'subject.id')
+        ->select(
+            'chapters.id',
+            'chapters.name',
+            'subject.name as subject_name'
+        );
+
+    return DataTables::of($query)
+    ->addIndexColumn()
+    ->filterColumn('subject_name', function($query, $keyword) {
+        $query->whereRaw("LOWER(subject.name) like ?", ["%".strtolower($keyword)."%"]);
+    })
+    ->addColumn('action', function($row){
+        return view('chapter.partials.actions', compact('row'))->render();
+    })
+    ->rawColumns(['action'])
+    ->make(true);
+}
 
 
 }

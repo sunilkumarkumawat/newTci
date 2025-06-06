@@ -451,9 +451,6 @@ $cur_route = Route::getFacadeRoot()->current()->uri();
                 $(document).on('submit', '#createCommon, .createCommon', function(e) {
                     e.preventDefault();
 
-
-
-
                     $('.dataContainer').each(function() {
                         const $row = $(`
                                     <tr class="placeholder-row" style="display:none">
@@ -491,7 +488,7 @@ $cur_route = Route::getFacadeRoot()->current()->uri();
 
                         // Remove previous validation messages
                         $form.find('.text-danger.validation-error').remove();
-
+                                
                         $form.find('[data-required="true"]').each(function() {
                             const $input = $(this);
                             const value = $input.val().trim();
@@ -664,12 +661,13 @@ $cur_route = Route::getFacadeRoot()->current()->uri();
                                     break;
                                 case 'class_type_id':
                                     if (value === '') {
+                                        alert('sdf');
                                         message = 'Class is required';
                                     }
                                     break;
                                 case 'subject_id':
                                     if (value === '') {
-                                        message = 'Class is required';
+                                        message = 'Subject is required';
                                     }
                                     break;
                                 case 'category_id':
@@ -842,75 +840,138 @@ $cur_route = Route::getFacadeRoot()->current()->uri();
 
 
 
+                // function dataGet() {
+                //     var baseUrl = "{{ url('/') }}";
+                //     const modalTypes = [];
+
+
+
+
+                //     $('[name="modal_type"]').each(function() {
+                //         const val = $(this).val();
+                //         if (val && !modalTypes.includes(val)) {
+                //             modalTypes.push(val);
+                //         }
+                //     });
+
+
+
+
+                //     modalTypes.forEach(modal => {
+                //         const containerId = `#dataContainer-${modal.toLowerCase()}`;
+                //         const url = `${baseUrl}/commonView/${modal}`;
+
+
+
+                //         $.get(url, function(data) {
+                //             const $container = $(containerId);
+
+                //             $container.fadeOut(100, function() {
+                //                 $container.html(data).fadeIn(200);
+
+                //                 // Wait for new content to be inserted before initializing DataTable
+                //                 // const table = $container.find('table');
+                //                 const table = $container.find('table');
+
+
+                //                 // Check if a DataTable is already initialized, destroy it
+                //                 if ($.fn.DataTable.isDataTable(table)) {
+                //                     table.DataTable().destroy();
+                //                 }
+
+                //                 // Initialize DataTable with pagination
+                //                 table.DataTable({
+                //                     pageLength: 10,
+                //                     lengthChange: true,
+                //                     searching: true,
+                //                     ordering: true,
+                //                     paging: true,
+                //                     dom: 'Bfrtip',
+                //                     buttons: [{
+                //                             extend: 'excelHtml5',
+                //                             text: 'Export to Excel',
+                //                             title: `${modal} Report`
+                //                         },
+                //                         {
+                //                             extend: 'pdfHtml5',
+                //                             text: 'Export to PDF',
+                //                             orientation: 'landscape',
+                //                             pageSize: 'A4',
+                //                             title: `${modal} Report`
+                //                         }
+                //                     ]
+                //                 });
+
+                //                 toastr.success(`${modal} data fetched successfully!`);
+                //             });
+                //         }).fail(function(xhr) {
+                //             console.error(`Error loading ${modal}: ${xhr.status} ${xhr.statusText}`);
+                //         });
+                //     });
+                // }
+
                 function dataGet() {
-                    var baseUrl = "{{ url('/') }}";
-                    const modalTypes = [];
+    var baseUrl = "{{ url('/') }}";
+    const modalTypes = [];
 
+    // Collect all unique modal types from inputs named 'modal_type'
+    $('[name="modal_type"]').each(function() {
+        const val = $(this).val();
+        if (val && !modalTypes.includes(val)) {
+            modalTypes.push(val);
+        }
+    });
 
+    // For each modal type, fetch and update its data container
+    modalTypes.forEach(modal => {
+        const containerId = `#dataContainer-${modal.toLowerCase()}`;
+        const url = `${baseUrl}/commonView/${modal}`;
 
+        $.get(url, function(data) {
+            const $container = $(containerId);
 
-                    $('[name="modal_type"]').each(function() {
-                        const val = $(this).val();
-                        if (val && !modalTypes.includes(val)) {
-                            modalTypes.push(val);
-                        }
-                    });
+            $container.fadeOut(100, function() {
+                $container.html(data).fadeIn(200);
 
+                // Find the table inside the container
+                const table = $container.find('table');
 
-
-
-                    modalTypes.forEach(modal => {
-                        const containerId = `#dataContainer-${modal.toLowerCase()}`;
-                        const url = `${baseUrl}/commonView/${modal}`;
-
-
-
-                        $.get(url, function(data) {
-                            const $container = $(containerId);
-
-                            $container.fadeOut(100, function() {
-                                $container.html(data).fadeIn(200);
-
-                                // Wait for new content to be inserted before initializing DataTable
-                                // const table = $container.find('table');
-                                const table = $container.find('table');
-
-
-                                // Check if a DataTable is already initialized, destroy it
-                                if ($.fn.DataTable.isDataTable(table)) {
-                                    table.DataTable().destroy();
-                                }
-
-                                // Initialize DataTable with pagination
-                                table.DataTable({
-                                    pageLength: 10,
-                                    lengthChange: true,
-                                    searching: true,
-                                    ordering: true,
-                                    paging: true,
-                                    dom: 'Bfrtip',
-                                    buttons: [{
-                                            extend: 'excelHtml5',
-                                            text: 'Export to Excel',
-                                            title: `${modal} Report`
-                                        },
-                                        {
-                                            extend: 'pdfHtml5',
-                                            text: 'Export to PDF',
-                                            orientation: 'landscape',
-                                            pageSize: 'A4',
-                                            title: `${modal} Report`
-                                        }
-                                    ]
-                                });
-
-                                toastr.success(`${modal} data fetched successfully!`);
-                            });
-                        }).fail(function(xhr) {
-                            console.error(`Error loading ${modal}: ${xhr.status} ${xhr.statusText}`);
-                        });
-                    });
+                // If DataTable is already initialized, destroy it first
+                if ($.fn.DataTable.isDataTable(table)) {
+                    table.DataTable().destroy();
                 }
+
+                // Initialize DataTable with options
+                table.DataTable({
+                    pageLength: 10,
+                    lengthChange: true,
+                    searching: true,
+                    ordering: true,
+                    paging: true,
+                    dom: 'Bfrtip',
+                    buttons: [
+                        {
+                            extend: 'excelHtml5',
+                            text: 'Export to Excel',
+                            title: `${modal} Report`
+                        },
+                        {
+                            extend: 'pdfHtml5',
+                            text: 'Export to PDF',
+                            orientation: 'landscape',
+                            pageSize: 'A4',
+                            title: `${modal} Report`
+                        }
+                    ]
+                });
+
+                toastr.success(`${modal} data fetched successfully!`);
+            });
+        }).fail(function(xhr) {
+            console.error(`Error loading ${modal}: ${xhr.status} ${xhr.statusText}`);
+        });
+    });
+}
                 dataGet();
 
 

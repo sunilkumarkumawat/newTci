@@ -23,7 +23,7 @@
         class="form-control"
         id="{{ $name }}"
         name="{{ $name }}"
-        {{ $isRequired ? 'required' : '' }}
+       
         data-required="{{ $isRequired ? 'true' : 'false' }}"
         @foreach($attributes as $attr => $val)
             {{ $attr }}="{{ $val }}"

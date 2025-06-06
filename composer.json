@@ -17,7 +17,8 @@
         "paytm/js-checkout": "dev-master",
         "phpoffice/phpspreadsheet": "^1.25",
         "picqer/php-barcode-generator": "^2.2",
-        "simplesoftwareio/simple-qrcode": "^4.2"
+        "simplesoftwareio/simple-qrcode": "^4.2",
+        "yajra/laravel-datatables-oracle": "^9.21"
     },
     "require-dev": {
         "facade/ignition": "^2.5",
