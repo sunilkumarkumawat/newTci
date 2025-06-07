@@ -995,7 +995,12 @@ $cur_route = Route::getFacadeRoot()->current()->uri();
                         },
                         success: function(res) {
                             toastr.success(res.message || 'Deleted successfully.');
-                            location.reload(); // refresh the page or remove item from table
+
+                            if(!modal.includes('Documents')) {
+                                // If it's a User modal, reload the page
+                                location.reload();
+                            } 
+                          
                         },
                         error: function(xhr) {
                             toastr.error('Failed to delete.');
@@ -1238,7 +1243,8 @@ $cur_route = Route::getFacadeRoot()->current()->uri();
             },
             success: function (response) {
                 // Handle success
-                alert('Usernames and passwords generated successfully!');
+                toastr.success('Usernames and passwords generated successfully!');
+                $('#generatePassTable').find('tbody').html(''); // Display generated usernames
                 // Optionally reset form or reload table
             },
             error: function (xhr) {

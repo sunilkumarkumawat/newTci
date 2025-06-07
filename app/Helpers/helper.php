@@ -80,6 +80,13 @@ public static function getSidebar()
                     'route' => 'userView',
                     'icon' => 'fa fa-circle',
                 ],
+                 [
+                    'title' => 'Generate/Change Id & Password',
+                    'className' => 'user_management.add',
+                    'status' => true,
+                    'route' => 'userPassword',
+                    'icon' => 'fa fa-circle',
+                ],
             ],
         ],
         [
@@ -110,8 +117,8 @@ public static function getSidebar()
                     'icon' => 'fa fa-circle',
                 ],
                 [
-                    'title' => 'Generate ID & Password',
-                    'className' => 'student_management.view',
+                    'title' => 'Generate/Change ID & Password',
+                    'className' => 'student_management.add',
                     'status' => true,
                     'route' => 'studentIdPassword',
                     'icon' => 'fa fa-circle',

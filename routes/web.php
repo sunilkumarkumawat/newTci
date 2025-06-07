@@ -121,7 +121,8 @@ Route::middleware(['auth'])->group(function () {
     Route::match(['get', 'post'], 'studentView', 'StudentController@studentView');
     Route::match(['get', 'post'], 'studentEdit/{id}', 'StudentController@studentEdit');
     Route::match(['get', 'post'], 'studentIdPassword', 'SharesController@studentIdPassword');
-    Route::match(['get', 'post'], 'studentsData', 'SharesController@studentsData');
+    Route::match(['get', 'post'], 'userPassword', 'SharesController@userPassword');
+    Route::match(['get', 'post'], 'allTypeUsersData', 'SharesController@allTypeUsersData');
 
     // Teacher
     Route::match(['get', 'post'], 'teacherView', 'TeacherController@teacherView');

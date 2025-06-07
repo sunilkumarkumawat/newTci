@@ -11,8 +11,8 @@ $permissions = Helper::getPermissions();
                 <div class="col-md-12 col-12 p-0">
                     <ul class="breadcrumb">
                         <li class="breadcrumb-item"><a href="{{ url('dashboard') }}">Dashboard</a></li>
-                        <li class="breadcrumb-item">Student Management</li>
-                        <li class="breadcrumb-item">Generate ID & Password</li>
+                        <li class="breadcrumb-item">User Management</li>
+                        <li class="breadcrumb-item">Generate Password</li>
                     </ul>
                 </div>
             </div>
@@ -20,14 +20,14 @@ $permissions = Helper::getPermissions();
                 <div class="card card-outline card-orange col-md-12 col-12 p-0">
                     <div class="card-header bg-primary">
                         <div class="card-title">
-                            <h4><i class="fa fa-desktop"></i> &nbsp; Generate ID & Password</h4>
+                            <h4><i class="fa fa-desktop"></i> &nbsp; Generate Password</h4>
                         </div>
                         <div class="card-tools">
-                            @if(in_array('student_management.`add`', $permissions) || Auth::user()->role_id == 1)
+                            @if(in_array('user_management.`add`', $permissions) || Auth::user()->role_id == 1)
                             <!-- <a href="{{ url('studentAdd') }}" class="student_management.add btn btn-primary  btn-sm"><i class="fa fa-plus"></i>
                                     <span class="Display_none_mobile"> {{ __('common.Add') }} </span></a> -->
                             @endif
-                            {{-- <a href="{{ url('studentAdd') }}" class="btn btn-primary btn-sm"><i
+                            {{-- <a href="{{ url('userAdd') }}" class="btn btn-primary btn-sm"><i
                                 class="fa fa-arrow-left"></i> <span class="Display_none_mobile"> {{ __('common.Back') }}
                             </span></a> --}}
                         </div>
@@ -35,7 +35,7 @@ $permissions = Helper::getPermissions();
                     <div class="card-body">
                         <div class="bg-item border p-3 rounded">
                             <form id="quickForm" method="post">
-                                <input type='hidden' value='Student' name='modal_type' />
+                                <input type='hidden' value='User' name='modal_type' />
                                 <div class="row">
                                     @include('commoninputs.filterinputs', [
                                     'filters' => [
@@ -60,7 +60,7 @@ $permissions = Helper::getPermissions();
                                     <label for="username_source">Username Based On:</label>
                                     <select id="username_source" class="form-control form-control-sm">
                                         <option value="">-- Select --</option>
-                                        <option value="father_mobile">Father Mobile</option>
+                                        <!-- <option value="father_mobile">Father Mobile</option> -->
                                         <option value="self_mobile">Self Mobile</option>
                                         <option value="dob">Date of Birth (YYYYMMDD)</option>
                                         <option value="custom">Custom</option>
@@ -85,7 +85,7 @@ $permissions = Helper::getPermissions();
                         </div>
 
                         <div class="table-responsive mt-2 ">
-                            <form id="generatePasswordForm" data-modal='Student' method="post" action="{{ url('generatePassword') }}">
+                            <form id="generatePasswordForm" data-modal='User' method="post" action="{{ url('generatePassword') }}">
                             <table id='generatePassTable' class="table table-bordered table-striped mt-4">
                                 <thead>
                                     <tr class="bg-light">
@@ -93,7 +93,7 @@ $permissions = Helper::getPermissions();
                                         <th>Name</th>
                                         <th>Dob</th>
                                         <th>Mobile</th>
-                                        <th>Father Mobile</th>
+                                        <!-- <th>Father Mobile</th> -->
                                         <th>Username</th>
                                         <th>Password</th>
 
@@ -124,14 +124,15 @@ $permissions = Helper::getPermissions();
                     // get form data
                     const formData = $(this).serializeArray();
                     const modalType = $('input[name="modal_type"]').val();
-                    const columns = 'id,name,dob,father_mobile,mobile,userName,confirm_password';
+                      const columns = 'id,name,dob,mobile,userName,confirm_password';
 
                     // ensure modal_type is sent
                     formData.push({
                         name: 'modal_type',
                         value: modalType
                     });
-                    formData.push({
+
+                        formData.push({
                         name: 'columns',
                         value: columns
                     });
@@ -153,7 +154,7 @@ $permissions = Helper::getPermissions();
 
                             data.data.forEach((item, index) => {
                                 tbody.append(`
-                        <tr data-father_mobile="${item.father_mobile}" data-self_mobile="${item.mobile}" data-dob="${item.dob}">
+                        <tr data-self_mobile="${item.mobile}" data-dob="${item.dob}">
                             <td>${index + 1}</td>
                             <td>${item.name}
                             <input type="hidden" value='${item.id}' name="id[]" />
@@ -161,7 +162,7 @@ $permissions = Helper::getPermissions();
                             </td>
                             <td>${item.dob ?? '-'}</td>
                             <td>${item.mobile ?? '-'}</td>
-                            <td>${item.father_mobile ?? '-'}</td>
+                           
                             <td>
                             <input type="text" 
                             class="form-control form-control-sm username-input " 
@@ -206,7 +207,7 @@ function generateRandomString(length = 6) {
           $('#generatePassword').on('click', function () {
     const selectedValue = $('#username_source').val();
     const commonPassword = $('#default_password').val();
-           const tbodyLength = $('#generatePassTable tbody tr').length;
+           const tbodyLength = $('#studentTable tbody tr').length;
 
     if (tbodyLength === 0) {
         toastr.error('Please search for students first.');
@@ -224,9 +225,7 @@ function generateRandomString(length = 6) {
         let value = '';
 
         switch (selectedValue) {
-            case 'father_mobile':
-                value = row.data('father_mobile');
-                break;
+           
             case 'self_mobile':
                 value = row.data('self_mobile');
                 break;
@@ -248,37 +247,6 @@ function generateRandomString(length = 6) {
     });
 });
 
-            // Generate random 5-character string
-            function generateRandomUsername(length = 5) {
-                const chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
-                let result = '';
-                for (let i = 0; i < length; i++) {
-                    result += chars.charAt(Math.floor(Math.random() * chars.length));
-                }
-                return result;
-            }
-
-            $('#generate_random_username').on('click', function() {
-                const randomUsername = generateRandomUsername();
-                $('#custom_username').val(randomUsername);
-                $('#username_preview').text(randomUsername);
-            });
-
-            function getUsername(type) {
-                const father_mobile = '9876543210';
-                const self_mobile = '9123456789';
-                const dob = '2005-07-15';
-
-                switch (type) {
-                    case 'father_mobile':
-                        return father_mobile;
-                    case 'self_mobile':
-                        return self_mobile;
-                    case 'dob':
-                        return dob.replaceAll('-', '');
-                    default:
-                        return '';
-                }
-            }
+           
         </script>
         @endsection

@@ -104,6 +104,11 @@ class SharesController extends Controller
         $data = null;
         return view('student.studentIdPassword',compact('data'));
     }
+    public function userPassword()
+    {
+        $data = null;
+        return view('user.userPassword',compact('data'));
+    }
 
      public function createCommon(Request $request)
     {
@@ -259,9 +264,19 @@ public function chaptersData (Request $request)
     ->make(true);
 }
 
-public function studentsData(Request $request)
+public function allTypeUsersData(Request $request)
 {
     $modalType = $request->input('modal_type');
+   $columnsInput = $request->input('columns');
+
+// Convert to array safely
+$columns = is_array($columnsInput)
+    ? $columnsInput
+    : explode(',', (string) $columnsInput);
+
+// Optional: trim spaces from each column name
+$columns = array_map('trim', $columns);
+    
     if (!$modalType) {
         return response()->json(['status' => false, 'message' => 'Modal type is required.'], 400);
     }
@@ -280,7 +295,7 @@ public function studentsData(Request $request)
     $query = Helper::applyFilters($query, $filters, $modalType);
     $query = Helper::sessionFilter($query);
 
-    $data = $query->get(['id', 'name','dob','father_mobile', 'mobile','userName' ,'confirm_password']);
+    $data = $query->get($columns);
 
     return response()->json(['status' => true, 'data' => $data]);
 }
@@ -302,12 +317,15 @@ public function generatePassword(Request $request)
         if (class_exists($modelClass)) {
             $modelInstance = $modelClass::find($data['id'][$index] ?? 0); // You may need to pass IDs too
             
+       
            
             if ($modelInstance) {
                 $modelInstance->userName = $username;
                 $modelInstance->password = bcrypt($password); // or store plain if needed
                 $modelInstance->confirm_password = $password; // or store plain if needed
                 $modelInstance->save();
+
+               
             }
         }
     }
