@@ -107,12 +107,12 @@ $isEdit = isset($data);
                                                 @endif
                                                 <div class="col-md-4 col-12">
                                                     <div class="form-group">
-                                                        <label for="first_name">First Name <span
+                                                        <label for="name">Name <span
                                                                 class="text-danger">*</span></label>
-                                                        <input type="text" class="form-control" id="first_name"
-                                                            placeholder="First Name" name="first_name"
+                                                        <input type="text" class="form-control" id="name"
+                                                            placeholder="Name" name="name"
                                                             data-required="true"
-                                                            value="{{ old('first_name', $data->first_name ?? '') }}">
+                                                            value="{{ old('name', $data->name ?? '') }}">
                                                     </div>
                                                 </div>
                                                 <div class="col-md-4">

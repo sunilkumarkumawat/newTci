@@ -988,7 +988,7 @@ $cur_route = Route::getFacadeRoot()->current()->uri();
                 const modal = $(this).data('modal'); // get modal name from data attribute
                 const id = $(this).data('id'); // get record ID
                 const baseUrl = "{{ url('/') }}"; // base URL (Blade will output Laravel base URL)
-
+                const target = $(this).closest('.position-relative'); // find the closest parent with class 'position-relative'
                 if (confirm('Are you sure you want to delete this item?')) {
                     $.ajax({
                         url: `${baseUrl}/common-delete/${modal}/${id}`,
@@ -999,9 +999,13 @@ $cur_route = Route::getFacadeRoot()->current()->uri();
                         },
                         success: function(res) {
                             toastr.success(res.message || 'Deleted successfully.');
-
-                            if(!modal.includes('Documents')) {
-                                // If it's a User modal, reload the page
+                                
+                         if (['Documents'].includes(modal)) {
+ target.fadeOut(500, function () {
+       target.remove();
+    });
+}
+                            else{
                                 location.reload();
                             } 
                           
@@ -1304,7 +1308,9 @@ $('#addDocBtn').on('click', function () {
             })();
 
             container.append(fileInput, categoryInput);
+        container.hide();
             $('#uploadedDocs').append(container);
+container.fadeIn(600);
         };
 
         reader.readAsDataURL(file);

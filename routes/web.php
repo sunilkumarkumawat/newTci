@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\DB;
 // 🔓 Public Routes
 Route::match(['get', 'post'], 'login', 'Auth\AuthController@getLogin')->name('login');
 Route::get('/', function () {
-    return redirect('/login');
+    return redirect('/dashboard');
 });
 Route::get('logout', function () {
  
