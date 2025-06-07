@@ -1215,6 +1215,42 @@ $cur_route = Route::getFacadeRoot()->current()->uri();
             });
         </script>
 
+      {{-- generate password --}}
+
+<script>
+
+    $(document).ready(function () {
+    $('#generatePasswordForm').on('submit', function (e) {
+        e.preventDefault(); // prevent default form submission
+
+        let form = $(this);
+        let modal = form.data('modal'); // get modal type from data attribute
+        let formData = form.serializeArray(); // serialize form inputs
+
+        formData.push({ name: 'modal_type', value: modal }); // append modal_type
+
+        $.ajax({
+            url: form.attr('action'),
+            method: 'POST',
+            data: formData,
+            beforeSend: function () {
+                // Optional: show loading indicator
+            },
+            success: function (response) {
+                // Handle success
+                alert('Usernames and passwords generated successfully!');
+                // Optionally reset form or reload table
+            },
+            error: function (xhr) {
+                // Handle error
+                alert('An error occurred while saving data.');
+                console.error(xhr.responseText);
+            }
+        });
+    });
+});
+</script>
+
       {{-- add Documents --}}
 
 <script>

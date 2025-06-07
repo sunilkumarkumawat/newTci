@@ -432,4 +432,70 @@ public static function getSavedDocuments($modelName, $modalType, $userId)
 }
 
 
+public static function sessionFilter($query)
+{
+    $currentSession = Session::get('current_session');
+    if ($currentSession) {
+        return $query->where('session_id', $currentSession);
+    }
+    return $query;
+
+
+}
+public static function getFiltersConfig()
+{
+    return [
+        'Student' => ['keyword', 'admission_id', 'class_type_id'],
+        'Teacher' => ['keyword', 'gender_id', 'status', 'department_id'],
+        'User' => ['keyword', 'status', 'role_id'],
+        'Admin' => ['keyword', 'status'],
+        // Add more modules and their filters here
+    ];
+}
+
+public static function applyFilters($query, $filters, $modalType)
+{
+    $filtersConfig = self::getFiltersConfig();
+
+
+
+   // Get array of filter keys
+    $allowedFilters = array_keys($filters);
+    // Get allowed filters for the given modal
+    // $allowedFilters = $filtersConfig[$modalType] ?? [];
+
+
+    foreach ($filters as $key => $value) {
+        if (in_array($key, $allowedFilters) && $value !== null && $value !== '') {
+            switch ($key) {
+                case 'keyword':
+                    $query->where(function ($q) use ($value) {
+                        $q->where('name', 'like', "%$value%")
+                          ->orWhere('email', 'like', "%$value%")
+                          ->orWhere('mobile', 'like', "%$value%");
+                    });
+                    break;
+
+                // Generic exact match filters
+                case 'admission_id':
+                case 'gender_id':
+                case 'class_type_id':
+                case 'status':
+                case 'department_id':
+                case 'role_id':
+                    $query->where($key, $value);
+                    break;
+
+                // Add any special filter handling here if needed
+
+                default:
+                    // Ignore unknown filters
+                    break;
+            }
+        }
+    }
+
+    return $query;
+}
+
 }

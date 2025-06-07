@@ -1,5 +1,5 @@
 @php
-    $filters = $filters ?? ['keyword' => true, 'admission_no' => true, 'status' => true, 'gender_id' => true, 'class_type_id' => true, 'role_id' => true];
+    $filters = $filters ?? ['keyword' => true,'batches'=>true, 'admission_no' => true, 'status' => true, 'gender_id' => true, 'class_type_id' => true, 'role_id' => true];
 @endphp
    
    
@@ -47,6 +47,17 @@
             'name' => 'class_type_id',
             'selected' => null,
             'label' => 'Search By Class',
+            'required' => false,
+        ])
+    </div>
+    @endif
+    @if(!empty($filters['batches']))
+    <div class="col-md-2">
+        @include('commoninputs.inputs', [
+            'modal' => 'Batches',
+            'name' => 'class_type_id',
+            'selected' => null,
+            'label' => 'Search By Batch',
             'required' => false,
         ])
     </div>

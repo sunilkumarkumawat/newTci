@@ -84,6 +84,7 @@ Route::middleware(['auth'])->group(function () {
     Route::match(['get','post'], '/set-current-branch', 'SharesController@setCurrentBranch');
     Route::match(['get','post'], '/set-permission-view/{roleId}/{userId}', 'SharesController@setPermissionView');
     Route::match(['get','post'], '/batches', 'SharesController@batches');
+    Route::match(['get','post'], '/generatePassword', 'SharesController@generatePassword');
 
     
 

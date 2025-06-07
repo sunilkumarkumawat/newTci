@@ -169,6 +169,9 @@ public function createCommon($request)
 
             $record->status = $record->status == 1 ? 0 : 1;
             $record->save();
+                 $modalName = class_basename($modal);
+                    // 🔄 Clear cache
+        Cache::forget('getAll_' . $modalName);
 
             return response()->json([
                 'message' => class_basename($modal) . ' status changed successfully.',

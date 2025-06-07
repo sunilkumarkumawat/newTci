@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Artisan;
 use DB;
 use Session;
 use Yajra\DataTables\Facades\DataTables;
+use Helper;
 class SharesController extends Controller
 {
     protected $commonService;
@@ -258,17 +259,59 @@ public function chaptersData (Request $request)
     ->make(true);
 }
 
-    public function studentsData(Request $request){
-        $query = DB::table('student');
-
-        return DataTables::of($query)
-        ->addIndexColumn()
-        ->addColumn('action', function($row){
-            return view('student.partials.actions', compact('row'))->render();
-        })
-        ->rawColumns(['action'])
-        ->make(true);
+public function studentsData(Request $request)
+{
+    $modalType = $request->input('modal_type');
+    if (!$modalType) {
+        return response()->json(['status' => false, 'message' => 'Modal type is required.'], 400);
     }
 
+    $modelClass = "App\\Models\\" . ucfirst($modalType);
+    if (!class_exists($modelClass)) {
+        return response()->json(['status' => false, 'message' => "Model $modalType not found."], 404);
+    }
 
+    $query = $modelClass::query();
+
+    // Get all filters from request except modal_type
+    $filters = $request->except('modal_type');
+
+    // Apply filters dynamically
+    $query = Helper::applyFilters($query, $filters, $modalType);
+    $query = Helper::sessionFilter($query);
+
+    $data = $query->get(['id', 'name','dob','father_mobile', 'mobile','userName' ,'confirm_password']);
+
+    return response()->json(['status' => true, 'data' => $data]);
+}
+
+public function generatePassword(Request $request)
+{
+    $data = $request->all(); // includes modal_type, username[], password[]
+    
+    // Example: iterate over inputs
+    $usernames = $data['userName'] ?? [];
+    $passwords = $data['password'] ?? [];
+
+    foreach ($usernames as $index => $username) {
+        $password = $passwords[$index] ?? null;
+
+        // Save to your modal, e.g., Student, Teacher, etc.
+        // You may dynamically resolve the modal like:
+        $modelClass = "App\\Models\\" . $request->modal_type;
+        if (class_exists($modelClass)) {
+            $modelInstance = $modelClass::find($data['id'][$index] ?? 0); // You may need to pass IDs too
+            
+           
+            if ($modelInstance) {
+                $modelInstance->userName = $username;
+                $modelInstance->password = bcrypt($password); // or store plain if needed
+                $modelInstance->confirm_password = $password; // or store plain if needed
+                $modelInstance->save();
+            }
+        }
+    }
+
+    return response()->json(['status' => 'success']);
+}
 }
