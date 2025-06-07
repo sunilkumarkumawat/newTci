@@ -224,7 +224,7 @@ public function getAll(string $modal)
  $modalLower = strtolower($baseModalName);
 
 
-           $sessionFilterModules = ['chapter','topic','user'];
+           $sessionFilterModules = ['subject', 'chapter','topic','user'];
 
     if (!in_array($modalLower, $sessionFilterModules))
     {
