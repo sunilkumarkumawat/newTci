@@ -401,5 +401,28 @@ public static function getThisCount($model, $column, $id)
 }
 
 
+public static function getSavedDocuments($modelName, $modalType, $userId)
+{
+    try {
+        if (!$modelName || !$modalType || !$userId) {
+            return collect();
+        }
+
+        $fullModel = "App\\Models\\$modelName";
+
+        if (!class_exists($fullModel)) {
+            return collect();
+        }
+
+     
+        return $fullModel::where('model_name', $modalType)
+            ->where('user_id', $userId)
+            ->get();
+    } catch (\Exception $e) {
+      
+        return collect();
+    }
+}
+
 
 }

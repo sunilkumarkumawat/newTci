@@ -304,8 +304,32 @@ $isEdit = isset($data);
 
         <!-- Preview uploaded files -->
         <div class="col-md-12">
-            <h6>Uploaded Documents:</h6>
-            <div id="uploadedDocs" class="row"></div>
+            <div class="row">
+    <!-- Uploaded Documents Section -->
+    <div class="col-md-6 mb-3">
+        <div class="border rounded p-3 h-100">
+            <h6 class="mb-3 text-primary">Uploaded Documents:</h6>
+            <div id="uploadedDocs" class="row g-2"></div>
+        </div>
+    </div>
+
+    <!-- Saved Documents Section -->
+     @if($isEdit)
+    <div class="col-md-6 mb-3">
+        <div class="border rounded p-3 h-100">
+            <h6 class="mb-3 text-success">Previous Saved Documents:</h6>
+            <div id="showSavedDocuments" class="row g-2">
+
+            @include('common.savedDocuments', [
+            'getDocumentFromModal' => 'Documents',
+            'modal' => 'User',
+            'userId' => $data->id ?? null,
+            ])
+            </div>
+        </div>
+    </div>
+    @endif
+</div>
         </div>
     </div>
 </div>
@@ -367,14 +391,19 @@ $isEdit = isset($data);
     }
     document.getElementById('nextStep').addEventListener('click', () => {
 
+
+       
       
  
             $('#createCommon').trigger('submit');
-     
+
+
+    
 
         var smallTags = $('#step-' + currentStep).find('small');
 
         if (smallTags.length > 0) {
+            
             return
         }
 

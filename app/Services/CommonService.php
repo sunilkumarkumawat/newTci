@@ -256,6 +256,9 @@ public function getAll(string $modal)
         // Save the file
         $path = $file->storeAs("public/documents/$modalName/$userId", $filename);
 
+
+       $path = str_replace('public/', 'storage/app/public/', $path);
+
       $modal = 'App\\Models\\' .'Documents';
         // Save metadata to DB
       

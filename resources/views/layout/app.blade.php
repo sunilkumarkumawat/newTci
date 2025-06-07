@@ -1232,19 +1232,25 @@ $('#addDocBtn').on('click', function () {
         let reader = new FileReader();
 
         reader.onload = function (e) {
-            let container = $('<div class="col-md-3 mb-3 text-center border rounded p-2"></div>');
-            // container.append(`<strong>${category}</strong><br>`);
+            let container = $('<div class="col-md-3 mb-3 text-center border rounded p-2 position-relative"></div>');
+            container.append(`<strong>${category}</strong><br>`);
 
-            // container.append(`
-            //     <img src="${e.target.result}" class="img-thumbnail" style="width:100px;height:100px;object-fit:cover;"><br>
-            //     <small>${file.name}</small>
-            // `);
+            container.append(`
+                <img src="${e.target.result}" class="img-thumbnail" style="width:100px;height:100px;object-fit:cover;"><br>
+                <strong>${file.name}</strong>
+            `);
+
+            // Remove button
+            let removeBtn = $('<button type="button" class="btn btn-sm btn-danger position-absolute top-0 end-0 m-1">&times;</button>');
+            removeBtn.on('click', function () {
+                container.remove(); // remove the whole container
+            });
+            container.append(removeBtn);
 
             // Hidden inputs for Laravel
             let fileInput = $('<input type="file" style="display:none;" name="documents[]">');
             let categoryInput = $(`<input type="hidden" name="categories[]">`).val(category);
 
-            // Append both inputs to the form
             fileInput[0].files = (function () {
                 let dt = new DataTransfer();
                 dt.items.add(file);
@@ -1254,6 +1260,7 @@ $('#addDocBtn').on('click', function () {
             container.append(fileInput, categoryInput);
             $('#uploadedDocs').append(container);
         };
+
         reader.readAsDataURL(file);
     }
 
