@@ -56,11 +56,14 @@
                                             </div>
                                             <div class="col-md-12 col-12 ">
                                                 @include('commoninputs.inputs', [
-                                                    'modal' => 'Subject', 
+                                                    'modal' => 'Subject',
                                                     'name' => 'subject_id',
                                                     'selected' => $data->subject_id ?? null,
                                                     'label' => 'Subject',
                                                     'required' => true,
+                                                    'isRequestSent' => isset($data->class_type_id),
+                                                    'dependentId' => $data->class_type_id ?? null,
+                                                    'foreignKey' => 'class_type_id',
                                                     'attributes' => [
                                                         'data-dependent' => 'chapter_id',
                                                         'data-url' => url(
@@ -77,9 +80,9 @@
                                                     'selected' => $data->chapter_id ?? null,
                                                     'label' => 'Chapter',
                                                     'required' => true,
-                                                    'isRequestSent' => isset($data->chapter_id),
+                                                    'isRequestSent' => isset($data->subject_id),
                                                     'dependentId' => $data->subject_id ?? null,
-                                                    'foreignKey' => 'chapter_id',
+                                                    'foreignKey' => 'subject_id',
                                                 ])
                                             </div>
                                             <div class="col-md-12 col-12 form-group">
@@ -109,7 +112,7 @@
                             </div>
                             <div class="card-body">
                                 <div class="table-responsive">
-                                    <table id='dataContainer'class="table table-bordered table-striped">
+                                    <table id='topicTable'class="table table-bordered table-striped">
                                         <thead>
                                             <tr class="bg-light">
                                                 <th>SR. NO.</th>
@@ -120,17 +123,51 @@
                                                 <th>Action</th>
                                             </tr>
                                         </thead>
-                                        <tbody id="dataContainer-topic" class='dataContainer'style="min-height:300px">
-                                           @include('common.loadskeletan',['loopCount'=>6])
-                                        </tbody>
+                                      
                                     </table>
+                                    <script>
+                                        $(function() {
+                                            $('#topicTable').DataTable({
+                                                processing: true,
+                                                serverSide: true,
+                                                ajax: "{{url('topicData')}}", // <-- Update to your chapters data route
+                                                columns: [{
+                                                        data: 'DT_RowIndex',
+                                                        name: 'DT_RowIndex',
+                                                        orderable: false,
+                                                        searchable: false
+                                                    }, // For SR. NO.
+                                                    {
+                                                        data: 'name',
+                                                        name: 'name'
+                                                    },
+                                                    {
+                                                        data: 'class_name',
+                                                        name: 'class_name'
+                                                    },
+                                                    {
+                                                        data: 'subject_name',
+                                                        name: 'subject_name'
+                                                    }, // Chapter Name
+                                                    {
+                                                        data: 'chapter_name',
+                                                        name: 'chapter_name'
+                                                    },
+                                                    {
+                                                        data: 'action',
+                                                        name: 'action',
+                                                        orderable: false,
+                                                        searchable: false
+                                                    }
+                                                ]
+                                            });
+                                        });
+                                    </script>
                                 </div>
                             </div>
                         </div>
                     </div>
-                <div class="col-md-12 p-0" id="permissionContainer">
-
-                </div>
+                
                 </div>
             </div>
         </section>

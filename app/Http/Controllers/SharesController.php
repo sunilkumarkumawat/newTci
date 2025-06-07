@@ -96,7 +96,7 @@ class SharesController extends Controller
     public function topics()
     {
         $data = null;
-        return view('topics.add',compact('data'));
+        return view('topic.add',compact('data'));
     }
 
     public function studentIdPassword()

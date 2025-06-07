@@ -661,13 +661,17 @@ $cur_route = Route::getFacadeRoot()->current()->uri();
                                     break;
                                 case 'class_type_id':
                                     if (value === '') {
-                                        alert('sdf');
                                         message = 'Class is required';
                                     }
                                     break;
                                 case 'subject_id':
                                     if (value === '') {
                                         message = 'Subject is required';
+                                    }
+                                    break;
+                                case 'chapter_id':
+                                    if (value === '') {
+                                        message = 'Chapter is required';
                                     }
                                     break;
                                 case 'category_id':
