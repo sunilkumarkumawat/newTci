@@ -12,7 +12,7 @@ $permissions = Helper::getPermissions();
                     <ul class="breadcrumb">
                         <li class="breadcrumb-item"><a href="{{ url('dashboard') }}">Dashboard</a></li>
                         <li class="breadcrumb-item">User Management</li>
-                        <li class="breadcrumb-item">Generate Password</li>
+                        <li class="breadcrumb-item">Id & Password</li>
                     </ul>
                 </div>
             </div>
@@ -20,7 +20,7 @@ $permissions = Helper::getPermissions();
                 <div class="card card-outline card-orange col-md-12 col-12 p-0">
                     <div class="card-header bg-primary">
                         <div class="card-title">
-                            <h4><i class="fa fa-desktop"></i> &nbsp; Generate Password</h4>
+                            <h4><i class="fa fa-desktop"></i> &nbsp; Id & Password</h4>
                         </div>
                         <div class="card-tools">
                             @if(in_array('user_management.`add`', $permissions) || Auth::user()->role_id == 1)
@@ -40,11 +40,7 @@ $permissions = Helper::getPermissions();
                                     @include('commoninputs.filterinputs', [
                                     'filters' => [
                                     'keyword' => true,
-                                    'admission_id' => false,
-                                    'gender_id' => false,
-                                    'class_type_id' => false,
-                                    'batches' => true,
-                                    'status' => false
+                                    'status' => true
                                     ]
                                     ])
                                     <div class="col-md-1 mt-4">
@@ -53,7 +49,7 @@ $permissions = Helper::getPermissions();
                                 </div>
                             </form>
                         </div>
-                        <div class="bg-item border p-3 rounded">
+                        <div class="bg-item border p-3 rounded usernameParameter d-none">
                             <div class="row">
                                 <!-- Username creation method -->
                                 <div class="col-md-2">
@@ -86,7 +82,7 @@ $permissions = Helper::getPermissions();
 
                         <div class="table-responsive mt-2 ">
                             <form id="generatePasswordForm" data-modal='User' method="post" action="{{ url('generatePassword') }}">
-                            <table id='generatePassTable' class="table table-bordered table-striped mt-4">
+                            <table id='generatePassTable' class="generatePassTable d-none table table-bordered table-striped mt-4">
                                 <thead>
                                     <tr class="bg-light">
                                         <th>SR.NO</th>
@@ -112,9 +108,11 @@ $permissions = Helper::getPermissions();
                     </div>
                 </div>
             </div>
+
         </div>
 
-
+    </section>
+</div>
 
         <script>
             $(document).ready(function() {
@@ -143,6 +141,7 @@ $permissions = Helper::getPermissions();
                         data: formData,
                         success: function(data) {
 
+                            $('.generatePassTable,.usernameParameter').removeClass('d-none');
 
                             const tbody = $('#generatePassTable tbody');
                             tbody.empty();

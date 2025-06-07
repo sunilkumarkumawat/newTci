@@ -68,3 +68,78 @@ $getUser=Helper::getUser();
 
 <aside class="control-sidebar control-sidebar-dark"></aside>
 
+<style>
+#scrollToTopBtn,
+#scrollToBottomBtn {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+}
+
+#scrollToTopBtn {
+    bottom: 70px;
+    right: 20px;
+}
+
+#scrollToBottomBtn {
+    bottom: 20px;
+    right: 20px;
+}
+</style>
+
+<script>
+$(document).ready(function () {
+    // Append buttons
+    $('body').append('<button id="scrollToTopBtn" class="btn btn-primary"><i class="fa fa-arrow-up"></i></button>');
+    $('body').append('<button id="scrollToBottomBtn" class="btn btn-primary"><i class="fa fa-arrow-down"></i> </button>');
+
+    // Scroll to top
+    $('#scrollToTopBtn').click(function () {
+        $('html, body').animate({ scrollTop: 0 }, 'slow');
+    });
+
+    // Scroll to bottom
+    $('#scrollToBottomBtn').click(function () {
+        $('html, body').animate({ scrollTop: $(document).height() }, 'slow');
+    });
+
+    let lastHeight = $(document).height();
+
+    function updateScrollButtonsVisibility() {
+        const hasScroll = $(document).height() > $(window).height();
+        const scrollTop = $(window).scrollTop();
+        const scrollBottom = scrollTop + $(window).height();
+        const nearTop = scrollTop < 100;
+        const nearBottom = scrollBottom >= $(document).height() - 100;
+
+        // Show/hide top button
+        if (hasScroll && !nearTop) {
+            $('#scrollToTopBtn').fadeIn();
+        } else {
+            $('#scrollToTopBtn').fadeOut();
+        }
+
+        // Show/hide bottom button
+        if (hasScroll && !nearBottom) {
+            $('#scrollToBottomBtn').fadeIn();
+        } else {
+            $('#scrollToBottomBtn').fadeOut();
+        }
+    }
+
+    // Bind scroll and resize events
+    $(window).on('scroll resize', updateScrollButtonsVisibility);
+
+    // Periodically check height changes
+    setInterval(() => {
+        const currentHeight = $(document).height();
+        if (currentHeight !== lastHeight) {
+            lastHeight = currentHeight;
+            updateScrollButtonsVisibility();
+        }
+    }, 300);
+
+    // Initial call
+    updateScrollButtonsVisibility();
+});
+</script>

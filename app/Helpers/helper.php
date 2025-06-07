@@ -81,7 +81,7 @@ public static function getSidebar()
                     'icon' => 'fa fa-circle',
                 ],
                  [
-                    'title' => 'Generate/Change Id & Password',
+                    'title' => 'Id & Password',
                     'className' => 'user_management.add',
                     'status' => true,
                     'route' => 'userPassword',
@@ -117,7 +117,7 @@ public static function getSidebar()
                     'icon' => 'fa fa-circle',
                 ],
                 [
-                    'title' => 'Generate/Change ID & Password',
+                    'title' => 'Id & Password',
                     'className' => 'student_management.add',
                     'status' => true,
                     'route' => 'studentIdPassword',
