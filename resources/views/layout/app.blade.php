@@ -1215,6 +1215,53 @@ $cur_route = Route::getFacadeRoot()->current()->uri();
             });
         </script>
 
+      {{-- add Documents --}}
+
+<script>
+$('#addDocBtn').on('click', function () {
+    let category = $('#docCategory').val().trim();
+    let files = $('#docFiles')[0].files;
+
+    if (!category || files.length === 0) {
+        alert("Please enter a category and select at least one file.");
+        return;
+    }
+
+    for (let i = 0; i < files.length; i++) {
+        let file = files[i];
+        let reader = new FileReader();
+
+        reader.onload = function (e) {
+            let container = $('<div class="col-md-3 mb-3 text-center border rounded p-2"></div>');
+            // container.append(`<strong>${category}</strong><br>`);
+
+            // container.append(`
+            //     <img src="${e.target.result}" class="img-thumbnail" style="width:100px;height:100px;object-fit:cover;"><br>
+            //     <small>${file.name}</small>
+            // `);
+
+            // Hidden inputs for Laravel
+            let fileInput = $('<input type="file" style="display:none;" name="documents[]">');
+            let categoryInput = $(`<input type="hidden" name="categories[]">`).val(category);
+
+            // Append both inputs to the form
+            fileInput[0].files = (function () {
+                let dt = new DataTransfer();
+                dt.items.add(file);
+                return dt.files;
+            })();
+
+            container.append(fileInput, categoryInput);
+            $('#uploadedDocs').append(container);
+        };
+        reader.readAsDataURL(file);
+    }
+
+    $('#docCategory').val('');
+    $('#docFiles').val('');
+});
+</script>
+
         <!-- Common Delete Confirmation Modal -->
         <div class="modal fade" id="deleteConfirmModal" tabindex="-1" aria-labelledby="deleteModalLabel"
             aria-hidden="true">

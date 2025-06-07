@@ -43,78 +43,71 @@ class CommonService
 }
 public function createCommon($request)
 {
-    $data = collect($request->all())->except(['modal_type', 'id'])->toArray();
+    $data = collect($request->all())->except(['modal_type', 'id', 'documents', 'categories'])->toArray();
     $modal = $request->modal_type;
 
-    
     if (!str_contains($modal, '\\')) {
         $modal = 'App\\Models\\' . $modal;
     }
 
     try {
         if (!class_exists($modal)) {
-            return response()->json(['message' => 'Invalid modal type'], 400);
+            return response()->json(['message' => 'Invalid model type'], 400);
         }
 
-    $modalName = class_basename($modal);
+        $modalName = class_basename($modal);
 
-// 🔐 Handle password field
-$this->handlePasswordField($data);
+        // 🔐 Handle password fields
+        $this->handlePasswordField($data);
 
+        // 💡 Handle permissions (for User only)
+        $permissions = null;
+        if ($modalName === 'User' && isset($data['permissions'])) {
+            $permissions = $data['permissions'];
+            unset($data['permissions']);
+        }
 
-  $permissions = null; // Initialize permissions variable
-// 🧹 Unset permissions if User model
-if ($modalName === 'User' && isset($data['permissions'])) {
-    $permissions = $data['permissions']; // Save temporarily
-    unset($data['permissions']);
-}
+        // 📂 Handle all files except documents
+        foreach ($request->allFiles() as $key => $file) {
+            if ($key !== 'documents' && $file->isValid()) {
+                $data[$key] = $this->handleFileUpload($file, $modalName);
+            }
+        }
 
-// 📂 Handle uploaded files
-foreach ($request->allFiles() as $key => $file) {
-    if ($file->isValid()) {
-        $data[$key] = $this->handleFileUpload($file, $modalName);
-    }
-}
+        // 📝 Create or Update the model
+        $record = $request->filled('id') ? $modal::find($request->id) : new $modal;
+        if ($request->filled('id') && !$record) {
+            return response()->json(['message' => "$modalName not found."], 404);
+        }
 
-// ✅ Update if ID exists
-if ($request->filled('id')) {
-    $record = $modal::find($request->id);
-    if (!$record) {
-        return response()->json(['message' => $modalName . ' not found.'], 404);
-    }
+        $record->fill($data)->save();
 
-    $record->update($data);
+        // 🔗 Save permissions
+        if ($modalName === 'User' && $permissions !== null) {
+            $this->savePermission($record->id, $permissions);
+        }
 
-    // 🔗 Save permissions
-    if ($modalName === 'User' && isset($permissions)) {
-      $this->savePermission($record->id, $permissions ?? []);
-    }
+        // 📎 Save documents with metadata
+        if ($request->hasFile('documents')) {
+            $documents = $request->file('documents');
+            $categories = $request->input('categories', []);
 
-    Cache::forget('getAll_' . $modalName);
+            foreach ($documents as $index => $file) {
+                $category = $categories[$index] ?? null;
+                $this->storeDocumentsWithMeta([$file], $modalName, $record->id, $category);
+            }
+        }
 
-    return response()->json([
-        'message' => $modalName . ' updated successfully.',
-        'data' => $record,
-        'modal' => $modalName,
-        'method' => 'update'
-    ]);
-} else {
-    $record = $modal::create($data);
+        // 🔄 Clear cache
+        Cache::forget('getAll_' . $modalName);
 
-    // 🔗 Save permissions
-    if ($modalName === 'User' && isset($permissions)) {
-       $this->savePermission($record->id, $permissions ?? []);
-    }
+        return response()->json([
+            'message' => $modalName . ($request->filled('id') ? ' updated' : ' created') . ' successfully.',
+            'data'    => $record,
+            'modal'   => $modalName,
+            'method'  => $request->filled('id') ? 'update' : 'create'
+        ], $request->filled('id') ? 200 : 201);
 
-    Cache::forget('getAll_' . $modalName);
-
-    return response()->json([
-        'message' => $modalName . ' created successfully.',
-        'data' => $record,
-        'modal' => $modalName,
-        'method' => 'create'
-    ], 201);
-}
     } catch (\Exception $e) {
         return response()->json([
             'error' => 'Error: ' . $e->getMessage()
@@ -248,6 +241,33 @@ public function getAll(string $modal)
             $data['password'] = bcrypt($data['password']);
         }
     }
+
+
+
+ private function storeDocumentsWithMeta(array $files, string $modalName, int $userId, ?string $category = null)
+{
+    foreach ($files as $file) {
+        if (!$file->isValid()) continue;
+
+        $originalName = $file->getClientOriginalName();
+        $extension = $file->getClientOriginalExtension();
+        $filename = time() . '_' . uniqid() . '.' . $extension;
+
+        // Save the file
+        $path = $file->storeAs("public/documents/$modalName/$userId", $filename);
+
+      $modal = 'App\\Models\\' .'Documents';
+        // Save metadata to DB
+      
+     $modal::create([
+            'user_id' => $userId,
+            'model_name' => $modalName,
+            'category' => $category,  // ✅ Category saved here
+            'file_name' => $originalName,
+            'file_path' => $path,
+        ]);
+    }
+}
 
     private function handleFileUpload($file, $folder = 'uploads')
     {

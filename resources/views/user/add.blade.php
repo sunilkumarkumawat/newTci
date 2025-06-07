@@ -66,6 +66,10 @@ $isEdit = isset($data);
                                 </div>
                                 <div class="wizard-step-indicator text-center flex-fill">
                                     <div class="circle step-circle">3</div>
+                                    <small class="d-block">Documents</small>
+                                </div>
+                                <div class="wizard-step-indicator text-center flex-fill">
+                                    <div class="circle step-circle">4</div>
                                     <small class="d-block">Permissions</small>
                                 </div>
                                 <div class="step-line position-absolute w-100"
@@ -73,7 +77,7 @@ $isEdit = isset($data);
                             </div>
 
 
-                            <form id="createCommon" enctype="multipart/form-data"  data-step="1" data-total_steps='3'>
+                            <form id="createCommon" enctype="multipart/form-data"  data-step="1" data-total_steps='4'>
                                 @if ($isEdit)
                                 <input type='hidden' value='{{ $data->id }}' id="user_id" name='id' />
                                 @endif
@@ -278,8 +282,35 @@ $isEdit = isset($data);
                                             </div>
                                         </div>
 
-                                        <!-- Step 3: Permissions -->
-                                        <div id="step-3" class="wizard-step d-none">
+                                        <!-- Step 3: Documents -->
+                       <div id="step-3" class="wizard-step d-none">
+    <div class="row">
+        <div class="col-md-12 p-0">
+            <h5><i class="fa fa-lock"></i> User</h5>
+        </div>
+
+        <!-- Upload section -->
+        <div class="col-md-6 mb-3">
+            <label for="docCategory">Document Category</label>
+            <input type="text" id="docCategory" class="form-control" placeholder="e.g., Aadhaar Card, Marksheet">
+        </div>
+        <div class="col-md-6 mb-3">
+            <label for="docFiles">Browse Documents</label>
+            <input type="file" id="docFiles" class="form-control" multiple>
+        </div>
+        <div class="col-md-12 mb-3">
+            <button type="button" class="btn btn-primary" id="addDocBtn">Add Document</button>
+        </div>
+
+        <!-- Preview uploaded files -->
+        <div class="col-md-12">
+            <h6>Uploaded Documents:</h6>
+            <div id="uploadedDocs" class="row"></div>
+        </div>
+    </div>
+</div>
+                                        <!-- Step 4: Permissions -->
+                                        <div id="step-4" class="wizard-step d-none">
                                        
                                             <div class="row">
                                                  <div class="col-md-12 p-0" id="permissionContainer">
@@ -311,7 +342,7 @@ $isEdit = isset($data);
 <!-- JS Script -->
 <script>
     let currentStep = 1;
-    const totalSteps = 3;
+    const totalSteps = 4;
 
     function showStep(step) {
         document.querySelectorAll('.wizard-step').forEach(el => el.classList.add('d-none'));
@@ -354,7 +385,7 @@ $isEdit = isset($data);
             $('#step-' + currentStep).find('small').remove();
             $('#createCommon').attr('data-step', currentStep);
 
-            if(currentStep == 3){
+            if(currentStep == 4){
                  const roleId = $("#role_id").val();
                  const userId = $("#user_id").val() || null;
                 const url = `{{ url('/set-permission-view') }}/${roleId}/${userId}`;
