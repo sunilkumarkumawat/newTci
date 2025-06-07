@@ -98,6 +98,12 @@ class SharesController extends Controller
         return view('topics.add',compact('data'));
     }
 
+    public function studentIdPassword()
+    {
+        $data = null;
+        return view('student.studentIdPassword',compact('data'));
+    }
+
      public function createCommon(Request $request)
     {
         return $this->commonService->createCommon($request);
@@ -251,6 +257,18 @@ public function chaptersData (Request $request)
     ->rawColumns(['action'])
     ->make(true);
 }
+
+    public function studentsData(Request $request){
+        $query = DB::table('student');
+
+        return DataTables::of($query)
+        ->addIndexColumn()
+        ->addColumn('action', function($row){
+            return view('student.partials.actions', compact('row'))->render();
+        })
+        ->rawColumns(['action'])
+        ->make(true);
+    }
 
 
 }
