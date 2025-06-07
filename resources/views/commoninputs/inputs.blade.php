@@ -7,6 +7,8 @@
     $labelBoolean = $labelBoolean ?? true;
     $emptyOption = $emptyOption ?? true;
     $attributes = $attributes ?? [];
+    $useIdAsValue = $useIdAsValue ?? true;
+    $nameField = $nameField ?? true;
 @endphp
 
 <div class="form-group">
@@ -22,7 +24,9 @@
     <select
         class="form-control"
         id="{{ $name }}"
-        name="{{ $name }}"
+        @if($nameField)
+            name="{{ $name }}"
+        @endif
        
         data-required="{{ $isRequired ? 'true' : 'false' }}"
         @foreach($attributes as $attr => $val)
@@ -33,7 +37,7 @@
         <option value="">Select {{ $label }}</option>
         @endif
         @foreach ($options as $key => $value)
-            <option value="{{ $key }}" {{ $selectedValue == $key ? 'selected' : '' }}>
+            <option value="{{ $useIdAsValue ? $key : $value }}" {{ $selectedValue == $key ? 'selected' : '' }}>
                 {{ $value }}
             </option>
         @endforeach

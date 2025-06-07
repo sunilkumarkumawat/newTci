@@ -1237,7 +1237,7 @@ $('#addDocBtn').on('click', function () {
 
             container.append(`
                 <img src="${e.target.result}" class="img-thumbnail" style="width:100px;height:100px;object-fit:cover;"><br>
-                <strong>${file.name}</strong>
+                <p>${file.name}</p>
             `);
 
             // Remove button

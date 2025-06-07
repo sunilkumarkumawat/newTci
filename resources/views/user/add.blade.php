@@ -291,8 +291,17 @@ $isEdit = isset($data);
 
         <!-- Upload section -->
         <div class="col-md-6 mb-3">
-            <label for="docCategory">Document Category</label>
-            <input type="text" id="docCategory" class="form-control" placeholder="e.g., Aadhaar Card, Marksheet">
+            <!-- <label for="docCategory">Document Category</label>
+            <input type="text" id="docCategory" class="form-control" placeholder="e.g., Aadhaar Card, Marksheet"> -->
+            @include('commoninputs.inputs',[
+            'modal' => 'DocumentCategory',
+            'name' => 'docCategory',
+            'selected' => null,
+            'label' => 'Document Category',
+            'required' => false,
+            'useIdAsValue' => false,
+            'nameField' => false
+            ])
         </div>
         <div class="col-md-6 mb-3">
             <label for="docFiles">Browse Documents</label>

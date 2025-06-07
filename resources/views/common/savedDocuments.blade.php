@@ -13,10 +13,10 @@ $savedDocuments = Helper::getSavedDocuments($getDocumentFromModal,$modal,$userId
      style="width:100px; height:100px; object-fit:cover;"
       onerror="this.src='{{ asset('defaultImages/imageError.png') }}'"><br>
         
-        <strong>{{ $doc->file_name }}</strong>
+        <!-- <strong>{{ $doc->file_name }}</strong> -->
         
         <button type="button" 
-                class="btn btn-sm btn-danger position-absolute top-0 end-0 m-1 delete-saved-doc" 
-                data-id="{{ $doc->id }}">×</button>
+                class="delete-btn btn btn-sm btn-danger position-absolute top-0 end-0 m-1 delete-saved-doc" 
+                data-id="{{ $doc->id }}" data-modal="Documents">×</button>
     </div>
 @endforeach
