@@ -1232,7 +1232,14 @@ $cur_route = Route::getFacadeRoot()->current()->uri();
 
 <script>
 
-    $(document).ready(function () {
+$(document).ready(function () {
+
+    hideElements();
+
+    function hideElements(){
+        $('.generatePassTable,.usernameParameter').addClass('d-none');
+    }
+
     $('#generatePasswordForm').on('submit', function (e) {
         e.preventDefault(); // prevent default form submission
 
@@ -1252,6 +1259,7 @@ $cur_route = Route::getFacadeRoot()->current()->uri();
             success: function (response) {
                 // Handle success
                 toastr.success('Usernames and passwords generated successfully!');
+                hideElements();
                 $('#generatePassTable').find('tbody').html(''); // Display generated usernames
                 // Optionally reset form or reload table
             },

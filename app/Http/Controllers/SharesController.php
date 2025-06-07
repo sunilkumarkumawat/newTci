@@ -264,6 +264,40 @@ public function chaptersData (Request $request)
     ->make(true);
 }
 
+public function topicData(Request $request)
+{
+    $query = DB::table('topics')
+    ->leftJoin('subject', function($join) {
+        $join->on('topics.subject_id', '=', 'subject.id')
+             ->whereNull('subject.deleted_at');
+    })
+    ->leftJoin('chapters', function($join) {
+        $join->on('topics.chapter_id', '=', 'chapters.id')
+             ->whereNull('chapters.deleted_at');
+    })
+    ->leftJoin('class_types', function($join) {
+        $join->on('topics.class_type_id', '=', 'class_types.id')
+             ->whereNull('class_types.deleted_at');
+    })
+    ->select(
+        'topics.id',
+        'topics.name',
+        'subject.name as subject_name',
+        'chapters.name as chapter_name',
+        'class_types.name as class_name'
+    )
+    ->whereNull('topics.deleted_at'); // Also exclude deleted topics
+
+
+    return DataTables::of($query)
+    ->addIndexColumn()
+    ->addColumn('action', function($row){
+        return view('topic.partials.actions', compact('row'))->render();
+    })
+    ->rawColumns(['action'])
+    ->make(true);
+}
+
 public function allTypeUsersData(Request $request)
 {
     $modalType = $request->input('modal_type');
