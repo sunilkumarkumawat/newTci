@@ -332,6 +332,11 @@ public function topicData(Request $request)
     ->select(
         'questions.id',
         'questions.name',
+        'questions.ans_a',
+        'questions.ans_b',
+        'questions.ans_c',
+        'questions.ans_d',
+        'questions.correct_ans',
         'subject.name as subject_name',
         'chapters.name as chapter_name',
         'class_types.name as class_name',
@@ -345,7 +350,7 @@ public function topicData(Request $request)
     ->addColumn('action', function($row){
         return view('questions.partials.actions', compact('row'))->render();
     })
-    ->rawColumns(['action'])
+    ->rawColumns(['action','name','ans_a','ans_b','ans_c','ans_d','correct_ans'])
     ->make(true);
 }
 
