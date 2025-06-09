@@ -8,7 +8,8 @@ class Question extends Model
 {
         use SoftDeletes;
 	protected $table = "questions"; //table name
-
+    protected $guarded = [];
+    
     public function Subject(){
         return $this->belongsTo('App\Models\Subject','subject_id');
     } 

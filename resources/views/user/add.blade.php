@@ -129,9 +129,9 @@ $isEdit = isset($data);
                                                     <div class="form-group">
                                                         <label for="mobile">Mobile <span
                                                                 class="text-danger">*</span></label>
-                                                        <input type="text" class="form-control" placeholder="Mobile"
+                                                        <input type="tel" class="form-control" placeholder="Mobile"
                                                             id="mobile" data-required="true" name="mobile"
-                                                            value="{{ old('mobile', $data->mobile ?? '') }}">
+                                                            value="{{ old('mobile', $data->mobile ?? '') }}" onkeypress="javascript:return isNumber(event)" maxlength="10" minlegth="10">
                                                     </div>
                                                 </div>
                                                 <div class="col-md-4">

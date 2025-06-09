@@ -20,7 +20,7 @@ $getSetting = Helper::getSetting();
                 'class' => 'brand_img'
             ])
              <!-- <img src={{ asset('/defaultImages/organization/logo.jpeg') }} alt="Brand Logo" class="brand_img"> -->
-             <p class="brand_title">Tci Edu Hub</p>
+             <p class="brand_title">{{ $getSetting->name ?? '' }}</p>
          </div>
      </a>
 
