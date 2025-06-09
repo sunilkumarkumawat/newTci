@@ -110,6 +110,18 @@ class SharesController extends Controller
         return view('user.userPassword',compact('data'));
     }
 
+    public function questions()
+    {
+        $data = null;
+        return view('questions.add',compact('data'));
+    }
+
+    public function questionView()
+    {
+        $data = null;
+        return view('questions.questionView',compact('data'));
+    }
+
      public function createCommon(Request $request)
     {
         return $this->commonService->createCommon($request);
@@ -298,6 +310,50 @@ public function topicData(Request $request)
     ->make(true);
 }
 
+    public function questionData(Request $request)
+{
+    $query = DB::table('questions')
+    ->leftJoin('subject', function($join) {
+        $join->on('questions.subject_id', '=', 'subject.id')
+             ->whereNull('subject.deleted_at');
+    })
+    ->leftJoin('chapters', function($join) {
+        $join->on('questions.chapter_id', '=', 'chapters.id')
+             ->whereNull('chapters.deleted_at');
+    })
+    ->leftJoin('class_types', function($join) {
+        $join->on('questions.class_type_id', '=', 'class_types.id')
+             ->whereNull('class_types.deleted_at');
+    })
+    ->leftJoin('question_types', function($join) {
+        $join->on('questions.question_type_id', '=', 'question_types.id')
+             ->whereNull('question_types.deleted_at');
+    })
+    ->select(
+        'questions.id',
+        'questions.name',
+        'questions.ans_a',
+        'questions.ans_b',
+        'questions.ans_c',
+        'questions.ans_d',
+        'questions.correct_ans',
+        'subject.name as subject_name',
+        'chapters.name as chapter_name',
+        'class_types.name as class_name',
+        'question_types.name as question_type'
+    )
+    ->whereNull('questions.deleted_at'); // Also exclude deleted topics
+
+
+    return DataTables::of($query)
+    ->addIndexColumn()
+    ->addColumn('action', function($row){
+        return view('questions.partials.actions', compact('row'))->render();
+    })
+    ->rawColumns(['action','name','ans_a','ans_b','ans_c','ans_d','correct_ans'])
+    ->make(true);
+}
+
 public function allTypeUsersData(Request $request)
 {
     $modalType = $request->input('modal_type');
@@ -436,4 +492,5 @@ public function generatePassword(Request $request)
 
     return response()->json(['status' => 'success']);
 }
+
 }

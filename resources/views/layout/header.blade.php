@@ -48,7 +48,8 @@ $sidebarData = Helper::getSidebar();
 <nav class="main-header navbar navbar-expand navbar-white navbar-light p-0">
     <ul class="navbar-nav">
         <li class="nav-item ml-1">
-            <a class="nav-link border border-0" href="javascript:void(0);" id="sidebarToggle"><i class="fa fa-bars"></i></a>
+            <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fa fa-bars"></i></a>
+            <!-- <a class="nav-link border border-0" href="javascript:void(0);" id="sidebarToggle"><i class="fa fa-bars"></i></a> -->
         </li>
     </ul>
     <ul class="navbar-nav">
@@ -110,7 +111,7 @@ $sidebarData = Helper::getSidebar();
             'required' => false,
             'labelBoolean' => false,
             'emptyOption' => false,
-
+                
             ])
 
             </form>
@@ -201,14 +202,14 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 </script>
 <script>
-    document.getElementById('sidebarToggle').addEventListener('click', function() {
-        var sidebar = document.getElementById('sidebar');
-        sidebar.classList.toggle('d-none');
-        sidebar.classList.toggle('d-block');
-        sidebar.classList.toggle('position-absolute');
-        sidebar.classList.toggle('w-auto');
-        sidebar.style.zIndex = '1050'; // Keep above main content
-    });
+    // document.getElementById('sidebarToggle').addEventListener('click', function() {
+    //     var sidebar = document.getElementById('sidebar');
+    //     sidebar.classList.toggle('d-none');
+    //     sidebar.classList.toggle('d-block');
+    //     sidebar.classList.toggle('position-absolute');
+    //     sidebar.classList.toggle('w-auto');
+    //     sidebar.style.zIndex = '1050'; // Keep above main content
+    // });
 </script>
 
 

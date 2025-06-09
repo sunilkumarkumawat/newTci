@@ -11,7 +11,7 @@
     $nameField = $nameField ?? true;
 @endphp
 
-<div class="form-group">
+<div class="form-group mb-0">
     @if (!empty($label) && $labelBoolean != false)
         <label for="{{ $name }}">
             {{ $label }}
