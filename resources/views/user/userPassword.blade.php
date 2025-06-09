@@ -2,6 +2,8 @@
 @section('content')
 @php
 $permissions = Helper::getPermissions();
+$filterable_columns = ['keyword'=>true, 'status'=>true];
+$filter_keys = implode(',', array_keys($filterable_columns));
 @endphp
 <div class="content-wrapper">
     <section class="content">
@@ -38,10 +40,7 @@ $permissions = Helper::getPermissions();
                                 <input type='hidden' value='User' name='modal_type' />
                                 <div class="row">
                                     @include('commoninputs.filterinputs', [
-                                    'filters' => [
-                                    'keyword' => true,
-                                    'status' => true
-                                    ]
+                                    'filters' => $filterable_columns
                                     ])
                                     <div class="col-md-1 mt-4">
                                         <button type="submit" class="btn btn-primary">Search</button>
@@ -63,7 +62,7 @@ $permissions = Helper::getPermissions();
                                     </select>
                                 </div>
 
-                             
+
 
                                 <!-- Password input -->
                                 <div class="col-md-2">
@@ -71,38 +70,38 @@ $permissions = Helper::getPermissions();
                                     <input type="text" id="default_password" class="form-control form-control-sm" placeholder="Enter password">
                                 </div>
                             </div>
-                        
+
                             <!-- Apply preview -->
                             <div class="row mt-3">
                                 <div class="col-md-12">
-                                <button class='btn btn-sm bg-danger' id='generatePassword'>Apply to all</button>
+                                    <button class='btn btn-sm bg-danger' id='generatePassword'>Apply to all</button>
                                 </div>
                             </div>
                         </div>
 
                         <div class="table-responsive mt-2 ">
                             <form id="generatePasswordForm" data-modal='User' method="post" action="{{ url('generatePassword') }}">
-                            <table id='generatePassTable' class="generatePassTable d-none table table-bordered table-striped mt-4">
-                                <thead>
-                                    <tr class="bg-light">
-                                        <th>SR.NO</th>
-                                        <th>Name</th>
-                                        <th>Dob</th>
-                                        <th>Mobile</th>
-                                        <!-- <th>Father Mobile</th> -->
-                                        <th>Username</th>
-                                        <th>Password</th>
+                                <table id='generatePassTable' class="generatePassTable d-none table table-bordered table-striped mt-4">
+                                    <thead>
+                                        <tr class="bg-light">
+                                            <th>SR.NO</th>
+                                            <th>Name</th>
+                                            <th>Dob</th>
+                                            <th>Mobile</th>
+                                            <!-- <th>Father Mobile</th> -->
+                                            <th>Username</th>
+                                            <th>Password</th>
 
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                </tbody>
-                                <tfoot>
-                                    <tr>
-                                        <td colspan='100%' class='text-center'><button type='submit' class='btn btn-sm bg-success'>Submit</button></td>
-                                    </tr>
-                                </tfoot>
-                            </table>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                    </tbody>
+                                    <tfoot>
+                                        <tr>
+                                            <td colspan='100%' class='text-center'><button type='submit' class='btn btn-sm bg-success'>Submit</button></td>
+                                        </tr>
+                                    </tfoot>
+                                </table>
                             </form>
                         </div>
                     </div>
@@ -114,45 +113,50 @@ $permissions = Helper::getPermissions();
     </section>
 </div>
 
-        <script>
-            $(document).ready(function() {
-                $('#quickForm').on('submit', function(e) {
-                    e.preventDefault();
+<script>
+    $(document).ready(function() {
+        $('#quickForm').on('submit', function(e) {
+            e.preventDefault();
 
-                    // get form data
-                    const formData = $(this).serializeArray();
-                    const modalType = $('input[name="modal_type"]').val();
-                      const columns = 'id,name,dob,mobile,userName,confirm_password';
+            // get form data
+            const formData = $(this).serializeArray();
+            const modalType = $('input[name="modal_type"]').val();
+            const gettable_columns = 'id,name,dob,mobile,userName,confirm_password';
+            const filterable_columns = '{{$filter_keys}}';
 
-                    // ensure modal_type is sent
-                    formData.push({
-                        name: 'modal_type',
-                        value: modalType
-                    });
+            // ensure modal_type is sent
+            formData.push({
+                name: 'modal_type',
+                value: modalType
+            });
 
-                        formData.push({
-                        name: 'columns',
-                        value: columns
-                    });
+            formData.push({
+                name: 'gettable_columns',
+                value: gettable_columns
+            });
+            formData.push({
+                name: 'filterable_columns',
+                value: filterable_columns
+            });
 
-                    $.ajax({
-                        url: "{{ url('allTypeUsersData') }}",
-                        method: "GET",
-                        data: formData,
-                        success: function(data) {
+            $.ajax({
+                url: "{{ url('allTypeUsersData') }}",
+                method: "GET",
+                data: formData,
+                success: function(data) {
 
-                            $('.generatePassTable,.usernameParameter').removeClass('d-none');
+                    $('.generatePassTable,.usernameParameter').removeClass('d-none');
 
-                            const tbody = $('#generatePassTable tbody');
-                            tbody.empty();
+                    const tbody = $('#generatePassTable tbody');
+                    tbody.empty();
 
-                            if (!data.data.length) {
-                                tbody.append(`<tr><td colspan="7" class="text-center">No records found.</td></tr>`);
-                                return;
-                            }
+                    if (!data.data.length) {
+                        tbody.append(`<tr><td colspan="7" class="text-center">No records found.</td></tr>`);
+                        return;
+                    }
 
-                            data.data.forEach((item, index) => {
-                                tbody.append(`
+                    data.data.forEach((item, index) => {
+                        tbody.append(`
                         <tr data-self_mobile="${item.mobile}" data-dob="${item.dob}">
                             <td>${index + 1}</td>
                             <td>${item.name}
@@ -180,72 +184,68 @@ $permissions = Helper::getPermissions();
                            
                         </tr>
                     `);
-                            });
-                        },
-                        error: function() {
-                            alert("Something went wrong.");
-                        }
                     });
-                });
+                },
+                error: function() {
+                    alert("Something went wrong.");
+                }
             });
-        </script>
+        });
+    });
+</script>
 
-        <script>
-
-
-function generateRandomString(length = 6) {
-    const chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
-    let result = '';
-    for (let i = 0; i < length; i++) {
-        result += chars.charAt(Math.floor(Math.random() * chars.length));
-    }
-    return result;
-}
-
-            // Show or hide the custom box
-          $('#generatePassword').on('click', function () {
-    const selectedValue = $('#username_source').val();
-    const commonPassword = $('#default_password').val();
-           const tbodyLength = $('#studentTable tbody tr').length;
-
-    if (tbodyLength === 0) {
-        toastr.error('Please search for students first.');
-        return;
-    }
-            
-    if(selectedValue === '') {
-       toastr.error('Please select a username source.');
-       return;
+<script>
+    function generateRandomString(length = 6) {
+        const chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+        let result = '';
+        for (let i = 0; i < length; i++) {
+            result += chars.charAt(Math.floor(Math.random() * chars.length));
+        }
+        return result;
     }
 
+    // Show or hide the custom box
+    $('#generatePassword').on('click', function() {
+        const selectedValue = $('#username_source').val();
+        const commonPassword = $('#default_password').val();
+        const tbodyLength = $('#studentTable tbody tr').length;
 
-    $('#generatePassTable tbody tr').each(function () {
-        const row = $(this);
-        let value = '';
-
-        switch (selectedValue) {
-           
-            case 'self_mobile':
-                value = row.data('self_mobile');
-                break;
-            case 'dob':
-                const dob = row.data('dob') || '';
-                value = dob.replaceAll('-', '');
-                break;
-               case 'custom':
-                const fullName = row.find('td:nth-child(2)').text().trim(); // assuming name is in 2nd column
-                const first3 = fullName.substring(0, 3);
-                value = first3 + generateRandomString(5);
-                break;
-            default:
-                value = '';
+        if (tbodyLength === 0) {
+            toastr.error('Please search for students first.');
+            return;
         }
 
-        row.find('.username-input').val(value);
-        row.find('.password-input').val(commonPassword);
-    });
-});
+        if (selectedValue === '') {
+            toastr.error('Please select a username source.');
+            return;
+        }
 
-           
-        </script>
-        @endsection
+
+        $('#generatePassTable tbody tr').each(function() {
+            const row = $(this);
+            let value = '';
+
+            switch (selectedValue) {
+
+                case 'self_mobile':
+                    value = row.data('self_mobile');
+                    break;
+                case 'dob':
+                    const dob = row.data('dob') || '';
+                    value = dob.replaceAll('-', '');
+                    break;
+                case 'custom':
+                    const fullName = row.find('td:nth-child(2)').text().trim(); // assuming name is in 2nd column
+                    const first3 = fullName.substring(0, 3);
+                    value = first3 + generateRandomString(5);
+                    break;
+                default:
+                    value = '';
+            }
+
+            row.find('.username-input').val(value);
+            row.find('.password-input').val(commonPassword);
+        });
+    });
+</script>
+@endsection

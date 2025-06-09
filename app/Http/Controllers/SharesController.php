@@ -301,7 +301,10 @@ public function topicData(Request $request)
 public function allTypeUsersData(Request $request)
 {
     $modalType = $request->input('modal_type');
-   $columnsInput = $request->input('columns');
+   $columnsInput = $request->input('gettable_columns');
+
+
+   
 
 // Convert to array safely
 $columns = is_array($columnsInput)
@@ -322,18 +325,85 @@ $columns = array_map('trim', $columns);
 
     $query = $modelClass::query();
 
+
+    
+
     // Get all filters from request except modal_type
     $filters = $request->except('modal_type');
 
     // Apply filters dynamically
     $query = Helper::applyFilters($query, $filters, $modalType);
-    $query = Helper::sessionFilter($query);
 
+    if($modalType == 'Student')
+    {
+    $query = Helper::sessionFilter($query);
+    }
     $data = $query->get($columns);
 
     return response()->json(['status' => true, 'data' => $data]);
 }
 
+
+
+
+public function saveExcelData(Request $request, $modal)
+{
+    $data = $request->input('data');
+
+    // Validate modal type
+    if (empty($modal)) {
+        return response()->json([
+            'status' => false,
+            'message' => 'Modal type is required.'
+        ], 400);
+    }
+
+    // Build and validate the model class
+    $modelClass = "App\\Models\\" . ucfirst($modal);
+    if (!class_exists($modelClass)) {
+        return response()->json([
+            'status' => false,
+            'message' => "Model '$modal' not found."
+        ], 404);
+    }
+
+
+    $role_id = $modal == 'Student' ? 3 : '' ;
+    try {
+        // Use DB transaction for safety
+        DB::beginTransaction();
+
+        // Add timestamps
+        $timestamp = now();
+        foreach ($data as &$row) {
+            $row['created_at'] = $timestamp;
+            $row['updated_at'] = $timestamp;
+        }
+
+        // Insert in one go
+        $modelClass::insert($data);
+
+        DB::commit();
+        return response()->json(['success' => true]);
+
+    } catch (\Exception $e) {
+        DB::rollBack();
+
+         // Prepare error list in point-wise format
+    $errorList = [
+        '1. Exception Type: ' . get_class($e),
+        '2. Message: ' . $e->getMessage(),
+        '3. File: ' . $e->getFile(),
+        '4. Line: ' . $e->getLine(),
+    ];
+
+    return response()->json([
+        'status' => false,
+        'message' => 'Failed to save data.',
+        'errors' => $errorList
+    ], 500);
+    }
+}
 public function generatePassword(Request $request)
 {
     $data = $request->all(); // includes modal_type, username[], password[]

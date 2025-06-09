@@ -85,6 +85,8 @@ Route::middleware(['auth'])->group(function () {
     Route::match(['get','post'], '/set-permission-view/{roleId}/{userId}', 'SharesController@setPermissionView');
     Route::match(['get','post'], '/batches', 'SharesController@batches');
     Route::match(['get','post'], '/generatePassword', 'SharesController@generatePassword');
+    Route::match(['get','post'], '/excelUpload/{modal}', 'SharesController@saveExcelData');
+    
 
     
 

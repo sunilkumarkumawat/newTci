@@ -34,24 +34,9 @@
 
                         <!-- Profile Upload Section -->
                         <div class="row">
-                            <div class="col-md-3 box">
-                                <div class="text-center py-4 ">
-                                    <div class="card-body  d-flex flex-column justify-content-center align-items-center">
-                                        <img id="profilePreview"
-                                            src="{{ asset('defaultImages/excel.jpg') }}"
-                                            class="img-fluid mb-3  border-dark p-2 larger shadow"
-                                            style="width: 120px; height: 120px; object-fit: cover; border-radius:10px"
-                                            alt="Excel Upload">
-
-                                        <div class="custom-file mt-3 col-md-8 col-12    ">
-                                            <input type="file" name="profile_photo" class="form-control bg-white"
-                                                id="excelFile" onchange="previewImage(event)">
-
-                                        </div>
-                                        {{-- <small id="fileName" class="form-text text-muted mt-2">No file selected</small> --}}
-                                    </div>
-                                </div>
-                            </div>
+                           @include('common.excelUploader',[
+                        'modal' => 'Student',
+                        ])
 
                             <!-- Form Section -->
                             <div class="col-md-9 py-2">
@@ -139,10 +124,11 @@
                                                     <div class="col-md-4">
                                                         @include('commoninputs.inputs', [
                                                             'modal' => 'Gender', // This decides the data source
-                                                            'name' => 'gender_id',
+                                                            'name' => 'gender',
                                                             'selected' => $student->gender_id ?? null,
                                                             'label' => 'Gender',
                                                             'required' => true,
+                                                             'useIdAsValue' => false,
                                                         ])
                                                     </div>
 

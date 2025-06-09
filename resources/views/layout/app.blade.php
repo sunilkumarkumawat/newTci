@@ -13,6 +13,7 @@ $setting = DB::table('settings')->get()->first();
         href="{{ env('IMAGE_SHOW_PATH') . 'setting/left_logo/' . $setting->left_logo }}"
         onerror="this.src='{{ env('IMAGE_SHOW_PATH') . 'default/mini_logo.png' }}'">
     <meta name="csrf-token" content="{{ csrf_token() }}">
+
     <link rel="stylesheet" href="{{ asset('public/assets/school/css/adminlte.min.css') }}">
     <link rel="stylesheet" href="{{ asset('public/assets/school/css/all.min.css') }}">
     <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
@@ -38,7 +39,8 @@ $setting = DB::table('settings')->get()->first();
     <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
     <!--<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>-->
 
-
+<!-- Include SheetJS -->
+<script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 
 
 
@@ -1031,41 +1033,6 @@ $cur_route = Route::getFacadeRoot()->current()->uri();
             });
         </script>
 
-        {{-- convert excel data into array --}}
-        <script>
-            document.getElementById('excelFile').addEventListener('change', function(e) {
-                const file = e.target.files[0];
-                if (!file) {
-                    alert("No file selected.");
-                    return;
-                }
-
-                const reader = new FileReader();
-
-                reader.onload = function(e) {
-                    const data = new Uint8Array(e.target.result);
-                    const workbook = XLSX.read(data, {
-                        type: 'array'
-                    });
-
-                    const sheetName = workbook.SheetNames[0];
-                    const worksheet = workbook.Sheets[sheetName];
-                    const jsonData = XLSX.utils.sheet_to_json(worksheet, {
-                        header: 1
-                    });
-
-                    // 🔥 Filter out empty rows
-                    const filteredData = jsonData.filter(row =>
-                        Array.isArray(row) &&
-                        row.some(cell => cell !== null && cell !== undefined && String(cell).trim() !== "")
-                    );
-
-                    alert(JSON.stringify(filteredData, null, 2)); // Show filtered data
-                };
-
-                reader.readAsArrayBuffer(file);
-            });
-        </script>
 
         {{-- change status --}}
         <script>
@@ -1329,6 +1296,143 @@ container.fadeIn(600);
 });
 </script>
 
+
+      {{-- excel upload --}}
+<script>
+let currentJsonData = []; // Store the extracted data globally
+
+document.getElementById('excelFile').addEventListener('change', function (e) {
+  const file = e.target.files[0];
+  const reader = new FileReader();
+  $('#errorBox').addClass('d-none');
+
+  function isExcelDate(value) {
+    return typeof value === 'number' && value > 59;
+  }
+
+  function excelDateToJSDate(serial) {
+    const utc_days = serial - 25569;
+    const utc_value = utc_days * 86400;
+    const date_info = new Date(utc_value * 1000);
+
+    const year = date_info.getUTCFullYear();
+    const month = (date_info.getUTCMonth() + 1).toString().padStart(2, '0');
+    const day = date_info.getUTCDate().toString().padStart(2, '0');
+
+    return `${year}-${month}-${day}`;
+  }
+
+  reader.onload = function (event) {
+    const data = new Uint8Array(event.target.result);
+    const workbook = XLSX.read(data, { type: 'array' });
+    const firstSheet = workbook.SheetNames[0];
+    const worksheet = workbook.Sheets[firstSheet];
+    let jsonData = XLSX.utils.sheet_to_json(worksheet, { defval: '' });
+
+    // Convert DOB dates before saving
+    jsonData = jsonData.map(row => {
+      if (row['dob'] && isExcelDate(row['dob'])) {
+        row['dob'] = excelDateToJSDate(row['dob']);
+      }
+      return row;
+    });
+
+    currentJsonData = jsonData; // save globally
+
+    const thead = document.querySelector('#excelTable thead');
+    const tbody = document.querySelector('#excelTable tbody');
+    thead.innerHTML = '';
+    tbody.innerHTML = '';
+
+    if (jsonData.length > 0) {
+      const headers = Object.keys(jsonData[0]);
+      const headerRow = document.createElement('tr');
+      headers.forEach(header => {
+        const th = document.createElement('th');
+        th.textContent = header;
+        headerRow.appendChild(th);
+      });
+      thead.appendChild(headerRow);
+
+      jsonData.forEach(row => {
+        const tr = document.createElement('tr');
+        headers.forEach(header => {
+          const td = document.createElement('td');
+          td.textContent = row[header];
+          tr.appendChild(td);
+        });
+        tbody.appendChild(tr);
+      });
+    } else {
+      tbody.innerHTML = '<tr><td colspan="100%">No data found</td></tr>';
+    }
+
+    const excelModal = new bootstrap.Modal(document.getElementById('excelModal'));
+    excelModal.show();
+  };
+
+  reader.readAsArrayBuffer(file);
+});
+
+// Save button click handler
+document.addEventListener('click', function(e) {
+  if (e.target && e.target.id === 'saveDataBtn') {
+  if(currentJsonData.length === 0){
+    alert('No data to save!');
+    return;
+  }
+
+  const modalName = $('#excelFile').attr('data-modal');
+  // Send AJAX POST request to your Laravel endpoint
+  fetch(`{{url('/excelUpload')}}/${modalName}`, { // Change this to your actual route URL
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'X-CSRF-TOKEN': '{{ csrf_token() }}' // Make sure blade renders csrf token here
+    },
+    body: JSON.stringify({ data: currentJsonData,modal:modalName })
+  })
+.then(response => response.json())
+.then(res => {
+  if (res.success) {
+    alert("Data saved successfully!");
+  } else {
+    const errorBox = document.getElementById('errorBox');
+    errorBox.classList.remove('d-none');
+    errorBox.innerHTML = '<strong>Error occurred:</strong><br>' +
+      res.errors.map(err => `<div>${err}</div>`).join('');
+  }
+})
+.catch(error => {
+  alert("Something went wrong: " + error.message);
+});
+  }
+});
+</script>
+
+<!-- Modal -->
+<div class="modal fade" id="excelModal" tabindex="-1" aria-labelledby="excelModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="excelModalLabel">Excel Data</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="table-responsive">
+          <table class="table table-bordered table-striped" id="excelTable">
+            <thead></thead>
+            <tbody></tbody>
+          </table>
+        </div>
+        <div class="text-center">
+          <button type="button" id="saveDataBtn" class="btn btn-primary mt-3">Save Data</button>
+      </div>
+      <div id="errorBox" class="alert alert-danger d-none mt-2" role="alert"></div>
+      </div>
+    </div>
+  </div>
+</div>
         <!-- Common Delete Confirmation Modal -->
         <div class="modal fade" id="deleteConfirmModal" tabindex="-1" aria-labelledby="deleteModalLabel"
             aria-hidden="true">

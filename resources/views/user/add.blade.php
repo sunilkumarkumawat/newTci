@@ -33,24 +33,10 @@ $isEdit = isset($data);
                     </div>
                     <!-- Profile Upload Section -->
                     <div class="row">
-                        <div class="col-md-3 col-12 box">
-                            {{-- <div class=" "> --}}
-                            <div class="d-grid text-center py-4 ">
-                                <img id="profilePreview" src="{{ asset('defaultImages/excel.jpg') }}"
-                                    class="img-fluid mb-3 p-1 border shadow-lg"
-                                    style="width: 120px; height: 120px; object-fit: cover; border-radius:10px; border-color: #b3b3b37a "
-                                    alt="Excel Upload">
 
-                                <div class="custom-file mt-3 col-md-8 col-12    ">
-                                    <input type="file" name="profile_photo" class="form-control bg-white"
-                                        id="excelFile" accept=".xlsx, .xls" />
-
-                                </div>
-                                {{-- <small id="fileName" class="form-text text-muted mt-2">No file selected</small> --}}
-                            </div>
-                            {{-- </div> --}}
-                        </div>
-
+                        @include('common.excelUploader',[
+                        'modal' => 'User',
+                        ])
                         <!-- Form Section -->
                         <div class="col-md-9 py-2">
                             <!-- Wizard Circle Bar -->
@@ -77,7 +63,7 @@ $isEdit = isset($data);
                             </div>
 
 
-                            <form id="createCommon" enctype="multipart/form-data"  data-step="1" data-total_steps='4'>
+                            <form id="createCommon" enctype="multipart/form-data" data-step="1" data-total_steps='4'>
                                 @if ($isEdit)
                                 <input type='hidden' value='{{ $data->id }}' id="user_id" name='id' />
                                 @endif
@@ -283,72 +269,72 @@ $isEdit = isset($data);
                                         </div>
 
                                         <!-- Step 3: Documents -->
-                       <div id="step-3" class="wizard-step d-none">
-    <div class="row">
-        <div class="col-md-12 p-0">
-            <h5><i class="fa fa-lock"></i> User</h5>
-        </div>
+                                        <div id="step-3" class="wizard-step d-none">
+                                            <div class="row">
+                                                <div class="col-md-12 p-0">
+                                                    <h5><i class="fa fa-lock"></i> User</h5>
+                                                </div>
 
-        <!-- Upload section -->
-        <div class="col-md-6 mb-3">
-            <!-- <label for="docCategory">Document Category</label>
+                                                <!-- Upload section -->
+                                                <div class="col-md-6 mb-3">
+                                                    <!-- <label for="docCategory">Document Category</label>
             <input type="text" id="docCategory" class="form-control" placeholder="e.g., Aadhaar Card, Marksheet"> -->
-            @include('commoninputs.inputs',[
-            'modal' => 'DocumentCategory',
-            'name' => 'docCategory',
-            'selected' => null,
-            'label' => 'Document Category',
-            'required' => false,
-            'useIdAsValue' => false,
-            'nameField' => false
-            ])
-        </div>
-        <div class="col-md-6 mb-3">
-            <label for="docFiles">Browse Documents</label>
-            <input type="file" id="docFiles" class="form-control" multiple>
-        </div>
-        <div class="col-md-12 mb-3">
-            <button type="button" class="btn btn-primary" id="addDocBtn">Add Document</button>
-        </div>
+                                                    @include('commoninputs.inputs',[
+                                                    'modal' => 'DocumentCategory',
+                                                    'name' => 'docCategory',
+                                                    'selected' => null,
+                                                    'label' => 'Document Category',
+                                                    'required' => false,
+                                                    'useIdAsValue' => false,
+                                                    'nameField' => false
+                                                    ])
+                                                </div>
+                                                <div class="col-md-6 mb-3">
+                                                    <label for="docFiles">Browse Documents</label>
+                                                    <input type="file" id="docFiles" class="form-control" multiple>
+                                                </div>
+                                                <div class="col-md-12 mb-3">
+                                                    <button type="button" class="btn btn-primary" id="addDocBtn">Add Document</button>
+                                                </div>
 
-        <!-- Preview uploaded files -->
-        <div class="col-md-12">
-            <div class="row">
-    <!-- Uploaded Documents Section -->
-    <div class="col-md-6 mb-3">
-        <div class="border rounded p-3 h-100">
-            <h6 class="mb-3 text-primary">Uploaded Documents:</h6>
-            <div id="uploadedDocs" class="row g-2"></div>
-        </div>
-    </div>
+                                                <!-- Preview uploaded files -->
+                                                <div class="col-md-12">
+                                                    <div class="row">
+                                                        <!-- Uploaded Documents Section -->
+                                                        <div class="col-md-6 mb-3">
+                                                            <div class="border rounded p-3 h-100">
+                                                                <h6 class="mb-3 text-primary">Uploaded Documents:</h6>
+                                                                <div id="uploadedDocs" class="row g-2"></div>
+                                                            </div>
+                                                        </div>
 
-    <!-- Saved Documents Section -->
-     @if($isEdit)
-    <div class="col-md-6 mb-3">
-        <div class="border rounded p-3 h-100">
-            <h6 class="mb-3 text-success">Previous Saved Documents:</h6>
-            <div id="showSavedDocuments" class="row g-2">
+                                                        <!-- Saved Documents Section -->
+                                                        @if($isEdit)
+                                                        <div class="col-md-6 mb-3">
+                                                            <div class="border rounded p-3 h-100">
+                                                                <h6 class="mb-3 text-success">Previous Saved Documents:</h6>
+                                                                <div id="showSavedDocuments" class="row g-2">
 
-            @include('common.savedDocuments', [
-            'getDocumentFromModal' => 'Documents',
-            'modal' => 'User',
-            'userId' => $data->id ?? null,
-            ])
-            </div>
-        </div>
-    </div>
-    @endif
-</div>
-        </div>
-    </div>
-</div>
+                                                                    @include('common.savedDocuments', [
+                                                                    'getDocumentFromModal' => 'Documents',
+                                                                    'modal' => 'User',
+                                                                    'userId' => $data->id ?? null,
+                                                                    ])
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        @endif
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
                                         <!-- Step 4: Permissions -->
                                         <div id="step-4" class="wizard-step d-none">
-                                       
+
                                             <div class="row">
-                                                 <div class="col-md-12 p-0" id="permissionContainer">
-     <h5><i class="fa fa-lock"></i> User Permissions</h5>
-                </div>
+                                                <div class="col-md-12 p-0" id="permissionContainer">
+                                                    <h5><i class="fa fa-lock"></i> User Permissions</h5>
+                                                </div>
                                             </div>
                                         </div>
 
@@ -401,18 +387,18 @@ $isEdit = isset($data);
     document.getElementById('nextStep').addEventListener('click', () => {
 
 
-       
-      
- 
-            $('#createCommon').trigger('submit');
 
 
-    
+
+        $('#createCommon').trigger('submit');
+
+
+
 
         var smallTags = $('#step-' + currentStep).find('small');
 
         if (smallTags.length > 0) {
-            
+
             return
         }
 
@@ -423,9 +409,9 @@ $isEdit = isset($data);
             $('#step-' + currentStep).find('small').remove();
             $('#createCommon').attr('data-step', currentStep);
 
-            if(currentStep == 4){
-                 const roleId = $("#role_id").val();
-                 const userId = $("#user_id").val() || null;
+            if (currentStep == 4) {
+                const roleId = $("#role_id").val();
+                const userId = $("#user_id").val() || null;
                 const url = `{{ url('/set-permission-view') }}/${roleId}/${userId}`;
 
                 $('#permissionContainer').load(url);
@@ -437,7 +423,7 @@ $isEdit = isset($data);
         if (currentStep > 1) {
             currentStep--;
             showStep(currentStep);
-             $('#createCommon').attr('data-step', currentStep);
+            $('#createCommon').attr('data-step', currentStep);
         }
     });
 

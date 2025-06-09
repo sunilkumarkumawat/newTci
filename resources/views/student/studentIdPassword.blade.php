@@ -2,6 +2,12 @@
 @section('content')
 @php
 $permissions = Helper::getPermissions();
+$filterable_columns = ['keyword'=>true, 'batches'=>true];
+  $keys = array_keys($filterable_columns);
+    $keys = array_map(function($key) {
+        return $key === 'batches' ? 'class_type_id' : $key;
+    }, $keys);
+    $filter_keys = implode(',', $keys);
 @endphp
 <div class="content-wrapper">
     <section class="content">
@@ -38,15 +44,9 @@ $permissions = Helper::getPermissions();
                                 <input type='hidden' value='Student' name='modal_type' />
                                 <div class="row">
                                     @include('commoninputs.filterinputs', [
-                                    'filters' => [
-                                    'keyword' => true,
-                                    'admission_id' => false,
-                                    'gender_id' => false,
-                                    'class_type_id' => false,
-                                    'batches' => true,
-                                    'status' => false
+                                    'filters' => $filterable_columns
                                     ]
-                                    ])
+                                    )
                                     <div class="col-md-1 mt-4">
                                         <button type="submit" class="btn btn-primary">Search</button>
                                     </div>
@@ -67,7 +67,7 @@ $permissions = Helper::getPermissions();
                                     </select>
                                 </div>
 
-                             
+
 
                                 <!-- Password input -->
                                 <div class="col-md-2">
@@ -75,38 +75,38 @@ $permissions = Helper::getPermissions();
                                     <input type="text" id="default_password" class="form-control form-control-sm" placeholder="Enter password">
                                 </div>
                             </div>
-                        
+
                             <!-- Apply preview -->
                             <div class="row mt-3">
                                 <div class="col-md-12">
-                                <button class='btn btn-sm bg-danger' id='generatePassword'>Apply to all</button>
+                                    <button class='btn btn-sm bg-danger' id='generatePassword'>Apply to all</button>
                                 </div>
                             </div>
                         </div>
 
                         <div class="table-responsive mt-2 ">
                             <form id="generatePasswordForm" data-modal='Student' method="post" action="{{ url('generatePassword') }}">
-                            <table id='generatePassTable' class="table table-bordered table-striped mt-4">
-                                <thead>
-                                    <tr class="bg-light">
-                                        <th>SR.NO</th>
-                                        <th>Name</th>
-                                        <th>Dob</th>
-                                        <th>Mobile</th>
-                                        <th>Father Mobile</th>
-                                        <th>Username</th>
-                                        <th>Password</th>
+                                <table id='generatePassTable' class="table table-bordered table-striped mt-4">
+                                    <thead>
+                                        <tr class="bg-light">
+                                            <th>SR.NO</th>
+                                            <th>Name</th>
+                                            <th>Dob</th>
+                                            <th>Mobile</th>
+                                            <th>Father Mobile</th>
+                                            <th>Username</th>
+                                            <th>Password</th>
 
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                </tbody>
-                                <tfoot>
-                                    <tr>
-                                        <td colspan='100%' class='text-center'><button type='submit' class='btn btn-sm bg-success'>Submit</button></td>
-                                    </tr>
-                                </tfoot>
-                            </table>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                    </tbody>
+                                    <tfoot>
+                                        <tr>
+                                            <td colspan='100%' class='text-center'><button type='submit' class='btn btn-sm bg-success'>Submit</button></td>
+                                        </tr>
+                                    </tfoot>
+                                </table>
                             </form>
                         </div>
                     </div>
@@ -124,16 +124,22 @@ $permissions = Helper::getPermissions();
                     // get form data
                     const formData = $(this).serializeArray();
                     const modalType = $('input[name="modal_type"]').val();
-                    const columns = 'id,name,dob,father_mobile,mobile,userName,confirm_password';
+                    const gettable_columns = 'id,name,dob,father_mobile,mobile,userName,confirm_password';
+                    const filterable_columns = '{{$filter_keys}}';
 
                     // ensure modal_type is sent
                     formData.push({
                         name: 'modal_type',
                         value: modalType
                     });
+
                     formData.push({
-                        name: 'columns',
-                        value: columns
+                        name: 'gettable_columns',
+                        value: gettable_columns
+                    });
+                    formData.push({
+                        name: 'filterable_columns',
+                        value: filterable_columns
                     });
 
                     $.ajax({
@@ -191,62 +197,60 @@ $permissions = Helper::getPermissions();
         </script>
 
         <script>
-
-
-function generateRandomString(length = 6) {
-    const chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
-    let result = '';
-    for (let i = 0; i < length; i++) {
-        result += chars.charAt(Math.floor(Math.random() * chars.length));
-    }
-    return result;
-}
+            function generateRandomString(length = 6) {
+                const chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+                let result = '';
+                for (let i = 0; i < length; i++) {
+                    result += chars.charAt(Math.floor(Math.random() * chars.length));
+                }
+                return result;
+            }
 
             // Show or hide the custom box
-          $('#generatePassword').on('click', function () {
-    const selectedValue = $('#username_source').val();
-    const commonPassword = $('#default_password').val();
-           const tbodyLength = $('#generatePassTable tbody tr').length;
+            $('#generatePassword').on('click', function() {
+                const selectedValue = $('#username_source').val();
+                const commonPassword = $('#default_password').val();
+                const tbodyLength = $('#generatePassTable tbody tr').length;
 
-    if (tbodyLength === 0) {
-        toastr.error('Please search for students first.');
-        return;
-    }
-            
-    if(selectedValue === '') {
-       toastr.error('Please select a username source.');
-       return;
-    }
+                if (tbodyLength === 0) {
+                    toastr.error('Please search for students first.');
+                    return;
+                }
+
+                if (selectedValue === '') {
+                    toastr.error('Please select a username source.');
+                    return;
+                }
 
 
-    $('#generatePassTable tbody tr').each(function () {
-        const row = $(this);
-        let value = '';
+                $('#generatePassTable tbody tr').each(function() {
+                    const row = $(this);
+                    let value = '';
 
-        switch (selectedValue) {
-            case 'father_mobile':
-                value = row.data('father_mobile');
-                break;
-            case 'self_mobile':
-                value = row.data('self_mobile');
-                break;
-            case 'dob':
-                const dob = row.data('dob') || '';
-                value = dob.replaceAll('-', '');
-                break;
-               case 'custom':
-                const fullName = row.find('td:nth-child(2)').text().trim(); // assuming name is in 2nd column
-                const first3 = fullName.substring(0, 3);
-                value = first3 + generateRandomString(5);
-                break;
-            default:
-                value = '';
-        }
+                    switch (selectedValue) {
+                        case 'father_mobile':
+                            value = row.data('father_mobile');
+                            break;
+                        case 'self_mobile':
+                            value = row.data('self_mobile');
+                            break;
+                        case 'dob':
+                            const dob = row.data('dob') || '';
+                            value = dob.replaceAll('-', '');
+                            break;
+                        case 'custom':
+                            const fullName = row.find('td:nth-child(2)').text().trim(); // assuming name is in 2nd column
+                            const first3 = fullName.substring(0, 3);
+                            value = first3 + generateRandomString(5);
+                            break;
+                        default:
+                            value = '';
+                    }
 
-        row.find('.username-input').val(value);
-        row.find('.password-input').val(commonPassword);
-    });
-});
+                    row.find('.username-input').val(value);
+                    row.find('.password-input').val(commonPassword);
+                });
+            });
 
             // Generate random 5-character string
             function generateRandomUsername(length = 5) {

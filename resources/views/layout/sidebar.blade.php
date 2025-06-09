@@ -277,48 +277,49 @@ function renderSidebarMenu($items) {
  </style>
 
  <script>
-     document.addEventListener('DOMContentLoaded', function() {
-         // Get DOM elements
-         const toggleBtn = document.getElementById('sidebarToggleBtn');
-         const sidebar = document.getElementById('sidebar');
-         const overlay = document.getElementById('sidebarOverlay');
+document.addEventListener('DOMContentLoaded', function() {
+    // Get DOM elements
+    const toggleBtn = document.getElementById('sidebarToggleBtn');
+    const sidebar = document.getElementById('sidebar');
+    const overlay = document.getElementById('sidebarOverlay');
 
-         if (toggleBtn && sidebar && overlay) {
-             // Toggle sidebar on button click
-             toggleBtn.addEventListener('click', function(e) {
-                 e.preventDefault();
-                 sidebar.classList.toggle('mobile-show');
-                 overlay.classList.toggle('show');
-                 console.log('Toggle clicked, sidebar classes:', sidebar.className);
-             });
+    if (toggleBtn && sidebar && overlay) {
+        // Restore sidebar state from localStorage on page load
+        const savedState = localStorage.getItem('sidebarOpen');
+        if (savedState === 'true') {
+            sidebar.classList.add('mobile-show');
+            overlay.classList.add('show');
+        } else {
+            sidebar.classList.remove('mobile-show');
+            overlay.classList.remove('show');
+        }
 
-             // Close sidebar when clicking overlay
-             overlay.addEventListener('click', function() {
-                 sidebar.classList.remove('mobile-show');
-                 overlay.classList.remove('show');
-             });
-         } else {
-             console.error('Sidebar elements not found:', {
-                 toggleBtn: !!toggleBtn,
-                 sidebar: !!sidebar,
-                 overlay: !!overlay
-             });
-         }
-     });
- </script>
-
-
-<script>
-    // Optional: Toggle collapse without Bootstrap JS
-    document.querySelectorAll('.sidebar-dropdown-toggle').forEach(function(toggle) {
-        toggle.addEventListener('click', function(e) {
+        // Toggle sidebar on button click
+        toggleBtn.addEventListener('click', function(e) {
             e.preventDefault();
-            var target = document.querySelector(this.getAttribute('href'));
-            if (target) {
-                target.classList.toggle('show');
-            }
+            const isOpen = sidebar.classList.toggle('mobile-show');
+            overlay.classList.toggle('show');
+            console.log('Toggle clicked, sidebar classes:', sidebar.className);
+
+            // Save state in localStorage
+            localStorage.setItem('sidebarOpen', isOpen);
         });
-    });
+
+        // Close sidebar when clicking overlay
+        overlay.addEventListener('click', function() {
+            sidebar.classList.remove('mobile-show');
+            overlay.classList.remove('show');
+            // Save closed state
+            localStorage.setItem('sidebarOpen', false);
+        });
+    } else {
+        console.error('Sidebar elements not found:', {
+            toggleBtn: !!toggleBtn,
+            sidebar: !!sidebar,
+            overlay: !!overlay
+        });
+    }
+});
 </script>
 
 
@@ -326,7 +327,6 @@ function renderSidebarMenu($items) {
 function updateResetMenuVisibility() {
     const groups = document.querySelectorAll('.sidebar-module-group');
     const resetBtn = document.getElementById('resetSidebarMenu');
-    // Show button only if at least one group is hidden
     const anyHidden = Array.from(groups).some(group => group.style.display === 'none');
     if (resetBtn) {
         resetBtn.style.display = anyHidden ? 'block' : 'none';
@@ -334,33 +334,54 @@ function updateResetMenuVisibility() {
 }
 
 document.addEventListener('DOMContentLoaded', function() {
-    // Show all modules by default
-    document.querySelectorAll('.sidebar-module-group').forEach(function(group) {
-        group.style.display = 'block';
-    });
+    const groups = document.querySelectorAll('.sidebar-module-group');
+    const resetBtn = document.getElementById('resetSidebarMenu');
+
+    // On page load: check localStorage for selected index
+    const selectedIndex = localStorage.getItem('selectedSidebarModule');
+
+    if (selectedIndex !== null) {
+        // Hide all groups first
+        groups.forEach(group => group.style.display = 'none');
+        // Show selected group
+        const selectedGroup = document.querySelector(`.sidebar-module-group[data-module-index="${selectedIndex}"]`);
+        if (selectedGroup) {
+            selectedGroup.style.display = 'block';
+        } else {
+            // fallback: show all if not found
+            groups.forEach(group => group.style.display = 'block');
+        }
+    } else {
+        // No selection stored: show all groups
+        groups.forEach(group => group.style.display = 'block');
+    }
+
     updateResetMenuVisibility();
 
-    // Dropdown click: show only selected module
+    // Attach click listeners to menu links
     document.querySelectorAll('.sidebar-module-link').forEach(function(link) {
         link.addEventListener('click', function(e) {
             e.preventDefault();
             var index = this.getAttribute('data-module-index');
-            document.querySelectorAll('.sidebar-module-group').forEach(function(group) {
-                group.style.display = 'none';
-            });
-            var selected = document.querySelector('.sidebar-module-group[data-module-index="' + index + '"]');
-            if(selected) selected.style.display = 'block';
+            // Hide all groups
+            groups.forEach(group => group.style.display = 'none');
+            // Show selected group
+            const selectedGroup = document.querySelector(`.sidebar-module-group[data-module-index="${index}"]`);
+            if (selectedGroup) selectedGroup.style.display = 'block';
+            // Save selection to localStorage
+            localStorage.setItem('selectedSidebarModule', index);
             updateResetMenuVisibility();
         });
     });
 
-    // Reset Menu functionality
-    document.getElementById('resetSidebarMenu').addEventListener('click', function() {
-        document.querySelectorAll('.sidebar-module-group').forEach(function(group) {
-            group.style.display = 'block';
+    // Reset button clears selection and shows all
+    if (resetBtn) {
+        resetBtn.addEventListener('click', function() {
+            groups.forEach(group => group.style.display = 'block');
+            localStorage.removeItem('selectedSidebarModule');
+            updateResetMenuVisibility();
         });
-        updateResetMenuVisibility();
-    });
+    }
 });
-
 </script>
+

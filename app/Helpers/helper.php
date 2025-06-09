@@ -462,12 +462,21 @@ public static function getFiltersConfig()
 
 public static function applyFilters($query, $filters, $modalType)
 {
+
+    
     $filtersConfig = self::getFiltersConfig();
 
 
+$filtercolumns = is_array($filters['filterable_columns'])
+    ? $filters['filterable_columns']
+    : explode(',', (string) $filters['filterable_columns']);
 
+// Optional: trim spaces from each column name
+$filtercolumns = array_map('trim', $filtercolumns);
    // Get array of filter keys
-    $allowedFilters = array_keys($filters);
+    $allowedFilters = $filtercolumns;
+    
+  
     // Get allowed filters for the given modal
     // $allowedFilters = $filtersConfig[$modalType] ?? [];
 
