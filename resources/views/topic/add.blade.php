@@ -30,6 +30,8 @@
 
                             <div class="card-body">
                                 <form id="createCommon" data-modal="Topic">
+
+                         
                                     @if ($isEdit)
                                         <input type='hidden' value="{{ $data->id ?? '' }}" name='id' />
                                     @endif
@@ -55,7 +57,7 @@
                                                 ])
                                             </div>
                                             <div class="col-md-12 col-12 ">
-                                                @include('commoninputs.inputs', [
+                                                @include('commoninputs.dependentInputs', [
                                                     'modal' => 'Subject',
                                                     'name' => 'subject_id',
                                                     'selected' => $data->subject_id ?? null,

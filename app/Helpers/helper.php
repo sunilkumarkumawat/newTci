@@ -134,6 +134,13 @@ public static function getSidebar()
             'subItems' => [
                 
                 [
+            'title' => 'Dashboard',
+            'className' => 'dashboard.view',
+            'status' => true,
+            'icon' => 'fa fa-desktop',
+            'route' => 'questions/dashboard',
+        ],
+                [
                     'title' => 'Subjects',
                     'className' => 'question_bank.add',
                     'status' => true,

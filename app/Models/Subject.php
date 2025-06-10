@@ -8,20 +8,10 @@ use Session;
 class Subject extends Model
 {
        use SoftDeletes;
-	protected $table = "subject"; //table name
+	protected $table = "all_subjects"; //table name
 	
     protected $guarded = [];
     
-       public static function countSubject(){
-        $data=Subject::whereNull('deleted_at')->count();
-        if($data){
-            return $data;
-        }
-        return 0;
-    }	
-      public function ClassTypes()
-    {
-        return $this->belongsTo('App\Models\ClassType','class_type_id');
-    }
+     
 	
 }

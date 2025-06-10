@@ -666,6 +666,26 @@ $cur_route = Route::getFacadeRoot()->current()->uri();
                                         message = 'Class is required';
                                     }
                                     break;
+                                case 'topic_id':
+                                    if (value === '') {
+                                        message = 'Topic is required';
+                                    }
+                                    break;
+                                case 'level_id':
+                                    if (value === '') {
+                                        message = 'Level is required';
+                                    }
+                                    break;
+                                case 'suka_id':
+                                    if (value === '') {
+                                        message = 'Suka is required';
+                                    }
+                                    break;
+                                case 'question_type_id':
+                                    if (value === '') {
+                                        message = 'Question type is required';
+                                    }
+                                    break;
                                 case 'subject_id':
                                     if (value === '') {
                                         message = 'Subject is required';
