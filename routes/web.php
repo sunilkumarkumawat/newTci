@@ -160,6 +160,7 @@ Route::middleware(['auth'])->group(function () {
     Route::match(['get', 'post'], 'role/permission/{roleId}', 'SharesController@savePermission');
 
     Route::match(['get', 'post'], 'subject', 'SharesController@subject');
+    Route::match(['get', 'post'], 'tags', 'SharesController@tags');
     Route::match(['get', 'post'], 'chapter', 'SharesController@chapter');
     Route::match(['get', 'post'], 'topics', 'SharesController@topics');
     Route::match(['get', 'post'], 'topicData', 'SharesController@topicData');
