@@ -3,6 +3,8 @@
 
 @php
     $permissions = Helper::getPermissions();
+    $filterable_columns = ['class_type_id'=>true, 'subject_id'=>true, 'chapter_id'=>true, 'topic_id'=>true, 'keyword'=>true, 'status'=>true];
+    $filter_keys = implode(',', array_keys($filterable_columns));
 @endphp
 
     <div class="content-wrapper">
@@ -39,26 +41,14 @@
                         <div class="card-body">
 
                             <div class="bg-item border p-3 rounded">
-                                <form id="quickForm" method="post" action="#">
+                                <form id="quickForm" method="post">
+                                    <input type='hidden' value='Question' name='modal_type' />
                                     <div class="row">
-                                        <div class="col-md-2 col-12">
-                                            <label>Search By Role</label>
-                                            <select class="form-control">
-                                                <option>Select</option>
-                                                <option>Admin</option>
-                                                <option>Teacher</option>
-                                                <option>Student</option>
-                                            </select>
-                                        </div>
-
-                                        <div class="col-md-4 col-12">
-                                            <label>Search By Keywords</label>
-                                            <input type="text" class="form-control"
-                                                placeholder="Ex. Name, Mobile, Email, Aadhaar etc.">
-                                        </div>
-
-                                        <div class="col-md-1 col-12 mt-4">
-                                            <button type="button" class="btn btn-primary">Search</button>
+                                        @include('commoninputs.filterinputs', [
+                                        'filters' => $filterable_columns
+                                        ])
+                                        <div class="col-md-1 mt-4">
+                                            <button type="submit" class="btn btn-primary">Search</button>
                                         </div>
                                     </div>
                                 </form>
@@ -96,7 +86,7 @@
                                                     }, // For SR. NO.
                                                     {
                                                         data: 'question_type',
-                                                        name: 'question_type'
+                                                        name: 'question_types.name'
                                                     },
                                                     {
                                                         data: 'name',
@@ -131,6 +121,7 @@
                                                 ],
                                                 drawCallback: function() {
                                                     updateEquationsInQuestion();
+                                                   
                                                 }
                                             });
                                         });
@@ -357,6 +348,8 @@ $(document).on('click', '#printPdf', function() {
             // Initialize the DataTable after MathJax has finished
             //initializeDataTable();
         });
+
+       
 
     }
 </script>

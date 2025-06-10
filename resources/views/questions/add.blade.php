@@ -101,7 +101,7 @@
                                     <h4><i class="fa fa-user-circle-o"></i> &nbsp;Add Questions</h4>
                                 </div>
                                 <div class="card-tools">
-                                <a href="{{ url('questionView') }}" class="btn btn-primary  btn-sm"><i class="fa fa-plus"></i>
+                                <a href="{{ url('questionView') }}" class="btn btn-primary  btn-sm"><i class="fa fa-eye"></i>
                                     <span class="Display_none_mobile"> {{ __('common.View') }} </span></a>
                             </div>
                             </div>

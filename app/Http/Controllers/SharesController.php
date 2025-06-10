@@ -332,6 +332,7 @@ public function topicData(Request $request)
     ->select(
         'questions.id',
         'questions.name',
+        'questions.hi_name',
         'questions.ans_a',
         'questions.ans_b',
         'questions.ans_c',
@@ -347,10 +348,34 @@ public function topicData(Request $request)
 
     return DataTables::of($query)
     ->addIndexColumn()
+    
+    ->editColumn('name', function($item) {
+        return ($item->name ?? '') . '<br>' . ($item->hi_name ?? '');
+    })
+    ->filterColumn('name', function ($query, $keyword) {
+        $query->where(function ($q) use ($keyword) {
+            $q->where('questions.name', 'like', "%{$keyword}%")
+                ->orWhere('questions.hi_name', 'like', "%{$keyword}%");
+        });
+    })
+    ->editColumn('correct_ans', function($item) {
+        switch ($item->correct_ans) {
+            case 1:
+                return $item->ans_a ?? '';
+            case 2:
+                return $item->ans_b ?? '';
+            case 3:
+                return $item->ans_c ?? '';
+            case 4:
+                return $item->ans_d ?? '';
+            default:
+                return '';
+        }
+    })
     ->addColumn('action', function($row){
         return view('questions.partials.actions', compact('row'))->render();
     })
-    ->rawColumns(['action','name','ans_a','ans_b','ans_c','ans_d','correct_ans'])
+    ->rawColumns(['name','ans_a','ans_b','ans_c','ans_d','correct_ans', 'action'])
     ->make(true);
 }
 

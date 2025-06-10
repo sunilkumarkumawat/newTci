@@ -63,6 +63,78 @@
     </div>
     @endif
 
+    @if(!empty($filters['subject_id']))
+    <div class="col-md-2">
+        @include('commoninputs.inputs', [
+            'modal' => 'Subject',
+            'name' => 'subject_id',
+            'selected' => null,
+            'label' => 'Search By Subject',
+            'required' => false,
+        ])
+    </div>
+    @endif
+
+    @if(!empty($filters['chapter_id']))
+    <div class="col-md-2">
+        @include('commoninputs.inputs', [
+            'modal' => 'Chapter',
+            'name' => 'chapter_id',
+            'selected' => null,
+            'label' => 'Search By Chapter',
+            'required' => false,
+        ])
+    </div>
+    @endif
+
+    @if(!empty($filters['topic_id']))
+    <div class="col-md-2">
+        @include('commoninputs.inputs', [
+            'modal' => 'Topic',
+            'name' => 'topic_id',
+            'selected' => null,
+            'label' => 'Search By Topic',
+            'required' => false,
+        ])
+    </div>
+    @endif
+
+    @if(!empty($filters['level_id']))
+    <div class="col-md-2">
+        @include('commoninputs.inputs', [
+            'modal' => 'Level',
+            'name' => 'level_id',
+            'selected' => null,
+            'label' => 'Search By Level',
+            'required' => false,
+        ])
+    </div>
+    @endif
+
+    @if(!empty($filters['suka_id']))
+    <div class="col-md-2">
+        @include('commoninputs.inputs', [
+            'modal' => 'Suka',
+            'name' => 'suka_id',
+            'selected' => null,
+            'label' => 'Search By Suka',
+            'required' => false,
+        ])
+    </div>
+    @endif
+
+    @if(!empty($filters['question_type_id']))
+    <div class="col-md-2">
+        @include('commoninputs.inputs', [
+            'modal' => 'Question Type',
+            'name' => 'question_type_id',
+            'selected' => null,
+            'label' => 'Search By Question Type',
+            'required' => false,
+        ])
+    </div>
+    @endif
+
     @if(!empty($filters['role_id']))
     <div class="col-md-2">
         @include('commoninputs.inputs', [
