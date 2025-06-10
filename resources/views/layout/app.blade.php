@@ -713,15 +713,15 @@ $cur_route = Route::getFacadeRoot()->current()->uri();
                                     }
                                     break;
 
-                                case 'library_id':
+                                case 'tags':
                                     if (value === '') {
-                                        message = 'select library';
+                                        message = 'Tags are required';
                                     }
                                     break;
 
-                                case 'book_name':
+                                case 'source_id':
                                     if (value === '') {
-                                        message = 'Book Name is required';
+                                        message = 'Source is required';
                                     }
                                     break;
 
