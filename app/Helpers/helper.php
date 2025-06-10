@@ -162,6 +162,13 @@ public static function getSidebar()
                     'icon' => 'fa fa-circle',
                 ],
                 [
+                    'title' => 'Tags',
+                    'className' => 'question_bank.add',
+                    'status' => true,
+                    'route' => 'tags',
+                    'icon' => 'fa fa-circle',
+                ],
+                [
                     'title' => 'Add New Question',
                     'className' => 'question_bank.add',
                     'status' => true,

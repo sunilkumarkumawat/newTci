@@ -116,7 +116,7 @@
                                     <!-- <input type='hidden' id="branch_id" name='branch_id' /> -->
                                     <div id="expense-container" class="bg-item mb-3 border p-3 rounded">
                                         <div class="row">
-                                            <div class="col-md-3 col-12 ">
+                                            <div class="col-md-2 col-12 ">
                                                 @include('commoninputs.inputs', [
                                                     'modal' => 'ClassType', 
                                                     'name' => 'class_type_id',
@@ -132,7 +132,7 @@
                                                     ],
                                                 ])
                                             </div>
-                                            <div class="col-md-3 col-12 ">
+                                            <div class="col-md-2 col-12 ">
                                                 
                                                 @include('commoninputs.dependentInputs', [
                                                     'modal' => 'AssignedSubjects',
@@ -152,7 +152,7 @@
                                                     ],
                                                 ])
                                             </div>
-                                            <div class="col-md-3 col-12 ">
+                                            <div class="col-md-2 col-12 ">
                                                 @include('commoninputs.dependentInputs', [
                                                     'modal' => 'Chapter',
                                                     'name' => 'chapter_id',
@@ -171,7 +171,7 @@
                                                     ],
                                                 ])
                                             </div>
-                                            <div class="col-md-3 col-12 ">
+                                            <div class="col-md-2 col-12 ">
                                                 @include('commoninputs.dependentInputs', [
                                                     'modal' => 'Topic',
                                                     'name' => 'topic_id',
@@ -183,7 +183,7 @@
                                                     'foreignKey' => 'chapter_id',
                                                 ])
                                             </div>
-                                            <div class="col-md-3 col-12 ">
+                                            <div class="col-md-2 col-12 ">
                                                 @include('commoninputs.inputs',[
                                                     'modal' => 'Level',
                                                     'name' => 'level_id',
@@ -192,7 +192,7 @@
                                                     'required' => true,
                                                 ])
                                             </div>
-                                            <div class="col-md-3 col-12 ">
+                                            <div class="col-md-2 col-12 ">
                                                 @include('commoninputs.inputs',[
                                                     'modal' => 'Suka',
                                                     'name' => 'suka_id',
@@ -201,12 +201,30 @@
                                                     'required' => true,
                                                 ])
                                             </div>
-                                            <div class="col-md-3 col-12 ">
+                                            <div class="col-md-2 col-12 ">
                                                 @include('commoninputs.inputs',[
                                                     'modal' => 'QuestionType',
                                                     'name' => 'question_type_id',
                                                     'selected' => $data->question_type_id ?? null,
                                                     'label' => 'Question Type',
+                                                    'required' => true,
+                                                ])
+                                            </div>
+                                            <div class="col-md-2 col-12 ">
+                                                @include('commoninputs.inputs',[
+                                                    'modal' => 'Tags',
+                                                    'name' => 'tags',
+                                                    'selected' => $data->tags ?? null,
+                                                    'label' => 'Tags',
+                                                    'required' => true,
+                                                ])
+                                            </div>
+                                            <div class="col-md-2 col-12 ">
+                                                @include('commoninputs.inputs',[
+                                                    'modal' => 'Source',
+                                                    'name' => 'source_id',
+                                                    'selected' => $data->source_id ?? null,
+                                                    'label' => 'Source',
                                                     'required' => true,
                                                 ])
                                             </div>

@@ -1,5 +1,5 @@
 @php
-    $filters = $filters ?? ['keyword' => true,'batches'=>true, 'admission_no' => true, 'status' => true, 'gender_id' => true, 'class_type_id' => true, 'role_id' => true, 'question_type_id' => true, 'suka_id' => true, 'level_id' => true, 'topic_id' => true, 'chapter_id' => true, 'subject_id' => true, 'batches' => true];
+    $filters = $filters ?? ['keyword' => true,'batches'=>true, 'admission_no' => true, 'status' => true, 'gender_id' => true, 'class_type_id' => true, 'role_id' => true, 'question_type_id' => true, 'suka_id' => true, 'level_id' => true, 'topic_id' => true, 'chapter_id' => true, 'subject_id' => true, 'batches' => true, 'tags' =>true, 'source_id' => true];
 @endphp
    
    
@@ -181,7 +181,19 @@
                 'modal' => 'Tags',
                 'name' => 'tags',
                 'selected' => null,
-                'label' => 'Search By tags',
+                'label' => 'Search By Tags',
+                'required' => false,
+            ])
+        </div>
+        @break
+
+        @case('source_id')
+        <div class="col-md-2">
+            @include('commoninputs.inputs', [
+                'modal' => 'Source',
+                'name' => 'source_id',
+                'selected' => null,
+                'label' => 'Search By Source',
                 'required' => false,
             ])
         </div>
