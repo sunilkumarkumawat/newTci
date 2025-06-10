@@ -335,8 +335,18 @@ public function getAll(string $modal)
         return response()->json([], 400);
     }
 
+    if($modal == 'AssignedSubjects')
+    {
+       
+     $options = $modelClass::leftJoin('all_subjects', 'subject.subject_id', '=', 'all_subjects.id')
+    ->where('subject.' . $field, $value)
+    ->pluck('all_subjects.name', 'all_subjects.id');
+    }
+    else{
+  $options = $modelClass::where($field, $value)->pluck('name', 'id');
+    }
 
-    $options = $modelClass::where($field, $value)->pluck('name', 'id');
+  
 
     return $options;
 }

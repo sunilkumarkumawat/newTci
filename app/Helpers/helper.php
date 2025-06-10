@@ -272,7 +272,7 @@ public static function getSidebar()
     }
    public static function getModalData($modal, $dependentId = null, $foreignKey = null)
 {
-    
+   
     // Build fully qualified class name if not already
     if (!str_contains($modal, '\\')) {
         $modal = 'App\\Models\\' . $modal;
@@ -290,8 +290,6 @@ public static function getSidebar()
     try {
         $query = $modal::query();
 
-
-        
         // If a dependent ID is provided, apply where condition
         if ($dependentId !== null) {
             $query->where($foreignKey, $dependentId);

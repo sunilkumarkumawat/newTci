@@ -156,6 +156,7 @@ public function commonEdit(Request $request,$modal,$id)
 public function getDependentOptions(Request $request)
     {
         $data =  $this->commonService->getDependentOptions($request);
+     
 
      return response()->json($data);
      
