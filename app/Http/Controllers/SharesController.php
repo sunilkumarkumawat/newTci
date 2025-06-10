@@ -87,6 +87,12 @@ class SharesController extends Controller
         return view('subject.add',compact('data'));
     }
 
+    public function tags()
+    {
+        $data = null;
+        return view('tags.add',compact('data'));
+    }
+
     public function chapter()
     {
         $data = null;
@@ -313,9 +319,9 @@ public function topicData(Request $request)
     public function questionData(Request $request)
 {
     $query = DB::table('questions')
-    ->leftJoin('subject', function($join) {
-        $join->on('questions.subject_id', '=', 'subject.id')
-             ->whereNull('subject.deleted_at');
+    ->leftJoin('all_subjects', function($join) {
+        $join->on('questions.subject_id', '=', 'all_subjects.id')
+             ->whereNull('all_subjects.deleted_at');
     })
     ->leftJoin('chapters', function($join) {
         $join->on('questions.chapter_id', '=', 'chapters.id')
@@ -338,7 +344,7 @@ public function topicData(Request $request)
         'questions.ans_c',
         'questions.ans_d',
         'questions.correct_ans',
-        'subject.name as subject_name',
+        'all_subjects.name as subject_name',
         'chapters.name as chapter_name',
         'class_types.name as class_name',
         'question_types.name as question_type'

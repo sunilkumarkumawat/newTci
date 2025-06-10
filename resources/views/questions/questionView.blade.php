@@ -3,8 +3,7 @@
 
 @php
     $permissions = Helper::getPermissions();
-    $filterable_columns = ['class_type_id'=>true, 'subject_id'=>true, 'chapter_id'=>true, 'topic_id'=>true, 'keyword'=>true, 'status'=>true];
-    $filter_keys = implode(',', array_keys($filterable_columns));
+    $filterable_columns = ['class_type_id'=>true, 'subject_id'=>true, 'chapter_id'=>true, 'topic_id'=>true, 'level_id'=>true, 'suka_id'=>true, 'question_type_id'=>true, 'status'=>true, 'language'=>true, 'use'=>true, 'tags'=>true, 'keyword'=>true];
 @endphp
 
     <div class="content-wrapper">
@@ -45,7 +44,7 @@
                                     <input type='hidden' value='Question' name='modal_type' />
                                     <div class="row">
                                         @include('commoninputs.filterinputs', [
-                                        'filters' => $filterable_columns
+                                            'filters' => $filterable_columns
                                         ])
                                         <div class="col-md-1 mt-4">
                                             <button type="submit" class="btn btn-primary">Search</button>
