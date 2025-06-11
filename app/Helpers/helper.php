@@ -280,6 +280,8 @@ public static function getSidebar()
    public static function getModalData($modal, $dependentId = null, $foreignKey = null)
 {
    
+
+$baseModalName = $modal;
     // Build fully qualified class name if not already
     if (!str_contains($modal, '\\')) {
         $modal = 'App\\Models\\' . $modal;
@@ -295,15 +297,31 @@ public static function getSidebar()
 
     
     try {
-        $query = $modal::query();
 
-        // If a dependent ID is provided, apply where condition
+       
+        if($baseModalName == 'AssignedSubjects')
+    {
+       
+     $query = $modal::leftJoin('all_subjects', 'subject.subject_id', '=', 'all_subjects.id')
+    ->where('subject.' . $foreignKey, $dependentId);
+    
+      // Build id => name array (assumes 'id' and 'name' fields exist)
+        return $query->pluck('all_subjects.name', 'all_subjects.id')->toArray();
+    }
+    else{
+     $query = $modal::query();
+      // If a dependent ID is provided, apply where condition
         if ($dependentId !== null) {
             $query->where($foreignKey, $dependentId);
         }
-
-        // Build id => name array (assumes 'id' and 'name' fields exist)
+          // Build id => name array (assumes 'id' and 'name' fields exist)
         return $query->pluck('name', 'id')->toArray();
+    }
+    
+
+       
+
+      
     } catch (\Exception $e) {
         // Optional: log error
         return [];

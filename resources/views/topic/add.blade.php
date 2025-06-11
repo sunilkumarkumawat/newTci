@@ -51,14 +51,14 @@
                                                         'data-dependent' => 'subject_id',
                                                         'data-url' => url(
                                                             '/get-dependent-options'),
-                                                        'data-modal' => 'Subject',
+                                                        'data-modal' => 'AssignedSubjects',
                                                         'data-field' => 'class_type_id',
                                                     ],
                                                 ])
                                             </div>
                                             <div class="col-md-12 col-12 ">
                                                 @include('commoninputs.dependentInputs', [
-                                                    'modal' => 'Subject',
+                                                    'modal' => 'AssignedSubjects',
                                                     'name' => 'subject_id',
                                                     'selected' => $data->subject_id ?? null,
                                                     'label' => 'Subject',
@@ -68,8 +68,7 @@
                                                     'foreignKey' => 'class_type_id',
                                                     'attributes' => [
                                                         'data-dependent' => 'chapter_id',
-                                                        'data-url' => url(
-                                                            '/get-dependent-options'),
+                                                        'data-url' => url('/get-dependent-options'),
                                                         'data-modal' => 'Chapter',
                                                         'data-field' => 'subject_id',
                                                     ],
