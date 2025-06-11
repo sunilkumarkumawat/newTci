@@ -30,7 +30,7 @@
                                     <div class="col-6 col-sm-3 col-md-3">
                                         <a href="{{ url('studentView') }}">
                                             <div class="info-box mb-3 text-dark">
-                                                <span class="info-box-icon bg-success elevation-1"><i class="fa fa-graduation-cap"></i></span>
+                                                <span class="info-box-icon bg-success elevation-1"><i class="fa fa-check-square"></i></span>
                                                 <div class="info-box-content">
                                                     <span class="info-box-text">TOTAL QUESTIONS</span>
                                                     <span class="info-box-number mt-n1">{{ Helper::getCount('Question') ?? '0' }}</span>
@@ -46,8 +46,8 @@
                                             <div class="info-box mb-3 text-dark">
                                                 <span class="info-box-icon bg-success elevation-1"><i class="fa fa-graduation-cap"></i></span>
                                                 <div class="info-box-content">
-                                                    <span class="info-box-text">TOTAL USERS</span>
-                                                    <span class="info-box-number mt-n1">{{ Helper::getCount('User') ?? '0' }}</span>
+                                                    <span class="info-box-text">SUBJECT-WISE QUESTIONS</span>
+                                                    <span class="info-box-number mt-n1">{{ Helper::countByColumnValue('Question', 'class_type_id', '1') ?? '0' }}</span>
                                                 </div>
                                             </div>
                                         </a>
