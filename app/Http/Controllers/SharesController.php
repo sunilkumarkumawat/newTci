@@ -319,6 +319,11 @@ public function topicData(Request $request)
 
     public function questionData(Request $request)
 {
+
+
+    $filters =$request->filterable_columns ?? [];
+
+
     $query = DB::table('questions')
     ->leftJoin('all_subjects', function($join) {
         $join->on('questions.subject_id', '=', 'all_subjects.id')
@@ -353,6 +358,17 @@ public function topicData(Request $request)
     ->whereNull('questions.deleted_at'); // Also exclude deleted topics
 
 
+
+foreach ($filters as $filter) {
+        $name = $filter['name'] ?? null;
+        $value = $filter['value'] ?? null;
+
+        // Only process if name and value are present and value is not empty
+     if ($name && $value !== null && $value !== '') {
+    $query->where("questions.$name", $value);
+}
+            
+        }
     return DataTables::of($query)
     ->addIndexColumn()
     

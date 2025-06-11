@@ -476,7 +476,7 @@ public static function applyFilters($query, $filters, $modalType)
 {
 
     
-    $filtersConfig = self::getFiltersConfig();
+    // $filtersConfig = self::getFiltersConfig();
 
 
 $filtercolumns = is_array($filters['filterable_columns'])
@@ -491,7 +491,6 @@ $filtercolumns = array_map('trim', $filtercolumns);
   
     // Get allowed filters for the given modal
     // $allowedFilters = $filtersConfig[$modalType] ?? [];
-
 
     foreach ($filters as $key => $value) {
         if (in_array($key, $allowedFilters) && $value !== null && $value !== '') {
