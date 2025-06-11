@@ -1430,6 +1430,60 @@ document.addEventListener('click', function(e) {
 });
 </script>
 
+
+<script>
+$(document).on('click', '.showQuestion', function() {
+    var thisQuestionId = $(this).data('id');
+    var thisQuestion = $(this).data('question');
+    var thisAns_a = $(this).data('ans_a');
+    var thisAns_b = $(this).data('ans_b');
+    var thisAns_c = $(this).data('ans_c');
+    var thisAns_d = $(this).data('ans_d');
+    //var thisCorrect_ans = $(this).data('correct_ans');
+
+    $('#viewQuestionModal').modal('toggle');
+    $('#thisQuestion').html(thisQuestion);
+    $('#thisAns_a').html(thisAns_a);
+    $('#thisAns_b').html(thisAns_b);
+    $('#thisAns_c').html(thisAns_c);
+    $('#thisAns_d').html(thisAns_d);
+    //$('#thisCorrect_ans').html(thisCorrect_ans);
+    MathJax.typesetPromise();
+    
+});
+</script>
+
+<div class="modal fade" id="viewQuestionModal" tabindex="-1" aria-labelledby="viewQuestionModal" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="viewQuestionModal">View Question</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+            
+            <div class="row">
+                <div class="col-md-12">
+                    <div class=""><b>Ques.:</b> <span id="thisQuestion"></span></div><hr>
+                </div>
+                <div class="col-md-12 p-2">
+                    <div class=""><span class=" bg-primary pt-1 pb-1 pr-2 pl-2">A</span> <span id="thisAns_a"></span></div>
+                </div>
+                <div class="col-md-12 p-2">
+                    <div class=""><span class=" bg-primary pt-1 pb-1 pr-2 pl-2">B</span> <span id="thisAns_b"></span></div>
+                </div>
+                <div class="col-md-12 p-2">
+                    <div class=""><span class=" bg-primary pt-1 pb-1 pr-2 pl-2">C</span> <span id="thisAns_c"></span></div>
+                </div>
+                <div class="col-md-12 p-2 ">
+                    <div class=""><span class=" bg-primary pt-1 pb-1 pr-2 pl-2">D</span> <span id="thisAns_d"></span></div>
+                </div>
+            </div>
+      </div>
+    </div>
+  </div>
+</div>
+
 <!-- Modal -->
 <div class="modal fade" id="excelModal" tabindex="-1" aria-labelledby="excelModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-lg">

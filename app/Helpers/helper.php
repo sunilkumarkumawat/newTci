@@ -138,7 +138,7 @@ public static function getSidebar()
             'className' => 'dashboard.view',
             'status' => true,
             'icon' => 'fa fa-desktop',
-            'route' => 'questions/dashboard',
+            'route' => 'questionDashboard',
         ],
                 [
                     'title' => 'Subjects',

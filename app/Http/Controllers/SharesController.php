@@ -122,6 +122,12 @@ class SharesController extends Controller
         return view('questions.add',compact('data'));
     }
 
+    public function questionDashboard()
+    {
+        $data = null;
+        return view('questions.dashboard',compact('data'));
+    }
+
     public function questionView()
     {
         $data = null;
@@ -264,11 +270,11 @@ public function setCurrentBranch(Request $request)
 public function chaptersData (Request $request)
 {
     $query = DB::table('chapters')
-        ->leftJoin('subject', 'chapters.subject_id', '=', 'subject.id')
+        ->leftJoin('all_subjects', 'chapters.subject_id', '=', 'all_subjects.id')
         ->select(
             'chapters.id',
             'chapters.name',
-            'subject.name as subject_name'
+            'all_subjects.name as subject_name'
         );
 
     return DataTables::of($query)
@@ -286,9 +292,9 @@ public function chaptersData (Request $request)
 public function topicData(Request $request)
 {
     $query = DB::table('topics')
-    ->leftJoin('subject', function($join) {
-        $join->on('topics.subject_id', '=', 'subject.id')
-             ->whereNull('subject.deleted_at');
+    ->leftJoin('all_subjects', function($join) {
+        $join->on('topics.subject_id', '=', 'all_subjects.id')
+             ->whereNull('all_subjects.deleted_at');
     })
     ->leftJoin('chapters', function($join) {
         $join->on('topics.chapter_id', '=', 'chapters.id')
@@ -301,7 +307,7 @@ public function topicData(Request $request)
     ->select(
         'topics.id',
         'topics.name',
-        'subject.name as subject_name',
+        'all_subjects.name as subject_name',
         'chapters.name as chapter_name',
         'class_types.name as class_name'
     )
