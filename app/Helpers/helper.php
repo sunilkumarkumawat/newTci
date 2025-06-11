@@ -11,6 +11,7 @@ use App\Models\Sessions;
 use App\Models\Sidebar;
 use App\Models\PaymentMode;
 use App\Models\Question;
+use App\Models\Exam;
 use DB;
 use Session;
 use Illuminate\Support\Facades\Auth;
@@ -277,6 +278,7 @@ public static function getSidebar()
         $getBranch = $getBranch->get();
         return $getBranch;
     }
+    
    public static function getModalData($modal, $dependentId = null, $foreignKey = null)
 {
    
@@ -412,6 +414,7 @@ public static function getCount($model)
     }
 }
 
+
 public static function getName($model, $id)
 {
     try {
@@ -440,6 +443,68 @@ public static function countByColumnValue($model, $column, $id)
 
         return $modelClass::where($column, $id)->count();
     } catch (\Exception $e) {
+        return 0;
+    }
+}
+
+public static function getAllData($model)
+{
+    try {
+        $modelClass = 'App\\Models\\' . $model;
+
+        if (!class_exists($modelClass)) {
+            return [];
+        }
+
+        return $modelClass::get();
+    } catch (\Exception $e) {
+        // Log the error if needed
+        return [];
+    }
+}
+
+public static function countQuestionByLatestCreatedDate($model)
+{
+    $latest = Question::orderBy('id', 'desc')->first();
+
+    if ($latest) {
+        // Step 2: Extract only the date from the latest created_at
+        $latestDate = date('Y-m-d', strtotime($latest->created_at));
+        
+        // Step 3: Count records with the same date
+        $count = Question::whereDate('created_at', $latestDate)->count();
+
+        return $count;
+    } else {
+        return 0;
+    }
+}
+
+public static function countByCondition($model, $conditions = [])
+{
+    try {
+        $modelClass = 'App\\Models\\' . $model;
+
+        if (!class_exists($modelClass)) {
+            return 0;
+        }
+
+        $query = $modelClass::query();
+
+        // Apply where conditions
+        foreach ($conditions as $column => $value) {
+            if (is_array($value)) {
+                // for whereIn type
+                $query->whereIn($column, $value);
+            } else {
+                $query->where($column, $value);
+            }
+        }
+
+        return $query->count();
+
+    } catch (\Exception $e) {
+        //\Log::error("getCount error: " . $e->getMessage());
         return 0;
     }
 }
@@ -542,5 +607,36 @@ $filtercolumns = array_map('trim', $filtercolumns);
 
     return $query;
 }
+
+    public static function getUsedUnusedQuestionCount()
+    {
+        try {
+            $examQuestionIds = Exam::pluck('questions_id')
+                ->filter()
+                ->flatMap(function ($item) {
+                    return explode(',', $item);
+                })
+                ->map('trim')
+                ->unique()
+                ->toArray();
+
+            $total = Question::count();
+            $used = count($examQuestionIds);
+            $unused = $total - $used;
+
+            return [
+                'total' => $total,
+                'used' => $used,
+                'unused' => $unused
+            ];
+        } catch (\Exception $e) {
+            //\Log::error('getUsedUnusedQuestionCount error: ' . $e->getMessage());
+            return [
+                'total' => 0,
+                'used' => 0,
+                'unused' => 0
+            ];
+        }
+    }
 
 }

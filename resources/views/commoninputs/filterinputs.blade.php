@@ -28,7 +28,7 @@ $filters = $filters ?? ['keyword' => true,'batches'=>true, 'admission_no' => tru
     <select class="form-control" name="status">
         <option value="">Select</option>
         <option value="1">Active</option>
-        <option value="2">InActive</option>
+        <option value="0">InActive</option>
     </select>
 </div>
 @break
