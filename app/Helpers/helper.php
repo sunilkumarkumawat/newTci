@@ -410,7 +410,7 @@ public static function getName($model, $id)
     }
 }
 
-public static function getThisCount($model, $column, $id)
+public static function countByColumnValue($model, $column, $id)
 {
     
     try {
