@@ -207,6 +207,35 @@ public static function getSidebar()
             ],
         ],
         [
+            'title' => 'Result Analysis',
+            'className' => 'result_analysis',
+            'status' => true,
+            'icon' => 'fa fa-calendar-check',
+            'subItems' => [
+                [
+                    'title' => 'Overview Dashboard',
+                    'className' => 'result_analysis.view',
+                    'status' => true,
+                    'route' => 'resultAnalysis/dashboard',
+                    'icon' => 'fa fa-circle',
+                ],
+                [
+                    'title' => 'Test-Wise Report',
+                    'className' => 'result_analysis.report',
+                    'status' => true,
+                    'route' => 'test-wise-report',
+                    'icon' => 'fa fa-circle',
+                ],
+                [
+                    'title' => 'Student-Wise Report',
+                    'className' => 'result_analysis.report',
+                    'status' => true,
+                    'route' => 'student-wise-report',
+                    'icon' => 'fa fa-circle',
+                ],
+            ],
+        ],
+        [
             'title' => 'Master Management',
             'className' => 'master_management',
             'status' => true,
