@@ -4,7 +4,7 @@
             <td>{{ $index + 1 }}</td>
             <td>{{ $chapter->name ?? '' }}</td>
             <td>{{ Helper::getName('ClassType', $chapter->class_type_id)->name ?? '' }}</td>
-            <td>{{ Helper::getName('Subject', $chapter->subject_id)->name ?? '' }} <small class="text-primary">Total Q : {{ Helper::getThisCount('Question', 'chapter_id', $chapter->id) ?? '0' }}</small></td>
+            <td>{{ Helper::getName('Subject', $chapter->subject_id)->name ?? '' }} <small class="text-primary">Total Q : </small></td>
             <td>
   
     <div class="btn-group">

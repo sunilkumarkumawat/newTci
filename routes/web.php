@@ -80,6 +80,8 @@ Route::middleware(['auth'])->group(function () {
     Route::match(['get', 'post'], 'commonView/{modal_type}', 'SharesController@commonView');
     Route::match(['get', 'post'], 'common-status-change/{model}/{id}', 'SharesController@changeStatusCommon');
     Route::match(['delete'], 'common-delete/{model}/{id}', 'SharesController@deleteCommon');
+    Route::match(['delete'], 'common-force-delete/{model}/{id}', 'SharesController@deleteForceCommon');
+    Route::match(['delete'], 'common-restore/{model}/{id}', 'SharesController@restoreCommon');
     Route::match(['get','post'], '/get-dependent-options', 'SharesController@getDependentOptions');
     Route::match(['get','post'], '/set-current-branch', 'SharesController@setCurrentBranch');
     Route::match(['get','post'], '/set-permission-view/{roleId}/{userId}', 'SharesController@setPermissionView');

@@ -150,6 +150,74 @@ public function createCommon($request)
         }
     }
 
+    public function deleteForceCommon(Request $request, $modal, $id)
+    {
+        try {
+            if (!str_contains($modal, '\\')) {
+                $modal = 'App\\Models\\' . $modal;
+            }
+
+            if (!class_exists($modal)) {
+                return response()->json(['message' => 'Invalid modal type'], 400);
+            }
+
+                 $modalName = class_basename($modal);
+
+            $record = $modal::withTrashed()->find($id);
+
+            if (!$record) {
+                return response()->json(['message' => 'Record not found'], 404);
+            }
+
+            $record->forceDelete(); // Permanent delete
+
+
+             Cache::forget('getAll_' . $modalName);
+            return response()->json([
+                'message' => class_basename($modal) . ' deleted successfully.',
+                'data' => $record
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'error' => 'Error: ' . $e->getMessage()
+            ], 500);
+        }
+    }
+
+    public function restoreCommon(Request $request, $modal, $id)
+    {
+        try {
+            if (!str_contains($modal, '\\')) {
+                $modal = 'App\\Models\\' . $modal;
+            }
+
+            if (!class_exists($modal)) {
+                return response()->json(['message' => 'Invalid model type'], 400);
+            }
+
+            $modalName = class_basename($modal);
+
+            $record = $modal::onlyTrashed()->find($id);
+
+            if (!$record) {
+                return response()->json(['message' => 'Soft-deleted record not found'], 404);
+            }
+
+            $record->restore(); // ✅ Restore the record
+
+            Cache::forget('getAll_' . $modalName);
+
+            return response()->json([
+                'message' => $modalName . ' restored successfully.',
+                'data' => $record
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'error' => 'Error: ' . $e->getMessage()
+            ], 500);
+        }
+    }
+
     public function changeStatusCommon(Request $request, $modal, $id)
     {
         try {

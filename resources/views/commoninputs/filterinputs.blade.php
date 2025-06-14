@@ -1,5 +1,5 @@
 @php
-$filters = $filters ?? ['keyword' => true,'batches'=>true, 'admission_no' => true, 'status' => true, 'gender_id' => true, 'class_type_id' => true, 'role_id' => true, 'question_type_id' => true, 'suka_id' => true, 'level_id' => true, 'topic_id' => true, 'chapter_id' => true, 'subject_id' => true, 'batches' => true, 'tags' =>true, 'source_id' => true];
+$filters = $filters ?? ['keyword' => true,'batches'=>true, 'admission_no' => true, 'status' => true, 'gender_id' => true, 'class_type_id' => true, 'role_id' => true, 'question_type_id' => true, 'suka_id' => true, 'level_id' => true, 'topic_id' => true, 'chapter_id' => true, 'subject_id' => true, 'batches' => true, 'tags' => true, 'source_id' => true, 'is_deleted' => true];
 @endphp
 
 
@@ -226,6 +226,16 @@ $filters = $filters ?? ['keyword' => true,'batches'=>true, 'admission_no' => tru
     'label' => 'Search By Source',
     'required' => false,
     ])
+</div>
+@break
+
+@case('is_deleted')
+<div class="col-md-2">
+    <label>In Recycle Bin</label>
+    <select class="form-control" name="is_deleted">
+        <option value="">Select</option>
+        <option value="1">Yes</option>
+    </select>
 </div>
 @break
 

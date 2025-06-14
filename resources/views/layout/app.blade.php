@@ -832,7 +832,12 @@ $cur_route = Route::getFacadeRoot()->current()->uri();
                     }
 
                     const formData = new FormData(this); // Handles files + inputs
+                    const submitBtn = $form.find('button[type="submit"]');
+                    const originalBtnText = submitBtn.text();
 
+                    submitBtn.prop("disabled", true).html(
+                        `Please wait...    <span class="spinner-border spinner-border-sm align-middle ms-2"></span>`
+                    );
                     $.ajax({
                         url: endpoint,
                         type: 'POST',
@@ -857,6 +862,10 @@ $cur_route = Route::getFacadeRoot()->current()->uri();
                         error: function(xhr) {
                             alert('Failed to submit form.');
                             console.error(xhr.responseText);
+                            toastr.error(xhr.responseText);
+                        },
+                        complete: function() {
+                            submitBtn.prop("disabled", false).text(originalBtnText);
                         }
                     });
 
@@ -995,6 +1004,7 @@ $cur_route = Route::getFacadeRoot()->current()->uri();
             });
         }).fail(function(xhr) {
             console.error(`Error loading ${modal}: ${xhr.status} ${xhr.statusText}`);
+            //toastr.error(`Error loading ${modal}: ${xhr.status} ${xhr.statusText} | ${xhr.responseText}`);
         });
     });
 }
@@ -1009,11 +1019,17 @@ $cur_route = Route::getFacadeRoot()->current()->uri();
             $(document).on('click', '.delete-btn', function() {
                 const modal = $(this).data('modal'); // get modal name from data attribute
                 const id = $(this).data('id'); // get record ID
+                var isDeleted = $(this).data('deleted') == '1';
                 const baseUrl = "{{ url('/') }}"; // base URL (Blade will output Laravel base URL)
                 const target = $(this).closest('.position-relative'); // find the closest parent with class 'position-relative'
-                if (confirm('Are you sure you want to delete this item?')) {
+
+                let deleteUrl = isDeleted
+                        ? `${baseUrl}/common-force-delete/${modal}/${id}`
+                        : `${baseUrl}/common-delete/${modal}/${id}`;
+
+                if (confirm(isDeleted ? "Permanently delete this item? \nThis action is not irreversible" : "Are you sure you want to delete this item?")) {
                     $.ajax({
-                        url: `${baseUrl}/common-delete/${modal}/${id}`,
+                        url: deleteUrl,
                         type: 'POST',
                         data: {
                             _method: 'DELETE', // Laravel treats this as a DELETE request
@@ -1035,6 +1051,41 @@ $cur_route = Route::getFacadeRoot()->current()->uri();
                         error: function(xhr) {
                             toastr.error('Failed to delete.');
                             console.error(xhr.responseText);
+                            toastr.error(xhr.responseText);
+                        }
+                    });
+                }
+            });
+        </script>
+
+        {{-- restore function --}}
+        <script>
+            $(document).on('click', '.restore-btn', function () {
+                var id = $(this).data('id');
+                var modal = $(this).data('modal');
+
+                if (confirm("Do you want to restore this item?")) {
+                    $.ajax({
+                        url: `{{ url('/') }}/common-restore/${modal}/${id}`,
+                        type: 'POST',
+                        data: {
+                            _method: 'DELETE', // Laravel treats this as a DELETE request
+                            _token: $('meta[name="csrf-token"]').attr('content') // if CSRF token is needed
+                        },
+                        success: function (res) {
+                            toastr.success(res.message || 'Restored successfully.');
+                            if (['Documents'].includes(modal)) {
+                                target.fadeOut(500, function () {
+                                    target.remove();
+                                });
+                            }else{
+                                location.reload();
+                            } 
+                        },
+                        error: function (xhr) {
+                            toastr.error('Failed to restore.');
+                            console.error(xhr.responseText);
+                            toastr.error(xhr.responseText);
                         }
                     });
                 }
@@ -1093,6 +1144,7 @@ $cur_route = Route::getFacadeRoot()->current()->uri();
                         error: function(xhr) {
                             toastr.error('Failed to change status.');
                             console.error(xhr.responseText);
+                            toastr.error(xhr.responseText);
                         }
                     });
                 }
@@ -1210,6 +1262,7 @@ $cur_route = Route::getFacadeRoot()->current()->uri();
                     error: function(xhr) {
                         toastr.error('Something went wrong while saving permissions.');
                         console.error(xhr.responseText);
+                        toastr.error(xhr.responseText);
                     }
                 });
             });
@@ -1254,6 +1307,7 @@ $(document).ready(function () {
                 // Handle error
                 alert('An error occurred while saving data.');
                 console.error(xhr.responseText);
+                toastr.error(xhr.responseText);
             }
         });
     });
