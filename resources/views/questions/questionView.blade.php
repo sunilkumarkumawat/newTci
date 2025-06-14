@@ -3,7 +3,7 @@
 
 @php
 $permissions = Helper::getPermissions();
-$filterable_columns = ['class_type_id'=>true, 'subject_id'=>true, 'chapter_id'=>true, 'topic_id'=>true, 'level_id'=>true, 'suka_id'=>true, 'question_type_id'=>true, 'status'=>true, 'language'=>true, 'use'=>true, 'tags'=>true, 'source_id'=>true, 'keyword'=>true];
+$filterable_columns = ['class_type_id'=>true, 'subject_id'=>true, 'chapter_id'=>true, 'topic_id'=>true, 'level_id'=>true, 'suka_id'=>true, 'question_type_id'=>true, 'status'=>true, 'language'=>true, 'use'=>true, 'tags'=>true, 'source_id'=>true, 'is_deleted'=>true, 'keyword'=>true];
 @endphp
 
 <div class="content-wrapper">

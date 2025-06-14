@@ -146,6 +146,17 @@ class SharesController extends Controller
     {
         return $this->commonService->deleteCommon($request,$modal, $id);
     }
+
+    public function deleteForceCommon(Request $request,$modal, $id)
+    {
+        return $this->commonService->deleteForceCommon($request,$modal, $id);
+    }
+
+    public function restoreCommon(Request $request,$modal, $id)
+    {
+        return $this->commonService->restoreCommon($request,$modal, $id);
+    }
+
 public function commonEdit(Request $request,$modal,$id)
     {
         
@@ -275,7 +286,8 @@ public function chaptersData (Request $request)
             'chapters.id',
             'chapters.name',
             'all_subjects.name as subject_name'
-        );
+        )
+        ->whereNull('chapters.deleted_at');;
 
     return DataTables::of($query)
     ->addIndexColumn()
@@ -285,7 +297,15 @@ public function chaptersData (Request $request)
     ->addColumn('action', function($row){
         return view('chapter.partials.actions', compact('row'))->render();
     })
-    ->rawColumns(['action'])
+    ->editColumn('name', function ($row) {
+        $quesCount = Helper::countByColumnValue('Question', 'chapter_id', $row->id) ?? '0';
+        $label = $row->name;
+        if($quesCount > 0){
+            $label .= ' <small class="text-primary">Ques.: ' . $quesCount . '</small>';
+        }
+        return $label;
+    })
+    ->rawColumns(['name', 'action'])
     ->make(true);
 }
 
@@ -319,7 +339,15 @@ public function topicData(Request $request)
     ->addColumn('action', function($row){
         return view('topic.partials.actions', compact('row'))->render();
     })
-    ->rawColumns(['action'])
+    ->editColumn('name', function ($row) {
+        $quesCount = Helper::countByColumnValue('Question', 'topic_id', $row->id) ?? '0';
+        $label = $row->name;
+        if($quesCount > 0){
+            $label .= ' <small class="text-primary">Ques.: ' . $quesCount . '</small>';
+        }
+        return $label;
+    })
+    ->rawColumns(['name', 'action'])
     ->make(true);
 }
 
@@ -328,7 +356,6 @@ public function topicData(Request $request)
 
 
     $filters =$request->filterable_columns ?? [];
-
 
     $query = DB::table('questions')
     ->leftJoin('all_subjects', function($join) {
@@ -355,26 +382,38 @@ public function topicData(Request $request)
         'questions.ans_b',
         'questions.ans_c',
         'questions.ans_d',
+        'questions.deleted_at',
         'questions.correct_ans',
         'all_subjects.name as subject_name',
         'chapters.name as chapter_name',
         'class_types.name as class_name',
         'question_types.name as question_type'
-    )
-    ->whereNull('questions.deleted_at'); // Also exclude deleted topics
+    );
 
+        $showDeletedOnly = false;
 
+        foreach ($filters as $filter) {
+            $name = $filter['name'] ?? null;
+            $value = $filter['value'] ?? null;
 
-foreach ($filters as $filter) {
-        $name = $filter['name'] ?? null;
-        $value = $filter['value'] ?? null;
-
-        // Only process if name and value are present and value is not empty
-     if ($name && $value !== null && $value !== '') {
-    $query->where("questions.$name", $value);
-}
+            // Only process if name and value are present and value is not empty
+            if ($name && $value !== null && $value !== '') {
+                if ($name === 'is_deleted') {
+                    $showDeletedOnly = (bool)$value;
+                } else {
+                    $query->where("questions.$name", $value);
+                }
+            }
             
         }
+
+        // Apply deletion filter based on is_deleted flag
+        if ($showDeletedOnly) {
+            $query->whereNotNull('questions.deleted_at');
+        } else {
+            $query->whereNull('questions.deleted_at');
+        }
+
     return DataTables::of($query)
     ->addIndexColumn()
     
