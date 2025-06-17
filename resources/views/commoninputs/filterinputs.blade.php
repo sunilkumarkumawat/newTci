@@ -11,7 +11,7 @@ $filters = $filters ?? ['keyword' => true,'batches'=>true, 'admission_no' => tru
 @case('keyword')
 <div class="col-md-2">
     <label>Search By Keyword</label>
-    <input type="text" name="keyword" class="form-control" placeholder="Ex. Name, Mobile, Email, Aadhaar etc.">
+    <input type="text" name="keyword" class="form-control" placeholder="Type keyword here">
 </div>
 @break
 

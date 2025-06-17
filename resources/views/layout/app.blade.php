@@ -39,8 +39,8 @@ $setting = DB::table('settings')->get()->first();
     <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
     <!--<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>-->
 
-<!-- Include SheetJS -->
-<script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+    <!-- Include SheetJS -->
+    <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 
 
 
@@ -490,7 +490,7 @@ $cur_route = Route::getFacadeRoot()->current()->uri();
 
                         // Remove previous validation messages
                         $form.find('.text-danger.validation-error').remove();
-                                
+
                         $form.find('[data-required="true"]').each(function() {
                             const $input = $(this);
                             const value = $input.val().trim();
@@ -666,6 +666,16 @@ $cur_route = Route::getFacadeRoot()->current()->uri();
                                         message = 'Class is required';
                                     }
                                     break;
+                                case 'exam_pattern_id':
+                                    if (value === '') {
+                                        message = 'Exam pattern is required';
+                                    }
+                                    break;
+                                case 'exam_type_id':
+                                    if (value === '') {
+                                        message = 'Exam type is required';
+                                    }
+                                    break;
                                 case 'topic_id':
                                     if (value === '') {
                                         message = 'Topic is required';
@@ -784,7 +794,7 @@ $cur_route = Route::getFacadeRoot()->current()->uri();
                                         message = 'Amount is required';
                                     }
                                     break;
-                                
+
                                 case 'plan_name':
                                     if (value === '') {
                                         message = 'Plan Name is required';
@@ -811,7 +821,7 @@ $cur_route = Route::getFacadeRoot()->current()->uri();
                     let currentStep = $(this).attr('data-step') || 1; // Get current step from data attribute or default to 1
                     let totalSteps = $(this).attr('data-total_steps') || 1; // Get current step from data attribute or default to 1
 
-               
+
 
                     // Optional helper to format field names like "mobile_no" to "Mobile No"
                     function formatFieldName(name) {
@@ -827,13 +837,15 @@ $cur_route = Route::getFacadeRoot()->current()->uri();
 
 
 
-                         if (currentStep !== totalSteps) {
+                    if (currentStep !== totalSteps) {
                         return
                     }
 
                     const formData = new FormData(this); // Handles files + inputs
                     const submitBtn = $form.find('button[type="submit"]');
                     const originalBtnText = submitBtn.text();
+
+
 
                     submitBtn.prop("disabled", true).html(
                         `Please wait...    <span class="spinner-border spinner-border-sm align-middle ms-2"></span>`
@@ -846,6 +858,16 @@ $cur_route = Route::getFacadeRoot()->current()->uri();
                         contentType: false, // Required for FormData
                         success: function(response) {
 
+                            if (response.modal === 'Exam') {
+                                const id = response?.data?.id;
+
+                                if (id) {
+                                    window.location.href = `{{ url('/') }}/createExam?query=${id}`;
+                                } else {
+                                    toastr.error('Exam ID is missing. Cannot proceed with redirection.');
+                                }
+                            }
+
                             if (response.method == 'update') {
                                 // window.location.href = "{{ url('/') }}/" + (response.modal)
                                 //     .toLowerCase();
@@ -854,6 +876,9 @@ $cur_route = Route::getFacadeRoot()->current()->uri();
                                 toastr.success('Data Updated Successfully');
                                 return
                             }
+
+
+
                             console.log(response);
                             $form[0].reset();
                             toastr.success('Form Submitted Successfully');
@@ -946,68 +971,67 @@ $cur_route = Route::getFacadeRoot()->current()->uri();
                 // }
 
                 function dataGet() {
-    var baseUrl = "{{ url('/') }}";
-    const modalTypes = [];
+                    var baseUrl = "{{ url('/') }}";
+                    const modalTypes = [];
 
-    // Collect all unique modal types from inputs named 'modal_type'
-    $('[name="modal_type"]').each(function() {
-        const val = $(this).val();
-        if (val && !modalTypes.includes(val)) {
-            modalTypes.push(val);
-        }
-    });
-
-    // For each modal type, fetch and update its data container
-    modalTypes.forEach(modal => {
-        const containerId = `#dataContainer-${modal.toLowerCase()}`;
-        const url = `${baseUrl}/commonView/${modal}`;
-
-        $.get(url, function(data) {
-            const $container = $(containerId);
-
-            $container.fadeOut(100, function() {
-                $container.html(data).fadeIn(200);
-
-                // Find the table inside the container
-                const table = $container.find('table');
-
-                // If DataTable is already initialized, destroy it first
-                if ($.fn.DataTable.isDataTable(table)) {
-                    table.DataTable().destroy();
-                }
-
-                // Initialize DataTable with options
-                table.DataTable({
-                    pageLength: 10,
-                    lengthChange: true,
-                    searching: true,
-                    ordering: true,
-                    paging: true,
-                    dom: 'Bfrtip',
-                    buttons: [
-                        {
-                            extend: 'excelHtml5',
-                            text: 'Export to Excel',
-                            title: `${modal} Report`
-                        },
-                        {
-                            extend: 'pdfHtml5',
-                            text: 'Export to PDF',
-                            orientation: 'landscape',
-                            pageSize: 'A4',
-                            title: `${modal} Report`
+                    // Collect all unique modal types from inputs named 'modal_type'
+                    $('[name="modal_type"]').each(function() {
+                        const val = $(this).val();
+                        if (val && !modalTypes.includes(val)) {
+                            modalTypes.push(val);
                         }
-                    ]
-                });
+                    });
 
-                toastr.success(`${modal} data fetched successfully!`);
-            });
-        }).fail(function(xhr) {
-            console.error(`Error loading ${modal}: ${xhr.status} ${xhr.statusText}`);
-            //toastr.error(`Error loading ${modal}: ${xhr.status} ${xhr.statusText} | ${xhr.responseText}`);
-        });
-    });
-}
+                    // For each modal type, fetch and update its data container
+                    modalTypes.forEach(modal => {
+                        const containerId = `#dataContainer-${modal.toLowerCase()}`;
+                        const url = `${baseUrl}/commonView/${modal}`;
+
+                        $.get(url, function(data) {
+                            const $container = $(containerId);
+
+                            $container.fadeOut(100, function() {
+                                $container.html(data).fadeIn(200);
+
+                                // Find the table inside the container
+                                const table = $container.find('table');
+
+                                // If DataTable is already initialized, destroy it first
+                                if ($.fn.DataTable.isDataTable(table)) {
+                                    table.DataTable().destroy();
+                                }
+
+                                // Initialize DataTable with options
+                                table.DataTable({
+                                    pageLength: 10,
+                                    lengthChange: true,
+                                    searching: true,
+                                    ordering: true,
+                                    paging: true,
+                                    dom: 'Bfrtip',
+                                    buttons: [{
+                                            extend: 'excelHtml5',
+                                            text: 'Export to Excel',
+                                            title: `${modal} Report`
+                                        },
+                                        {
+                                            extend: 'pdfHtml5',
+                                            text: 'Export to PDF',
+                                            orientation: 'landscape',
+                                            pageSize: 'A4',
+                                            title: `${modal} Report`
+                                        }
+                                    ]
+                                });
+
+                                toastr.success(`${modal} data fetched successfully!`);
+                            });
+                        }).fail(function(xhr) {
+                            console.error(`Error loading ${modal}: ${xhr.status} ${xhr.statusText}`);
+                            //toastr.error(`Error loading ${modal}: ${xhr.status} ${xhr.statusText} | ${xhr.responseText}`);
+                        });
+                    });
+                }
                 dataGet();
 
 
@@ -1023,9 +1047,9 @@ $cur_route = Route::getFacadeRoot()->current()->uri();
                 const baseUrl = "{{ url('/') }}"; // base URL (Blade will output Laravel base URL)
                 const target = $(this).closest('.position-relative'); // find the closest parent with class 'position-relative'
 
-                let deleteUrl = isDeleted
-                        ? `${baseUrl}/common-force-delete/${modal}/${id}`
-                        : `${baseUrl}/common-delete/${modal}/${id}`;
+                let deleteUrl = isDeleted ?
+                    `${baseUrl}/common-force-delete/${modal}/${id}` :
+                    `${baseUrl}/common-delete/${modal}/${id}`;
 
                 if (confirm(isDeleted ? "Permanently delete this item? \nThis action is not irreversible" : "Are you sure you want to delete this item?")) {
                     $.ajax({
@@ -1037,16 +1061,15 @@ $cur_route = Route::getFacadeRoot()->current()->uri();
                         },
                         success: function(res) {
                             toastr.success(res.message || 'Deleted successfully.');
-                                
-                         if (['Documents'].includes(modal)) {
- target.fadeOut(500, function () {
-       target.remove();
-    });
-}
-                            else{
+
+                            if (['Documents'].includes(modal)) {
+                                target.fadeOut(500, function() {
+                                    target.remove();
+                                });
+                            } else {
                                 location.reload();
-                            } 
-                          
+                            }
+
                         },
                         error: function(xhr) {
                             toastr.error('Failed to delete.');
@@ -1060,7 +1083,7 @@ $cur_route = Route::getFacadeRoot()->current()->uri();
 
         {{-- restore function --}}
         <script>
-            $(document).on('click', '.restore-btn', function () {
+            $(document).on('click', '.restore-btn', function() {
                 var id = $(this).data('id');
                 var modal = $(this).data('modal');
 
@@ -1072,17 +1095,17 @@ $cur_route = Route::getFacadeRoot()->current()->uri();
                             _method: 'DELETE', // Laravel treats this as a DELETE request
                             _token: $('meta[name="csrf-token"]').attr('content') // if CSRF token is needed
                         },
-                        success: function (res) {
+                        success: function(res) {
                             toastr.success(res.message || 'Restored successfully.');
                             if (['Documents'].includes(modal)) {
-                                target.fadeOut(500, function () {
+                                target.fadeOut(500, function() {
                                     target.remove();
                                 });
-                            }else{
+                            } else {
                                 location.reload();
-                            } 
+                            }
                         },
-                        error: function (xhr) {
+                        error: function(xhr) {
                             toastr.error('Failed to restore.');
                             console.error(xhr.responseText);
                             toastr.error(xhr.responseText);
@@ -1268,299 +1291,310 @@ $cur_route = Route::getFacadeRoot()->current()->uri();
             });
         </script>
 
-      {{-- generate password --}}
+        {{-- generate password --}}
 
-<script>
+        <script>
+            $(document).ready(function() {
 
-$(document).ready(function () {
-
-    hideElements();
-
-    function hideElements(){
-        $('.generatePassTable,.usernameParameter').addClass('d-none');
-    }
-
-    $('#generatePasswordForm').on('submit', function (e) {
-        e.preventDefault(); // prevent default form submission
-
-        let form = $(this);
-        let modal = form.data('modal'); // get modal type from data attribute
-        let formData = form.serializeArray(); // serialize form inputs
-
-        formData.push({ name: 'modal_type', value: modal }); // append modal_type
-
-        $.ajax({
-            url: form.attr('action'),
-            method: 'POST',
-            data: formData,
-            beforeSend: function () {
-                // Optional: show loading indicator
-            },
-            success: function (response) {
-                // Handle success
-                toastr.success('Usernames and passwords generated successfully!');
                 hideElements();
-                $('#generatePassTable').find('tbody').html(''); // Display generated usernames
-                // Optionally reset form or reload table
-            },
-            error: function (xhr) {
-                // Handle error
-                alert('An error occurred while saving data.');
-                console.error(xhr.responseText);
-                toastr.error(xhr.responseText);
-            }
-        });
-    });
-});
-</script>
 
-      {{-- add Documents --}}
+                function hideElements() {
+                    $('.generatePassTable,.usernameParameter').addClass('d-none');
+                }
 
-<script>
-$('#addDocBtn').on('click', function () {
-    let category = $('#docCategory').val().trim();
-    let files = $('#docFiles')[0].files;
+                $('#generatePasswordForm').on('submit', function(e) {
+                    e.preventDefault(); // prevent default form submission
 
-    if (!category || files.length === 0) {
-        alert("Please enter a category and select at least one file.");
-        return;
-    }
+                    let form = $(this);
+                    let modal = form.data('modal'); // get modal type from data attribute
+                    let formData = form.serializeArray(); // serialize form inputs
 
-    for (let i = 0; i < files.length; i++) {
-        let file = files[i];
-        let reader = new FileReader();
+                    formData.push({
+                        name: 'modal_type',
+                        value: modal
+                    }); // append modal_type
 
-        reader.onload = function (e) {
-            let container = $('<div class="col-md-3 mb-3 text-center border rounded p-2 position-relative"></div>');
-            container.append(`<strong>${category}</strong><br>`);
+                    $.ajax({
+                        url: form.attr('action'),
+                        method: 'POST',
+                        data: formData,
+                        beforeSend: function() {
+                            // Optional: show loading indicator
+                        },
+                        success: function(response) {
+                            // Handle success
+                            toastr.success('Usernames and passwords generated successfully!');
+                            hideElements();
+                            $('#generatePassTable').find('tbody').html(''); // Display generated usernames
+                            // Optionally reset form or reload table
+                        },
+                        error: function(xhr) {
+                            // Handle error
+                            alert('An error occurred while saving data.');
+                            console.error(xhr.responseText);
+                            toastr.error(xhr.responseText);
+                        }
+                    });
+                });
+            });
+        </script>
 
-            container.append(`
+        {{-- add Documents --}}
+
+        <script>
+            $('#addDocBtn').on('click', function() {
+                let category = $('#docCategory').val().trim();
+                let files = $('#docFiles')[0].files;
+
+                if (!category || files.length === 0) {
+                    alert("Please enter a category and select at least one file.");
+                    return;
+                }
+
+                for (let i = 0; i < files.length; i++) {
+                    let file = files[i];
+                    let reader = new FileReader();
+
+                    reader.onload = function(e) {
+                        let container = $('<div class="col-md-3 mb-3 text-center border rounded p-2 position-relative"></div>');
+                        container.append(`<strong>${category}</strong><br>`);
+
+                        container.append(`
                 <img src="${e.target.result}" class="img-thumbnail" style="width:100px;height:100px;object-fit:cover;"><br>
                 <p>${file.name}</p>
             `);
 
-            // Remove button
-            let removeBtn = $('<button type="button" class="btn btn-sm btn-danger position-absolute top-0 end-0 m-1">&times;</button>');
-            removeBtn.on('click', function () {
-                container.remove(); // remove the whole container
+                        // Remove button
+                        let removeBtn = $('<button type="button" class="btn btn-sm btn-danger position-absolute top-0 end-0 m-1">&times;</button>');
+                        removeBtn.on('click', function() {
+                            container.remove(); // remove the whole container
+                        });
+                        container.append(removeBtn);
+
+                        // Hidden inputs for Laravel
+                        let fileInput = $('<input type="file" style="display:none;" name="documents[]">');
+                        let categoryInput = $(`<input type="hidden" name="categories[]">`).val(category);
+
+                        fileInput[0].files = (function() {
+                            let dt = new DataTransfer();
+                            dt.items.add(file);
+                            return dt.files;
+                        })();
+
+                        container.append(fileInput, categoryInput);
+                        container.hide();
+                        $('#uploadedDocs').append(container);
+                        container.fadeIn(600);
+                    };
+
+                    reader.readAsDataURL(file);
+                }
+
+                $('#docCategory').val('');
+                $('#docFiles').val('');
             });
-            container.append(removeBtn);
-
-            // Hidden inputs for Laravel
-            let fileInput = $('<input type="file" style="display:none;" name="documents[]">');
-            let categoryInput = $(`<input type="hidden" name="categories[]">`).val(category);
-
-            fileInput[0].files = (function () {
-                let dt = new DataTransfer();
-                dt.items.add(file);
-                return dt.files;
-            })();
-
-            container.append(fileInput, categoryInput);
-        container.hide();
-            $('#uploadedDocs').append(container);
-container.fadeIn(600);
-        };
-
-        reader.readAsDataURL(file);
-    }
-
-    $('#docCategory').val('');
-    $('#docFiles').val('');
-});
-</script>
+        </script>
 
 
-      {{-- excel upload --}}
-<script>
-let currentJsonData = []; // Store the extracted data globally
+        {{-- excel upload --}}
+        <script>
+            let currentJsonData = []; // Store the extracted data globally
 
-document.getElementById('excelFile').addEventListener('change', function (e) {
-  const file = e.target.files[0];
-  const reader = new FileReader();
-  $('#errorBox').addClass('d-none');
+            document.getElementById('excelFile').addEventListener('change', function(e) {
+                const file = e.target.files[0];
+                const reader = new FileReader();
+                $('#errorBox').addClass('d-none');
 
-  function isExcelDate(value) {
-    return typeof value === 'number' && value > 59;
-  }
+                function isExcelDate(value) {
+                    return typeof value === 'number' && value > 59;
+                }
 
-  function excelDateToJSDate(serial) {
-    const utc_days = serial - 25569;
-    const utc_value = utc_days * 86400;
-    const date_info = new Date(utc_value * 1000);
+                function excelDateToJSDate(serial) {
+                    const utc_days = serial - 25569;
+                    const utc_value = utc_days * 86400;
+                    const date_info = new Date(utc_value * 1000);
 
-    const year = date_info.getUTCFullYear();
-    const month = (date_info.getUTCMonth() + 1).toString().padStart(2, '0');
-    const day = date_info.getUTCDate().toString().padStart(2, '0');
+                    const year = date_info.getUTCFullYear();
+                    const month = (date_info.getUTCMonth() + 1).toString().padStart(2, '0');
+                    const day = date_info.getUTCDate().toString().padStart(2, '0');
 
-    return `${year}-${month}-${day}`;
-  }
+                    return `${year}-${month}-${day}`;
+                }
 
-  reader.onload = function (event) {
-    const data = new Uint8Array(event.target.result);
-    const workbook = XLSX.read(data, { type: 'array' });
-    const firstSheet = workbook.SheetNames[0];
-    const worksheet = workbook.Sheets[firstSheet];
-    let jsonData = XLSX.utils.sheet_to_json(worksheet, { defval: '' });
+                reader.onload = function(event) {
+                    const data = new Uint8Array(event.target.result);
+                    const workbook = XLSX.read(data, {
+                        type: 'array'
+                    });
+                    const firstSheet = workbook.SheetNames[0];
+                    const worksheet = workbook.Sheets[firstSheet];
+                    let jsonData = XLSX.utils.sheet_to_json(worksheet, {
+                        defval: ''
+                    });
 
-    // Convert DOB dates before saving
-    jsonData = jsonData.map(row => {
-      if (row['dob'] && isExcelDate(row['dob'])) {
-        row['dob'] = excelDateToJSDate(row['dob']);
-      }
-      return row;
-    });
+                    // Convert DOB dates before saving
+                    jsonData = jsonData.map(row => {
+                        if (row['dob'] && isExcelDate(row['dob'])) {
+                            row['dob'] = excelDateToJSDate(row['dob']);
+                        }
+                        return row;
+                    });
 
-    currentJsonData = jsonData; // save globally
+                    currentJsonData = jsonData; // save globally
 
-    const thead = document.querySelector('#excelTable thead');
-    const tbody = document.querySelector('#excelTable tbody');
-    thead.innerHTML = '';
-    tbody.innerHTML = '';
+                    const thead = document.querySelector('#excelTable thead');
+                    const tbody = document.querySelector('#excelTable tbody');
+                    thead.innerHTML = '';
+                    tbody.innerHTML = '';
 
-    if (jsonData.length > 0) {
-      const headers = Object.keys(jsonData[0]);
-      const headerRow = document.createElement('tr');
-      headers.forEach(header => {
-        const th = document.createElement('th');
-        th.textContent = header;
-        headerRow.appendChild(th);
-      });
-      thead.appendChild(headerRow);
+                    if (jsonData.length > 0) {
+                        const headers = Object.keys(jsonData[0]);
+                        const headerRow = document.createElement('tr');
+                        headers.forEach(header => {
+                            const th = document.createElement('th');
+                            th.textContent = header;
+                            headerRow.appendChild(th);
+                        });
+                        thead.appendChild(headerRow);
 
-      jsonData.forEach(row => {
-        const tr = document.createElement('tr');
-        headers.forEach(header => {
-          const td = document.createElement('td');
-          td.textContent = row[header];
-          tr.appendChild(td);
-        });
-        tbody.appendChild(tr);
-      });
-    } else {
-      tbody.innerHTML = '<tr><td colspan="100%">No data found</td></tr>';
-    }
+                        jsonData.forEach(row => {
+                            const tr = document.createElement('tr');
+                            headers.forEach(header => {
+                                const td = document.createElement('td');
+                                td.textContent = row[header];
+                                tr.appendChild(td);
+                            });
+                            tbody.appendChild(tr);
+                        });
+                    } else {
+                        tbody.innerHTML = '<tr><td colspan="100%">No data found</td></tr>';
+                    }
 
-    const excelModal = new bootstrap.Modal(document.getElementById('excelModal'));
-    excelModal.show();
-  };
+                    const excelModal = new bootstrap.Modal(document.getElementById('excelModal'));
+                    excelModal.show();
+                };
 
-  reader.readAsArrayBuffer(file);
-});
+                reader.readAsArrayBuffer(file);
+            });
 
-// Save button click handler
-document.addEventListener('click', function(e) {
-  if (e.target && e.target.id === 'saveDataBtn') {
-  if(currentJsonData.length === 0){
-    alert('No data to save!');
-    return;
-  }
+            // Save button click handler
+            document.addEventListener('click', function(e) {
+                if (e.target && e.target.id === 'saveDataBtn') {
+                    if (currentJsonData.length === 0) {
+                        alert('No data to save!');
+                        return;
+                    }
 
-  const modalName = $('#excelFile').attr('data-modal');
-  // Send AJAX POST request to your Laravel endpoint
-  fetch(`{{url('/excelUpload')}}/${modalName}`, { // Change this to your actual route URL
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'X-CSRF-TOKEN': '{{ csrf_token() }}' // Make sure blade renders csrf token here
-    },
-    body: JSON.stringify({ data: currentJsonData,modal:modalName })
-  })
-.then(response => response.json())
-.then(res => {
-  if (res.success) {
-    alert("Data saved successfully!");
-  } else {
-    const errorBox = document.getElementById('errorBox');
-    errorBox.classList.remove('d-none');
-    errorBox.innerHTML = '<strong>Error occurred:</strong><br>' +
-      res.errors.map(err => `<div>${err}</div>`).join('');
-  }
-})
-.catch(error => {
-  alert("Something went wrong: " + error.message);
-});
-  }
-});
-</script>
+                    const modalName = $('#excelFile').attr('data-modal');
+                    // Send AJAX POST request to your Laravel endpoint
+                    fetch(`{{url('/excelUpload')}}/${modalName}`, { // Change this to your actual route URL
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'X-CSRF-TOKEN': '{{ csrf_token() }}' // Make sure blade renders csrf token here
+                            },
+                            body: JSON.stringify({
+                                data: currentJsonData,
+                                modal: modalName
+                            })
+                        })
+                        .then(response => response.json())
+                        .then(res => {
+                            if (res.success) {
+                                alert("Data saved successfully!");
+                            } else {
+                                const errorBox = document.getElementById('errorBox');
+                                errorBox.classList.remove('d-none');
+                                errorBox.innerHTML = '<strong>Error occurred:</strong><br>' +
+                                    res.errors.map(err => `<div>${err}</div>`).join('');
+                            }
+                        })
+                        .catch(error => {
+                            alert("Something went wrong: " + error.message);
+                        });
+                }
+            });
+        </script>
 
 
-<script>
-$(document).on('click', '.showQuestion', function() {
-    var thisQuestionId = $(this).data('id');
-    var thisQuestion = $(this).data('question');
-    var thisAns_a = $(this).data('ans_a');
-    var thisAns_b = $(this).data('ans_b');
-    var thisAns_c = $(this).data('ans_c');
-    var thisAns_d = $(this).data('ans_d');
-    //var thisCorrect_ans = $(this).data('correct_ans');
+        <script>
+            $(document).on('click', '.showQuestion', function() {
+                const $row = $(this).closest('tr');
 
-    $('#viewQuestionModal').modal('toggle');
-    $('#thisQuestion').html(thisQuestion);
-    $('#thisAns_a').html(thisAns_a);
-    $('#thisAns_b').html(thisAns_b);
-    $('#thisAns_c').html(thisAns_c);
-    $('#thisAns_d').html(thisAns_d);
-    //$('#thisCorrect_ans').html(thisCorrect_ans);
-    MathJax.typesetPromise();
-    
-});
-</script>
+                const question = $row.find('td').eq(2).html(); // Question
+                const ansA = $row.find('td').eq(3).html(); // Option A
+                const ansB = $row.find('td').eq(4).html(); // Option B
+                const ansC = $row.find('td').eq(5).html(); // Option C
+                const ansD = $row.find('td').eq(6).html(); // Option D
+                const correctAns = $row.find('td').eq(7).html(); // Correct Answer
 
-<div class="modal fade" id="viewQuestionModal" tabindex="-1" aria-labelledby="viewQuestionModal" aria-hidden="true">
-  <div class="modal-dialog modal-lg">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="viewQuestionModal">View Question</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-            
-            <div class="row">
-                <div class="col-md-12">
-                    <div class=""><b>Ques.:</b> <span id="thisQuestion"></span></div><hr>
-                </div>
-                <div class="col-md-12 p-2">
-                    <div class=""><span class=" bg-primary pt-1 pb-1 pr-2 pl-2">A</span> <span id="thisAns_a"></span></div>
-                </div>
-                <div class="col-md-12 p-2">
-                    <div class=""><span class=" bg-primary pt-1 pb-1 pr-2 pl-2">B</span> <span id="thisAns_b"></span></div>
-                </div>
-                <div class="col-md-12 p-2">
-                    <div class=""><span class=" bg-primary pt-1 pb-1 pr-2 pl-2">C</span> <span id="thisAns_c"></span></div>
-                </div>
-                <div class="col-md-12 p-2 ">
-                    <div class=""><span class=" bg-primary pt-1 pb-1 pr-2 pl-2">D</span> <span id="thisAns_d"></span></div>
+                $('#thisQuestion').html(question);
+                $('#thisAns_a').html(ansA);
+                $('#thisAns_b').html(ansB);
+                $('#thisAns_c').html(ansC);
+                $('#thisAns_d').html(ansD);
+
+                // Show correct answer with a horizontal line
+                $('#thisCorrectAnsWrapper').html('<hr><b>Correct Answer:</b> ' + correctAns);
+
+                $('#viewQuestionModal').modal('show');
+
+                // Re-render MathJax in modal
+                if (window.MathJax) {
+                    MathJax.typesetPromise();
+                }
+            });
+        </script>
+
+        <div class="modal fade" id="viewQuestionModal" tabindex="-1" aria-labelledby="viewQuestionModal" aria-hidden="true">
+            <div class="modal-dialog ">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="viewQuestionModal">Question Preview</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div><b>Ques.: 1</b>
+                            <div id="thisQuestion"></div>
+                            <hr>
+                        </div>
+                        <div><span class="bg-primary p-1 text-white">A</span> <span id="thisAns_a"></span></div>
+                        <div><span class="bg-primary p-1 text-white">B</span> <span id="thisAns_b"></span></div>
+                        <div><span class="bg-primary p-1 text-white">C</span> <span id="thisAns_c"></span></div>
+                        <div><span class="bg-primary p-1 text-white">D</span> <span id="thisAns_d"></span></div>
+
+                        <!-- Correct answer placeholder -->
+                        <div id="thisCorrectAnsWrapper" class="mt-3"></div>
+                    </div>
+
+
                 </div>
             </div>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- Modal -->
-<div class="modal fade" id="excelModal" tabindex="-1" aria-labelledby="excelModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-lg">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="excelModalLabel">Excel Data</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-        <div class="table-responsive">
-          <table class="table table-bordered table-striped" id="excelTable">
-            <thead></thead>
-            <tbody></tbody>
-          </table>
         </div>
-        <div class="text-center">
-          <button type="button" id="saveDataBtn" class="btn btn-primary mt-3">Save Data</button>
-      </div>
-      <div id="errorBox" class="alert alert-danger d-none mt-2" role="alert"></div>
-      </div>
-    </div>
-  </div>
-</div>
+
+        <!-- Modal -->
+        <div class="modal fade" id="excelModal" tabindex="-1" aria-labelledby="excelModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="excelModalLabel">Excel Data</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="table-responsive">
+                            <table class="table table-bordered table-striped" id="excelTable">
+                                <thead></thead>
+                                <tbody></tbody>
+                            </table>
+                        </div>
+                        <div class="text-center">
+                            <button type="button" id="saveDataBtn" class="btn btn-primary mt-3">Save Data</button>
+                        </div>
+                        <div id="errorBox" class="alert alert-danger d-none mt-2" role="alert"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
         <!-- Common Delete Confirmation Modal -->
         <div class="modal fade" id="deleteConfirmModal" tabindex="-1" aria-labelledby="deleteModalLabel"
             aria-hidden="true">

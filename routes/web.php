@@ -13,15 +13,15 @@ Route::get('/', function () {
     return redirect('/dashboard');
 });
 Route::get('logout', function () {
- 
-      DB::table('login_logs')->insert([
-    'user_id' => Auth::id(),
-    'category' => 2,
-    'type' => 'users', // or 'student' / 'teacher' accordingly
-    'time_at' => now(),
-]);
 
-   Auth::logout();
+    DB::table('login_logs')->insert([
+        'user_id' => Auth::id(),
+        'category' => 2,
+        'type' => 'users', // or 'student' / 'teacher' accordingly
+        'time_at' => now(),
+    ]);
+
+    Auth::logout();
     return redirect('/login');
 });
 
@@ -36,21 +36,21 @@ Route::post('/loginAuth', function (Request $request) {
     }
 
 
-   $currentSession = DB::table('settings')
-    ->where('id', 1)
-    ->value('current_active_session_id');
+    $currentSession = DB::table('settings')
+        ->where('id', 1)
+        ->value('current_active_session_id');
 
-   
-     Auth::login($user); // ✅ session-based login
 
-     session(['current_session' => $currentSession]);
+    Auth::login($user); // ✅ session-based login
 
-  DB::table('login_logs')->insert([
-    'user_id' => $user->id,
-    'category' => 1,
-    'type' => 'users', // or 'student' / 'teacher' accordingly
-    'time_at' => now(),
-]);
+    session(['current_session' => $currentSession]);
+
+    DB::table('login_logs')->insert([
+        'user_id' => $user->id,
+        'category' => 1,
+        'type' => 'users', // or 'student' / 'teacher' accordingly
+        'time_at' => now(),
+    ]);
 
     return response()->json(['user' => $user], 200);
 });
@@ -63,38 +63,38 @@ Route::middleware(['auth'])->group(function () {
 
     // Sidebar
     Route::match(['get', 'post'], 'sidebar', 'Auth\AuthController@sidebar');
-   
-    Route::post('/set-session', function (\Illuminate\Http\Request $request) {
-    $sessionId = $request->input('sessionSelect');
-    session(['current_session' => $sessionId]);
-      return redirect()->back();
-})->name('set.session');
 
-     // branch
-     Route::match(['get', 'post'], 'commonEdit/{modal}/{id}', 'SharesController@commonEdit');
-     Route::match(['get', 'post'], 'createCommon', 'SharesController@createCommon');
-     Route::match(['get', 'post'], 'branch', 'SharesController@branch');
-     Route::match(['get', 'post'], 'role', 'SharesController@role');
-     Route::match(['get', 'post'], 'expense', 'SharesController@expense');
-     Route::match(['get', 'post'], 'setting', 'SharesController@setting');
+    Route::post('/set-session', function (\Illuminate\Http\Request $request) {
+        $sessionId = $request->input('sessionSelect');
+        session(['current_session' => $sessionId]);
+        return redirect()->back();
+    })->name('set.session');
+
+    // branch
+    Route::match(['get', 'post'], 'commonEdit/{modal}/{id}', 'SharesController@commonEdit');
+    Route::match(['get', 'post'], 'createCommon', 'SharesController@createCommon');
+    Route::match(['get', 'post'], 'branch', 'SharesController@branch');
+    Route::match(['get', 'post'], 'role', 'SharesController@role');
+    Route::match(['get', 'post'], 'expense', 'SharesController@expense');
+    Route::match(['get', 'post'], 'setting', 'SharesController@setting');
     Route::match(['get', 'post'], 'commonView/{modal_type}', 'SharesController@commonView');
     Route::match(['get', 'post'], 'common-status-change/{model}/{id}', 'SharesController@changeStatusCommon');
     Route::match(['delete'], 'common-delete/{model}/{id}', 'SharesController@deleteCommon');
     Route::match(['delete'], 'common-force-delete/{model}/{id}', 'SharesController@deleteForceCommon');
     Route::match(['delete'], 'common-restore/{model}/{id}', 'SharesController@restoreCommon');
-    Route::match(['get','post'], '/get-dependent-options', 'SharesController@getDependentOptions');
-    Route::match(['get','post'], '/set-current-branch', 'SharesController@setCurrentBranch');
-    Route::match(['get','post'], '/set-permission-view/{roleId}/{userId}', 'SharesController@setPermissionView');
-    Route::match(['get','post'], '/batches', 'SharesController@batches');
-    Route::match(['get','post'], '/generatePassword', 'SharesController@generatePassword');
-    Route::match(['get','post'], '/excelUpload/{modal}', 'SharesController@saveExcelData');
-    
-
-    
+    Route::match(['get', 'post'], '/get-dependent-options', 'SharesController@getDependentOptions');
+    Route::match(['get', 'post'], '/set-current-branch', 'SharesController@setCurrentBranch');
+    Route::match(['get', 'post'], '/set-permission-view/{roleId}/{userId}', 'SharesController@setPermissionView');
+    Route::match(['get', 'post'], '/batches', 'SharesController@batches');
+    Route::match(['get', 'post'], '/generatePassword', 'SharesController@generatePassword');
+    Route::match(['get', 'post'], '/excelUpload/{modal}', 'SharesController@saveExcelData');
 
 
 
- Route::match(['get','post'], '/chapters/data', 'SharesController@chaptersData');
+
+
+
+    Route::match(['get', 'post'], '/chapters/data', 'SharesController@chaptersData');
 
 
 
@@ -171,10 +171,15 @@ Route::middleware(['auth'])->group(function () {
     Route::match(['get', 'post'], 'questionView', 'SharesController@questionView');
     Route::match(['get', 'post'], 'questionData', 'SharesController@questionData');
 
-    
+
 
     Route::match(['get', 'post'], 'resultAnalysis/dashboard', 'ResultAnalysisController@dashboard');
     Route::match(['get', 'post'], 'test-wise-report', 'ResultAnalysisController@testWiseReport');
     Route::match(['get', 'post'], 'student-wise-report', 'ResultAnalysisController@studentWiseReport');
 
+    Route::match(['get', 'post'], 'exam/dashboard', 'ExamController@dashboard');
+    Route::match(['get', 'post'], 'exam/list', 'ExamController@examList');
+    Route::match(['get', 'post'], 'exam/create', 'ExamController@examCreate');
+    Route::match(['get', 'post'], 'examData', 'ExamController@examData');
+    Route::match(['get', 'post'], 'createExam', 'ExamController@createExam');
 });

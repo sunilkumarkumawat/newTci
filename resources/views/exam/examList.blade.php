@@ -3,7 +3,7 @@
 
 @php
 $permissions = Helper::getPermissions();
-$filterable_columns = ['class_type_id'=>true, 'subject_id'=>true, 'chapter_id'=>true, 'topic_id'=>true, 'level_id'=>true, 'suka_id'=>true, 'question_type_id'=>true, 'status'=>true, 'language'=>true, 'use'=>true, 'tags'=>true, 'source_id'=>true, 'is_deleted'=>true, 'keyword'=>true];
+$filterable_columns = [ 'batches'=>true,'subject_id'=>false, 'level_id'=>true, 'suka_id'=>true,  'status'=>true,  'source_id'=>true, 'is_deleted'=>false, 'keyword'=>true];
 @endphp
 
 <div class="content-wrapper">
@@ -14,8 +14,8 @@ $filterable_columns = ['class_type_id'=>true, 'subject_id'=>true, 'chapter_id'=>
                 <div class="col-md-12 col-12 p-0">
                     <ul class="breadcrumb">
                         <li class="breadcrumb-item"><a href="{{ url('dashboard') }}">Dashboard</a></li>
-                        <li class="breadcrumb-item">Question Bank</li>
-                        <li class="breadcrumb-item">Question List</li>
+                        <li class="breadcrumb-item">Exam Management</li>
+                        <li class="breadcrumb-item">List</li>
                     </ul>
                 </div>
             </div>
@@ -24,7 +24,7 @@ $filterable_columns = ['class_type_id'=>true, 'subject_id'=>true, 'chapter_id'=>
                 <div class="card card-outline card-orange col-md-12 col-12 p-0">
                     <div class="card-header bg-primary">
                         <div class="card-title">
-                            <h4><i class="fa fa-desktop"></i> &nbsp;View Questions</h4>
+                            <h4><i class="fa fa-desktop"></i> &nbsp;Exam List</h4>
                         </div>
                         <div class="card-tools">
                             @if(in_array('user_management.edit', $permissions) || Auth::user()->role_id == 1)
@@ -55,18 +55,16 @@ $filterable_columns = ['class_type_id'=>true, 'subject_id'=>true, 'chapter_id'=>
                         </div>
 
                         <div class="table-responsive">
-                            <table id='questionTable' class="table table-bordered table-striped mt-4">
-                                <input type='hidden' value="Question" name='modal_type' />
+                            <table id='examTable' class="table table-bordered table-striped mt-4">
+                                <!-- <input type='hidden' value="Exam" name='modal_type' /> -->
                                 <thead>
                                     <tr class="bg-light">
                                         <th>SR.NO</th>
-                                        <th>Q. Type</th>
-                                        <th>Question</th>
-                                        <th>Ans A</th>
-                                        <th>Ans B</th>
-                                        <th>Ans C</th>
-                                        <th>Ans D</th>
-                                        <th>Correct</th>
+                                        <th>Name</th>
+                                        <th>Created At</th>
+                                        <th>Created By</th>
+                                        <th>Status</th>
+                                        <!-- <th>Assign</th> -->
                                         <th>Action</th>
                                     </tr>
                                 </thead>
@@ -74,11 +72,11 @@ $filterable_columns = ['class_type_id'=>true, 'subject_id'=>true, 'chapter_id'=>
                             </table>
                            <script>
 $(document).ready(function () {
-    const table = $('#questionTable').DataTable({
+    const table = $('#examTable').DataTable({
         processing: true,
         serverSide: true,
         ajax: {
-            url: "{{ url('questionData') }}",
+            url: "{{ url('examData') }}",
             data: function (d) {
                 const formDataArray = [];
                 $('#filterForm').find('input, select, textarea').each(function () {
@@ -95,29 +93,22 @@ $(document).ready(function () {
             }
         },
         columns: [
-            { data: 'DT_RowIndex', name: 'DT_RowIndex', orderable: false, searchable: false },
-            { data: 'question_type', name: 'question_types.name' },
-            { data: 'name', name: 'name' },
-            { data: 'ans_a', name: 'ans_a' },
-            { data: 'ans_b', name: 'ans_b' },
-            { data: 'ans_c', name: 'ans_c' },
-            { data: 'ans_d', name: 'ans_d' },
-            { data: 'correct_ans', name: 'correct_ans' },
-            { data: 'action', name: 'action', orderable: false, searchable: false }
+            { data: 'DT_RowIndex', name: 'DT_RowIndex', orderable: false, searchable: false }, // SR.NO
+            { data: 'name', name: 'name' },         // Exam
+            { data: 'created_at', name: 'created_at' },       // Created At
+            { data: 'created_by', name: 'created_by' },       // Created by
+            { data: 'status', name: 'status' },               // Status
+            // { data: 'assign_to', name: 'assign_to' },         // Assign
+            { data: 'action', name: 'action', orderable: false, searchable: false } // Action
         ],
-
-        // ✅ Add this to apply class to each <tr>
         createdRow: function (row, data, dataIndex) {
-            $(row).addClass('questionRow');
-        },
-
-        drawCallback: function () {
-            updateEquationsInQuestion();
+            $(row).addClass('examRow');
         }
     });
 
-    // ✅ Reload on filter form interaction
-    $('#filterForm').on('click', function (e) {
+    // Reload table on filter change or submit
+    $('#filterForm').on('click', function () {
+    
         table.ajax.reload();
     });
 });
