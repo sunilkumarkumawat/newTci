@@ -62,24 +62,17 @@
                                     </div>
                                     <!-- /.card-header -->
                                     <div class="card-body ">
-
-
+            
+                    
                                         @include('commoninputs.dependentInputs', [
-                                        'modal' => 'AssignedSubjects',
+                                        'modal' => 'Subject',
                                         'name' => 'subject_id',
                                         'selected' => $data->subject_id ?? null,
                                         'label' => 'Subject',
                                         'required' => true,
-                                        'isRequestSent' => isset($data->class_type_id),
-                                        'dependentId' => $data->class_type_id ?? null,
-                                        'foreignKey' => 'class_type_id',
-                                        'attributes' => [
-                                        'data-dependent' => 'chapter_id',
-                                        'data-url' => url(
-                                        '/get-dependent-options'),
-                                        'data-modal' => 'Chapter',
-                                        'data-field' => 'subject_id',
-                                        ],
+                                        'isRequestSent' => isset($examDetails->exam_pattern_id),
+                                        'dependentId' => $examDetails->exam_pattern_id ?? null,
+                                        'foreignKey' => 'exam_pattern_id',
                                         ])
 
                                         <button class='btn-xs btn btn-info' type='button' id='appendSubject'>Append Subject</button>
@@ -93,38 +86,27 @@
                                     <div class="card-header">
                                         <h3 class="card-title">Subject(s) Overview</h3>
                                     </div>
+
+                                    
                                     <!-- /.card-header -->
-                                    <div class="card-body d-flex flex-wrap gap-3">
-                                        <!-- Chemistry -->
-                                        <div class="subject-box p-2 m-1 border rounded flex-fill">
-                                            <strong><i class="fas fa-book mr-1"></i> Chemistry</strong><br>
-                                            <span class="text-muted">Total Questions: 26</span><br>
-                                            <span class="text-muted">Marks per Question: 4</span><br>
-                                            <span class="text-muted">Total Marks: 104</span>
-                                        </div>
+                                 <div class="d-flex flex-wrap gap-2 mb-2 align-items-end" id="questionMarkSection">
+    <div class="me-3">
+        <label for="per_question_marks" class="form-label">Per Question Marks</label>
+        <input type="text" name="per_question_marks" id="per_question_marks" value="4" class="form-control" />
+    </div>
 
-                                        <!-- Physics -->
-                                        <div class="subject-box p-2 m-1 border rounded flex-fill">
-                                            <strong><i class="fas fa-book mr-1"></i> Physics</strong><br>
-                                            <span class="text-muted">Total Questions: 26</span><br>
-                                            <span class="text-muted">Marks per Question: 4</span><br>
-                                            <span class="text-muted">Total Marks: 104</span>
-                                        </div>
+    <div class="me-3">
+        <label for="total_questions" class="form-label">Total Questions</label>
+        <input type="text" name="total_questions" id="total_questions" value="0" class="form-control" />
+    </div>
 
-                                        <!-- Mathematics -->
-                                        <div class="subject-box p-2 m-1 border rounded flex-fill">
-                                            <strong><i class="fas fa-book mr-1"></i> Mathematics</strong><br>
-                                            <span class="text-muted">Total Questions: 26</span><br>
-                                            <span class="text-muted">Marks per Question: 4</span><br>
-                                            <span class="text-muted">Total Marks: 104</span>
-                                        </div>
-                                        <hr class="w-100">
-                                        <!-- Total Summary -->
-                                        <div class="subject-box p-3 border rounded flex-fill" style="min-width: 200px;">
-                                            <strong><i class="fas fa-calculator mr-1"></i> Total</strong><br>
-                                            <span class="text-muted">Total Questions: 78</span><br>
-                                            <span class="text-muted">Total Marks: 312</span>
-                                        </div>
+    <div class="me-3">
+        <label for="total_marks" class="form-label">Total Marks</label>
+        <input type="text" name="total_marks" id="total_marks" value="0" class="form-control" readonly />
+    </div>
+</div>
+                                    <div id="subjectContainer" class="card-body d-flex flex-wrap gap-3">
+                                        
                                     </div>
                                     <!-- /.card-body -->
                                 </div>
@@ -207,7 +189,73 @@
         font-size: 18px;
         white-space: nowrap;
     }
+
+.selected-subject {
+    border: 2px solid #007bff !important;
+    background-color: #f0f8ff;
+}
 </style>
+
+
+<script>
+// Global variables (can be updated from anywhere)
+let totalQuestions = 0;
+let marksPerQuestion = 0;
+
+// Function to update subject details from another function
+function setSubjectDetails(questions, marksPerQ) {
+    totalQuestions = questions;
+    marksPerQuestion = marksPerQ;
+}
+
+// Append subject on button click
+$(document).on('click', '#appendSubject', function () {
+    let subjectId = $('select[name="subject_id"]').val();
+    let subjectName = $('select[name="subject_id"] option:selected').text();
+
+    if (!subjectId) {
+        toastr.warning("Please select a subject.");
+        return;
+    }
+
+    // Check for duplicate subject
+    if ($(`.subject-item[data-subject-id="${subjectId}"]`).length > 0) {
+        toastr.info("Subject already added.");
+        return;
+    }
+
+    let totalMarks = totalQuestions * marksPerQuestion;
+
+    let subjectBox = `
+        <div class="subject-box p-2 m-1 border rounded flex-fill subject-item" 
+             data-subject-id="${subjectId}">
+            <strong><i class="fas fa-book mr-1"></i> ${subjectName}</strong><br>
+            <span class="text-muted">Total Questions: ${totalQuestions}</span><br>
+            <span class="text-muted">Marks per Question: ${marksPerQuestion}</span><br>
+            <span class="text-muted">Total Marks: ${totalMarks}</span>
+        </div>
+    `;
+
+    $('#subjectContainer').append(subjectBox);
+ $('select[name="subject_id"]').val('');
+
+});
+
+// Optional: Click handler for subject box (for future use)
+$(document).on('click', '.subject-item', function () {
+    let subjectId = $(this).data('subject-id');
+    // alert('You clicked subject ID: ' + subjectId);
+
+    // Remove 'selected' class from all boxes
+    $('.subject-item').removeClass('selected-subject');
+
+    // Add 'selected' class to the clicked one
+    $(this).addClass('selected-subject');
+});
+
+// Example call to set dynamic values
+setSubjectDetails(26, 4); // Can be updated anytime from elsewhere
+    </script>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-AMS_HTML"></script>
 @endsection

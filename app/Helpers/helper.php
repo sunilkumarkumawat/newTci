@@ -312,6 +312,8 @@ public static function getSidebar()
 {
    
 
+    
+
 $baseModalName = $modal;
     // Build fully qualified class name if not already
     if (!str_contains($modal, '\\')) {
@@ -338,6 +340,16 @@ $baseModalName = $modal;
     
       // Build id => name array (assumes 'id' and 'name' fields exist)
         return $query->pluck('all_subjects.name', 'all_subjects.id')->toArray();
+    }
+       elseif($baseModalName == 'Subject' && $foreignKey == 'exam_pattern_id')
+    {
+     
+$query = $modal::where(function($q) use ($dependentId) {
+    $q->whereRaw("FIND_IN_SET(?, exam_pattern_id)", [$dependentId])
+      ->orWhere('exam_pattern_id', '=', (string) $dependentId);
+});
+
+return $query->pluck('name', 'id')->toArray();
     }
     else{
      $query = $modal::query();
