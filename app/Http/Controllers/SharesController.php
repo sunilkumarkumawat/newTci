@@ -110,6 +110,25 @@ class SharesController extends Controller
         $data = null;
         return view('student.studentIdPassword',compact('data'));
     }
+
+    public function studentTestHistory()
+    {
+        $data = null;
+        return view('student.studentTestHistory',compact('data'));
+    }
+
+    public function performanceReport()
+    {
+        $data = null;
+        return view('student.performanceReport',compact('data'));
+    }
+
+    public function studentFeesStatus()
+    {
+        $data = null;
+        return view('student.studentFeesStatus',compact('data'));
+    }
+
     public function userPassword()
     {
         $data = null;

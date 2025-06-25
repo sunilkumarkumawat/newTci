@@ -125,6 +125,9 @@ Route::middleware(['auth'])->group(function () {
     Route::match(['get', 'post'], 'studentView', 'StudentController@studentView');
     Route::match(['get', 'post'], 'studentEdit/{id}', 'StudentController@studentEdit');
     Route::match(['get', 'post'], 'studentIdPassword', 'SharesController@studentIdPassword');
+    Route::match(['get', 'post'], 'studentTestHistory', 'SharesController@studentTestHistory');
+    Route::match(['get', 'post'], 'performanceReport', 'SharesController@performanceReport');
+    Route::match(['get', 'post'], 'studentFeesStatus', 'SharesController@studentFeesStatus');
     Route::match(['get', 'post'], 'userPassword', 'SharesController@userPassword');
     Route::match(['get', 'post'], 'allTypeUsersData', 'SharesController@allTypeUsersData');
 
@@ -176,5 +179,19 @@ Route::middleware(['auth'])->group(function () {
     Route::match(['get', 'post'], 'resultAnalysis/dashboard', 'ResultAnalysisController@dashboard');
     Route::match(['get', 'post'], 'test-wise-report', 'ResultAnalysisController@testWiseReport');
     Route::match(['get', 'post'], 'student-wise-report', 'ResultAnalysisController@studentWiseReport');
+    Route::match(['get', 'post'], 'subject-wise-report', 'ResultAnalysisController@subjectWiseReport');
+    Route::match(['get', 'post'], 'batch-wise-comparison', 'ResultAnalysisController@batchWiseComparison');
+    Route::match(['get', 'post'], 'time-based-performance', 'ResultAnalysisController@timeBasedPerformance');
+    Route::match(['get', 'post'], 'examAnalysis', 'ResultAnalysisController@examAnalysis');
+
+
+    //Test Schedular
+    Route::match(['get', 'post'], 'create-new-test', 'TestScheduleController@createNewTest');
+
+    //Student Feedback-Dobt B0x
+    Route::match(['get', 'post'], 'allFeedbackDoubt', 'FeedbackController@allFeedbackDoubt');
+    Route::match(['get', 'post'], 'viewDoubt', 'FeedbackController@viewDoubt');
+
+
 
 });

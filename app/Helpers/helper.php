@@ -124,6 +124,27 @@ public static function getSidebar()
                     'route' => 'studentIdPassword',
                     'icon' => 'fa fa-circle',
                 ],
+                [
+                    'title' => 'Student Test History',
+                    'className' => 'student_management.add',
+                    'status' => true,
+                    'route' => 'studentTestHistory',
+                    'icon' => 'fa fa-circle',
+                ],
+                [
+                    'title' => 'Student Fee Status',
+                    'className' => 'student_management.add',
+                    'status' => true,
+                    'route' => 'studentFeesStatus',
+                    'icon' => 'fa fa-circle',
+                ],
+                [
+                    'title' => 'Performance Report',
+                    'className' => 'student_management.add',
+                    'status' => true,
+                    'route' => 'performanceReport',
+                    'icon' => 'fa fa-circle',
+                ],
                 
             ],
         ],
@@ -234,6 +255,34 @@ public static function getSidebar()
                     'route' => 'student-wise-report',
                     'icon' => 'fa fa-circle',
                 ],
+                [
+                    'title' => 'Subject-Wise Report',
+                    'className' => 'result_analysis.report',
+                    'status' => true,
+                    'route' => 'subject-wise-report',
+                    'icon' => 'fa fa-circle',
+                ],
+                [
+                    'title' => 'Batch-Wise Comparison',
+                    'className' => 'result_analysis.report',
+                    'status' => true,
+                    'route' => 'batch-wise-comparison',
+                    'icon' => 'fa fa-circle',
+                ],
+                [
+                    'title' => 'Time-Based Performance',
+                    'className' => 'result_analysis.report',
+                    'status' => true,
+                    'route' => 'time-based-performance',
+                    'icon' => 'fa fa-circle',
+                ],
+                [
+                    'title' => 'Exam Analysis',
+                    'className' => 'result_analysis.report',
+                    'status' => true,
+                    'route' => 'examAnalysis',
+                    'icon' => 'fa fa-circle',
+                ],
             ],
         ],
         [
@@ -248,6 +297,45 @@ public static function getSidebar()
                     'className' => 'master_management.role',
                     'status' => true,
                     'route' => 'role',
+                    'icon' => 'fa fa-circle',
+                ],
+            ],
+        ],
+        [
+            'title' => 'Test Schedular',
+            'className' => 'test_schedular',
+            'status' => true,
+            'icon' => 'fa fa-sitemap',
+            'subItems' => [
+               
+                [
+                    'title' => 'Create New Test',
+                    'className' => 'test_schedular.createNewTest',
+                    'status' => true,
+                    'route' => 'create-new-test',
+                    'icon' => 'fa fa-circle',
+                ],
+            ],
+        ],
+        [
+            'title' => 'Student Feedback',
+            'className' => 'student_feedback',
+            'status' => true,
+            'icon' => 'fa fa-sitemap',
+            'subItems' => [
+               
+                [
+                    'title' => 'All Feedback/Doubts Overview',
+                    'className' => 'student_feedback.allFeedbackDoubt',
+                    'status' => true,
+                    'route' => 'allFeedbackDoubt',
+                    'icon' => 'fa fa-circle',
+                ],
+                [
+                    'title' => 'View Doubts/Feedback Detail',
+                    'className' => 'student_feedback.viewDoubt',
+                    'status' => true,
+                    'route' => 'viewDoubt',
                     'icon' => 'fa fa-circle',
                 ],
             ],

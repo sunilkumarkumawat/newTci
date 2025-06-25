@@ -64,7 +64,7 @@
                             </div>
 
                             <div class="table-responsive mt-2 ">
-                                <table id='dataContainer'class="table table-bordered table-striped mt-4">
+                                <table id='dataContainer' class="table table-bordered table-striped mt-4">
                                     <thead>
                                         <tr class="bg-light">
                                             <th>SR.NO</th>
