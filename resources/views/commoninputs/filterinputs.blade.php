@@ -99,88 +99,100 @@ $filters = $filters ?? ['keyword' => true,'batches'=>true, 'admission_no' => tru
 @break
 
 @case('chapter_id')
-<div class="col-md-2">
-    @include('commoninputs.dependentInputs', [
-    'modal' => 'Chapter',
-    'name' => 'chapter_id',
-    'selected' => $data->chapter_id ?? null,
-    'label' => 'Chapter',
-    'required' => true,
-    'isRequestSent' => isset($data->subject_id),
-    'dependentId' => $data->subject_id ?? null,
-    'foreignKey' => 'subject_id',
-    'attributes' => [
-    'data-dependent' => 'topic_id',
-    'data-url' => url(
-    '/get-dependent-options'),
-    'data-modal' => 'Topic',
-    'data-field' => 'chapter_id',
-    ],
-    ])
-</div>
+    <div class="col-md-2">
+        @include('commoninputs.dependentInputs', [
+        'modal' => 'Chapter',
+        'name' => 'chapter_id',
+        'selected' => $data->chapter_id ?? null,
+        'label' => 'Chapter',
+        'required' => true,
+        'isRequestSent' => isset($data->subject_id),
+        'dependentId' => $data->subject_id ?? null,
+        'foreignKey' => 'subject_id',
+        'attributes' => [
+        'data-dependent' => 'topic_id',
+        'data-url' => url(
+        '/get-dependent-options'),
+        'data-modal' => 'Topic',
+        'data-field' => 'chapter_id',
+        ],
+        ])
+    </div>
 @break
 
 @case('topic_id')
-<div class="col-md-2">
-    @include('commoninputs.dependentInputs', [
-    'modal' => 'Topic',
-    'name' => 'topic_id',
-    'selected' => $data->topic_id ?? null,
-    'label' => 'Topic',
-    'required' => true,
-    'isRequestSent' => isset($data->chapter_id),
-    'dependentId' => $data->chapter_id ?? null,
-    'foreignKey' => 'chapter_id',
-    ])
-</div>
+    <div class="col-md-2">
+        @include('commoninputs.dependentInputs', [
+        'modal' => 'Topic',
+        'name' => 'topic_id',
+        'selected' => $data->topic_id ?? null,
+        'label' => 'Topic',
+        'required' => true,
+        'isRequestSent' => isset($data->chapter_id),
+        'dependentId' => $data->chapter_id ?? null,
+        'foreignKey' => 'chapter_id',
+        ])
+    </div>
 @break
 
 @case('level_id')
-<div class="col-md-2">
-    @include('commoninputs.inputs', [
-    'modal' => 'Level',
-    'name' => 'level_id',
-    'selected' => null,
-    'label' => 'Search By Level',
-    'required' => false,
-    ])
-</div>
+    <div class="col-md-2">
+        @include('commoninputs.inputs', [
+        'modal' => 'Level',
+        'name' => 'level_id',
+        'selected' => null,
+        'label' => 'Search By Level',
+        'required' => false,
+        ])
+    </div>
 @break
 
 @case('suka_id')
-<div class="col-md-2">
-    @include('commoninputs.inputs', [
-    'modal' => 'Suka',
-    'name' => 'suka_id',
-    'selected' => null,
-    'label' => 'Search By Suka',
-    'required' => false,
-    ])
-</div>
+    <div class="col-md-2">
+        @include('commoninputs.inputs', [
+        'modal' => 'Suka',
+        'name' => 'suka_id',
+        'selected' => null,
+        'label' => 'Search By Suka',
+        'required' => false,
+        ])
+    </div>
 @break
 
 @case('question_type_id')
-<div class="col-md-2">
-    @include('commoninputs.inputs', [
-    'modal' => 'QuestionType',
-    'name' => 'question_type_id',
-    'selected' => null,
-    'label' => 'Search By Question Type',
-    'required' => false,
-    ])
-</div>
+    <div class="col-md-2">
+        @include('commoninputs.inputs', [
+        'modal' => 'QuestionType',
+        'name' => 'question_type_id',
+        'selected' => null,
+        'label' => 'Search By Question Type',
+        'required' => false,
+        ])
+    </div>
+@break
+
+@case('select_exam')
+    <div class="col-md-2">
+        @include('commoninputs.inputs', [
+        'modal' => 'Exam',
+        'name' => 'exam',
+        'selected' => null,
+        'label' => 'Search By Exam',
+        'required' => false,
+        ])
+    </div>
 @break
 
 @case('role_id')
-<div class="col-md-2">
-    @include('commoninputs.inputs', [
-    'modal' => 'Role',
-    'name' => 'role_id',
-    'selected' => null,
-    'label' => 'Search By Role',
-    'required' => false,
-    ])
-</div>
+    <div class="col-md-2">
+        @include('commoninputs.inputs', [
+        'modal' => 'Role',
+        'name' => 'role_id',
+        'selected' => null,
+        'label' => 'Search By Role',
+        'required' => false,
+        ])
+    </div>
 @break
 
 @case('language')
@@ -195,38 +207,38 @@ $filters = $filters ?? ['keyword' => true,'batches'=>true, 'admission_no' => tru
 @break
 
 @case('use')
-<div class="col-md-2">
-    <label>Search By Use</label>
-    <select class="form-control" name="use">
-        <option value="">Select</option>
-        <option value="1">Used In Test</option>
-        <option value="2">Unused</option>
-    </select>
-</div>
+    <div class="col-md-2">
+        <label>Search By Use</label>
+        <select class="form-control" name="use">
+            <option value="">Select</option>
+            <option value="1">Used In Test</option>
+            <option value="2">Unused</option>
+        </select>
+    </div>
 @break
 
 @case('tags')
-<div class="col-md-2">
-    @include('commoninputs.inputs', [
-    'modal' => 'Tags',
-    'name' => 'tags',
-    'selected' => null,
-    'label' => 'Search By Tags',
-    'required' => false,
-    ])
-</div>
+    <div class="col-md-2">
+        @include('commoninputs.inputs', [
+        'modal' => 'Tags',
+        'name' => 'tags',
+        'selected' => null,
+        'label' => 'Search By Tags',
+        'required' => false,
+        ])
+    </div>
 @break
 
 @case('source_id')
-<div class="col-md-2">
-    @include('commoninputs.inputs', [
-    'modal' => 'Source',
-    'name' => 'source_id',
-    'selected' => null,
-    'label' => 'Search By Source',
-    'required' => false,
-    ])
-</div>
+    <div class="col-md-2">
+        @include('commoninputs.inputs', [
+        'modal' => 'Source',
+        'name' => 'source_id',
+        'selected' => null,
+        'label' => 'Search By Source',
+        'required' => false,
+        ])
+    </div>
 @break
 
 @case('is_deleted')
@@ -239,5 +251,18 @@ $filters = $filters ?? ['keyword' => true,'batches'=>true, 'admission_no' => tru
 </div>
 @break
 
+@case('from_date')
+    <div class="col-md-2">
+        <label>From Date</label>
+        <input type="date" name="from_date" class="form-control">
+    </div>
+@break
+
+@case('to_date')
+    <div class="col-md-2">
+        <label>To Date</label>
+        <input type="date" name="to_date" class="form-control">
+    </div>
+@break
 @endswitch
 @endforeach

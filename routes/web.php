@@ -171,10 +171,13 @@ Route::middleware(['auth'])->group(function () {
     Route::match(['get', 'post'], 'questionView', 'SharesController@questionView');
     Route::match(['get', 'post'], 'questionData', 'SharesController@questionData');
 
-    
 
+    
     Route::match(['get', 'post'], 'resultAnalysis/dashboard', 'ResultAnalysisController@dashboard');
     Route::match(['get', 'post'], 'test-wise-report', 'ResultAnalysisController@testWiseReport');
     Route::match(['get', 'post'], 'student-wise-report', 'ResultAnalysisController@studentWiseReport');
 
+    # Reports
+    Route::match(['get', 'post'], 'reports','ReportController@index');
+    Route::match(['get', 'post'], 'get-report-data','ReportController@getReportData');
 });

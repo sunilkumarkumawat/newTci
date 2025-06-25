@@ -138,10 +138,12 @@ class SharesController extends Controller
     {
         return $this->commonService->createCommon($request);
     }
+
      public function changeStatusCommon(Request $request,$modal, $id)
     {
         return $this->commonService->changeStatusCommon($request,$modal, $id);
     }
+    
      public function deleteCommon(Request $request,$modal, $id)
     {
         return $this->commonService->deleteCommon($request,$modal, $id);
