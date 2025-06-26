@@ -703,7 +703,8 @@ input[type="radio"]:checked + label::before {
     gap: 2rem;
     overflow-y: auto;
     border: 1px solid var(--border-color);
-    max-height: calc(100vh - 180px);
+    /* max-height: calc(100vh - 180px); */
+    height: 435px;
 }
 
 .nav-header {

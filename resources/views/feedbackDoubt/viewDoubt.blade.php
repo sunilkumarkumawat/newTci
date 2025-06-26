@@ -75,27 +75,28 @@ foreach($feedback->communications as $comm) {
         <div class="container-fluid">
             
             <!-- Header Section -->
-            <div class="row mb-4">
-                <div class="col-12">
-                    <div class="d-flex justify-content-between align-items-center">
-                        <div>
-                            
-                            <h4 class="mb-1 text-dark font-weight-bold">Feedback Detail</h4>
-                            
-                        </div>
-                        <div class="d-flex gap-2">
-                            <a href="#" class="btn btn-outline-secondary btn-sm">
+             <div class="row">
+                <div class="col-md-12">
+                    <div class="card card-outline card-orange">
+                        <div class="card-header bg-primary">
+                            <div class="card-title">
+                                <h4 style="margin: 4px;"><i class="fa fa-desktop"></i> &nbsp;Feedback Detail</h4>
+                            </div>
+                            <div class="card-tools">
+                               <a href="#" class="btn btn-outline-secondary btn-sm">
                                 <i class="fas fa-arrow-left mr-1"></i> Back to List
                             </a>
                             @if(in_array('feedback_edit', $permissions))
-                            <button class="btn btn-outline-primary btn-sm" data-toggle="modal" data-target="#updateStatusModal">
+                            <button class="btn btn-primary btn-sm" data-toggle="modal" data-target="#updateStatusModal">
                                 <i class="fas fa-edit mr-1"></i> Update Status
                             </button>
                             @endif
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
+           
 
             <div class="row">
                 <!-- Left Column -->
@@ -103,7 +104,7 @@ foreach($feedback->communications as $comm) {
                     
                     <!-- Student Query Card -->
                     <div class="card shadow-sm border-0 mb-4">
-                        <div class="card-header bg-white border-bottom">
+                        <div class="card-header border-bottom" style="background-color:rgb(221, 221, 221);" >
                             <h6 class="mb-0 font-weight-semibold text-dark">
                                 <i class="fas fa-question-circle text-primary mr-2"></i>
                                 Student Query
@@ -122,7 +123,7 @@ foreach($feedback->communications as $comm) {
                                 <div class="row">
                                     @if(isset($feedback->audio_file) && $feedback->audio_file)
                                     <div class="col-md-6 mb-3">
-                                        <div class="media-item p-3 bg-light rounded">
+                                        <div class="media-item p-3  rounded">
                                             <div class="d-flex align-items-center">
                                                 <i class="fas fa-microphone text-success mr-2"></i>
                                                 <small class="text-muted">{{ $feedback->audio_file }}</small>
@@ -132,7 +133,7 @@ foreach($feedback->communications as $comm) {
                                     @endif
                                     @if(isset($feedback->image_file) && $feedback->image_file)
                                     <div class="col-md-6 mb-3">
-                                        <div class="media-item p-3 bg-light rounded">
+                                        <div class="media-item p-3  rounded">
                                             <div class="d-flex align-items-center">
                                                 <i class="fas fa-image text-warning mr-2"></i>
                                                 <small class="text-muted">{{ $feedback->image_file }}</small>
@@ -151,7 +152,7 @@ foreach($feedback->communications as $comm) {
                                 <div class="row">
                                     @foreach($feedback->attachments as $attachment)
                                     <div class="col-md-6 mb-3">
-                                        <div class="attachment-item p-3 bg-light rounded d-flex align-items-center">
+                                        <div class="attachment-item p-3  rounded d-flex align-items-center">
                                             @if(in_array(pathinfo($attachment->file_name, PATHINFO_EXTENSION), ['jpg', 'jpeg', 'png', 'gif']))
                                                 <i class="fas fa-image text-info mr-3"></i>
                                             @elseif(pathinfo($attachment->file_name, PATHINFO_EXTENSION) == 'pdf')
@@ -177,7 +178,7 @@ foreach($feedback->communications as $comm) {
 
                     <!-- Communication History -->
                     <div class="card shadow-sm border-0 mb-4">
-                        <div class="card-header bg-white border-bottom">
+                        <div class="card-header border-bottom" style="background-color: rgb(221, 221, 221);">
                             <h6 class="mb-0 font-weight-semibold text-dark">
                                 <i class="fas fa-comments text-primary mr-2"></i>
                                 Communication History
@@ -202,7 +203,7 @@ foreach($feedback->communications as $comm) {
                                                     </div>
                                                     <small class="text-muted">{{ $comm->created_at->diffForHumans() }}</small>
                                                 </div>
-                                                <div class="message-content p-3 bg-light rounded">
+                                                <div class="message-content p-3  rounded">
                                                     <p class="mb-0">{{ $comm->message }}</p>
                                                     @if($comm->attachment)
                                                     <div class="mt-2 pt-2 border-top">
@@ -231,7 +232,7 @@ foreach($feedback->communications as $comm) {
                     <!-- Response Section -->
                     @if(in_array('feedback_respond', $permissions))
                     <div class="card shadow-sm border-0 mb-4">
-                        <div class="card-header bg-white border-bottom">
+                        <div class="card-header border-bottom" style="background-color: rgb(221, 221, 221);">
                             <h6 class="mb-0 font-weight-semibold text-dark">
                                 <i class="fas fa-reply text-primary mr-2"></i>
                                 Send Response
@@ -304,7 +305,7 @@ foreach($feedback->communications as $comm) {
                     
                     <!-- Student Information -->
                     <div class="card shadow-sm border-0 mb-4">
-                        <div class="card-header bg-white border-bottom">
+                        <div class="card-header border-bottom " style="background-color: rgb(221, 221, 221);">
                             <h6 class="mb-0 font-weight-semibold text-dark">
                                 <i class="fas fa-user text-primary mr-2"></i>
                                 Student Information
@@ -333,7 +334,7 @@ foreach($feedback->communications as $comm) {
 
                     <!-- Status & Details -->
                     <div class="card shadow-sm border-0 mb-4">
-                        <div class="card-header bg-white border-bottom">
+                        <div class="card-header border-bottom" style="background-color: rgb(221, 221, 221);">
                             <h6 class="mb-0 font-weight-semibold text-dark">
                                 <i class="fas fa-info-circle text-primary mr-2"></i>
                                 Status & Details
@@ -378,7 +379,7 @@ foreach($feedback->communications as $comm) {
 
                     <!-- Subject Information -->
                     <div class="card shadow-sm border-0 mb-4">
-                        <div class="card-header bg-white border-bottom">
+                        <div class="card-header  border-bottom" style="background-color: rgb(221, 221, 221);">
                             <h6 class="mb-0 font-weight-semibold text-dark">
                                 <i class="fas fa-book text-primary mr-2"></i>
                                 Subject Details
@@ -457,13 +458,13 @@ foreach($feedback->communications as $comm) {
 }
 
 .card:hover {
-    transform: translateY(-2px);
+    /* transform: translateY(-2px); */
     box-shadow: 0 8px 25px rgba(0,0,0,0.1) !important;
 }
 
 .card-header {
     border-radius: 12px 12px 0 0 !important;
-    padding: 1.25rem 1.5rem;
+    /* padding: 1.25rem 1.5rem; */
 }
 
 /* Typography */
@@ -574,7 +575,7 @@ foreach($feedback->communications as $comm) {
 .form-control {
     border-radius: 8px;
     border: 1px solid #e5e7eb;
-    padding: 0.75rem 1rem;
+    padding: 0.25rem 1rem;
     transition: all 0.2s ease;
 }
 
@@ -624,7 +625,7 @@ foreach($feedback->communications as $comm) {
 }
 
 .btn-outline-secondary {
-    color: #6b7280;
+    color:rgb(255, 255, 255);
     border-color: #d1d5db;
 }
 
