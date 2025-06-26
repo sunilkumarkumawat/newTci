@@ -192,6 +192,11 @@ Route::middleware(['auth'])->group(function () {
     Route::match(['get', 'post'], 'allFeedbackDoubt', 'FeedbackController@allFeedbackDoubt');
     Route::match(['get', 'post'], 'viewDoubt', 'FeedbackController@viewDoubt');
 
+    //Exam Analysis 
+    Route::match(['get', 'post'], 'startExam', 'ExamController@startExam');
+
+
+
 
 
 });

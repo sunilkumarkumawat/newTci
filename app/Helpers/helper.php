@@ -355,6 +355,21 @@ public static function getSidebar()
                 ],
             ],
         ],
+        [
+            'title' => 'Exam',
+            'className' => 'exam',
+            'status' => true,
+            'icon' => 'fa fa-cog',
+            'subItems' => [
+                [
+                    'title' => 'start exam',
+                    'className' => 'exam.startExam',
+                    'status' => true,
+                    'route' => 'startExam',
+                    'icon' => 'fa fa-circle',
+                ],
+            ],
+        ],
     ];
 
     // Filter based on permissions for non-admin users
