@@ -21,6 +21,16 @@ class ExamController extends Controller
     {
         return view('exam.examList');
     }
+    public function getQuestionsByRequest(Request $request, $classId, $subjectId)
+    {
+        // Fetch questions based on classId and subjectId
+        $questions = DB::table('questions')
+            ->where('class_type_id', $classId)
+            ->where('subject_id', $subjectId)
+            ->get();
+
+        return view('exam.questionList', ['questions' => $questions, 'classId' => $classId, 'subjectId' => $subjectId]);
+    }
     public function createExam(Request $request)
     {
 

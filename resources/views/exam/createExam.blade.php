@@ -7,7 +7,7 @@
 
             <form id="quickForm" action="{{ url('add/exam') }}" method="POST" enctype="multipart/form-data">
                 @csrf
-                <div class="row border-bottom border-warning">
+                <div class="row">
 
                     <div class="col-md-3">
                         <div class="row">
@@ -62,8 +62,8 @@
                                     </div>
                                     <!-- /.card-header -->
                                     <div class="card-body ">
-            
-                    
+
+
                                         @include('commoninputs.dependentInputs', [
                                         'modal' => 'Subject',
                                         'name' => 'subject_id',
@@ -74,6 +74,15 @@
                                         'dependentId' => $examDetails->exam_pattern_id ?? null,
                                         'foreignKey' => 'exam_pattern_id',
                                         ])
+
+                                        <div class="form-group">
+                                            <label for="number_of_questions_per_subject" class="form-label">
+                                                Number of Questions Per Subject
+                                                <span class="text-danger">*</span>
+                                            </label>
+
+                                            <input type="number" min='1' name="number_of_questions_per_subject" id="number_of_questions_per_subject" value="35" class="form-control" data-required='true' />
+                                        </div>
 
                                         <button class='btn-xs btn btn-info' type='button' id='appendSubject'>Append Subject</button>
 
@@ -87,32 +96,83 @@
                                         <h3 class="card-title">Subject(s) Overview</h3>
                                     </div>
 
-                                    
-                                    <!-- /.card-header -->
-                                 <div class="d-flex flex-wrap gap-2 mb-2 align-items-end" id="questionMarkSection">
-    <div class="me-3">
-        <label for="per_question_marks" class="form-label">Per Question Marks</label>
-        <input type="text" name="per_question_marks" id="per_question_marks" value="4" class="form-control" />
-    </div>
+                                    <div class="card-body ">
+                                        <div id="subjectContainer" class="justify-content-center card-body d-flex flex-wrap gap-3">
+                                            <span class='empty-message'>Please select a subject to see the overview.</span>
+                                        </div>
 
-    <div class="me-3">
-        <label for="total_questions" class="form-label">Total Questions</label>
-        <input type="text" name="total_questions" id="total_questions" value="0" class="form-control" />
-    </div>
+                                        <div class="d-flex flex-wrap gap-2 mb-2 justify-content-center align-items-end" id="questionMarkSection">
+                                            <div class="mr-2">
+                                                <label for="per_question_marks" class="form-label">Per Question Marks <span class="text-danger">*</span></label>
 
-    <div class="me-3">
-        <label for="total_marks" class="form-label">Total Marks</label>
-        <input type="text" name="total_marks" id="total_marks" value="0" class="form-control" readonly />
-    </div>
-</div>
-                                    <div id="subjectContainer" class="card-body d-flex flex-wrap gap-3">
-                                        
+                                                <input type="text" name="per_question_marks" id="per_question_marks" value="4" class="form-control" />
+                                            </div>
+
+                                            <div class="mr-2">
+                                                <label for="total_questions" class="form-label">Total Questions <span class="text-danger">*</span></label>
+                                                <input type="text" name="total_questions" id="total_questions" value="0" class="form-control" />
+                                            </div>
+
+                                            <div class="mr-2">
+                                                <label for="total_marks" class="form-label">Total Marks</label>
+                                                <input type="text" name="total_marks" id="total_marks" value="0" class="form-control" readonly />
+                                            </div>
+                                        </div>
+
+
                                     </div>
                                     <!-- /.card-body -->
                                 </div>
                             </div>
                         </div>
                     </div>
+                </div>
+
+                <div class="row" id='questionsSelectionSection'>
+
+                    <div class="col-md-12">
+                        <div class="card card-primary">
+                            <div class="card-header">
+                                <h3 class="card-title">Select Questions</h3>
+                            </div>
+
+                            <div class="card-body ">
+
+                                <div class="row">
+                                    <div class="col-md-2">
+                                        @include('commoninputs.inputs', [
+                                        'modal' => 'ClassType', // This decides the data source
+                                        'name' => 'class_type_id',
+                                        'selected' => $data->class_type_id ?? null,
+                                        'label' => 'Select Class',
+                                        'required' => true,
+                                        ])
+
+                                    </div>
+                                    <div class="col-md-12 pt-3">
+                                        <table class="table table-bordered table-striped table-hover table-responsive">
+                                            <thead class="thead-primary">
+                                                <tr>
+                                                    <th>Sr No</th>
+                                                    <th>Name</th>
+                                                    <th>Questions Available</th>
+                                                    <th>Objective</th>
+                                                    <th>Number</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="questionsTableBody">
+                                              
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+
+
+                            </div>
+                            <!-- /.card-body -->
+                        </div>
+                    </div>
+
                 </div>
             </form>
         </div>
@@ -190,72 +250,127 @@
         white-space: nowrap;
     }
 
-.selected-subject {
-    border: 2px solid #007bff !important;
-    background-color: #f0f8ff;
-}
+    .selected-subject {
+        border: 2px solid #007bff !important;
+        background-color: #f0f8ff;
+    }
 </style>
 
 
 <script>
-// Global variables (can be updated from anywhere)
-let totalQuestions = 0;
-let marksPerQuestion = 0;
+    // Global variables
+    let totalQuestions = 0;
+    let marksPerQuestion = 4;
+    let numberOfSelectedSubject = 0;
 
-// Function to update subject details from another function
-function setSubjectDetails(questions, marksPerQ) {
-    totalQuestions = questions;
-    marksPerQuestion = marksPerQ;
-}
+    $('#questionsSelectionSection').hide();
 
-// Append subject on button click
-$(document).on('click', '#appendSubject', function () {
-    let subjectId = $('select[name="subject_id"]').val();
-    let subjectName = $('select[name="subject_id"] option:selected').text();
 
-    if (!subjectId) {
-        toastr.warning("Please select a subject.");
-        return;
+    function loadQuestionsTable(){
+           const url = `{{ url('/getQuestionsByRequest') }}/${1}/${1}`;
+
+                $('#questionsTableBody').load(url);
     }
 
-    // Check for duplicate subject
-    if ($(`.subject-item[data-subject-id="${subjectId}"]`).length > 0) {
-        toastr.info("Subject already added.");
-        return;
+    // Utility: Set total question and mark values
+    function setSubjectDetails(questions, marksPerQ) {
+        totalQuestions += parseInt(questions);
+        marksPerQuestion = marksPerQ;
+        updateTotalFields();
     }
 
-    let totalMarks = totalQuestions * marksPerQuestion;
+    // Utility: Update total fields in the UI
+    function updateTotalFields() {
+        $('#total_questions').val(totalQuestions);
+        $('#total_marks').val(totalQuestions * marksPerQuestion);
+    }
 
-    let subjectBox = `
-        <div class="subject-box p-2 m-1 border rounded flex-fill subject-item" 
-             data-subject-id="${subjectId}">
-            <strong><i class="fas fa-book mr-1"></i> ${subjectName}</strong><br>
-            <span class="text-muted">Total Questions: ${totalQuestions}</span><br>
-            <span class="text-muted">Marks per Question: ${marksPerQuestion}</span><br>
-            <span class="text-muted">Total Marks: ${totalMarks}</span>
-        </div>
-    `;
+    // Utility: Create subject box HTML
+    function createSubjectBox(subjectId, subjectName, numberOfQuestions, marksPerQuestion) {
+        let totalMarks = numberOfQuestions * marksPerQuestion;
 
-    $('#subjectContainer').append(subjectBox);
- $('select[name="subject_id"]').val('');
+        return `
+            <div class="subject-box p-2 m-1 border rounded flex-fill subject-item position-relative" 
+                 data-subject-id="${subjectId}">
+                <button type="button" class="close-btn btn btn-sm btn-danger position-absolute" 
+                style="top: 5px; right: 5px; z-index: 10;" 
+                onclick="removeSubjectBox(this, event)">
+                &times;
+                </button>
+                <strong><i class="fas fa-book mr-1"></i> ${subjectName}</strong><br>
+                <span class="text-muted">Total Questions: ${numberOfQuestions}</span><br>
+                <span class="text-muted">Marks per Question: ${marksPerQuestion}</span><br>
+                <span class="text-muted">Total Marks: ${totalMarks}</span>
+            </div>
+        `;
+    }
 
-});
+    // Event: Append subject on button click
+    $(document).on('click', '#appendSubject', function() {
+        let subjectId = $('select[name="subject_id"]').val();
+        let numberOfQuestions = $('#number_of_questions_per_subject').val();
+        let subjectName = $('select[name="subject_id"] option:selected').text();
 
-// Optional: Click handler for subject box (for future use)
-$(document).on('click', '.subject-item', function () {
-    let subjectId = $(this).data('subject-id');
-    // alert('You clicked subject ID: ' + subjectId);
+        if (!subjectId) {
+            toastr.warning("Please select a subject.");
+            return;
+        }
 
-    // Remove 'selected' class from all boxes
-    $('.subject-item').removeClass('selected-subject');
+        if (isSubjectAlreadyAdded(subjectId)) {
+            toastr.info("Subject already added.");
+            return;
+        }
 
-    // Add 'selected' class to the clicked one
-    $(this).addClass('selected-subject');
-});
+        numberOfSelectedSubject++;
+        setSubjectDetails(numberOfQuestions, marksPerQuestion);
 
-// Example call to set dynamic values
-setSubjectDetails(26, 4); // Can be updated anytime from elsewhere
-    </script>
+        let subjectBoxHtml = createSubjectBox(subjectId, subjectName, numberOfQuestions, marksPerQuestion);
+        $('#subjectContainer').find('.empty-message').remove();
+        $('#subjectContainer').append(subjectBoxHtml);
+
+        $('select[name="subject_id"]').val('');
+    });
+
+    // Utility: Check if subject is already added
+    function isSubjectAlreadyAdded(subjectId) {
+        return $(`.subject-item[data-subject-id="${subjectId}"]`).length > 0;
+    }
+
+    // Reusable: Remove subject box
+    function removeSubjectBox(button, event) {
+        event.stopPropagation(); // ✅ Prevent parent .subject-item click
+
+        const subjectBox = $(button).closest('.subject-box');
+
+        // Extract number of questions
+        const questionsText = subjectBox.find('span:contains("Total Questions:")').text();
+        const match = questionsText.match(/(\d+)/);
+
+        if (match) {
+            const questionsToRemove = parseInt(match[1]);
+            totalQuestions -= questionsToRemove;
+            if (totalQuestions < 0) totalQuestions = 0;
+            updateTotalFields();
+        }
+
+        subjectBox.remove();
+
+        // Hide if no subjects remain
+        $('#questionsSelectionSection').hide();
+    }
+
+    // Optional: Subject item click handler
+    $(document).on('click', '.subject-item', function() {
+
+        let subjectId = $(this).data('subject-id');
+        $('#questionsSelectionSection').show();
+        loadQuestionsTable();
+
+        $('.subject-item').removeClass('selected-subject');
+        $(this).addClass('selected-subject');
+    });
+</script>
+
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-AMS_HTML"></script>
 @endsection
