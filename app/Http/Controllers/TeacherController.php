@@ -32,4 +32,6 @@ class TeacherController extends Controller
     public function teacherView(){               
         return view('teacher/teacherView');
     }
+
+   
 }    

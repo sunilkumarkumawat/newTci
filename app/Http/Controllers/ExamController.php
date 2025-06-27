@@ -113,4 +113,8 @@ class ExamController extends Controller
             ->rawColumns(['status', 'created_by', 'action'])
             ->make(true);
     }
+    public function PaperPreview()
+    {
+        return view('common.questionPreview');
+    }
 }

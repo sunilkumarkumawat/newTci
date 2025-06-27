@@ -199,5 +199,15 @@ Route::middleware(['auth'])->group(function () {
     Route::match(['get', 'post'], 'exam/create', 'ExamController@examCreate');
     Route::match(['get', 'post'], 'examData', 'ExamController@examData');
     Route::match(['get', 'post'], 'createExam', 'ExamController@createExam');
+    Route::match(['get', 'post'], 'paperPreview', 'ExamController@PaperPreview');
     Route::match(['get', 'post'], 'getQuestionsByRequest/{classId}/{subjectId}', 'ExamController@getQuestionsByRequest');
+
+    // reports & Exports
+    Route::match(['get', 'post'], '/facultyReport', 'ReportController@facultyreport');
+    Route::match(['get', 'post'], '/timeAnalysis', 'ReportController@timeAnalysis');
+    Route::match(['get', 'post'], '/doubtSolution', 'ReportController@doubtSolution');
+    Route::match(['get', 'post'], '/attendence_report', 'ReportController@attendencereport');
+    Route::match(['get', 'post'], '/customReport', 'ReportController@customreport');
+
+
 });

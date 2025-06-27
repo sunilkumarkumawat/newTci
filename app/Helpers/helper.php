@@ -355,6 +355,49 @@ public static function getSidebar()
                 ],
             ],
         ],
+        [
+            'title' => 'Report & Export',
+            'className' => 'report_management',
+            'status' => true,
+            'icon' => 'fa-solid fa-file-lines',
+            'subItems' => [
+                [
+                    'title' => 'Faculty Reports',
+                    'className' => 'faculty_report',
+                    'status' => true,
+                    'route' => 'facultyReport',
+                    'icon' => 'fa fa-circle',
+                ],
+                [
+                    'title' => 'Time Analysis',
+                    'className' => 'timeanalysis',
+                    'status' => true,
+                    'route' => 'timeAnalysis',
+                    'icon' => 'fa fa-circle',
+                ],
+                [
+                    'title' => 'Feedback & Doubt',
+                    'className' => 'feedback_doubt',
+                    'status' => true,
+                    'route' => 'doubtSolution',
+                    'icon' => 'fa fa-circle',
+                ],
+                [
+                    'title' => 'Test & Attendence',
+                    'className' => 'attendence_report',
+                    'status' => true,
+                    'route' => 'attendence_report',
+                    'icon' => 'fa fa-circle',
+                ],
+                [
+                    'title' => 'Custom Report',
+                    'className' => 'custom_report',
+                    'status' => true,
+                    'route' => 'customReport',
+                    'icon' => 'fa fa-circle',
+                ],
+            ],
+        ],
     ];
 
     // Filter based on permissions for non-admin users
