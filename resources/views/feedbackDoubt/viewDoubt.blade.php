@@ -73,315 +73,176 @@ foreach($feedback->communications as $comm) {
 <div class="content-wrapper">
     <section class="content">
         <div class="container-fluid">
+            
             <!-- Header Section -->
-            <div class="row mb-3">
-                <div class="col-12">
-                    <div class="card">
-                        <div class="card-header bg-primary text-white">
-                            <div class="d-flex justify-content-between align-items-center">
-                                <h3 class="card-title mb-0">
-                                    <i class="fas fa-question-circle mr-2"></i>
-                                    Feedback Detail - {{ $feedback->type ?? 'Doubt' }}
-                                </h3>
-                                <div>
-                                    <a href="#" class="btn btn-light btn-sm">
-                                        <i class="fas fa-arrow-left mr-1"></i> Back to List
-                                    </a>
-                                    @if(in_array('feedback_edit', $permissions))
-                                    <button class="btn btn-warning btn-sm ml-2" data-toggle="modal" data-target="#updateStatusModal">
-                                        <i class="fas fa-edit mr-1"></i> Update Status
-                                    </button>
+             <div class="row">
+                <div class="col-md-12">
+                    <div class="card card-outline card-orange">
+                        <div class="card-header bg-primary">
+                            <div class="card-title">
+                                <h4 style="margin: 4px;"><i class="fa fa-desktop"></i> &nbsp;Feedback Detail</h4>
+                            </div>
+                            <div class="card-tools">
+                               <a href="#" class="btn btn-outline-secondary btn-sm">
+                                <i class="fas fa-arrow-left mr-1"></i> Back to List
+                            </a>
+                            @if(in_array('feedback_edit', $permissions))
+                            <button class="btn btn-primary btn-sm" data-toggle="modal" data-target="#updateStatusModal">
+                                <i class="fas fa-edit mr-1"></i> Update Status
+                            </button>
+                            @endif
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+           
+
+            <div class="row">
+                <!-- Left Column -->
+                <div class="col-lg-8">
+                    
+                    <!-- Student Query Card -->
+                    <div class="card shadow-sm border-0 mb-4">
+                        <div class="card-header border-bottom" style="background-color:rgb(221, 221, 221);" >
+                            <h6 class="mb-0 font-weight-semibold text-dark">
+                                <i class="fas fa-question-circle text-primary mr-2"></i>
+                                Student Query
+                            </h6>
+                        </div>
+                        <div class="card-body p-4">
+                            <!-- Query Message -->
+                            <div class="mb-4">
+                                <p class="text-muted mb-3 line-height-relaxed">{{ $feedback->message }}</p>
+                            </div>
+
+                            <!-- Media Attachments -->
+                            @if(isset($feedback->audio_file) || isset($feedback->image_file))
+                            <div class="mb-4">
+                                <h6 class="text-muted mb-3 font-weight-semibold">Media Attachments</h6>
+                                <div class="row">
+                                    @if(isset($feedback->audio_file) && $feedback->audio_file)
+                                    <div class="col-md-6 mb-3">
+                                        <div class="media-item p-3  rounded">
+                                            <div class="d-flex align-items-center">
+                                                <i class="fas fa-microphone text-success mr-2"></i>
+                                                <small class="text-muted">{{ $feedback->audio_file }}</small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    @endif
+                                    @if(isset($feedback->image_file) && $feedback->image_file)
+                                    <div class="col-md-6 mb-3">
+                                        <div class="media-item p-3  rounded">
+                                            <div class="d-flex align-items-center">
+                                                <i class="fas fa-image text-warning mr-2"></i>
+                                                <small class="text-muted">{{ $feedback->image_file }}</small>
+                                            </div>
+                                        </div>
+                                    </div>
                                     @endif
                                 </div>
                             </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Student Information Card -->
-            <div class="row mb-3">
-                <div class="col-md-6">
-                    <div class="card">
-                        <div class="card-header bg-info text-white">
-                            <h5 class="card-title mb-0">
-                                <i class="fas fa-user mr-2"></i>Student Information
-                            </h5>
-                        </div>
-                        <div class="card-body">
-                            <div class="row">
-                                <div class="col-6">
-                                    <strong>Name:</strong><br>
-                                    <span class="text-primary">{{ $feedback->student_name ?? 'N/A' }}</span>
-                                </div>
-                                <div class="col-6">
-                                    <strong>Student ID:</strong><br>
-                                    <span class="text-muted">{{ $feedback->student_id ?? 'N/A' }}</span>
-                                </div>
-                            </div>
-                            <div class="row mt-3">
-                                <div class="col-6">
-                                    <strong>Class:</strong><br>
-                                    <span class="badge badge-info">{{ $feedback->class ?? 'N/A' }}</span>
-                                </div>
-                                <div class="col-6">
-                                    <strong>Submission Date:</strong><br>
-                                    <span class="text-muted">{{ $feedback->created_at ? $feedback->created_at->format('d M Y, h:i A') : 'N/A' }}</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Status and Priority Card -->
-                <div class="col-md-6">
-                    <div class="card">
-                        <div class="card-header bg-secondary text-white">
-                            <h5 class="card-title mb-0">
-                                <i class="fas fa-flag mr-2"></i>Status & Priority
-                            </h5>
-                        </div>
-                        <div class="card-body">
-                            <div class="row">
-                                <div class="col-6">
-                                    <strong>Current Status:</strong><br>
-                                    <span class="badge 
-                                        @if($feedback->status == 'Open') badge-danger
-                                        @elseif($feedback->status == 'In Progress') badge-warning
-                                        @elseif($feedback->status == 'Resolved') badge-success
-                                        @else badge-secondary @endif">
-                                        {{ $feedback->status ?? 'Open' }}
-                                    </span>
-                                </div>
-                                <div class="col-6">
-                                    <strong>Type:</strong><br>
-                                    <span class="badge 
-                                        @if($feedback->type == 'Doubt') badge-primary
-                                        @elseif($feedback->type == 'Suggestion') badge-info
-                                        @elseif($feedback->type == 'Complaint') badge-danger
-                                        @else badge-secondary @endif">
-                                        {{ $feedback->type ?? 'Doubt' }}
-                                    </span>
-                                </div>
-                            </div>
-                            <div class="row mt-3">
-                                <div class="col-6">
-                                    <strong>Priority:</strong><br>
-                                    <span class="badge 
-                                        @if($feedback->priority == 'High') badge-danger
-                                        @elseif($feedback->priority == 'Urgent') badge-dark
-                                        @else badge-success @endif">
-                                        {{ $feedback->priority ?? 'Normal' }}
-                                    </span>
-                                </div>
-                                <div class="col-6">
-                                    <strong>Last Updated:</strong><br>
-                                    <span class="text-muted">{{ $feedback->updated_at ? $feedback->updated_at->format('d M Y, h:i A') : 'N/A' }}</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Subject & Chapter Information -->
-            <div class="row mb-3">
-                <div class="col-12">
-                    <div class="card">
-                        <div class="card-header bg-success text-white">
-                            <h5 class="card-title mb-0">
-                                <i class="fas fa-book mr-2"></i>Subject & Chapter Details
-                            </h5>
-                        </div>
-                        <div class="card-body">
-                            <div class="row">
-                                <div class="col-md-4">
-                                    <strong>Subject:</strong><br>
-                                    <span class="text-primary">{{ $feedback->subject ?? 'N/A' }}</span>
-                                </div>
-                                <div class="col-md-4">
-                                    <strong>Chapter:</strong><br>
-                                    <span class="text-info">{{ $feedback->chapter ?? 'N/A' }}</span>
-                                </div>
-                                <div class="col-md-4">
-                                    <strong>Topic:</strong><br>
-                                    <span class="text-secondary">{{ $feedback->topic ?? 'General' }}</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Main Message Card -->
-            <div class="row mb-3">
-                <div class="col-12">
-                    <div class="card">
-                        <div class="card-header bg-dark text-white">
-                            <h5 class="card-title mb-0">
-                                <i class="fas fa-comment-dots mr-2"></i>Student Message
-                            </h5>
-                        </div>
-                        <div class="card-body">
-                            <!-- Text Message -->
-                            @if($feedback->message)
-                            <div class="mb-3">
-                                <h6 class="text-primary"><i class="fas fa-comment mr-1"></i> Text Message:</h6>
-                                <div class="border-left border-primary pl-3">
-                                    <p class="mb-0">{{ $feedback->message }}</p>
-                                </div>
-                            </div>
                             @endif
 
-                            <!-- Audio Message -->
-                            @if(isset($feedback->audio_file) && $feedback->audio_file)
+                            <!-- File Attachments -->
+                            @if(isset($feedback->attachments) && count($feedback->attachments) > 0)
                             <div class="mb-3">
-                                <h6 class="text-success"><i class="fas fa-microphone mr-1"></i> Audio Message:</h6>
-                                <div class="alert alert-info">
-                                    <i class="fas fa-info-circle mr-2"></i>
-                                    Audio file: {{ $feedback->audio_file }}
-                                    <br><small class="text-muted">Note: Audio playback requires actual file in storage/feedback/audio/</small>
-                                </div>
-                                <!-- Uncomment when actual audio file is available -->
-                                <!-- <audio controls class="w-100">
-                                    <source src="{{ asset('storage/feedback/audio/' . $feedback->audio_file) }}" type="audio/mpeg">
-                                    Your browser does not support the audio element.
-                                </audio> -->
-                            </div>
-                            @endif
-
-                            <!-- Image Message -->
-                            @if(isset($feedback->image_file) && $feedback->image_file)
-                            <div class="mb-3">
-                                <h6 class="text-warning"><i class="fas fa-image mr-1"></i> Image Message:</h6>
-                                <div class="alert alert-warning">
-                                    <i class="fas fa-image mr-2"></i>
-                                    Image file: {{ $feedback->image_file }}
-                                    <br><small class="text-muted">Note: Image display requires actual file in storage/feedback/images/</small>
-                                </div>
-                                <!-- Uncomment when actual image file is available -->
-                                <!-- <div class="text-center">
-                                    <img src="{{ asset('storage/feedback/images/' . $feedback->image_file) }}" 
-                                         alt="Student Image" 
-                                         class="img-fluid rounded border"
-                                         style="max-height: 400px; cursor: pointer;"
-                                         data-toggle="modal" 
-                                         data-target="#imageModal">
-                                </div> -->
-                            </div>
-                            @endif
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Attachments Card -->
-            @if(isset($feedback->attachments) && count($feedback->attachments) > 0)
-            <div class="row mb-3">
-                <div class="col-12">
-                    <div class="card">
-                        <div class="card-header bg-warning text-white">
-                            <h5 class="card-title mb-0">
-                                <i class="fas fa-paperclip mr-2"></i>Attachments & Screenshots
-                            </h5>
-                        </div>
-                        <div class="card-body">
-                            <div class="row">
-                                @foreach($feedback->attachments as $attachment)
-                                <div class="col-md-3 mb-3">
-                                    <div class="card h-100">
-                                        <div class="card-body text-center">
+                                <h6 class="text-muted mb-3 font-weight-semibold">Attachments</h6>
+                                <div class="row">
+                                    @foreach($feedback->attachments as $attachment)
+                                    <div class="col-md-6 mb-3">
+                                        <div class="attachment-item p-3  rounded d-flex align-items-center">
                                             @if(in_array(pathinfo($attachment->file_name, PATHINFO_EXTENSION), ['jpg', 'jpeg', 'png', 'gif']))
-                                                <i class="fas fa-image fa-3x text-success mb-2"></i>
+                                                <i class="fas fa-image text-info mr-3"></i>
                                             @elseif(pathinfo($attachment->file_name, PATHINFO_EXTENSION) == 'pdf')
-                                                <i class="fas fa-file-pdf fa-3x text-danger mb-2"></i>
+                                                <i class="fas fa-file-pdf text-danger mr-3"></i>
                                             @else
-                                                <i class="fas fa-file fa-3x text-muted mb-2"></i>
+                                                <i class="fas fa-file text-muted mr-3"></i>
                                             @endif
-                                            <h6 class="card-title">{{ $attachment->original_name ?? 'File' }}</h6>
-                                            <p class="small text-muted">{{ $attachment->file_name }}</p>
-                                            <button class="btn btn-primary btn-sm" onclick="alert('File download requires actual file in storage')">
-                                                <i class="fas fa-download mr-1"></i>Download
+                                            <div class="flex-grow-1">
+                                                <p class="mb-0 font-weight-medium">{{ $attachment->original_name ?? 'File' }}</p>
+                                                <small class="text-muted">{{ strtoupper(pathinfo($attachment->file_name, PATHINFO_EXTENSION)) }}</small>
+                                            </div>
+                                            <button class="btn btn-sm btn-outline-primary" onclick="alert('File download requires actual file in storage')">
+                                                <i class="fas fa-download"></i>
                                             </button>
                                         </div>
                                     </div>
+                                    @endforeach
                                 </div>
-                                @endforeach
                             </div>
+                            @endif
                         </div>
                     </div>
-                </div>
-            </div>
-            @endif
 
-            <!-- Communication History Card -->
-            <div class="row mb-3">
-                <div class="col-12">
-                    <div class="card">
-                        <div class="card-header bg-purple text-white">
-                            <h5 class="card-title mb-0">
-                                <i class="fas fa-history mr-2"></i>Communication History
-                            </h5>
+                    <!-- Communication History -->
+                    <div class="card shadow-sm border-0 mb-4">
+                        <div class="card-header border-bottom" style="background-color: rgb(221, 221, 221);">
+                            <h6 class="mb-0 font-weight-semibold text-dark">
+                                <i class="fas fa-comments text-primary mr-2"></i>
+                                Communication History
+                            </h6>
                         </div>
-                        <div class="card-body">
+                        <div class="card-body p-4">
                             @if(isset($feedback->communications) && count($feedback->communications) > 0)
-                                <div class="timeline">
-                                    @foreach($feedback->communications as $comm)
-                                    <div class="time-label">
-                                        <span class="bg-info">{{ $comm->created_at->format('d M Y') }}</span>
-                                    </div>
-                                    <div>
-                                        <i class="fas fa-{{ $comm->sender_type == 'teacher' ? 'chalkboard-teacher' : 'user-graduate' }} bg-{{ $comm->sender_type == 'teacher' ? 'success' : 'primary' }}"></i>
-                                        <div class="timeline-item">
-                                            <span class="time">
-                                                <i class="fas fa-clock"></i> {{ $comm->created_at->format('h:i A') }}
-                                            </span>
-                                            <h3 class="timeline-header">
-                                                <strong>{{ $comm->sender_name }}</strong> 
-                                                <small class="text-muted">({{ ucfirst($comm->sender_type) }})</small>
-                                            </h3>
-                                            <div class="timeline-body">
-                                                {{ $comm->message }}
-                                                @if($comm->attachment)
-                                                <br><br>
-                                                <div class="alert alert-info mt-2">
-                                                    <i class="fas fa-paperclip mr-1"></i>
-                                                    Attachment: {{ $comm->attachment }}
-                                                    <br><small>Note: File viewing requires actual file in storage/communications/</small>
+                                <div class="communication-timeline">
+                                    @foreach($feedback->communications as $index => $comm)
+                                    <div class="communication-item {{ $index !== count($feedback->communications) - 1 ? 'mb-4' : '' }}">
+                                        <div class="d-flex">
+                                            <div class="flex-shrink-0 mr-3">
+                                                <div class="avatar-circle {{ $comm->sender_type == 'teacher' ? 'bg-success' : 'bg-primary' }}">
+                                                    <i class="fas fa-{{ $comm->sender_type == 'teacher' ? 'chalkboard-teacher' : 'user-graduate' }} text-white"></i>
                                                 </div>
-                                                @endif
+                                            </div>
+                                            <div class="flex-grow-1">
+                                                <div class="d-flex justify-content-between align-items-start mb-2">
+                                                    <div>
+                                                        <h6 class="mb-0 font-weight-semibold">{{ $comm->sender_name }}</h6>
+                                                        <small class="text-muted">{{ ucfirst($comm->sender_type) }}</small>
+                                                    </div>
+                                                    <small class="text-muted">{{ $comm->created_at->diffForHumans() }}</small>
+                                                </div>
+                                                <div class="message-content p-3  rounded">
+                                                    <p class="mb-0">{{ $comm->message }}</p>
+                                                    @if($comm->attachment)
+                                                    <div class="mt-2 pt-2 border-top">
+                                                        <small class="text-primary">
+                                                            <i class="fas fa-paperclip mr-1"></i>
+                                                            {{ $comm->attachment }}
+                                                        </small>
+                                                    </div>
+                                                    @endif
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
                                     @endforeach
                                 </div>
                             @else
-                                <div class="text-center text-muted py-4">
-                                    <i class="fas fa-comments fa-3x mb-3"></i>
-                                    <h5>No Communication History</h5>
-                                    <p>This is the first message in this conversation.</p>
+                                <div class="text-center py-5">
+                                    <i class="fas fa-comments fa-3x text-muted mb-3"></i>
+                                    <h6 class="text-muted">No Communication History</h6>
+                                    <p class="text-muted mb-0">This is the first message in this conversation.</p>
                                 </div>
                             @endif
                         </div>
                     </div>
-                </div>
-            </div>
 
-            <!-- Response Section -->
-            @if(in_array('feedback_respond', $permissions))
-            <div class="row mb-3">
-                <div class="col-12">
-                    <div class="card">
-                        <div class="card-header bg-primary text-white">
-                            <h5 class="card-title mb-0">
-                                <i class="fas fa-reply mr-2"></i>Send Response
-                            </h5>
+                    <!-- Response Section -->
+                    @if(in_array('feedback_respond', $permissions))
+                    <div class="card shadow-sm border-0 mb-4">
+                        <div class="card-header border-bottom" style="background-color: rgb(221, 221, 221);">
+                            <h6 class="mb-0 font-weight-semibold text-dark">
+                                <i class="fas fa-reply text-primary mr-2"></i>
+                                Send Response
+                            </h6>
                         </div>
-                        <div class="card-body">
+                        <div class="card-body p-4">
                             <form action="#" method="POST" enctype="multipart/form-data" onsubmit="event.preventDefault(); alert('Form submission disabled in static demo');">
                                 @csrf
-                                <div class="form-group">
-                                    <label for="response_message">Your Response <span class="text-danger">*</span></label>
+                                <div class="form-group mb-4">
+                                    <label for="response_message" class="form-label font-weight-semibold">Response Message</label>
                                     <textarea class="form-control" 
                                               id="response_message" 
                                               name="response_message" 
@@ -389,20 +250,25 @@ foreach($feedback->communications as $comm) {
                                               placeholder="Type your response here..."
                                               required></textarea>
                                 </div>
-                                <div class="form-group">
-                                    <label for="response_attachment">Attach File (Optional)</label>
-                                    <input type="file" 
-                                           class="form-control-file" 
-                                           id="response_attachment" 
-                                           name="response_attachment"
-                                           accept=".jpg,.jpeg,.png,.pdf,.doc,.docx">
+                                
+                                <div class="form-group mb-4">
+                                    <label for="response_attachment" class="form-label font-weight-semibold">Attach File (Optional)</label>
+                                    <div class="custom-file">
+                                        <input type="file" 
+                                               class="custom-file-input" 
+                                               id="response_attachment" 
+                                               name="response_attachment"
+                                               accept=".jpg,.jpeg,.png,.pdf,.doc,.docx">
+                                        <label class="custom-file-label" for="response_attachment">Choose file</label>
+                                    </div>
                                     <small class="form-text text-muted">
                                         Allowed formats: JPG, PNG, PDF, DOC, DOCX (Max: 5MB)
                                     </small>
                                 </div>
-                                <div class="form-group row">
+                                
+                                <div class="row mb-4">
                                     <div class="col-md-6">
-                                        <label for="update_status">Update Status</label>
+                                        <label for="update_status" class="form-label font-weight-semibold">Update Status</label>
                                         <select class="form-control" id="update_status" name="update_status">
                                             <option value="In Progress" {{ $feedback->status == 'In Progress' ? 'selected' : '' }}>In Progress</option>
                                             <option value="Resolved" {{ $feedback->status == 'Resolved' ? 'selected' : '' }}>Resolved</option>
@@ -410,7 +276,7 @@ foreach($feedback->communications as $comm) {
                                         </select>
                                     </div>
                                     <div class="col-md-6">
-                                        <label for="priority">Set Priority</label>
+                                        <label for="priority" class="form-label font-weight-semibold">Set Priority</label>
                                         <select class="form-control" id="priority" name="priority">
                                             <option value="Normal" {{ ($feedback->priority ?? 'Normal') == 'Normal' ? 'selected' : '' }}>Normal</option>
                                             <option value="High" {{ ($feedback->priority ?? '') == 'High' ? 'selected' : '' }}>High</option>
@@ -418,51 +284,136 @@ foreach($feedback->communications as $comm) {
                                         </select>
                                     </div>
                                 </div>
-                                <div class="form-group">
+                                
+                                <div class="d-flex justify-content-end">
+                                    <button type="button" class="btn btn-outline-secondary mr-2" onclick="document.getElementById('response_message').value='';">
+                                        <i class="fas fa-eraser mr-1"></i>Clear
+                                    </button>
                                     <button type="submit" class="btn btn-primary">
                                         <i class="fas fa-paper-plane mr-1"></i>Send Response
-                                    </button>
-                                    <button type="button" class="btn btn-secondary ml-2" onclick="document.getElementById('response_message').value='';">
-                                        <i class="fas fa-eraser mr-1"></i>Clear
                                     </button>
                                 </div>
                             </form>
                         </div>
                     </div>
+                    @endif
+
+                </div>
+
+                <!-- Right Sidebar -->
+                <div class="col-lg-4">
+                    
+                    <!-- Student Information -->
+                    <div class="card shadow-sm border-0 mb-4">
+                        <div class="card-header border-bottom " style="background-color: rgb(221, 221, 221);">
+                            <h6 class="mb-0 font-weight-semibold text-dark">
+                                <i class="fas fa-user text-primary mr-2"></i>
+                                Student Information
+                            </h6>
+                        </div>
+                        <div class="card-body p-4">
+                            <div class="info-item mb-3">
+                                <label class="text-muted font-weight-semibold">Name</label>
+                                <p class="mb-0 font-weight-medium">{{ $feedback->student_name ?? 'N/A' }}</p>
+                            </div>
+                            <div class="info-item mb-3">
+                                <label class="text-muted font-weight-semibold">Student ID</label>
+                                <p class="mb-0">{{ $feedback->student_id ?? 'N/A' }}</p>
+                            </div>
+                            <div class="info-item mb-3">
+                                <label class="text-muted font-weight-semibold">Class</label>
+                                <span class="badge badge-light">{{ $feedback->class ?? 'N/A' }}</span>
+                            </div>
+                            <div class="info-item">
+                                <label class="text-muted font-weight-semibold">Submission Date</label>
+                                <p class="mb-0">{{ $feedback->created_at ? $feedback->created_at->format('M d, Y') : 'N/A' }}</p>
+                                <small class="text-muted">{{ $feedback->created_at ? $feedback->created_at->format('h:i A') : '' }}</small>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Status & Details -->
+                    <div class="card shadow-sm border-0 mb-4">
+                        <div class="card-header border-bottom" style="background-color: rgb(221, 221, 221);">
+                            <h6 class="mb-0 font-weight-semibold text-dark">
+                                <i class="fas fa-info-circle text-primary mr-2"></i>
+                                Status & Details
+                            </h6>
+                        </div>
+                        <div class="card-body p-4">
+                            <div class="info-item mb-3">
+                                <label class="text-muted font-weight-semibold">Status</label>
+                                <div>
+                                    <span class="status-badge 
+                                        @if($feedback->status == 'Open') status-open
+                                        @elseif($feedback->status == 'In Progress') status-progress
+                                        @elseif($feedback->status == 'Resolved') status-resolved
+                                        @else status-default @endif">
+                                        {{ $feedback->status ?? 'Open' }}
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="info-item mb-3">
+                                <label class="text-muted font-weight-semibold">Type</label>
+                                <div>
+                                    <span class="badge badge-primary">{{ $feedback->type ?? 'Doubt' }}</span>
+                                </div>
+                            </div>
+                            <div class="info-item mb-3">
+                                <label class="text-muted font-weight-semibold">Priority</label>
+                                <div>
+                                    <span class="priority-badge 
+                                        @if($feedback->priority == 'High') priority-high
+                                        @elseif($feedback->priority == 'Urgent') priority-urgent
+                                        @else priority-normal @endif">
+                                        {{ $feedback->priority ?? 'Normal' }}
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="info-item">
+                                <label class="text-muted font-weight-semibold">Last Updated</label>
+                                <p class="mb-0">{{ $feedback->updated_at ? $feedback->updated_at->diffForHumans() : 'N/A' }}</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Subject Information -->
+                    <div class="card shadow-sm border-0 mb-4">
+                        <div class="card-header  border-bottom" style="background-color: rgb(221, 221, 221);">
+                            <h6 class="mb-0 font-weight-semibold text-dark">
+                                <i class="fas fa-book text-primary mr-2"></i>
+                                Subject Details
+                            </h6>
+                        </div>
+                        <div class="card-body p-4">
+                            <div class="info-item mb-3">
+                                <label class="text-muted font-weight-semibold">Subject</label>
+                                <p class="mb-0 font-weight-medium">{{ $feedback->subject ?? 'N/A' }}</p>
+                            </div>
+                            <div class="info-item mb-3">
+                                <label class="text-muted font-weight-semibold">Chapter</label>
+                                <p class="mb-0">{{ $feedback->chapter ?? 'N/A' }}</p>
+                            </div>
+                            <div class="info-item">
+                                <label class="text-muted font-weight-semibold">Topic</label>
+                                <p class="mb-0">{{ $feedback->topic ?? 'General' }}</p>
+                            </div>
+                        </div>
+                    </div>
+
                 </div>
             </div>
-            @endif
 
         </div>
     </section>
 </div>
 
-<!-- Image Modal -->
-<div class="modal fade" id="imageModal" tabindex="-1" role="dialog" aria-labelledby="imageModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="imageModalLabel">Student Image</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body text-center">
-                <div class="alert alert-info">
-                    <i class="fas fa-image mr-2"></i>
-                    Image would be displayed here when actual file is available
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
 <!-- Status Update Modal -->
 <div class="modal fade" id="updateStatusModal" tabindex="-1" role="dialog" aria-labelledby="updateStatusModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="updateStatusModalLabel">Update Status</h5>
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content border-0 shadow">
+            <div class="modal-header border-bottom">
+                <h5 class="modal-title font-weight-semibold" id="updateStatusModalLabel">Update Feedback Status</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -470,22 +421,22 @@ foreach($feedback->communications as $comm) {
             <form action="#" method="POST" onsubmit="event.preventDefault(); alert('Status update disabled in static demo'); $('#updateStatusModal').modal('hide');">
                 @csrf
                 @method('PUT')
-                <div class="modal-body">
-                    <div class="form-group">
-                        <label for="modal_status">Status</label>
+                <div class="modal-body p-4">
+                    <div class="form-group mb-4">
+                        <label for="modal_status" class="form-label font-weight-semibold">Status</label>
                         <select class="form-control" id="modal_status" name="status" required>
                             <option value="Open" {{ $feedback->status == 'Open' ? 'selected' : '' }}>Open</option>
                             <option value="In Progress" {{ $feedback->status == 'In Progress' ? 'selected' : '' }}>In Progress</option>
                             <option value="Resolved" {{ $feedback->status == 'Resolved' ? 'selected' : '' }}>Resolved</option>
                         </select>
                     </div>
-                    <div class="form-group">
-                        <label for="modal_notes">Notes (Optional)</label>
+                    <div class="form-group mb-0">
+                        <label for="modal_notes" class="form-label font-weight-semibold">Notes (Optional)</label>
                         <textarea class="form-control" id="modal_notes" name="notes" rows="3" placeholder="Add any notes about this status update..."></textarea>
                     </div>
                 </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                <div class="modal-footer border-top">
+                    <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Cancel</button>
                     <button type="submit" class="btn btn-primary">Update Status</button>
                 </div>
             </form>
@@ -494,83 +445,402 @@ foreach($feedback->communications as $comm) {
 </div>
 
 <style>
-.timeline {
-    position: relative;
-    margin: 0 0 30px 0;
-    padding: 0;
-    list-style: none;
+/* Clean and Modern Styling */
+.content-wrapper {
+    background-color: #f8f9fa;
+    min-height: 100vh;
 }
 
-.timeline:before {
+/* Cards */
+.card {
+    border-radius: 12px;
+    transition: all 0.2s ease;
+}
+
+.card:hover {
+    /* transform: translateY(-2px); */
+    box-shadow: 0 8px 25px rgba(0,0,0,0.1) !important;
+}
+
+.card-header {
+    border-radius: 12px 12px 0 0 !important;
+    /* padding: 1.25rem 1.5rem; */
+}
+
+/* Typography */
+.font-weight-semibold {
+    font-weight: 600;
+}
+
+.line-height-relaxed {
+    line-height: 1.7;
+}
+
+/* Status Badges */
+.status-badge {
+    padding: 0.375rem 0.75rem;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.status-open {
+    background-color: #fee2e2;
+    color: #dc2626;
+}
+
+.status-progress {
+    background-color: #fef3c7;
+    color: #d97706;
+}
+
+.status-resolved {
+    background-color: #d1fae5;
+    color: #059669;
+}
+
+.status-default {
+    background-color: #f3f4f6;
+    color: #6b7280;
+}
+
+/* Priority Badges */
+.priority-badge {
+    padding: 0.25rem 0.5rem;
+    border-radius: 12px;
+    font-size: 0.75rem;
+    font-weight: 600;
+}
+
+.priority-normal {
+    background-color: #d1fae5;
+    color: #059669;
+}
+
+.priority-high {
+    background-color: #fecaca;
+    color: #dc2626;
+}
+
+.priority-urgent {
+    background-color: #f3e8ff;
+    color: #7c3aed;
+}
+
+/* Info Items */
+.info-item label {
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 0.25rem;
+    display: block;
+}
+
+/* Communication Timeline */
+.communication-timeline {
+    position: relative;
+}
+
+.communication-item {
+    position: relative;
+}
+
+.communication-item:not(:last-child):before {
     content: '';
     position: absolute;
-    top: 0;
-    bottom: 0;
-    width: 4px;
-    background: #ddd;
-    left: 31px;
-    margin: 0;
-    border-radius: 2px;
+    left: 24px;
+    top: 50px;
+    width: 2px;
+    height: calc(100% - 50px);
+    background: #e5e7eb;
 }
 
-.timeline > li {
-    position: relative;
-    margin: 0 0 20px 0;
-    padding: 0;
-}
-
-.timeline > li > .timeline-item {
-    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
-    border-radius: 3px;
-    margin-top: 0;
-    background: #fff;
-    color: #444;
-    margin-left: 60px;
-    margin-right: 15px;
-    padding: 0;
-    position: relative;
-}
-
-.timeline > li > .fa,
-.timeline > li > .glyphicon,
-.timeline > li > .ion {
-    width: 30px;
-    height: 30px;
-    font-size: 15px;
-    line-height: 30px;
-    position: absolute;
-    color: #666;
-    background: #d2d6de;
+.avatar-circle {
+    width: 48px;
+    height: 48px;
     border-radius: 50%;
-    text-align: center;
-    left: 18px;
-    top: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
 }
 
-.timeline > .time-label > span {
-    font-weight: 600;
-    color: #fff;
-    border-radius: 4px;
-    display: inline-block;
-    padding: 5px;
+.message-content {
+    border-left: 3px solid #e5e7eb;
 }
 
-.timeline-header {
-    margin: 0;
-    color: #555;
-    border-bottom: 1px solid #f4f4f4;
-    padding: 10px;
-    font-weight: 600;
-    font-size: 16px;
+/* Form Styling */
+.form-control {
+    border-radius: 8px;
+    border: 1px solid #e5e7eb;
+    padding: 0.25rem 1rem;
+    transition: all 0.2s ease;
 }
 
-.timeline-body,
-.timeline-footer {
-    padding: 10px;
+.form-control:focus {
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
 }
 
-.bg-purple {
-    background-color: #605ca8 !important;
+.form-label {
+    margin-bottom: 0.5rem;
+    color: #374151;
+}
+
+/* Buttons */
+.btn {
+    border-radius: 8px;
+    padding: 0.5rem 1rem;
+    font-weight: 500;
+    transition: all 0.2s ease;
+}
+
+.btn-sm {
+    padding: 0.375rem 0.75rem;
+    font-size: 0.8rem;
+}
+
+.btn-primary {
+    background-color: #3b82f6;
+    border-color: #3b82f6;
+}
+
+.btn-primary:hover {
+    background-color: #2563eb;
+    border-color: #2563eb;
+    transform: translateY(-1px);
+}
+
+.btn-outline-primary {
+    color: #3b82f6;
+    border-color: #3b82f6;
+}
+
+.btn-outline-primary:hover {
+    background-color: #3b82f6;
+    border-color: #3b82f6;
+    transform: translateY(-1px);
+}
+
+.btn-outline-secondary {
+    color:rgb(255, 255, 255);
+    border-color: #d1d5db;
+}
+
+.btn-outline-secondary:hover {
+    background-color: #6b7280;
+    border-color: #6b7280;
+    transform: translateY(-1px);
+}
+
+/* Media Items */
+.media-item, .attachment-item {
+    border: 1px solid #e5e7eb;
+    transition: all 0.2s ease;
+}
+
+.media-item:hover, .attachment-item:hover {
+    border-color: #3b82f6;
+    background-color: #f8faff !important;
+}
+
+/* Breadcrumb */
+.breadcrumb-item a {
+    text-decoration: none;
+}
+
+.breadcrumb-item a:hover {
+    text-decoration: underline;
+}
+
+/* Modal */
+.modal-content {
+    border-radius: 16px;
+}
+
+.modal-header {
+    border-radius: 16px 16px 0 0;
+}
+
+/* Badge Styling */
+.badge {
+    padding: 0.375rem 0.75rem;
+    border-radius: 12px;
+    font-weight: 500;
+}
+
+.badge-light {
+    background-color: #f8f9fa;
+    color: #495057;
+    border: 1px solid #e9ecef;
+}
+
+.badge-primary {
+    background-color: #3b82f6;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .card-body {
+        padding: 1.5rem !important;
+    }
+    
+    .d-flex.gap-2 {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+    
+    .btn-sm {
+        width: 100%;
+        margin-bottom: 0.5rem;
+    }
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+    width: 6px;
+}
+
+::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #c1c1c1;
+    border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #a8a8a8;
+}
+
+/* Additional Utility Classes */
+.shadow-soft {
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.text-soft {
+    color: #6b7280;
+}
+
+.bg-gradient-primary {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+.bg-gradient-success {
+    background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+}
+
+/* Animation keyframes */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.fade-in-up {
+    animation: fadeInUp 0.5s ease-out;
+}
+
+/* Focus states for accessibility */
+.btn:focus,
+.form-control:focus,
+.custom-file-input:focus ~ .custom-file-label {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+}
+
+/* Custom file upload styling */
+.custom-file-label {
+    border-radius: 8px;
+    border: 1px solid #e5e7eb;
+    padding: 0.75rem 1rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.custom-file-label:hover {
+    border-color: #3b82f6;
+    background-color: #f8faff;
+}
+
+.custom-file-input:focus ~ .custom-file-label {
+    border-color: #3b82f6;
+}
+
+/* Loading states */
+.btn.loading {
+    position: relative;
+    color: transparent;
+}
+
+.btn.loading::after {
+    content: '';
+    position: absolute;
+    width: 16px;
+    height: 16px;
+    top: 50%;
+    left: 50%;
+    margin-left: -8px;
+    margin-top: -8px;
+    border: 2px solid #ffffff;
+    border-radius: 50%;
+    border-top-color: transparent;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* Improved spacing utilities */
+.mb-6 {
+    margin-bottom: 3rem;
+}
+
+.mt-6 {
+    margin-top: 3rem;
+}
+
+.p-6 {
+    padding: 3rem;
+}
+
+/* Text selection styling */
+::selection {
+    background-color: rgba(59, 130, 246, 0.2);
+    color: #1e40af;
+}
+
+::-moz-selection {
+    background-color: rgba(59, 130, 246, 0.2);
+    color: #1e40af;
+}
+
+/* Print styles */
+@media print {
+    .btn, .modal, .breadcrumb {
+        display: none !important;
+    }
+    
+    .card {
+        border: 1px solid #000 !important;
+        box-shadow: none !important;
+    }
+    
+    .card-body {
+        padding: 1rem !important;
+    }
 }
 </style>
 

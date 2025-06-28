@@ -191,6 +191,13 @@ Route::middleware(['auth'])->group(function () {
     //Student Feedback-Dobt B0x
     Route::match(['get', 'post'], 'allFeedbackDoubt', 'FeedbackController@allFeedbackDoubt');
     Route::match(['get', 'post'], 'viewDoubt', 'FeedbackController@viewDoubt');
+    Route::match(['get', 'post'], 'feedbackAnalytics', 'FeedbackController@feedbackAnalytics');
+    Route::match(['get', 'post'], 'archiveExport', 'FeedbackController@archiveExport');
+
+    //Exam Analysis 
+    Route::match(['get', 'post'], 'startExam', 'ExamController@startExam');
+
+
 
 
 

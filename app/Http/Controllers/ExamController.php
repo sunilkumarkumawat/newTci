@@ -187,4 +187,9 @@ class ExamController extends Controller
     //         'questionsBySubject' => $questionsBySubject
     //     ]);
     // }
+    public function startExam(){
+        return view('exam.startExam');
+    }
+
 }
+

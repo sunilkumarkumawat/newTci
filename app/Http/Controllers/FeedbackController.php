@@ -13,4 +13,11 @@ class FeedbackController extends Controller
     public function viewDoubt(){
         return view('feedbackDoubt.viewDoubt');
     }
+
+     public function feedbackAnalytics(){
+        return view('feedbackDoubt.feedbackAnalytics');
+    }
+     public function archiveExport(){
+        return view('feedbackDoubt.archiveExport');
+    }
 }
