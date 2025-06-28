@@ -394,16 +394,35 @@
         });
 
         // Optional: Subject item click handler
-        $(document).on('click', '#generatePreview', function() {
-            loadPreview();
-        });
+         $(document).on('click', '#generatePreview', function() {
+        let questionIds = {
+            'Physics': [1, 3, 4],
+            'Chemistry': [5, 7, 9]
+        };
+        loadPreview(questionIds);
+    });
 
 
-        function loadPreview() {
-            const url = `{{ url('/paperPreview') }}`;
+      
+function loadPreview(questionIds) {
+    const url = `{{ url('/paperPreview') }}`;
 
-            $('#loadPreview').load(url);
+    $.ajax({
+        url: url,
+        type: 'POST',
+        data: {
+            questionIds: JSON.stringify(questionIds),
+            _token: '{{ csrf_token() }}'
+        },
+        success: function(response) {
+            $('#loadPreview').html(response);
+        },
+        error: function(xhr) {
+            console.error("Preview load failed:", xhr);
         }
+    });
+}
+
     </script>
 
 

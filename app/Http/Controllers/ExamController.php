@@ -4,8 +4,10 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Exam;
+use App\Models\Question;
 use DB;
 use Yajra\DataTables\Facades\DataTables;
+use App\Helpers\helper;
 
 class ExamController extends Controller
 {
@@ -113,8 +115,76 @@ class ExamController extends Controller
             ->rawColumns(['status', 'created_by', 'action'])
             ->make(true);
     }
-    public function PaperPreview()
+
+
+    public function PaperPreview(Request $request)
     {
-        return view('common.questionPreview');
+        $jsonData = $request->input('questionIds');
+
+
+        // Decode subject => [question_ids] array
+        $questionIdsBySubject = json_decode($jsonData, true);
+
+        $questionsBySubject = [];
+
+        foreach ($questionIdsBySubject as $subject => $questionIds) {
+            // Fetch questions for this subject and only the requested IDs
+            $questions = Question::whereIn('id', $questionIds)
+                ->get();
+
+            // Store in structured array
+            $questionsBySubject[$subject] = $questions;
+        }
+
+        return view('common.questionPreview', compact('questionsBySubject'));
     }
+
+
+    // public function PaperPreview(Request $request)
+    // {
+    //     // Decode JSON from the request
+    //     $questionData = json_decode($request->questionIds, true);
+
+    //     // Safe fallback if decoding fails
+    //     if (!is_array($questionData)) {
+    //         return response()->json(['error' => 'Invalid question data'], 422);
+    //     }
+
+    //     // Prepare questions by subject
+    //     $questionsBySubject = [];
+
+    //     foreach ($questionData as $subject => $ids) {
+    //         $questions = Question::whereIn('id', $ids)->get();
+    //         $questionsBySubject[$subject] = $questions;
+    //     }
+
+    //     // Send view with valid data
+    //     return view('common.questionPreview', [
+    //         'questionsBySubject' => $questionsBySubject
+    //     ]);
+    // }
+
+
+
+    // public function PaperPreview(Request $request)
+    // {
+    //     $questionsBySubject = [];
+
+    //     if ($request->has('questionIds')) {
+    //         $questionData = json_decode($request->questionIds, true);
+
+    //         if (is_array($questionData)) {
+    //             foreach ($questionData as $subject => $ids) {
+    //                 if (is_array($ids) && !empty($ids)) {
+    //                     $questions = Question::whereIn('id', $ids)->get();
+    //                     $questionsBySubject[$subject] = $questions;
+    //                 }
+    //             }
+    //         }
+    //     }
+
+    //     return view('common.questionPreview', [
+    //         'questionsBySubject' => $questionsBySubject
+    //     ]);
+    // }
 }

@@ -8,50 +8,75 @@
         </div>
     </div>
     <div class="card-body">
-        <div class="row">
-            <div class="col-md-12 text-center">
-                Chemistry
-            </div>
-            <div class="col-md-6 text-center">
-                Section A (English)
-            </div>
-            <div class="col-md-6 text-center">
-                Section B (Hindi)
-            </div>
-        </div>
 
-        <div class="row">
-            <div class="col-md-6 border">
-                <h5 class="mb-0">Question</h5>
-            </div>
-            <div class="col-md-6 border">
-                <h5 class="mb-0">Question</h5>
-            </div>
-            <div class="col-md-6 border">
-                <div style="display: grid" >
-                    <span class="fw-bold" style="font-size: 14px">Q. 1&#41; The electrophile in the nitration of benzene is</span>
-                   <span class="py-1" style="font-size: 14px">a&#41;<b> NO<sup>+</sup><sub>2</sub></b></span>
-                    <span class="py-1" style="font-size: 14px">b&#41;<b> NO<sub>2</sub></b></span>
-                    <span class="py-1" style="font-size: 14px">c&#41;<b> NO<sup>+</sup></b></span>
-                    <span class="py-1" style="font-size: 14px">d&#41;<b> NO<sup>-</sup><sub>2</sub></b></span>
+        @foreach ($questionsBySubject as $subject => $questions)
+            <div class="row my-4">
+                <div class="col-md-12 text-center fw-bold fs-5 text-primary">
+                    {{ $subject }}
+                </div>
+                <div class="col-md-6 text-center text-muted">
+                    Section A (English)
+                </div>
+                <div class="col-md-6 text-center text-muted">
+                    Section B (Hindi)
                 </div>
             </div>
-            <div class="col-md-6 border">
-                <div style="display: grid">
-                    <span class="fw-bold" style="font-size: 14px">Q. 1&#41; बेंजीन के नाइट्रीकरण में इलेक्‍ट्रॉनस्‍नेही है</span>
-                    <span class="py-1" style="font-size: 14px">a&#41;<b> NO<sup>+</sup><sub>2</sub></b></span>
-                    <span class="py-1" style="font-size: 14px">b&#41;<b> NO<sub>2</sub></b></span>
-                    <span class="py-1" style="font-size: 14px">c&#41;<b> NO<sup>+</sup></b></span>
-                    <span class="py-1" style="font-size: 14px">d&#41;<b> NO<sup>-</sup><sub>2</sub></b></span>
+
+            @foreach ($questions as $index => $question)
+                <div class="row ">
+                    <div class="col-md-6 border py-1">
+                        <div style="display: grid;">
+                            <span class="fw-bold" style="font-size: 14px">
+                                Q. {{ $index + 1 }}) {!! $question->name !!}
+
+                            </span>
+                            {{-- @php
+                                    dd(($question));
+                                @endphp --}}
+                            @php
+                                $options = [
+                                    'a)' => $question->ans_a,
+                                    'b)' => $question->ans_b,
+                                    'c)' => $question->ans_c,
+                                    'd)' => $question->ans_d,
+                                ];
+                            @endphp
+                            @foreach ($options as $key => $opt)
+                                <span class="py-1" style="font-size: 14px">
+                                    <b>{{ $key }}. {!! $opt !!}</b>
+                                </span>
+                            @endforeach
+
+                        </div>
+                    </div>
+                    <div class="col-md-6 border">
+                        <div style="display: grid;">
+                            <span class="fw-bold" style="font-size: 14px">
+                                Q. {{ $index + 1 }}) {!! $question->hi_name !!}
+                            </span>
+                            @php
+                                $options = [
+                                    'a)' => $question->hi_ans_a,
+                                    'b)' => $question->hi_ans_b,
+                                    'c)' => $question->hi_ans_c,
+                                    'd)' => $question->hi_ans_d,
+                                ];
+                            @endphp
+                            @foreach ($options as $key => $opt)
+                                <span class="py-1" style="font-size: 14px">
+                                    <b>{{ $key }}. {!! $opt !!}</b>
+                                </span>
+                            @endforeach
+                        </div>
+                    </div>
                 </div>
-            </div>
-        </div>
+            @endforeach
+        @endforeach
     </div>
 </div>
 
-
 <script>
     $(document).on('click', '#previewhide', function() {
-        $('#questionpreview').hide();
+        $(this).closest('.card').hide();
     });
 </script>
