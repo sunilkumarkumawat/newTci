@@ -9,4 +9,5 @@ class ExamController extends Controller
     public function startExam(){
         return view('exam.startExam');
     }
+   
 }

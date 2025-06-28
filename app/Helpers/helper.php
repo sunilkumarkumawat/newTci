@@ -338,6 +338,20 @@ public static function getSidebar()
                     'route' => 'viewDoubt',
                     'icon' => 'fa fa-circle',
                 ],
+                [
+                    'title' => 'Feedback Analytics',
+                    'className' => 'student_feedback.feedbackAnalytics',
+                    'status' => true,
+                    'route' => 'feedbackAnalytics',
+                    'icon' => 'fa fa-circle',
+                ],
+                [
+                    'title' => 'Archive/Export logs',
+                    'className' => 'student_feedback.archiveExport',
+                    'status' => true,
+                    'route' => 'archiveExport',
+                    'icon' => 'fa fa-circle',
+                ],
             ],
         ],
         [
