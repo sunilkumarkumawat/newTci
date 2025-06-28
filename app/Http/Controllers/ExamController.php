@@ -9,7 +9,7 @@ use DB;
 use Yajra\DataTables\Facades\DataTables;
 use App\Helpers\helper;
 
-class ExamController extends Controller
+class ExamController extends Controller 
 {
     public function dashboard()
     {
