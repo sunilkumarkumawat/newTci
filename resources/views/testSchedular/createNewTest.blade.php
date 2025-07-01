@@ -3,6 +3,7 @@
 
 @php
 $permissions = Helper::getPermissions();
+$feedback = '';
 @endphp
 
 <div class="content-wrapper">
@@ -19,7 +20,7 @@ $permissions = Helper::getPermissions();
                                     Feedback Detail - {{ $feedback->type ?? 'Doubt' }}
                                 </h3>
                                 <div>
-                                    <a href="{{ route('student.feedback.index') }}" class="btn btn-light btn-sm">
+                                    <a href="{{ url('/') }}" class="btn btn-light btn-sm">
                                         <i class="fas fa-arrow-left mr-1"></i> Back to List
                                     </a>
                                     @if(in_array('feedback_edit', $permissions))
@@ -411,84 +412,84 @@ $permissions = Helper::getPermissions();
 </div>
 
 <style>
-.timeline {
-    position: relative;
-    margin: 0 0 30px 0;
-    padding: 0;
-    list-style: none;
-}
+    .timeline {
+        position: relative;
+        margin: 0 0 30px 0;
+        padding: 0;
+        list-style: none;
+    }
 
-.timeline:before {
-    content: '';
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    width: 4px;
-    background: #ddd;
-    left: 31px;
-    margin: 0;
-    border-radius: 2px;
-}
+    .timeline:before {
+        content: '';
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        width: 4px;
+        background: #ddd;
+        left: 31px;
+        margin: 0;
+        border-radius: 2px;
+    }
 
-.timeline > li {
-    position: relative;
-    margin: 0 0 20px 0;
-    padding: 0;
-}
+    .timeline > li {
+        position: relative;
+        margin: 0 0 20px 0;
+        padding: 0;
+    }
 
-.timeline > li > .timeline-item {
-    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
-    border-radius: 3px;
-    margin-top: 0;
-    background: #fff;
-    color: #444;
-    margin-left: 60px;
-    margin-right: 15px;
-    padding: 0;
-    position: relative;
-}
+    .timeline > li > .timeline-item {
+        box-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
+        border-radius: 3px;
+        margin-top: 0;
+        background: #fff;
+        color: #444;
+        margin-left: 60px;
+        margin-right: 15px;
+        padding: 0;
+        position: relative;
+    }
 
-.timeline > li > .fa,
-.timeline > li > .glyphicon,
-.timeline > li > .ion {
-    width: 30px;
-    height: 30px;
-    font-size: 15px;
-    line-height: 30px;
-    position: absolute;
-    color: #666;
-    background: #d2d6de;
-    border-radius: 50%;
-    text-align: center;
-    left: 18px;
-    top: 0;
-}
+    .timeline > li > .fa,
+    .timeline > li > .glyphicon,
+    .timeline > li > .ion {
+        width: 30px;
+        height: 30px;
+        font-size: 15px;
+        line-height: 30px;
+        position: absolute;
+        color: #666;
+        background: #d2d6de;
+        border-radius: 50%;
+        text-align: center;
+        left: 18px;
+        top: 0;
+    }
 
-.timeline > .time-label > span {
-    font-weight: 600;
-    color: #fff;
-    border-radius: 4px;
-    display: inline-block;
-    padding: 5px;
-}
+    .timeline > .time-label > span {
+        font-weight: 600;
+        color: #fff;
+        border-radius: 4px;
+        display: inline-block;
+        padding: 5px;
+    }
 
-.timeline-header {
-    margin: 0;
-    color: #555;
-    border-bottom: 1px solid #f4f4f4;
-    padding: 10px;
-    font-weight: 600;
-    font-size: 16px;
-}
+    .timeline-header {
+        margin: 0;
+        color: #555;
+        border-bottom: 1px solid #f4f4f4;
+        padding: 10px;
+        font-weight: 600;
+        font-size: 16px;
+    }
 
-.timeline-body,
-.timeline-footer {
-    padding: 10px;
-}
+    .timeline-body,
+    .timeline-footer {
+        padding: 10px;
+    }
 
-.bg-purple {
-    background-color: #605ca8 !important;
-}
+    .bg-purple {
+        background-color: #605ca8 !important;
+    }
 </style>
 
 @endsection
