@@ -40,6 +40,10 @@ return [
             'driver' => 'session',
             'provider' => 'users',
         ],
+        'student' => [
+        'driver' => 'session',
+        'provider' => 'students', // ✅ this must match below
+    ],
         'api' => [
         'driver' => 'sanctum',
         'provider' => 'users',
@@ -68,6 +72,10 @@ return [
             'driver' => 'eloquent',
             'model' => App\Models\User::class,
         ],
+         'students' => [
+        'driver' => 'eloquent',
+        'model' => App\Models\Student::class, // ✅ your student model
+    ],
 
         // 'users' => [
         //     'driver' => 'database',

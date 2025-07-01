@@ -13,18 +13,39 @@ Route::match(['get', 'post'], 'login', 'Auth\AuthController@getLogin')->name('lo
 Route::get('/', function () {
     return redirect('/dashboard');
 });
+Route::get('/student/dashboard', function () {
+    return view('studentDashboard');
+});
+
 Route::get('logout', function () {
+    $userId = null;
+    $userType = null;
 
-    DB::table('login_logs')->insert([
-        'user_id' => Auth::id(),
-        'category' => 2,
-        'type' => 'users', // or 'student' / 'teacher' accordingly
-        'time_at' => now(),
-    ]);
+    if (Auth::guard('web')->check()) {
+        $userId = Auth::guard('web')->id();
+        $userType = 'users';
+        Auth::guard('web')->logout();
+    } elseif (Auth::guard('student')->check()) {
+        $userId = Auth::guard('student')->id();
+        $userType = 'student';
+        Auth::guard('student')->logout();
+    }
 
-    Auth::logout();
+    if ($userId) {
+        DB::table('login_logs')->insert([
+            'user_id' => $userId,
+            'category' => 2, // logout
+            'type' => $userType,
+            'time_at' => now(),
+        ]);
+    }
+
+    session()->invalidate();
+    session()->regenerateToken();
+
     return redirect('/login');
 });
+
 
 
 Route::post('/loginAuth', function (Request $request) {
@@ -34,17 +55,21 @@ Route::post('/loginAuth', function (Request $request) {
     $modelType = null;
     $authUser = null;
 
-    // 🔍 First try to find in User model
-    $user = User::where('username', $username)->first();
+    $currentSession = DB::table('settings')
+        ->where('id', 1)
+        ->value('current_active_session_id');
 
+    // 🔍 Check in User model
+    $user = User::where('userName', $username)->first();
     if ($user && Hash::check($password, $user->password)) {
+        Auth::guard('web')->login($user);
         $authUser = $user;
         $modelType = 'user';
     } else {
-        // 🔍 Try to find in Student model
-        $student = Student::where('username', $username)->first();
-
+        // 🔍 Check in Student model
+        $student = Student::where('userName', $username)->first();
         if ($student && Hash::check($password, $student->password)) {
+            Auth::guard('student')->login($student);
             $authUser = $student;
             $modelType = 'student';
         }
@@ -54,15 +79,10 @@ Route::post('/loginAuth', function (Request $request) {
         return response()->json(['message' => 'Invalid credentials'], 401);
     }
 
-    // ✅ Login & session setup
-    Auth::login($authUser); // Laravel will handle session
-
-    $currentSession = DB::table('settings')
-        ->where('id', 1)
-        ->value('current_active_session_id');
-
+    // ✅ Store current session
     session(['current_session' => $currentSession]);
 
+    // ✅ Log login
     DB::table('login_logs')->insert([
         'user_id' => $authUser->id,
         'category' => 1,
@@ -70,11 +90,14 @@ Route::post('/loginAuth', function (Request $request) {
         'time_at' => now(),
     ]);
 
-  return response()->json([
-    'user' => $authUser,
-    'model' => $modelType,
-    'redirect_to' => $modelType === 'student' ? url('/student/dashboard') : url('/dashboard'),
-], 200);
+    // ✅ Final response with redirect
+    return response()->json([
+        'user' => $authUser,
+        'model' => $modelType,
+        'redirect_to' => $modelType === 'student'
+            ? url('/student/dashboard')
+            : url('/dashboard'),
+    ]);
 });
 
 

@@ -1,5 +1,8 @@
 @php
 $sidebarData = Helper::getSidebar();
+    $authUser = Auth::guard('web')->check()
+        ? Auth::guard('web')->user()
+        : (Auth::guard('student')->check() ? Auth::guard('student')->user() : null);
 @endphp
 <style>
     .selectDesign {
@@ -131,7 +134,7 @@ $sidebarData = Helper::getSidebar();
                     alt="User Image"> -->
                 @include('common.imageViewer', [
                 'modal' => 'User',
-                'id' => Auth::user()->id,
+                'id' => $authUser->id,
                 'field' => 'image',
                 'defaultImage' => 'defaultImages/user.png',
                 'alt' => 'User Image',
@@ -145,15 +148,15 @@ $sidebarData = Helper::getSidebar();
                             alt="User Image" width="50"> -->
                         @include('common.imageViewer', [
                         'modal' => 'User',
-                        'id' => Auth::user()->id,
+                        'id' => $authUser->id,
                         'field' => 'image',
                         'defaultImage' => 'defaultImages/user.png',
                         'alt' => 'User Image',
                         'class' => 'mr-2'
                         ])
                         <div>
-                            <h5 class="mb-0">{{Auth::user()->first_name ?? ''}} {{Auth::user()->last_name ?? ''}}</h5>
-                            <p class="mb-0">{{Auth::user()->role_name ?? ''}}</p>
+                            <h5 class="mb-0">{{$authUser->first_name ?? ''}} {{$authUser->last_name ?? ''}}</h5>
+                            <p class="mb-0">{{$authUser->role_name ?? ''}}</p>
                         </div>
                     </div>
                 </div>

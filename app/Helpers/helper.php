@@ -21,7 +21,8 @@ class Helper
 
     public static function getPermissions()
     {
-        $user = Auth::user();
+        $user = Auth::user() ?? Auth::guard('student')->user();
+    
         if (!$user) {
             return [];
         }
@@ -402,26 +403,32 @@ class Helper
         ];
 
         // Filter based on permissions for non-admin users
-        if (Auth::user()->role_id != 1) {
-            foreach ($sidebarMenu as $key => &$menu) {
-                // Filter subItems if present
-                if (isset($menu['subItems'])) {
-                    $menu['subItems'] = array_filter($menu['subItems'], function ($sub) use ($allowedPermissions) {
-                        return in_array(strtolower($sub['className']), $allowedPermissions);
-                    });
+      // Detect current logged-in user safely
+$currentUser = Auth::guard('web')->check()
+    ? Auth::guard('web')->user()
+    : (Auth::guard('student')->check() ? Auth::guard('student')->user() : null);
 
-                    // If no subItems left, unset parent
-                    if (empty($menu['subItems'])) {
-                        unset($sidebarMenu[$key]);
-                    }
-                } else {
-                    // If no subItems, check main className
-                    if (!in_array(strtolower($menu['className']), $allowedPermissions)) {
-                        unset($sidebarMenu[$key]);
-                    }
-                }
+// Apply permission filtering only if user has role_id != 1
+if ($currentUser && isset($currentUser->role_id) && $currentUser->role_id != 1) {
+    foreach ($sidebarMenu as $key => &$menu) {
+        // Filter subItems if present
+        if (isset($menu['subItems'])) {
+            $menu['subItems'] = array_filter($menu['subItems'], function ($sub) use ($allowedPermissions) {
+                return in_array(strtolower($sub['className']), $allowedPermissions);
+            });
+
+            // If no subItems left, unset parent
+            if (empty($menu['subItems'])) {
+                unset($sidebarMenu[$key]);
+            }
+        } else {
+            // If no subItems, check main className
+            if (!in_array(strtolower($menu['className']), $allowedPermissions)) {
+                unset($sidebarMenu[$key]);
             }
         }
+    }
+}
 
         return array_values($sidebarMenu);
     }
