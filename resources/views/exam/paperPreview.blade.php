@@ -18,7 +18,7 @@
                     <div class="col-md-6 border py-1">
                         <div style="display: grid;">
                             <span class="fw-bold" style="font-size: 14px">
-                                Q. {{ $index + 1 }}) {!! $question->name !!}
+                                Q. {{ $index + 1 }}&#41; {!! $question->name !!}
 
                             </span>
                             {{-- @php
