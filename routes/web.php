@@ -26,34 +26,56 @@ Route::get('logout', function () {
 });
 
 
-
 Route::post('/loginAuth', function (Request $request) {
-    $user = User::where('username', $request->user_name)->first();
+    $username = $request->user_name;
+    $password = $request->password;
 
+    $modelType = null;
+    $authUser = null;
 
-    if (! $user || ! Hash::check($request->password, $user->password)) {
+    // 🔍 First try to find in User model
+    $user = User::where('username', $username)->first();
+
+    if ($user && Hash::check($password, $user->password)) {
+        $authUser = $user;
+        $modelType = 'user';
+    } else {
+        // 🔍 Try to find in Student model
+        $student = Student::where('username', $username)->first();
+
+        if ($student && Hash::check($password, $student->password)) {
+            $authUser = $student;
+            $modelType = 'student';
+        }
+    }
+
+    if (! $authUser) {
         return response()->json(['message' => 'Invalid credentials'], 401);
     }
 
+    // ✅ Login & session setup
+    Auth::login($authUser); // Laravel will handle session
 
     $currentSession = DB::table('settings')
         ->where('id', 1)
         ->value('current_active_session_id');
 
-
-    Auth::login($user); // ✅ session-based login
-
     session(['current_session' => $currentSession]);
 
     DB::table('login_logs')->insert([
-        'user_id' => $user->id,
+        'user_id' => $authUser->id,
         'category' => 1,
-        'type' => 'users', // or 'student' / 'teacher' accordingly
+        'type' => $modelType,
         'time_at' => now(),
     ]);
 
-    return response()->json(['user' => $user], 200);
+  return response()->json([
+    'user' => $authUser,
+    'model' => $modelType,
+    'redirect_to' => $modelType === 'student' ? url('/student/dashboard') : url('/dashboard'),
+], 200);
 });
+
 
 // 🔐 Protected Routes (Only accessible if logged in)
 Route::middleware(['auth'])->group(function () {

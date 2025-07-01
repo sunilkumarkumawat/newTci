@@ -339,6 +339,7 @@
                 </button>
                 <strong><i class="fas fa-book mr-1"></i> ${subjectName}</strong><br>
                 <span class="text-muted">Total Questions: ${numberOfQuestions}</span><br>
+                <span class="text-muted subject_selected_question" data-subject_id="${subjectId}">Selected Questions: ${0}</span><br>
                 <span class="text-muted">Marks per Question: ${marksPerQuestion}</span><br>
                 <span class="text-muted">Total Marks: ${totalMarks}</span>
             </div>
@@ -574,55 +575,56 @@
     }
 
 
-    function matchSelectedQuestionsInTopic() {
-
-    }
-
-   function openSubTopics(chapterId) {
+ 
+  function openSubTopics(chapterId) {
     $('#subTopicsModal').modal('show');
 
     const url = `{{ url('/getSubTopicsByRequest') }}/${chapterId}`;
 
-    $('#appendTopicData').load(url, function() {
-        $('#appendTopicData .topic_preview').each(function() {
-            const $topicPreview = $(this);
-            const topicChapterId = $topicPreview.data('chapter_id');
+    $('#appendTopicData').load(url, function () {
 
-            const $modalRow = $topicPreview.closest('tr');
-            const inputObjectiveIds = ($modalRow.attr('data-objective_ids') || '').split(',').map(id => id.trim());
-            const inputNumericIds = ($modalRow.attr('data-numeric_ids') || '').split(',').map(id => id.trim());
+        // ⏳ Delay execution to ensure DOM is ready and smoother transition
+        setTimeout(() => {
+            $('#appendTopicData .topic_preview').each(function () {
+                const $topicPreview = $(this);
+                const topicChapterId = $topicPreview.data('chapter_id');
 
-            const $chapterRow = $(`tr[data-chapter_id="${topicChapterId}"]`);
-            const mainPreviewHtml = $chapterRow.find('.preview').html();
+                const $modalRow = $topicPreview.closest('tr');
+                const inputObjectiveIds = ($modalRow.attr('data-objective_ids') || '').split(',').map(id => id.trim());
+                const inputNumericIds = ($modalRow.attr('data-numeric_ids') || '').split(',').map(id => id.trim());
 
-            let mainObjectiveIds = '';
-            let mainNumericIds = '';
+                const $chapterRow = $(`tr[data-chapter_id="${topicChapterId}"]`);
+                const mainPreviewHtml = $chapterRow.find('.preview').html();
 
-            if (mainPreviewHtml && mainPreviewHtml.trim() !== '') {
-                const $mainPreview = $('<div>' + mainPreviewHtml + '</div>');
+                let mainObjectiveIds = '';
+                let mainNumericIds = '';
 
-                mainObjectiveIds = ($mainPreview.find('*').data('objective') || '').toString().split(',').map(id => id.trim());
-                mainNumericIds = ($mainPreview.find('*').data('numeric') || '').toString().split(',').map(id => id.trim());
+                if (mainPreviewHtml && mainPreviewHtml.trim() !== '') {
+                    const $mainPreview = $('<div>' + mainPreviewHtml + '</div>');
 
-                const matchedObjectiveIds = mainObjectiveIds.filter(id => inputObjectiveIds.includes(id) && id !== '');
-                const matchedNumericIds = mainNumericIds.filter(id => inputNumericIds.includes(id) && id !== '');
+                    mainObjectiveIds = ($mainPreview.find('*').data('objective') || '').toString().split(',').map(id => id.trim());
+                    mainNumericIds = ($mainPreview.find('*').data('numeric') || '').toString().split(',').map(id => id.trim());
 
-                // ✅ Set counts in inputs
-                $modalRow.find('.selected_topic_objective_questions').val(matchedObjectiveIds.length);
-                $modalRow.find('.selected_topic_numeric_questions').val(matchedNumericIds.length);
+                    const matchedObjectiveIds = mainObjectiveIds.filter(id => inputObjectiveIds.includes(id) && id !== '');
+                    const matchedNumericIds = mainNumericIds.filter(id => inputNumericIds.includes(id) && id !== '');
 
-                // ✅ Create or update the <span> inside topicPreview
-                let $span = $topicPreview.find('span');
-                if ($span.length === 0) {
-                    $span = $('<span style="text-decoration: underline; cursor: pointer;">Preview</span>');
-                    $topicPreview.html($span); // clear previous content and append span
+                    // Set counts in inputs
+                    $modalRow.find('.selected_topic_objective_questions').val(matchedObjectiveIds.length);
+                    $modalRow.find('.selected_topic_numeric_questions').val(matchedNumericIds.length);
+
+                    // Create or update the <span> inside topicPreview
+                    let $span = $topicPreview.find('span');
+                    if ($span.length === 0) {
+                        $span = $('<span style="text-decoration: underline; cursor: pointer;">Preview</span>');
+                        $topicPreview.html($span); // clear previous content and append span
+                    }
+
+                    // Set matched IDs as data attributes on the <span>
+                    $span.attr('data-objective', matchedObjectiveIds.join(','));
+                    $span.attr('data-numeric', matchedNumericIds.join(','));
                 }
-
-                // ✅ Set matched IDs as data attributes on the <span>
-                $span.attr('data-objective', matchedObjectiveIds.join(','));
-                $span.attr('data-numeric', matchedNumericIds.join(','));
-            }
-        });
+            });
+        }, 300); // Delay of 300ms (adjust if needed)
     });
 }
 

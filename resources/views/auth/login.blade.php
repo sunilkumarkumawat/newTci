@@ -126,39 +126,44 @@
     }
   });
 
-  $('#loginForm').on('submit', function (e) {
-    e.preventDefault();
+ $('#loginForm').on('submit', function (e) {
+  e.preventDefault();
 
-    var baseUrl = "{{ url('/') }}";
+  var baseUrl = "{{ url('/') }}";
+  $('#login-error').text('');
 
-    $('#login-error').text('');
-
-    $.ajax({
-      url: baseUrl + '/loginAuth',
-      type: "POST",
-      data: {
-        user_name: $('input[name="user_name"]').val(),
-        password: $('input[name="password"]').val(),
-      },
-      xhrFields: {
-        withCredentials: true
-      },
-      success: function (response) {
-        window.location.href = response.redirect_to || baseUrl + "/dashboard";
-      },
-      error: function (xhr) {
-        let response = xhr.responseJSON;
-        let errors = response?.errors || {};
-        let errorText = response?.message || "Something went wrong";
-
-        for (let field in errors) {
-          errorText += "\n" + errors[field][0];
-        }
-
-        $('#login-error').text(errorText);
+  $.ajax({
+    url: baseUrl + '/loginAuth',
+    type: "POST",
+    data: {
+      user_name: $('input[name="user_name"]').val(),
+      password: $('input[name="password"]').val(),
+    },
+    xhrFields: {
+      withCredentials: true
+    },
+    success: function (response) {
+      // ✅ Redirect based on model
+      if (response.model === 'student') {
+        window.location.href = baseUrl + '/student/dashboard';
+      } else {
+        window.location.href = baseUrl + '/dashboard';
       }
-    });
+    },
+    error: function (xhr) {
+      let response = xhr.responseJSON;
+      let errors = response?.errors || {};
+      let errorText = response?.message || "Something went wrong";
+
+      for (let field in errors) {
+        errorText += "\n" + errors[field][0];
+      }
+
+      $('#login-error').text(errorText);
+    }
   });
+});
+
 
     $(".toggle-password").click(function() {
         var passwordInput = $("#password");
