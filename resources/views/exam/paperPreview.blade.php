@@ -1,12 +1,3 @@
-<div class="card" id="questionpreview">
-    <div class="card-header">
-        <div class="card-title">
-            <h4>Questions By Subject</h4>
-        </div>
-        <div class="card-tools">
-            <button id="previewhide" class="btn btn-outline-primary" type="button">Close</button>
-        </div>
-    </div>
     <div class="card-body">
 
         @foreach ($questionsBySubject as $subject => $questions)
@@ -73,10 +64,19 @@
             @endforeach
         @endforeach
     </div>
-</div>
 
-<script>
-    $(document).on('click', '#previewhide', function() {
-        $(this).closest('.card').hide();
-    });
+
+    <script>
+window.MathJax = {
+  tex: {
+    inlineMath: [['$', '$'], ['\\(', '\\)']],
+    displayMath: [['$$', '$$'], ['\\[', '\\]']],
+    processEscapes: true
+  },
+  svg: {
+    fontCache: 'global'
+  }
+};
 </script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+

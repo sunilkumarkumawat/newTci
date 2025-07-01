@@ -23,16 +23,139 @@ class ExamController extends Controller
     {
         return view('exam.examList');
     }
-    public function getQuestionsByRequest(Request $request, $classId, $subjectId)
+  public function getChaptersByRequest(Request $request, $classId, $subjectId)
+{
+    // Step 1: Get all questions (with chapter name)
+    $questions = DB::table('questions')
+        ->leftJoin('chapters', 'chapters.id', '=', 'questions.chapter_id')
+        ->where('questions.class_type_id', $classId)
+        ->where('questions.subject_id', $subjectId)
+        ->select('questions.*', 'chapters.name as chapter_name')
+        ->get();
+
+    // Step 2: Group and count manually
+    $groupedData = [];
+
+    foreach ($questions as $q) {
+        $chapterId = $q->chapter_id ?? 0;
+        $chapterName = $q->chapter_name ?? 'Unassigned';
+
+        // Initialize if not already
+        if (!isset($groupedData[$chapterId])) {
+            $groupedData[$chapterId] = [
+                'chapter_id' => $chapterId,
+                'chapter_name' => $chapterName,
+                'objective_count' => 0,
+                'numeric_count' => 0,
+                'total_questions' => 0,
+                'objective_question_ids' => [],
+                'numeric_question_ids' => [],
+            ];
+        }
+
+        // Count and collect IDs by question type
+        if ($q->question_type_id == 1) {
+            $groupedData[$chapterId]['objective_count']++;
+            $groupedData[$chapterId]['objective_question_ids'][] = $q->id;
+        } elseif ($q->question_type_id == 2) {
+            $groupedData[$chapterId]['numeric_count']++;
+            $groupedData[$chapterId]['numeric_question_ids'][] = $q->id;
+        }
+
+        $groupedData[$chapterId]['total_questions']++;
+    }
+
+    // Convert to indexed array & format question IDs
+    $chapterStats = array_map(function ($item) {
+        $item['objective_question_ids'] = implode(',', $item['objective_question_ids']);
+        $item['numeric_question_ids'] = implode(',', $item['numeric_question_ids']);
+        return $item;
+    }, array_values($groupedData));
+
+    return view('exam.chapterList', [
+        'questions' => $questions,
+        'chapterStats' => $chapterStats,
+        'classId' => $classId,
+        'subjectId' => $subjectId
+    ]);
+}
+
+
+
+    public function getQuestionsByChapterId(Request $request,$chapterId)
     {
-        // Fetch questions based on classId and subjectId
-        $questions = DB::table('questions')
-            ->where('class_type_id', $classId)
-            ->where('subject_id', $subjectId)
+        // Fetch questions for the given chapter ID
+        $questions = Question::where('chapter_id', $chapterId)
             ->get();
 
-        return view('exam.questionList', ['questions' => $questions, 'classId' => $classId, 'subjectId' => $subjectId]);
+        // Return the view with the questions
+        return view('exam.questionsByRequest', compact('questions'));
     }
+    public function getQuestionsByTopicId(Request $request,$topicId)
+    {
+        // Fetch questions for the given chapter ID
+        $questions = Question::where('topic_id', $topicId)
+            ->get();
+
+        // Return the view with the questions
+        return view('exam.questionsByRequest', compact('questions'));
+    }
+    
+   public function getSubTopicsByRequest(Request $request, $chapterId)
+{
+    // Step 1: Get all questions with topic name
+    $questions = DB::table('questions')
+        ->leftJoin('topics', 'topics.id', '=', 'questions.topic_id')
+        ->where('questions.chapter_id', $chapterId)
+        ->select('questions.*', 'topics.name as topic_name')
+        ->get();
+
+    // Step 2: Group and count manually
+    $groupedData = [];
+
+    foreach ($questions as $q) {
+        $topicId = $q->topic_id ?? 0;
+        $topicName = $q->topic_name ?? 'Unassigned';
+
+        if (!isset($groupedData[$topicId])) {
+            $groupedData[$topicId] = [
+                'chapter_id' => $topicId,
+                'topic_id' => $topicId,
+                'topic_name' => $topicName,
+                'objective_count' => 0,
+                'numeric_count' => 0,
+                'total_questions' => 0,
+                'objective_question_ids' => [],
+                'numeric_question_ids' => [],
+            ];
+        }
+
+        if ($q->question_type_id == 1) {
+            $groupedData[$topicId]['objective_count']++;
+            $groupedData[$topicId]['objective_question_ids'][] = $q->id;
+        } elseif ($q->question_type_id == 2) {
+            $groupedData[$topicId]['numeric_count']++;
+            $groupedData[$topicId]['numeric_question_ids'][] = $q->id;
+        }
+
+        $groupedData[$topicId]['total_questions']++;
+    }
+
+    // Format question IDs as comma-separated strings
+    $topicStats = array_map(function ($item) {
+        $item['objective_question_ids'] = implode(',', $item['objective_question_ids']);
+        $item['numeric_question_ids'] = implode(',', $item['numeric_question_ids']);
+        return $item;
+    }, array_values($groupedData));
+
+    // Return view with topic statistics
+    return view('exam.subTopicsByChapter', [
+        'topicStats' => $topicStats,
+        'chapterId' => $chapterId
+    ]);
+}
+
+  
     public function createExam(Request $request)
     {
 
@@ -136,7 +259,7 @@ class ExamController extends Controller
             $questionsBySubject[$subject] = $questions;
         }
 
-        return view('common.questionPreview', compact('questionsBySubject'));
+        return view('exam.paperPreview', compact('questionsBySubject'));
     }
 
 
