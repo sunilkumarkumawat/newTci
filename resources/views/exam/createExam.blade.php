@@ -217,6 +217,32 @@
     </div>
 </div>
 
+<!-- get Paper Preview Modal -->
+<div class="modal fade" id="getPaperPreviewModal" tabindex="-1" aria-labelledby="getPaperPreviewModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h5 class="modal-title" id="getPaperPreviewModalLabel">Paper Preview</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+
+            <div class="modal-body">
+                <div id="getPaperPreviewContent">
+                    <!-- Dynamically loaded paper content will go here -->
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+
+        </div>
+    </div>
+</div>
+
 
 <!-- Chapter Questions List Modal -->
 <div class="modal fade" id="questionsListModal" tabindex="-1" aria-labelledby="questionsListModalLabel" aria-hidden="true">
@@ -426,6 +452,15 @@
         loadPreview(questionIds);
     });
 
+    // Optional: Subject item click handler
+    $(document).on('click', '.getPreview', function() {
+        const objective = ($(this).data('objective') || '').toString().split(',').filter(Boolean);
+        const numeric = ($(this).data('numeric') || '').toString().split(',').filter(Boolean);
+
+        const questionIds = [...objective, ...numeric].join(',');
+        getPreview(questionIds);
+    });
+
 
 
 
@@ -465,7 +500,7 @@
         // Get existing span or create new
         let $span = $preview.find('span');
         if ($span.length === 0) {
-            $span = $('<span style="text-decoration: underline; cursor: pointer;">Preview</span>');
+            $span = $('<span style="text-decoration: underline; cursor: pointer;" class="getPreview">Preview</span>');
             $preview.html($span);
         }
 
@@ -519,7 +554,7 @@
         // Get existing span or create new
         let $span = $preview.find('span');
         if ($span.length === 0) {
-            $span = $('<span style="text-decoration: underline; cursor: pointer;">Preview</span>');
+            $span = $('<span style="text-decoration: underline; cursor: pointer;" class="getPreview">Preview</span>');
             $preview.html($span);
         }
 
@@ -556,6 +591,29 @@
             },
             success: function(response) {
                 $('#paperPreviewContent').html(response);
+                // Re-render MathJax after content is injected
+
+            },
+            error: function(xhr) {
+                console.error("Preview load failed:", xhr);
+            }
+        });
+    }
+
+    function getPreview(questionIds) {
+        const url = `{{ url('/getPaperPreview') }}`;
+
+        $('#getPaperPreviewModal').modal('show');
+
+        $.ajax({
+            url: url,
+            type: 'POST',
+            data: {
+                questionIds: JSON.stringify(questionIds),
+                _token: '{{ csrf_token() }}'
+            },
+            success: function(response) {
+                $('#getPaperPreviewContent').html(response);
                 // Re-render MathJax after content is injected
 
             },
