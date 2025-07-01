@@ -35,14 +35,14 @@ Route::post('/loginAuth', function (Request $request) {
     $authUser = null;
 
     // 🔍 First try to find in User model
-    $user = User::where('username', $username)->first();
+    $user = User::where('userName', $username)->first();
 
     if ($user && Hash::check($password, $user->password)) {
         $authUser = $user;
         $modelType = 'user';
     } else {
         // 🔍 Try to find in Student model
-        $student = Student::where('username', $username)->first();
+        $student = Student::where('userName', $username)->first();
 
         if ($student && Hash::check($password, $student->password)) {
             $authUser = $student;
@@ -230,6 +230,7 @@ Route::middleware(['auth'])->group(function () {
     Route::match(['get', 'post'], 'examData', 'ExamController@examData');
     Route::match(['get', 'post'], 'createExam', 'ExamController@createExam');
     Route::match(['get', 'post'], 'paperPreview', 'ExamController@PaperPreview');
+    Route::match(['get', 'post'], 'getPaperPreview', 'ExamController@getPaperPreview');
     Route::match(['get', 'post'], 'getChaptersByRequest/{classId}/{subjectId}', 'ExamController@getChaptersByRequest');
     Route::match(['get', 'post'], 'getQuestionsByChapterId/{chapterId}', 'ExamController@getQuestionsByChapterId');
     Route::match(['get', 'post'], 'getQuestionsByTopicId/{subjectId}', 'ExamController@getQuestionsByTopicId');
