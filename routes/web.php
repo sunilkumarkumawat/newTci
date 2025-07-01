@@ -208,6 +208,9 @@ Route::middleware(['auth'])->group(function () {
     Route::match(['get', 'post'], 'createExam', 'ExamController@createExam');
     Route::match(['get', 'post'], 'paperPreview', 'ExamController@PaperPreview');
     Route::match(['get', 'post'], 'getQuestionsByRequest/{classId}/{subjectId}', 'ExamController@getQuestionsByRequest');
+    Route::match(['get', 'post'], '/answerkey', 'ExamController@answerkey');
+    Route::match(['get', 'post'], '/questionkey', 'ExamController@questionkey');
+
 
     // reports & Exports
     Route::match(['get', 'post'], '/facultyReport', 'ReportController@facultyreport');
@@ -215,6 +218,7 @@ Route::middleware(['auth'])->group(function () {
     Route::match(['get', 'post'], '/doubtSolution', 'ReportController@doubtSolution');
     Route::match(['get', 'post'], '/attendence_report', 'ReportController@attendencereport');
     Route::match(['get', 'post'], '/customReport', 'ReportController@customreport');
+   
 
 
 });

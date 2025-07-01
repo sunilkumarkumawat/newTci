@@ -139,9 +139,16 @@ class ExamController extends Controller
         return view('common.questionPreview', compact('questionsBySubject'));
     }
 
-    
+
     public function startExam(){
         return view('exam.startExam');
+    }
+
+    public function answerkey(){
+        return view('exam.answerkey');
+    }
+    public function questionkey(){
+        return view('exam.questionKey');
     }
 
 }
