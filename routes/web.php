@@ -13,8 +13,10 @@ Route::match(['get', 'post'], 'login', 'Auth\AuthController@getLogin')->name('lo
 Route::get('/', function () {
     return redirect('/dashboard');
 });
-Route::get('/student/dashboard', function () {
-    return view('studentDashboard');
+
+Route::prefix('student')->group(function () {
+    Route::match(['get', 'post'], 'dashboard', 'Students\StudentController@studentDashboard');
+    Route::match(['get', 'post'], 'examTerminal', 'Students\StudentController@examTerminal');
 });
 
 Route::get('logout', function () {
