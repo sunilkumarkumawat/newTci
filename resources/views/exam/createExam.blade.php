@@ -99,7 +99,7 @@
                                         <h3 class="card-title">Subject(s) Overview</h3>
                                     </div>
 
-                                    <div class="card-body">
+                                    <div class="card-body" id='subject_overview'>
                                         <div id="subjectContainer" class="justify-content-center card-body d-flex flex-wrap gap-3">
                                             <span class="empty-message">Please select a subject to see the overview.</span>
                                         </div>
@@ -326,7 +326,52 @@
     let totalQuestions = 0;
     let marksPerQuestion = 4;
     let numberOfSelectedSubject = 0;
+    let finalArray = @json($questioningData) || {};
+    let overviewMap = @json($overviewingData ?? null);
 
+    if (overviewMap !== null) {
+
+        $('#subject_overview').html($(overviewMap)); // Set the subject_overview_id if available
+
+    }
+
+
+    function draftArray(classTypeId, subjectId) {
+        if (!finalArray[classTypeId]) {
+            finalArray[classTypeId] = {};
+        }
+
+
+
+
+
+        // 🔁 Copy and sync input values
+        let $originalRows = $('#questionsTableBody').children();
+        let $clonedRows = $originalRows.clone();
+
+        $clonedRows.each(function(i) {
+            const $originalInputs = $originalRows.eq(i).find('input, select, textarea');
+            const $clonedInputs = $(this).find('input, select, textarea');
+
+            $clonedInputs.each(function(j) {
+                const $original = $originalInputs.eq(j);
+                const type = $(this).attr('type');
+
+                if (type === 'checkbox' || type === 'radio') {
+                    $(this).prop('checked', $original.prop('checked'));
+                } else {
+                    $(this).val($original.val());
+                }
+            });
+        });
+
+        // ✅ Store updated HTML
+        let container = $('<div>').append($clonedRows);
+        finalArray[classTypeId][subjectId] = container.html();
+
+        // 🔁 Save both arrays
+        draftExam(finalArray, overviewMap);
+    }
     $('#questionsSelectionSection').hide();
 
 
@@ -348,7 +393,9 @@
     // Utility: Update total fields in the UI
     function updateTotalFields() {
         $('#total_questions').val(totalQuestions);
+        $('#total_questions').attr('value', totalQuestions);
         $('#total_marks').val(totalQuestions * marksPerQuestion);
+        $('#total_marks').attr('value', totalQuestions * marksPerQuestion);
     }
 
     // Utility: Create subject box HTML
@@ -396,6 +443,15 @@
         $('#subjectContainer').append(subjectBoxHtml);
 
         $('select[name="subject_id"]').val('');
+
+        // ✅ Get subject_overview_id from somewhere, e.g., a hidden input or attribute
+        const subjectOverview = $('#subject_overview').html(); // Or use `.data('overview-id')` from somewhere
+
+        // ✅ Store subject_overview_id
+        overviewMap = subjectOverview;
+
+        draftExam(finalArray, overviewMap);
+
     });
 
     // Utility: Check if subject is already added
@@ -421,9 +477,14 @@
         }
 
         subjectBox.remove();
+        const subjectOverview = $('#subject_overview').html(); // Or use `.data('overview-id')` from somewhere
 
+        // ✅ Store subject_overview_id
+        overviewMap = subjectOverview;
+        draftExam(finalArray, overviewMap);
         // Hide if no subjects remain
         $('#questionsSelectionSection').hide();
+
     }
 
     var subjectId = '';
@@ -439,9 +500,17 @@
     });
     $(document).on('change', '#class_type_id', function() {
         let classTypeId = $(this).val();
-        loadQuestionsTable(classTypeId, subjectId);
 
+
+        if (finalArray[classTypeId] && finalArray[classTypeId][subjectId]) {
+            // Restore saved HTML content
+            $('#questionsTableBody').html(finalArray[classTypeId][subjectId]);
+        } else {
+            // No draft, load fresh
+            loadQuestionsTable(classTypeId, subjectId);
+        }
     });
+
 
     // Optional: Subject item click handler
     $(document).on('click', '#generatePreview', function() {
@@ -539,6 +608,7 @@
             return;
         }
 
+        $input.attr('value', value); // Update input value
         // Generate random unique IDs
         const selected = [];
         const used = new Set();
@@ -572,10 +642,95 @@
         if (!objVal && !numVal) {
             $preview.html('');
         }
+        const classTypeId = $('#class_type_id').val();
+        draftArray(classTypeId, subjectId);
+        updateSelectedQuestionCountsBySubject();
     });
 
 
 
+
+    function draftExam(draftArray, overviewMap) {
+        const url = `{{ url('/draftExam') }}`;
+
+        $.ajax({
+            url: url,
+            type: 'POST',
+            data: {
+                draftArray: JSON.stringify(draftArray),
+                overviewMap: JSON.stringify(overviewMap),
+                exam_id: '{{ $examDetails->id ?? 0 }}',
+                _token: '{{ csrf_token() }}'
+            },
+            success: function(response) {
+                if (response.status === 'success') {
+                    toastr.success("Draft saved successfully.");
+                } else {
+                    toastr.error("Failed to save draft.");
+                }
+            },
+            error: function(xhr) {
+                console.error("Draft save failed:", xhr);
+            }
+        });
+    }
+
+   function updateSelectedQuestionCountsBySubject() {
+    let results = {};
+
+    // Loop through each classTypeId
+    for (let classTypeId in finalArray) {
+        if (!finalArray.hasOwnProperty(classTypeId)) continue;
+
+        // Loop through each subjectId under that classType
+        for (let subjectId in finalArray[classTypeId]) {
+            if (!finalArray[classTypeId].hasOwnProperty(subjectId)) continue;
+
+            const html = finalArray[classTypeId][subjectId];
+            const $parsed = $('<div>').html(html);
+
+            let objective = 0;
+            let numeric = 0;
+
+            // Sum all selected_objective_questions
+            $parsed.find('.selected_objective_questions').each(function () {
+                const val = parseInt($(this).val());
+                if (!isNaN(val) && val > 0) {
+                    objective += val;
+                }
+            });
+
+            // Sum all selected_numeric_questions
+            $parsed.find('.selected_numeric_questions').each(function () {
+                const val = parseInt($(this).val());
+                if (!isNaN(val) && val > 0) {
+                    numeric += val;
+                }
+            });
+
+            // ✅ Add to subjectId total (aggregated)
+            if (!results[subjectId]) {
+                results[subjectId] = { objective: 0, numeric: 0 };
+            }
+
+
+
+   const $target = $(`#subjectContainer [data-subject_id="${subjectId}"].subject_selected_question`);
+
+    if ($target.length > 0) {
+        $target.text(`Selected Questions: ${objective + numeric}`);
+    } else {
+        console.warn('Target not found for subjectId:', subjectId);
+    }
+
+            results[subjectId].objective += objective;
+            results[subjectId].numeric += numeric;
+        }
+    }
+
+    // console.log(results);
+    // return results;
+}
 
     function loadPreview(questionIds) {
         const url = `{{ url('/paperPreview') }}`;
@@ -601,19 +756,21 @@
     }
 
     function getPreview(questionIds) {
-        const url = `{{ url('/getPaperPreview') }}`;
 
-        $('#getPaperPreviewModal').modal('show');
+
+        const url = `{{ url('/getQuestionsPreview') }}`;
+
+        $('#paperPreviewModal').modal('show');
 
         $.ajax({
             url: url,
             type: 'POST',
             data: {
-                questionIds: JSON.stringify(questionIds),
+                questionIds: questionIds,
                 _token: '{{ csrf_token() }}'
             },
             success: function(response) {
-                $('#getPaperPreviewContent').html(response);
+                $('#paperPreviewContent').html(response);
                 // Re-render MathJax after content is injected
 
             },
@@ -633,58 +790,58 @@
     }
 
 
- 
-  function openSubTopics(chapterId) {
-    $('#subTopicsModal').modal('show');
 
-    const url = `{{ url('/getSubTopicsByRequest') }}/${chapterId}`;
+    function openSubTopics(chapterId) {
+        $('#subTopicsModal').modal('show');
 
-    $('#appendTopicData').load(url, function () {
+        const url = `{{ url('/getSubTopicsByRequest') }}/${chapterId}`;
 
-        // ⏳ Delay execution to ensure DOM is ready and smoother transition
-        setTimeout(() => {
-            $('#appendTopicData .topic_preview').each(function () {
-                const $topicPreview = $(this);
-                const topicChapterId = $topicPreview.data('chapter_id');
+        $('#appendTopicData').load(url, function() {
 
-                const $modalRow = $topicPreview.closest('tr');
-                const inputObjectiveIds = ($modalRow.attr('data-objective_ids') || '').split(',').map(id => id.trim());
-                const inputNumericIds = ($modalRow.attr('data-numeric_ids') || '').split(',').map(id => id.trim());
+            // ⏳ Delay execution to ensure DOM is ready and smoother transition
+            setTimeout(() => {
+                $('#appendTopicData .topic_preview').each(function() {
+                    const $topicPreview = $(this);
+                    const topicChapterId = $topicPreview.data('chapter_id');
 
-                const $chapterRow = $(`tr[data-chapter_id="${topicChapterId}"]`);
-                const mainPreviewHtml = $chapterRow.find('.preview').html();
+                    const $modalRow = $topicPreview.closest('tr');
+                    const inputObjectiveIds = ($modalRow.attr('data-objective_ids') || '').split(',').map(id => id.trim());
+                    const inputNumericIds = ($modalRow.attr('data-numeric_ids') || '').split(',').map(id => id.trim());
 
-                let mainObjectiveIds = '';
-                let mainNumericIds = '';
+                    const $chapterRow = $(`tr[data-chapter_id="${topicChapterId}"]`);
+                    const mainPreviewHtml = $chapterRow.find('.preview').html();
 
-                if (mainPreviewHtml && mainPreviewHtml.trim() !== '') {
-                    const $mainPreview = $('<div>' + mainPreviewHtml + '</div>');
+                    let mainObjectiveIds = '';
+                    let mainNumericIds = '';
 
-                    mainObjectiveIds = ($mainPreview.find('*').data('objective') || '').toString().split(',').map(id => id.trim());
-                    mainNumericIds = ($mainPreview.find('*').data('numeric') || '').toString().split(',').map(id => id.trim());
+                    if (mainPreviewHtml && mainPreviewHtml.trim() !== '') {
+                        const $mainPreview = $('<div>' + mainPreviewHtml + '</div>');
 
-                    const matchedObjectiveIds = mainObjectiveIds.filter(id => inputObjectiveIds.includes(id) && id !== '');
-                    const matchedNumericIds = mainNumericIds.filter(id => inputNumericIds.includes(id) && id !== '');
+                        mainObjectiveIds = ($mainPreview.find('*').data('objective') || '').toString().split(',').map(id => id.trim());
+                        mainNumericIds = ($mainPreview.find('*').data('numeric') || '').toString().split(',').map(id => id.trim());
 
-                    // Set counts in inputs
-                    $modalRow.find('.selected_topic_objective_questions').val(matchedObjectiveIds.length);
-                    $modalRow.find('.selected_topic_numeric_questions').val(matchedNumericIds.length);
+                        const matchedObjectiveIds = mainObjectiveIds.filter(id => inputObjectiveIds.includes(id) && id !== '');
+                        const matchedNumericIds = mainNumericIds.filter(id => inputNumericIds.includes(id) && id !== '');
 
-                    // Create or update the <span> inside topicPreview
-                    let $span = $topicPreview.find('span');
-                    if ($span.length === 0) {
-                        $span = $('<span style="text-decoration: underline; cursor: pointer;">Preview</span>');
-                        $topicPreview.html($span); // clear previous content and append span
+                        // Set counts in inputs
+                        $modalRow.find('.selected_topic_objective_questions').val(matchedObjectiveIds.length);
+                        $modalRow.find('.selected_topic_numeric_questions').val(matchedNumericIds.length);
+
+                        // Create or update the <span> inside topicPreview
+                        let $span = $topicPreview.find('span');
+                        if ($span.length === 0) {
+                            $span = $('<span style="text-decoration: underline; cursor: pointer;" class="getPreview">Preview</span>');
+                            $topicPreview.html($span); // clear previous content and append span
+                        }
+
+                        // Set matched IDs as data attributes on the <span>
+                        $span.attr('data-objective', matchedObjectiveIds.join(','));
+                        $span.attr('data-numeric', matchedNumericIds.join(','));
                     }
-
-                    // Set matched IDs as data attributes on the <span>
-                    $span.attr('data-objective', matchedObjectiveIds.join(','));
-                    $span.attr('data-numeric', matchedNumericIds.join(','));
-                }
-            });
-        }, 300); // Delay of 300ms (adjust if needed)
-    });
-}
+                });
+            }, 300); // Delay of 300ms (adjust if needed)
+        });
+    }
 
 
     function goBackToSubTopics() {

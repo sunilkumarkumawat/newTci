@@ -8,8 +8,10 @@ use App\Models\Question;
 use DB;
 use Yajra\DataTables\Facades\DataTables;
 use App\Helpers\helper;
+use App\Models\ExamDraft;
+use Illuminate\Support\Facades\Auth;
 
-class ExamController extends Controller 
+class ExamController extends Controller
 {
     public function dashboard()
     {
@@ -23,66 +25,66 @@ class ExamController extends Controller
     {
         return view('exam.examList');
     }
-  public function getChaptersByRequest(Request $request, $classId, $subjectId)
-{
-    // Step 1: Get all questions (with chapter name)
-    $questions = DB::table('questions')
-        ->leftJoin('chapters', 'chapters.id', '=', 'questions.chapter_id')
-        ->where('questions.class_type_id', $classId)
-        ->where('questions.subject_id', $subjectId)
-        ->select('questions.*', 'chapters.name as chapter_name')
-        ->get();
+    public function getChaptersByRequest(Request $request, $classId, $subjectId)
+    {
+        // Step 1: Get all questions (with chapter name)
+        $questions = DB::table('questions')
+            ->leftJoin('chapters', 'chapters.id', '=', 'questions.chapter_id')
+            ->where('questions.class_type_id', $classId)
+            ->where('questions.subject_id', $subjectId)
+            ->select('questions.*', 'chapters.name as chapter_name')
+            ->get();
 
-    // Step 2: Group and count manually
-    $groupedData = [];
+        // Step 2: Group and count manually
+        $groupedData = [];
 
-    foreach ($questions as $q) {
-        $chapterId = $q->chapter_id ?? 0;
-        $chapterName = $q->chapter_name ?? 'Unassigned';
+        foreach ($questions as $q) {
+            $chapterId = $q->chapter_id ?? 0;
+            $chapterName = $q->chapter_name ?? 'Unassigned';
 
-        // Initialize if not already
-        if (!isset($groupedData[$chapterId])) {
-            $groupedData[$chapterId] = [
-                'chapter_id' => $chapterId,
-                'chapter_name' => $chapterName,
-                'objective_count' => 0,
-                'numeric_count' => 0,
-                'total_questions' => 0,
-                'objective_question_ids' => [],
-                'numeric_question_ids' => [],
-            ];
+            // Initialize if not already
+            if (!isset($groupedData[$chapterId])) {
+                $groupedData[$chapterId] = [
+                    'chapter_id' => $chapterId,
+                    'chapter_name' => $chapterName,
+                    'objective_count' => 0,
+                    'numeric_count' => 0,
+                    'total_questions' => 0,
+                    'objective_question_ids' => [],
+                    'numeric_question_ids' => [],
+                ];
+            }
+
+            // Count and collect IDs by question type
+            if ($q->question_type_id == 1) {
+                $groupedData[$chapterId]['objective_count']++;
+                $groupedData[$chapterId]['objective_question_ids'][] = $q->id;
+            } elseif ($q->question_type_id == 2) {
+                $groupedData[$chapterId]['numeric_count']++;
+                $groupedData[$chapterId]['numeric_question_ids'][] = $q->id;
+            }
+
+            $groupedData[$chapterId]['total_questions']++;
         }
 
-        // Count and collect IDs by question type
-        if ($q->question_type_id == 1) {
-            $groupedData[$chapterId]['objective_count']++;
-            $groupedData[$chapterId]['objective_question_ids'][] = $q->id;
-        } elseif ($q->question_type_id == 2) {
-            $groupedData[$chapterId]['numeric_count']++;
-            $groupedData[$chapterId]['numeric_question_ids'][] = $q->id;
-        }
+        // Convert to indexed array & format question IDs
+        $chapterStats = array_map(function ($item) {
+            $item['objective_question_ids'] = implode(',', $item['objective_question_ids']);
+            $item['numeric_question_ids'] = implode(',', $item['numeric_question_ids']);
+            return $item;
+        }, array_values($groupedData));
 
-        $groupedData[$chapterId]['total_questions']++;
+        return view('exam.chapterList', [
+            'questions' => $questions,
+            'chapterStats' => $chapterStats,
+            'classId' => $classId,
+            'subjectId' => $subjectId
+        ]);
     }
 
-    // Convert to indexed array & format question IDs
-    $chapterStats = array_map(function ($item) {
-        $item['objective_question_ids'] = implode(',', $item['objective_question_ids']);
-        $item['numeric_question_ids'] = implode(',', $item['numeric_question_ids']);
-        return $item;
-    }, array_values($groupedData));
-
-    return view('exam.chapterList', [
-        'questions' => $questions,
-        'chapterStats' => $chapterStats,
-        'classId' => $classId,
-        'subjectId' => $subjectId
-    ]);
-}
 
 
-
-    public function getQuestionsByChapterId(Request $request,$chapterId)
+    public function getQuestionsByChapterId(Request $request, $chapterId)
     {
         // Fetch questions for the given chapter ID
         $questions = Question::where('chapter_id', $chapterId)
@@ -91,7 +93,7 @@ class ExamController extends Controller
         // Return the view with the questions
         return view('exam.questionsByRequest', compact('questions'));
     }
-    public function getQuestionsByTopicId(Request $request,$topicId)
+    public function getQuestionsByTopicId(Request $request, $topicId)
     {
         // Fetch questions for the given chapter ID
         $questions = Question::where('topic_id', $topicId)
@@ -100,62 +102,62 @@ class ExamController extends Controller
         // Return the view with the questions
         return view('exam.questionsByRequest', compact('questions'));
     }
-    
-   public function getSubTopicsByRequest(Request $request, $chapterId)
-{
-    // Step 1: Get all questions with topic name
-    $questions = DB::table('questions')
-        ->leftJoin('topics', 'topics.id', '=', 'questions.topic_id')
-        ->where('questions.chapter_id', $chapterId)
-        ->select('questions.*', 'topics.name as topic_name')
-        ->get();
 
-    // Step 2: Group and count manually
-    $groupedData = [];
+    public function getSubTopicsByRequest(Request $request, $chapterId)
+    {
+        // Step 1: Get all questions with topic name
+        $questions = DB::table('questions')
+            ->leftJoin('topics', 'topics.id', '=', 'questions.topic_id')
+            ->where('questions.chapter_id', $chapterId)
+            ->select('questions.*', 'topics.name as topic_name')
+            ->get();
 
-    foreach ($questions as $q) {
-        $topicId = $q->topic_id ?? 0;
-        $topicName = $q->topic_name ?? 'Unassigned';
+        // Step 2: Group and count manually
+        $groupedData = [];
 
-        if (!isset($groupedData[$topicId])) {
-            $groupedData[$topicId] = [
-                'chapter_id' => $topicId,
-                'topic_id' => $topicId,
-                'topic_name' => $topicName,
-                'objective_count' => 0,
-                'numeric_count' => 0,
-                'total_questions' => 0,
-                'objective_question_ids' => [],
-                'numeric_question_ids' => [],
-            ];
+        foreach ($questions as $q) {
+            $topicId = $q->topic_id ?? 0;
+            $topicName = $q->topic_name ?? 'Unassigned';
+
+            if (!isset($groupedData[$topicId])) {
+                $groupedData[$topicId] = [
+                    'chapter_id' => $topicId,
+                    'topic_id' => $topicId,
+                    'topic_name' => $topicName,
+                    'objective_count' => 0,
+                    'numeric_count' => 0,
+                    'total_questions' => 0,
+                    'objective_question_ids' => [],
+                    'numeric_question_ids' => [],
+                ];
+            }
+
+            if ($q->question_type_id == 1) {
+                $groupedData[$topicId]['objective_count']++;
+                $groupedData[$topicId]['objective_question_ids'][] = $q->id;
+            } elseif ($q->question_type_id == 2) {
+                $groupedData[$topicId]['numeric_count']++;
+                $groupedData[$topicId]['numeric_question_ids'][] = $q->id;
+            }
+
+            $groupedData[$topicId]['total_questions']++;
         }
 
-        if ($q->question_type_id == 1) {
-            $groupedData[$topicId]['objective_count']++;
-            $groupedData[$topicId]['objective_question_ids'][] = $q->id;
-        } elseif ($q->question_type_id == 2) {
-            $groupedData[$topicId]['numeric_count']++;
-            $groupedData[$topicId]['numeric_question_ids'][] = $q->id;
-        }
+        // Format question IDs as comma-separated strings
+        $topicStats = array_map(function ($item) {
+            $item['objective_question_ids'] = implode(',', $item['objective_question_ids']);
+            $item['numeric_question_ids'] = implode(',', $item['numeric_question_ids']);
+            return $item;
+        }, array_values($groupedData));
 
-        $groupedData[$topicId]['total_questions']++;
+        // Return view with topic statistics
+        return view('exam.subTopicsByChapter', [
+            'topicStats' => $topicStats,
+            'chapterId' => $chapterId
+        ]);
     }
 
-    // Format question IDs as comma-separated strings
-    $topicStats = array_map(function ($item) {
-        $item['objective_question_ids'] = implode(',', $item['objective_question_ids']);
-        $item['numeric_question_ids'] = implode(',', $item['numeric_question_ids']);
-        return $item;
-    }, array_values($groupedData));
 
-    // Return view with topic statistics
-    return view('exam.subTopicsByChapter', [
-        'topicStats' => $topicStats,
-        'chapterId' => $chapterId
-    ]);
-}
-
-  
     public function createExam(Request $request)
     {
 
@@ -167,11 +169,27 @@ class ExamController extends Controller
             ->where('exams.id', $id)
             ->first();
 
+        $draft = ExamDraft::where('exam_id', $id)->first();
 
+        $questioningData = [];
+        $overviewingData = [];
 
+        if ($draft && $draft->questioningData) {
+            $questioningData = json_decode($draft->questioningData, true);
+        }
+        if ($draft && $draft->overviewingData) {
+            $overviewingData = json_decode($draft->overviewingData, true);
+        }
 
-
-        return view('exam.createExam', ['examDetails' => $examDetails, 'data' => $id]);
+        return view(
+            'exam.createExam',
+            [
+                'examDetails' => $examDetails,
+                'data' => $id,
+                'questioningData' => $questioningData,
+                'overviewingData' => $overviewingData
+            ]
+        );
     }
     public function examData(Request $request)
     {
@@ -263,16 +281,71 @@ class ExamController extends Controller
     }
 
 
-    public function startExam(){
+    public function draftExam(Request $request)
+    {
+        $examData = $request->input('draftArray');
+        $overViewData = $request->input('overviewMap');
+        $examId = $request->input('exam_id');
+
+        $authUser = Auth::guard('web')->check()
+            ? Auth::guard('web')->user()
+            : (Auth::guard('student')->check() ? Auth::guard('student')->user() : null);
+        // // Decode the JSON data
+        // $examData = json_decode($examData, true);
+
+        // Create or update the exam
+        $draftExam = ExamDraft::updateOrCreate(
+            ['id' => $examId ?? null],
+            [
+                'questioningData' => $examData,
+                'overviewingData' => $overViewData,
+                'user_id' => $authUser->id,
+                'exam_id' => $examId,
+            ]
+        );
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Draft saved successfully.',
+
+        ]);
+    }
+    public function getQuestionsPreview(Request $request)
+    {
+        $questionIds = $request->input('questionIds');
+
+        // Normalize to array if comma-separated string
+        if (is_string($questionIds)) {
+            $questionIds = explode(',', $questionIds);
+        }
+
+
+
+        // Get questions with subject name using LEFT JOIN
+        $questions = DB::table('questions')
+            ->leftJoin('all_subjects', 'questions.subject_id', '=', 'all_subjects.id')
+            ->whereIn('questions.id', $questionIds)
+            ->select('questions.*', 'all_subjects.name as subject_name')
+            ->get();
+
+        // Group by subject name
+        $questionsBySubject = $questions->groupBy('subject_name');
+
+
+
+        return view('exam.paperPreview', compact('questionsBySubject'));
+    }
+    public function startExam()
+    {
         return view('exam.startExam');
     }
 
-    public function answerkey(){
+    public function answerkey()
+    {
         return view('exam.answerkey');
     }
-    public function questionkey(){
+    public function questionkey()
+    {
         return view('exam.questionKey');
     }
-
 }
-
