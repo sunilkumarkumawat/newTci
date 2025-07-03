@@ -1507,8 +1507,17 @@ $cur_route = Route::getFacadeRoot()->current()->uri();
                             } else {
                                 const errorBox = document.getElementById('errorBox');
                                 errorBox.classList.remove('d-none');
-                                errorBox.innerHTML = '<strong>Error occurred:</strong><br>' +
-                                    res.errors.map(err => `<div>${err}</div>`).join('');
+
+                                if (res.message && !res.errors) {
+                                    // Single friendly error message (like "Column 'Accuracy' not found")
+                                    errorBox.innerHTML = `<strong>Error:</strong><br><div>${res.message}</div>`;
+                                } else if (Array.isArray(res.errors)) {
+                                    // Detailed point-wise error messages
+                                    errorBox.innerHTML = '<strong>Error occurred:</strong><br>' +
+                                        res.errors.map(err => `<div>${err}</div>`).join('');
+                                } else {
+                                    errorBox.innerHTML = `<strong>Something went wrong.</strong>`;
+                                }
                             }
                         })
                         .catch(error => {

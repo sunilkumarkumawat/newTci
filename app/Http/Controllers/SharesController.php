@@ -4,9 +4,9 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Services\CommonService;
-use Auth;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Artisan;
-use DB;
+use Illuminate\Support\Facades\DB;
 use Session;
 use Yajra\DataTables\Facades\DataTables;
 use Helper;
@@ -553,20 +553,24 @@ class SharesController extends Controller
             return response()->json(['success' => true]);
         } catch (\Exception $e) {
             DB::rollBack();
+            $errorMessage = $e->getMessage();
 
-            // Prepare error list in point-wise format
-            $errorList = [
-                '1. Exception Type: ' . get_class($e),
-                '2. Message: ' . $e->getMessage(),
-                '3. File: ' . $e->getFile(),
-                '4. Line: ' . $e->getLine(),
-            ];
+            // Clean message if it's a column not found error
+            if ($e instanceof \Illuminate\Database\QueryException && str_contains($errorMessage, 'Unknown column')) {
+                preg_match("/Unknown column '([^']+)'/", $errorMessage, $matches);
+                $column = $matches[1] ?? 'Unknown';
+                $friendlyMessage = "Column \"$column\" not found in database table.";
+            } else {
+                $friendlyMessage = 'Failed to save data.';
+            }
 
             return response()->json([
                 'status' => false,
-                'message' => 'Failed to save data.',
-                'errors' => $errorList
+                'message' => $friendlyMessage,
             ], 500);
+
+            
+            
         }
     }
     public function generatePassword(Request $request)
