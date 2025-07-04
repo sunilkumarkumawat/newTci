@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use Illuminate\Http\Request;
 use App\Services\CommonService;
 use Auth;
@@ -55,7 +56,7 @@ class SharesController extends Controller
         return view($modalLower . '/view', compact('data'));
     }
 
-    
+
     public function branch()
     {
         $data = null;
@@ -370,6 +371,71 @@ class SharesController extends Controller
             ->make(true);
     }
 
+
+
+    public function userData(Request $request)
+    {
+        $filters = $request->filterable_columns ?? [];
+
+        $query = User::query()
+            ->leftJoin('role', function ($join) {
+                $join->on('users.role_id', '=', 'role.id')
+                    ->whereNull('role.deleted_at');
+            })
+            ->select(
+                'users.id',
+                'users.name',
+                'users.email',
+                'users.mobile',
+                'users.image',
+                'users.gender',
+                'users.dob',
+                'users.status',
+                'role.name as role_name'
+            );
+
+        // Apply filters
+        foreach ($filters as $filter) {
+            $name = $filter['name'] ?? null;
+            $value = $filter['value'] ?? null;
+
+            if ($name && $value !== null && $value !== '') {
+                $query->where("users.$name", $value);
+            }
+        }
+
+        return DataTables::of($query)
+            ->addIndexColumn()
+
+            // Show user image if exists
+            ->editColumn('image', function ($item) {
+                $imageUrl = $item->image
+                    ? asset($item->image)
+                    : asset('defaultImages/imageError.png');
+                return '<img src="' . $imageUrl . '" width="40" height="40" class="rounded-circle" />';
+            })
+
+            // Format status badge
+            ->editColumn('status', function ($item) {
+                return $item->status
+                    ? '<span class="badge bg-success">Active</span>'
+                    : '<span class="badge bg-danger">Inactive</span>';
+            })
+
+            // Format DOB
+            ->editColumn('dob', function ($item) {
+                return optional($item->dob)->format('d-m-Y');
+            })
+
+            // Action column with view/edit/delete
+            ->addColumn('action', function ($row) {
+                return view('user.partials.actions', compact('row'))->render();
+            })
+
+            ->rawColumns(['image', 'status', 'action'])
+            ->make(true);
+    }
+
     public function questionData(Request $request)
     {
 
@@ -599,4 +665,31 @@ class SharesController extends Controller
 
         return response()->json(['status' => 'success']);
     }
+
+
+    // validation
+    // public function checkExistence(Request $request)
+    // {
+    //     $table = $request->table;
+    //     $field = $request->field;
+    //     $value = $request->value;
+    //     $label = $request->label ?? $field;
+    //     $exceptId = $request->except_id;
+
+    //     if (!Schema::hasTable($table) || !$field) {
+    //         return response()->json(['exists' => false]);
+    //     }
+
+    //     $query = DB::table($table)->where($field, $value);
+    //     if ($exceptId) {
+    //         $query->where('id', '!=', $exceptId);
+    //     }
+
+    //     $exists = $query->exists();
+
+    //     return response()->json([
+    //         'exists' => $exists,
+    //         'message' => $exists ? "$label already exists." : ''
+    //     ]);
+    // }
 }

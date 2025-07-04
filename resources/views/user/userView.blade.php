@@ -3,6 +3,9 @@
 
 @php
     $permissions = Helper::getPermissions();
+     
+$filterable_columns = ['role_id'=>true,  'keyword'=>true];
+    
 @endphp
 
     <div class="content-wrapper">
@@ -38,33 +41,21 @@
                         <div class="card-body">
 
                             <div class="bg-item border p-3 rounded">
-                                <form id="quickForm" method="post" action="#">
-                                    <div class="row">
-                                        <div class="col-md-2 col-12">
-                                            <label>Search By Role</label>
-                                            <select class="form-control">
-                                                <option>Select</option>
-                                                <option>Admin</option>
-                                                <option>Teacher</option>
-                                                <option>Student</option>
-                                            </select>
-                                        </div>
-
-                                        <div class="col-md-4 col-12">
-                                            <label>Search By Keywords</label>
-                                            <input type="text" class="form-control"
-                                                placeholder="Ex. Name, Mobile, Email, Aadhaar etc.">
-                                        </div>
-
-                                        <div class="col-md-1 col-12 mt-4">
-                                            <button type="button" class="btn btn-primary">Search</button>
-                                        </div>
+                                <form id='filterForm'>
+                                <!-- <input type='hidden' value='Question' name='modal_type' /> -->
+                                <div class="row">
+                                    @include('commoninputs.filterinputs', [
+                                    'filters' => $filterable_columns
+                                    ])
+                                    <div class="col-md-1 mt-4">
+                                        <button type="button" id="filterFormButton" class="btn btn-primary">Search</button>
                                     </div>
-                                </form>
+                                </div>
+                            </form>
                             </div>
 
                             <div class="table-responsive">
-                                <table id='dataContainer' class="table table-bordered table-striped mt-4">
+                                <table id='userTable' class="table table-bordered table-striped mt-4">
                                     <input type='hidden' value="User" name='modal_type' />
                                     <thead>
                                         <tr class="bg-light">
@@ -80,11 +71,50 @@
                                             <th>Action</th>
                                         </tr>
                                     </thead>
-                                    <tbody id="dataContainer-user" class='dataContainer'style="min-height:300px">
-                                        @include('common.loadskeletan',['loopCount'=>6])
-
-                                    </tbody>
+                                   
                                 </table>
+                                    <script>
+$(document).ready(function () {
+    const table = $('#userTable').DataTable({
+        processing: true,
+        serverSide: true,
+        ajax: {
+            url: "{{ url('userData') }}",
+            data: function (d) {
+                const formDataArray = [];
+                $('#filterForm').find('input, select, textarea').each(function () {
+                    const name = $(this).attr('name');
+                    const value = $(this).val();
+                    if (name && value !== null && value !== '' && value !== undefined) {
+                        formDataArray.push({ name, value });
+                    }
+                });
+                d.filterable_columns = formDataArray;
+            }
+        },
+        columns: [
+            { data: 'DT_RowIndex', name: 'DT_RowIndex', orderable: false, searchable: false },
+            { data: 'image', name: 'image', orderable: false, searchable: false },
+            { data: 'role_name', name: 'role' },
+            { data: 'name', name: 'name' },
+            { data: 'mobile', name: 'mobile' },
+            { data: 'email', name: 'email' },
+            { data: 'gender', name: 'gender' },
+            { data: 'dob', name: 'dob' },
+            { data: 'status', name: 'status' },
+            { data: 'action', name: 'action', orderable: false, searchable: false }
+        ],
+       
+        drawCallback: function () {
+            updateEquationsInQuestion(); // custom logic if needed
+        }
+    });
+
+    $('#filterFormButton').on('click', function () {
+        table.ajax.reload();
+    });
+});
+</script>
                             </div>
                         </div>
                     </div>

@@ -18,11 +18,11 @@
 
                  </td>
                  <td>{{ $user->role_id ?? '' }}</td>
-                 <td>{{ $user->first_name ?? '' }} {{ $user->last_name ?? '' }}</td>
+                 <td>{{ $user->name ?? '' }} {{ $user->last_name ?? '' }}</td>
                  <td>{{ $user->mobile ?? '' }}</td>
                  <td>{{ $user->email ?? '' }}</td>
                  <td>{{ $user->gender_id ?? '' }}</td>
-                 <td>{{ $user->dob ?? '' }}</td>
+                 <td> @include('common.dateViewer', ['date' => $user->dob ?? ''])</td>
                  <td>
                     @if(in_array('user_management.status', $permissions)  || Auth::user()->role_id == 1)
                      <button

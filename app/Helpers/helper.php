@@ -22,7 +22,7 @@ class Helper
     public static function getPermissions()
     {
         $user = Auth::user() ?? Auth::guard('student')->user();
-    
+
         if (!$user) {
             return [];
         }
@@ -403,37 +403,37 @@ class Helper
         ];
 
         // Filter based on permissions for non-admin users
-      // Detect current logged-in user safely
-$currentUser = Auth::guard('web')->check()
-    ? Auth::guard('web')->user()
-    : (Auth::guard('student')->check() ? Auth::guard('student')->user() : null);
+        // Detect current logged-in user safely
+        $currentUser = Auth::guard('web')->check()
+            ? Auth::guard('web')->user()
+            : (Auth::guard('student')->check() ? Auth::guard('student')->user() : null);
 
-// Apply permission filtering only if user has role_id != 1
-if ($currentUser && isset($currentUser->role_id) && $currentUser->role_id != 1) {
-    foreach ($sidebarMenu as $key => &$menu) {
-        // Filter subItems if present
-        if (isset($menu['subItems'])) {
-            $menu['subItems'] = array_filter($menu['subItems'], function ($sub) use ($allowedPermissions) {
-                return in_array(strtolower($sub['className']), $allowedPermissions);
-            });
+        // Apply permission filtering only if user has role_id != 1
+        if ($currentUser && isset($currentUser->role_id) && $currentUser->role_id != 1) {
+            foreach ($sidebarMenu as $key => &$menu) {
+                // Filter subItems if present
+                if (isset($menu['subItems'])) {
+                    $menu['subItems'] = array_filter($menu['subItems'], function ($sub) use ($allowedPermissions) {
+                        return in_array(strtolower($sub['className']), $allowedPermissions);
+                    });
 
-            // If no subItems left, unset parent
-            if (empty($menu['subItems'])) {
-                unset($sidebarMenu[$key]);
-            }
-        } else {
-            // If no subItems, check main className
-            if (!in_array(strtolower($menu['className']), $allowedPermissions)) {
-                unset($sidebarMenu[$key]);
+                    // If no subItems left, unset parent
+                    if (empty($menu['subItems'])) {
+                        unset($sidebarMenu[$key]);
+                    }
+                } else {
+                    // If no subItems, check main className
+                    if (!in_array(strtolower($menu['className']), $allowedPermissions)) {
+                        unset($sidebarMenu[$key]);
+                    }
+                }
             }
         }
-    }
-}
 
         return array_values($sidebarMenu);
     }
 
-    
+
 
     public static function getPaymentMode()
     {
@@ -590,6 +590,42 @@ if ($currentUser && isset($currentUser->role_id) && $currentUser->role_id != 1) 
         }
     }
 
+    // export data
+    
+    // public static function export($data, $type = 'excel', $fileName = 'export', $excelHeadings = [], $pdfView = '', $pdfDataKey = '')
+    // {
+    //     if ($type === 'excel') {
+    //         $export = new class($data, $excelHeadings) implements \Maatwebsite\Excel\Concerns\FromCollection, \Maatwebsite\Excel\Concerns\WithHeadings {
+    //             protected $data;
+    //             protected $headings;
+
+    //             public function __construct($data, $headings)
+    //             {
+    //                 $this->data = $data;
+    //                 $this->headings = $headings;
+    //             }
+
+    //             public function collection()
+    //             {
+    //                 return $this->data;
+    //             }
+
+    //             public function headings(): array
+    //             {
+    //                 return $this->headings;
+    //             }
+    //         };
+
+    //         return Excel::download($export, $fileName . '.xlsx');
+    //     }
+
+    //     if ($type === 'pdf') {
+    //         $pdf = Pdf::loadView($pdfView, [$pdfDataKey => $data]);
+    //         return $pdf->download($fileName . '.pdf');
+    //     }
+
+    //     return response()->json(['error' => 'Invalid export type'], 400);
+    // }
 
     public static function getName($model, $id)
     {

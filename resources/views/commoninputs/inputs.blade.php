@@ -11,6 +11,16 @@
     $nameField = $nameField ?? true;
 @endphp
 
+@php
+    $options = [];
+
+    if ($modal === 'Role') {
+        // Fetch roles except ID 1
+        $options = \App\Models\Role::where('id', '!=', 1)->pluck('name', 'id');
+    }
+
+@endphp
+
 <div class="form-group mb-0">
     @if (!empty($label) && $labelBoolean != false)
         <label for="{{ $name }}">
