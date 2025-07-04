@@ -904,63 +904,6 @@
                 });
 
 
-                // common validation for 
-                // function checkExistence({
-                //     inputId,
-                //     table,
-                //     field = null,
-                //     label = null,
-                //     exceptId = null
-                // }) {
-                //     const $input = $('#' + inputId);
-                //     const value = $input.val().trim();
-
-                //     // Auto detect field from name if not passed
-                //     const fieldName = field || $input.attr('name');
-
-                //     // Auto detect label from data-label or fallback to field
-                //     const fieldLabel = label || $input.data('label') || fieldName;
-
-                //     // Get or fallback error element
-                //     let $errorBox = $('#' + inputId + '-error');
-                //     if ($errorBox.length === 0) {
-                //         $errorBox = $input.siblings('.text-danger');
-                //     }
-
-                //     if (!value) {
-                //         $errorBox.text('');
-                //         $input.removeClass('is-invalid');
-                //         return;
-                //     }
-
-                //     $.ajax({
-                //         type: 'POST',
-                //         url: "{{ route('check.existence') }}", // 👈 You must create this route
-                //         data: {
-                //             _token: '{{ csrf_token() }}',
-                //             table: table,
-                //             field: fieldName,
-                //             value: value,
-                //             label: fieldLabel,
-                //             except_id: exceptId
-                //         },
-                //         success: function(response) {
-                //             if (response.exists) {
-                //                 $errorBox.text(response.message);
-                //                 $input.addClass('is-invalid');
-                //             } else {
-                //                 $errorBox.text('');
-                //                 $input.removeClass('is-invalid');
-                //             }
-                //         },
-                //         error: function() {
-                //             $errorBox.text('Something went wrong. Please try again.');
-                //             $input.addClass('is-invalid');
-                //         }
-                //     });
-                // }
-
-
 
                 // function dataGet() {
                 //     var baseUrl = "{{ url('/') }}";
