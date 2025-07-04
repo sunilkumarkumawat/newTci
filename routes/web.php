@@ -277,7 +277,8 @@ Route::middleware(['auth'])->group(function () {
    
 
 
-    Route::post('/check-existence', [SharesController::class, 'checkExistence'])->name('check.existence');
+//    Route::post('/user/check-exist', [SharesController::class, 'checkUserExist'])->name('user.checkExist');
+
 
 
 });

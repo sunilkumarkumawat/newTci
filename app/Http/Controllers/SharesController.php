@@ -371,8 +371,31 @@ class SharesController extends Controller
             ->make(true);
     }
 
+    // data already exist or not
+    // public function checkUserExist(Request $request)
+    // {
+    //     $field = $request->field;
+    //     $value = $request->value;
+    //     $exceptId = $request->except_id;
 
+    //     if (!in_array($field, ['email', 'mobile']) || !$value) {
+    //         return response()->json(['exists' => false]);
+    //     }
 
+    //     $query = \App\Models\User::where($field, $value);
+    //     if ($exceptId) {
+    //         $query->where('id', '!=', $exceptId);
+    //     }
+
+    //     $exists = $query->exists();
+
+    //     return response()->json([
+    //         'exists' => $exists,
+    //         'message' => $exists ? ucfirst($field) . ' already exists.' : ''
+    //     ]);
+    // }
+
+    // get user data
     public function userData(Request $request)
     {
         $filters = $request->filterable_columns ?? [];
@@ -460,7 +483,6 @@ class SharesController extends Controller
     }
     public function questionData(Request $request)
     {
-
 
         $filters = $request->filterable_columns ?? [];
 
@@ -688,31 +710,4 @@ class SharesController extends Controller
 
         return response()->json(['status' => 'success']);
     }
-
-
-    // validation
-    // public function checkExistence(Request $request)
-    // {
-    //     $table = $request->table;
-    //     $field = $request->field;
-    //     $value = $request->value;
-    //     $label = $request->label ?? $field;
-    //     $exceptId = $request->except_id;
-
-    //     if (!Schema::hasTable($table) || !$field) {
-    //         return response()->json(['exists' => false]);
-    //     }
-
-    //     $query = DB::table($table)->where($field, $value);
-    //     if ($exceptId) {
-    //         $query->where('id', '!=', $exceptId);
-    //     }
-
-    //     $exists = $query->exists();
-
-    //     return response()->json([
-    //         'exists' => $exists,
-    //         'message' => $exists ? "$label already exists." : ''
-    //     ]);
-    // }
 }
