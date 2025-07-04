@@ -1,8 +1,8 @@
 @extends('layout.app')
 @section('content')
-@php
-    $permissions = Helper::getPermissions();
-@endphp
+    @php
+        $permissions = Helper::getPermissions();
+    @endphp
     <div class="content-wrapper">
         <section class="content">
             <div class="container-fluid">
@@ -23,9 +23,10 @@
                                 <h4><i class="fa fa-desktop"></i> &nbsp;View Student</h4>
                             </div>
                             <div class="card-tools">
-                                @if(in_array('student_management.`add`', $permissions)  || Auth::user()->role_id == 1)
-                                <a href="{{ url('studentAdd') }}" class="student_management.add btn btn-primary  btn-sm"><i class="fa fa-plus"></i>
-                                    <span class="Display_none_mobile"> {{ __('common.Add') }} </span></a>
+                                @if (in_array('student_management.`add`', $permissions) || Auth::user()->role_id == 1)
+                                    <a href="{{ url('studentAdd') }}"
+                                        class="student_management.add btn btn-primary  btn-sm"><i class="fa fa-plus"></i>
+                                        <span class="Display_none_mobile"> {{ __('common.Add') }} </span></a>
                                 @endif
                                 {{-- <a href="{{ url('studentAdd') }}" class="btn btn-primary btn-sm"><i
                                 class="fa fa-arrow-left"></i> <span class="Display_none_mobile"> {{ __('common.Back') }}
@@ -63,8 +64,17 @@
                                 </form>
                             </div>
 
-                            <div class="table-responsive mt-2 ">
-                                <table id='dataContainer' class="table table-bordered table-striped mt-4">
+                            {{-- </div> --}}
+                            <div class="table-responsive mt-3 ">
+                                <div class="row">
+                                    <div class="text-md-right col-md-12 col-12 align-content-end ">
+                                        <button class="btn btn-outline-primary"><i class="fas fa-file-download"></i> Export
+                                            PDF</button>
+                                        <button id="exportExcel" class="btn btn-outline-secondary" type="button"><i class="fas fa-file-download"></i>
+                                            Export CSV</button>
+                                    </div>
+                                </div>
+                                <table id='dataContainer' class="table table-bordered table-striped mt-1">
                                     <thead>
                                         <tr class="bg-light">
                                             <th>SR.NO</th>
@@ -78,9 +88,8 @@
                                             <th>Action</th>
                                         </tr>
                                     </thead>
-                                    <tbody id='dataContainer-student'
-                                    class="dataContainer" style="min-height: 300px">
-                                         @include('common.loadskeletan',['loopCount'=>5])
+                                    <tbody id='dataContainer-student' class="dataContainer" style="min-height: 300px">
+                                        @include('common.loadskeletan', ['loopCount' => 5])
                                     </tbody>
                                 </table>
                             </div>
@@ -161,4 +170,6 @@
             });
         });
     </script>
+
+
 @endsection

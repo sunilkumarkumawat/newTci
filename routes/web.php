@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\SharesController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
@@ -221,6 +222,7 @@ Route::middleware(['auth'])->group(function () {
     Route::match(['get', 'post'], 'questions', 'SharesController@questions');
     Route::match(['get', 'post'], 'questionView', 'SharesController@questionView');
     Route::match(['get', 'post'], 'questionData', 'SharesController@questionData');
+    Route::match(['get', 'post'], 'userData', 'SharesController@userData');
 
 
 
@@ -273,6 +275,9 @@ Route::middleware(['auth'])->group(function () {
     Route::match(['get', 'post'], '/attendence_report', 'ReportController@attendencereport');
     Route::match(['get', 'post'], '/customReport', 'ReportController@customreport');
    
+
+
+    Route::post('/check-existence', [SharesController::class, 'checkExistence'])->name('check.existence');
 
 
 });

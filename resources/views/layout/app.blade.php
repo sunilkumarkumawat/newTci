@@ -1,5 +1,5 @@
 @php
-$setting = DB::table('settings')->get()->first();
+    $setting = DB::table('settings')->get()->first();
 @endphp
 
 <!DOCTYPE html>
@@ -139,7 +139,7 @@ $setting = DB::table('settings')->get()->first();
 
 
 @php
-$cur_route = Route::getFacadeRoot()->current()->uri();
+    $cur_route = Route::getFacadeRoot()->current()->uri();
 @endphp
 
 <body class="sidebar-mini layout-fixed sidebar-collapse">
@@ -148,19 +148,19 @@ $cur_route = Route::getFacadeRoot()->current()->uri();
 
         @include('layout.header')
         @if (Session()->get('role_id') == 3)
-        @include('layout.student_sidebar')
+            @include('layout.student_sidebar')
         @else
-        @include('layout.sidebar')
+            @include('layout.sidebar')
         @endif
         @include('layout.message')
         @yield('content')
         @include('layout.footer')
         <script>
             /*$.ajaxSetup({
-                                                                                                                                                                                                                                                                                                                                                            headers: {
-                                                                                                                                                                                                                                                                                                                                                                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                                                                                                                                                                                                                                                                                                                                                            }
-                                                                                                                                                                                                                                                                                                                                                        });*/
+                                                                                                                                                                                                                                                                                                                                                                            headers: {
+                                                                                                                                                                                                                                                                                                                                                                                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                                                                                                                                                                                                                                                                                                                                                                            }
+                                                                                                                                                                                                                                                                                                                                                                        });*/
             //var URL  = "{{ url('/') }}";
         </script>
 
@@ -820,8 +820,10 @@ $cur_route = Route::getFacadeRoot()->current()->uri();
                     }
 
 
-                    let currentStep = $(this).attr('data-step') || 1; // Get current step from data attribute or default to 1
-                    let totalSteps = $(this).attr('data-total_steps') || 1; // Get current step from data attribute or default to 1
+                    let currentStep = $(this).attr('data-step') ||
+                        1; // Get current step from data attribute or default to 1
+                    let totalSteps = $(this).attr('data-total_steps') ||
+                        1; // Get current step from data attribute or default to 1
 
 
 
@@ -864,9 +866,11 @@ $cur_route = Route::getFacadeRoot()->current()->uri();
                                 const id = response?.data?.id;
 
                                 if (id) {
-                                    window.location.href = `{{ url('/') }}/createExam?query=${id}`;
+                                    window.location.href =
+                                        `{{ url('/') }}/createExam?query=${id}`;
                                 } else {
-                                    toastr.error('Exam ID is missing. Cannot proceed with redirection.');
+                                    toastr.error(
+                                        'Exam ID is missing. Cannot proceed with redirection.');
                                 }
                             }
 
@@ -899,6 +903,62 @@ $cur_route = Route::getFacadeRoot()->current()->uri();
 
                 });
 
+
+                // common validation for 
+                // function checkExistence({
+                //     inputId,
+                //     table,
+                //     field = null,
+                //     label = null,
+                //     exceptId = null
+                // }) {
+                //     const $input = $('#' + inputId);
+                //     const value = $input.val().trim();
+
+                //     // Auto detect field from name if not passed
+                //     const fieldName = field || $input.attr('name');
+
+                //     // Auto detect label from data-label or fallback to field
+                //     const fieldLabel = label || $input.data('label') || fieldName;
+
+                //     // Get or fallback error element
+                //     let $errorBox = $('#' + inputId + '-error');
+                //     if ($errorBox.length === 0) {
+                //         $errorBox = $input.siblings('.text-danger');
+                //     }
+
+                //     if (!value) {
+                //         $errorBox.text('');
+                //         $input.removeClass('is-invalid');
+                //         return;
+                //     }
+
+                //     $.ajax({
+                //         type: 'POST',
+                //         url: "{{ route('check.existence') }}", // 👈 You must create this route
+                //         data: {
+                //             _token: '{{ csrf_token() }}',
+                //             table: table,
+                //             field: fieldName,
+                //             value: value,
+                //             label: fieldLabel,
+                //             except_id: exceptId
+                //         },
+                //         success: function(response) {
+                //             if (response.exists) {
+                //                 $errorBox.text(response.message);
+                //                 $input.addClass('is-invalid');
+                //             } else {
+                //                 $errorBox.text('');
+                //                 $input.removeClass('is-invalid');
+                //             }
+                //         },
+                //         error: function() {
+                //             $errorBox.text('Something went wrong. Please try again.');
+                //             $input.addClass('is-invalid');
+                //         }
+                //     });
+                // }
 
 
 
@@ -1047,13 +1107,15 @@ $cur_route = Route::getFacadeRoot()->current()->uri();
                 const id = $(this).data('id'); // get record ID
                 var isDeleted = $(this).data('deleted') == '1';
                 const baseUrl = "{{ url('/') }}"; // base URL (Blade will output Laravel base URL)
-                const target = $(this).closest('.position-relative'); // find the closest parent with class 'position-relative'
+                const target = $(this).closest(
+                    '.position-relative'); // find the closest parent with class 'position-relative'
 
                 let deleteUrl = isDeleted ?
                     `${baseUrl}/common-force-delete/${modal}/${id}` :
                     `${baseUrl}/common-delete/${modal}/${id}`;
 
-                if (confirm(isDeleted ? "Permanently delete this item? \nThis action is not irreversible" : "Are you sure you want to delete this item?")) {
+                if (confirm(isDeleted ? "Permanently delete this item? \nThis action is not irreversible" :
+                        "Are you sure you want to delete this item?")) {
                     $.ajax({
                         url: deleteUrl,
                         type: 'POST',
@@ -1327,7 +1389,8 @@ $cur_route = Route::getFacadeRoot()->current()->uri();
                             // Handle success
                             toastr.success('Usernames and passwords generated successfully!');
                             hideElements();
-                            $('#generatePassTable').find('tbody').html(''); // Display generated usernames
+                            $('#generatePassTable').find('tbody').html(
+                                ''); // Display generated usernames
                             // Optionally reset form or reload table
                         },
                         error: function(xhr) {
@@ -1358,7 +1421,9 @@ $cur_route = Route::getFacadeRoot()->current()->uri();
                     let reader = new FileReader();
 
                     reader.onload = function(e) {
-                        let container = $('<div class="col-md-3 mb-3 text-center border rounded p-2 position-relative"></div>');
+                        let container = $(
+                            '<div class="col-md-3 mb-3 text-center border rounded p-2 position-relative"></div>'
+                        );
                         container.append(`<strong>${category}</strong><br>`);
 
                         container.append(`
@@ -1367,7 +1432,9 @@ $cur_route = Route::getFacadeRoot()->current()->uri();
             `);
 
                         // Remove button
-                        let removeBtn = $('<button type="button" class="btn btn-sm btn-danger position-absolute top-0 end-0 m-1">&times;</button>');
+                        let removeBtn = $(
+                            '<button type="button" class="btn btn-sm btn-danger position-absolute top-0 end-0 m-1">&times;</button>'
+                        );
                         removeBtn.on('click', function() {
                             container.remove(); // remove the whole container
                         });
@@ -1489,7 +1556,7 @@ $cur_route = Route::getFacadeRoot()->current()->uri();
 
                     const modalName = $('#excelFile').attr('data-modal');
                     // Send AJAX POST request to your Laravel endpoint
-                    fetch(`{{url('/excelUpload')}}/${modalName}`, { // Change this to your actual route URL
+                    fetch(`{{ url('/excelUpload') }}/${modalName}`, { // Change this to your actual route URL
                             method: 'POST',
                             headers: {
                                 'Content-Type': 'application/json',
@@ -1557,7 +1624,8 @@ $cur_route = Route::getFacadeRoot()->current()->uri();
             });
         </script>
 
-        <div class="modal fade" id="viewQuestionModal" tabindex="-1" aria-labelledby="viewQuestionModal" aria-hidden="true">
+        <div class="modal fade" id="viewQuestionModal" tabindex="-1" aria-labelledby="viewQuestionModal"
+            aria-hidden="true">
             <div class="modal-dialog ">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -1613,13 +1681,15 @@ $cur_route = Route::getFacadeRoot()->current()->uri();
                 <div class="modal-content">
                     <div class="modal-header bg-danger text-white">
                         <h5 class="modal-title" id="deleteModalLabel">Confirm Delete</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                            aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
                         Are you sure you want to delete this item?
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Cancel</button>
+                        <button type="button" class="btn btn-secondary btn-sm"
+                            data-bs-dismiss="modal">Cancel</button>
                         <button type="button" id="confirmDeleteBtn" class="btn btn-danger btn-sm">Delete</button>
                     </div>
                 </div>
