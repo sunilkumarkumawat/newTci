@@ -12,7 +12,8 @@
 @endphp
 
 @php
-    $options = [];
+    
+
 
     if ($modal === 'Role') {
         // Fetch roles except ID 1

@@ -391,6 +391,7 @@ class SharesController extends Controller
                 'users.gender',
                 'users.dob',
                 'users.status',
+                'users.role_id',
                 'role.name as role_name'
             );
 
@@ -400,42 +401,63 @@ class SharesController extends Controller
             $value = $filter['value'] ?? null;
 
             if ($name && $value !== null && $value !== '') {
-                $query->where("users.$name", $value);
+                if ($name === 'keyword') {
+                    $query->where(function ($q) use ($value) {
+                        $q->where('users.name', 'like', "%{$value}%")
+                            ->orWhere('users.email', 'like', "%{$value}%")
+                            ->orWhere('users.mobile', 'like', "%{$value}%");
+                    });
+                } else {
+                    $query->where("users.$name", $value);
+                }
             }
         }
 
         return DataTables::of($query)
             ->addIndexColumn()
 
-            // Show user image if exists
+            // User profile image
             ->editColumn('image', function ($item) {
                 $imageUrl = $item->image
                     ? asset($item->image)
                     : asset('defaultImages/imageError.png');
-                return '<img src="' . $imageUrl . '" width="40" height="40" class="rounded-circle" />';
+                return '<img src="' . $imageUrl . '" width="40" height="40" class="rounded-circle profileImg" style="cursor:pointer;" />';
             })
 
-            // Format status badge
+            // Status Badge
             ->editColumn('status', function ($item) {
-                return $item->status
+                $badge = $item->status
                     ? '<span class="badge bg-success">Active</span>'
                     : '<span class="badge bg-danger">Inactive</span>';
+                return '<span style="cursor:pointer;" data-id="' . $item->id . '" data-status="' . $item->status . '" class="change-status-btn">' . $badge . '</span>';
+            })
+            // Gender formatting
+            ->editColumn('gender', function ($item) {
+                switch ($item->gender) {
+                    case 1:
+                        return 'Male';
+                    case 2:
+                        return 'Female';
+                    case 3:
+                        return 'Other';
+                    default:
+                        return '-';
+                }
             })
 
             // Format DOB
             ->editColumn('dob', function ($item) {
-                return optional($item->dob)->format('d-m-Y');
+                return $item->dob ? \Carbon\Carbon::parse($item->dob)->format('d-m-Y') : '';
             })
 
-            // Action column with view/edit/delete
+            // Action buttons partial
             ->addColumn('action', function ($row) {
                 return view('user.partials.actions', compact('row'))->render();
             })
 
-            ->rawColumns(['image', 'status', 'action'])
+            ->rawColumns(['gender','image', 'status', 'action'])
             ->make(true);
     }
-
     public function questionData(Request $request)
     {
 
@@ -634,9 +656,6 @@ class SharesController extends Controller
                 'status' => false,
                 'message' => $friendlyMessage,
             ], 500);
-
-            
-            
         }
     }
     public function generatePassword(Request $request)

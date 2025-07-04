@@ -1,203 +1,191 @@
 @extends('layout.app')
-@section('content')
 
+@section('content')
 @php
     $permissions = Helper::getPermissions();
-     
-$filterable_columns = ['role_id'=>true,  'keyword'=>true];
-    
+    $filterable_columns = ['role_id' => true, 'keyword' => true];
 @endphp
 
-    <div class="content-wrapper">
-        <section class="content">
-            <div class="container-fluid">
-                {{-- breadcrumb --}}
-                <div class="row">
-                    <div class="col-md-12 col-12 p-0">
-                        <ul class="breadcrumb">
-                            <li class="breadcrumb-item"><a href="{{ url('dashboard') }}">Dashboard</a></li>
-                            <li class="breadcrumb-item">UserView</li>
-                        </ul>
-                    </div>
+<div class="content-wrapper">
+    <section class="content">
+        <div class="container-fluid">
+
+            {{-- Breadcrumb --}}
+            <div class="row">
+                <div class="col-md-12 col-12 p-0">
+                    <ul class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="{{ url('dashboard') }}">Dashboard</a></li>
+                        <li class="breadcrumb-item">UserView</li>
+                    </ul>
                 </div>
+            </div>
 
-                <div class="row">
-                    <div class="card card-outline card-orange col-md-12 col-12 p-0">
-                        <div class="card-header bg-primary">
-                            <div class="card-title">
-                                <h4><i class="fa fa-desktop"></i> &nbsp;View User</h4>
-                            </div>
-                            <div class="card-tools">
-                                @if(in_array('user_management.edit', $permissions)  || Auth::user()->role_id == 1)
-                                <a href="{{ url('userAdd') }}" class="btn btn-primary  btn-sm"><i class="fa fa-plus"></i>
-                                    <span class="Display_none_mobile"> {{ __('common.Add') }} </span></a>
-                                @endif
-                                {{-- <a href="{{ url('userDashboard') }}" class="btn btn-primary  btn-sm"><i
-                                        class="fa fa-arrow-left"></i> <span class="Display_none_mobile">
-                                        {{ __('common.Back') }}
-                                    </span></a> --}}
-                            </div>
+            <div class="row">
+                <div class="card card-outline card-orange col-md-12 col-12 p-0">
+                    <div class="card-header bg-primary">
+                        <div class="card-title">
+                            <h4><i class="fa fa-desktop"></i> &nbsp;View User</h4>
                         </div>
-                        <div class="card-body">
+                        <div class="card-tools">
+                            @if(in_array('user_management.edit', $permissions) || Auth::user()->role_id == 1)
+                                <a href="{{ url('userAdd') }}" class="btn btn-sm btn-light text-primary">
+                                    <i class="fa fa-plus"></i>
+                                    <span class="d-none d-sm-inline">{{ __('common.Add') }}</span>
+                                </a>
+                            @endif
+                        </div>
+                    </div>
 
-                            <div class="bg-item border p-3 rounded">
-                                <form id='filterForm'>
-                                <!-- <input type='hidden' value='Question' name='modal_type' /> -->
+                    <div class="card-body">
+                        <div class="bg-item border p-3 rounded">
+                            <form id="filterForm">
                                 <div class="row">
-                                    @include('commoninputs.filterinputs', [
-                                    'filters' => $filterable_columns
-                                    ])
+                                    @include('commoninputs.filterinputs', ['filters' => $filterable_columns])
                                     <div class="col-md-1 mt-4">
                                         <button type="button" id="filterFormButton" class="btn btn-primary">Search</button>
                                     </div>
                                 </div>
                             </form>
-                            </div>
+                        </div>
 
-                            <div class="table-responsive">
-                                <table id='userTable' class="table table-bordered table-striped mt-4">
-                                    <input type='hidden' value="User" name='modal_type' />
-                                    <thead>
-                                        <tr class="bg-light">
-                                            <th>SR.NO</th>
-                                            <th class="text-center">Image</th>
-                                            <th>Role</th>
-                                            <th>Name</th>
-                                            <th>Mobile</th>
-                                            <th>E-Mail</th>
-                                            <th>Gender</th>
-                                            <th>DOB</th>
-                                            <th>Status</th>
-                                            <th>Action</th>
-                                        </tr>
-                                    </thead>
-                                   
-                                </table>
-                                    <script>
-$(document).ready(function () {
-    const table = $('#userTable').DataTable({
-        processing: true,
-        serverSide: true,
-        ajax: {
-            url: "{{ url('userData') }}",
-            data: function (d) {
-                const formDataArray = [];
-                $('#filterForm').find('input, select, textarea').each(function () {
-                    const name = $(this).attr('name');
-                    const value = $(this).val();
-                    if (name && value !== null && value !== '' && value !== undefined) {
-                        formDataArray.push({ name, value });
-                    }
-                });
-                d.filterable_columns = formDataArray;
-            }
-        },
-        columns: [
-            { data: 'DT_RowIndex', name: 'DT_RowIndex', orderable: false, searchable: false },
-            { data: 'image', name: 'image', orderable: false, searchable: false },
-            { data: 'role_name', name: 'role' },
-            { data: 'name', name: 'name' },
-            { data: 'mobile', name: 'mobile' },
-            { data: 'email', name: 'email' },
-            { data: 'gender', name: 'gender' },
-            { data: 'dob', name: 'dob' },
-            { data: 'status', name: 'status' },
-            { data: 'action', name: 'action', orderable: false, searchable: false }
-        ],
-       
-        drawCallback: function () {
-            updateEquationsInQuestion(); // custom logic if needed
-        }
-    });
-
-    $('#filterFormButton').on('click', function () {
-        table.ajax.reload();
-    });
-});
-</script>
-                            </div>
+                        <div class="table-responsive">
+                            <table id="userTable" class="table table-bordered table-striped mt-4">
+                                <thead class="bg-light">
+                                    <tr>
+                                        <th>SR.NO</th>
+                                        <th class="text-center">Image</th>
+                                        <th>Role</th>
+                                        <th>Name</th>
+                                        <th>Mobile</th>
+                                        <th>E-Mail</th>
+                                        <th>Gender</th>
+                                        <th>DOB</th>
+                                        <th>Status</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                            </table>
                         </div>
                     </div>
                 </div>
             </div>
 
             <!-- Modals -->
-            <div class="modal fade" id="statusModal" tabindex="-1" role="dialog">
+
+            {{-- Change Status Modal --}}
+            <div class="modal fade" id="statusModal" tabindex="-1" role="dialog" aria-hidden="true">
                 <div class="modal-dialog" role="document">
-                    <div class="modal-content" style="background: #555b5beb;">
+                    <div class="modal-content bg-dark text-white">
                         <div class="modal-header">
-                            <h5 class="modal-title text-white">Change Status Confirmation</h5>
-                            <button type="button" class="close text-white" data-dismiss="modal"><i
-                                    class="fa fa-times"></i></button>
+                            <h5 class="modal-title">Change Status Confirmation</h5>
+                            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
-                        <div class="modal-body text-white">
+                        <div class="modal-body">
                             Are you sure you want to change status?
                             <input type="hidden" id="status_id">
                             <input type="hidden" id="id">
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                             <button type="submit" class="btn btn-danger">Submit</button>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <div class="modal" id="Modal_id">
-                <div class="modal-dialog">
-                    <div class="modal-content" style="background: #555b5beb;">
+            {{-- Delete Modal --}}
+            <div class="modal fade" id="Modal_id" tabindex="-1" role="dialog" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content bg-dark text-white">
                         <div class="modal-header">
-                            <h5 class="modal-title text-white">Delete Confirmation</h5>
-                            <button type="button" class="btn-close text-white" data-bs-dismiss="modal"><i
-                                    class="fa fa-times"></i></button>
+                            <h5 class="modal-title">Delete Confirmation</h5>
+                            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
-                        <div class="modal-body text-white">
+                        <div class="modal-body">
                             Are you sure you want to delete?
                             <input type="hidden" id="delete_id">
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-default" data-bs-dismiss="modal">Close</button>
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                             <button type="submit" class="btn btn-danger">Delete</button>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <div class="modal fade" id="profileImgModal" role="dialog">
+            {{-- Profile Image Preview Modal --}}
+            <div class="modal fade" id="profileImgModal" tabindex="-1" aria-hidden="true">
                 <div class="modal-dialog modal-md">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <button type="button" class="close text-dark" data-bs-dismiss="modal">&times;</button>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
-                        <div class="modal-body">
-                            <img id="profileImg" src="" width="100%" height="100%">
+                        <div class="modal-body text-center">
+                            <img id="profileImg" src="" class="img-fluid" alt="Profile Image">
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-default" data-bs-dismiss="modal">Close</button>
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                         </div>
                     </div>
                 </div>
             </div>
-        </section>
-    </div>
+
+        </div>
+    </section>
+</div>
 
 
-    {{-- style css --}}
-
-    <style>
-
-    </style>
-
-    <!-- Scripts -->
-    <script>
-        $(document).ready(function() {
-            $('.profileImg').click(function() {
-                var profileImgUrl = $(this).attr('src');
-                if (profileImgUrl) {
-                    $('#profileImgModal').modal('show');
-                    $('#profileImg').attr('src', profileImgUrl);
+<script>
+    $(document).ready(function () {
+        const table = $('#userTable').DataTable({
+            processing: true,
+            serverSide: true,
+            ajax: {
+                url: "{{ url('userData') }}",
+                data: function (d) {
+                    const formDataArray = [];
+                    $('#filterForm').find('input, select, textarea').each(function () {
+                        const name = $(this).attr('name');
+                        const value = $(this).val();
+                        if (name && value !== null && value !== '' && value !== undefined) {
+                            formDataArray.push({ name, value });
+                        }
+                    });
+                    d.filterable_columns = formDataArray;
                 }
-            });
+            },
+            columns: [
+                { data: 'DT_RowIndex', name: 'DT_RowIndex', orderable: false, searchable: false },
+                { data: 'image', name: 'image', orderable: false, searchable: false },
+                { data: 'role_name', name: 'role' },
+                { data: 'name', name: 'name' },
+                { data: 'mobile', name: 'mobile' },
+                { data: 'email', name: 'email' },
+                { data: 'gender', name: 'gender' },
+                { data: 'dob', name: 'dob' },
+                { data: 'status', name: 'status' },
+                { data: 'action', name: 'action', orderable: false, searchable: false }
+            ],
+            drawCallback: function () {
+                if (typeof updateEquationsInQuestion === 'function') {
+                    updateEquationsInQuestion();
+                }
+            }
         });
-    </script>
+
+        $('#filterFormButton').on('click', function () {
+            table.ajax.reload();
+        });
+
+        $(document).on('click', '.profileImg', function () {
+            const profileImgUrl = $(this).attr('src');
+            if (profileImgUrl) {
+                $('#profileImg').attr('src', profileImgUrl);
+                $('#profileImgModal').modal('show');
+            }
+        });
+    });
+</script>
+
+
 @endsection
