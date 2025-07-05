@@ -273,8 +273,12 @@ class ExamController extends Controller
             $questions = Question::whereIn('id', $questionIds)
                 ->get();
 
+                $subjectName = DB::table('all_subjects')
+                ->where('id', $subject)
+                ->value('name');
+
             // Store in structured array
-            $questionsBySubject[$subject] = $questions;
+            $questionsBySubject[$subjectName] = $questions;
         }
 
         return view('exam.paperPreview', compact('questionsBySubject'));

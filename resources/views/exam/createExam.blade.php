@@ -255,7 +255,7 @@
                     <i class="fas fa-times"></i>
                 </button>
                 <!-- Back to Sub-topics Modal -->
-                <button type="button" class="btn topic_times_button" onclick="goBackToSubTopics()">
+                <button type="button" class="btn topic_times_button" onclick="goBackToSubTopics()" data-chapterId='' data-topicId=''>
                     <i class="fa fa-arrow-left"></i>
                 </button>
             </div>
@@ -328,6 +328,7 @@
     let numberOfSelectedSubject = 0;
     let finalArray = @json($questioningData) || {};
     let overviewMap = @json($overviewingData ?? null);
+    let finalQuestionArray = @json($finalQuestionArray ?? []);
 
     if (overviewMap !== null) {
 
@@ -369,8 +370,15 @@
         let container = $('<div>').append($clonedRows);
         finalArray[classTypeId][subjectId] = container.html();
 
+        updateSelectedQuestionCountsBySubject();
+
+         const subjectOverview = $('#subject_overview').html(); // Or use `.data('overview-id')` from somewhere
+
+        // ✅ Store subject_overview_id
+        overviewMap = subjectOverview;
         // 🔁 Save both arrays
         draftExam(finalArray, overviewMap);
+ 
     }
     $('#questionsSelectionSection').hide();
 
@@ -513,14 +521,23 @@
 
 
     // Optional: Subject item click handler
-    $(document).on('click', '#generatePreview', function() {
-        let questionIds = {
-            'Physics': [1, 3, 4],
-            'Chemistry': [5, 7, 9]
-        };
-        loadPreview(questionIds);
+    $(document).on('click', '#generatePreview', function () {
+    let questionIds = {};
+
+    $('.subject_selected_question').each(function () {
+        const subjectId = $(this).data('subject_id');
+        const objectiveStr = $(this).attr('data-objective') || '';
+        const numericStr = $(this).attr('data-numeric') || '';
+
+        const objectiveIds = objectiveStr.split(',').filter(Boolean);
+        const numericIds = numericStr.split(',').filter(Boolean);
+
+        questionIds[subjectId] = [...objectiveIds, ...numericIds];
     });
 
+    // 🔥 Now call your preview function
+    loadPreview(questionIds);
+});
     // Optional: Subject item click handler
     $(document).on('click', '.getPreview', function() {
         const objective = ($(this).data('objective') || '').toString().split(',').filter(Boolean);
@@ -664,7 +681,7 @@
             },
             success: function(response) {
                 if (response.status === 'success') {
-                    toastr.success("Draft saved successfully.");
+                    // toastr.success("Draft saved successfully.");
                 } else {
                     toastr.error("Failed to save draft.");
                 }
@@ -678,11 +695,9 @@
    function updateSelectedQuestionCountsBySubject() {
     let results = {};
 
-    // Loop through each classTypeId
     for (let classTypeId in finalArray) {
         if (!finalArray.hasOwnProperty(classTypeId)) continue;
 
-        // Loop through each subjectId under that classType
         for (let subjectId in finalArray[classTypeId]) {
             if (!finalArray[classTypeId].hasOwnProperty(subjectId)) continue;
 
@@ -692,45 +707,60 @@
             let objective = 0;
             let numeric = 0;
 
-            // Sum all selected_objective_questions
-            $parsed.find('.selected_objective_questions').each(function () {
-                const val = parseInt($(this).val());
-                if (!isNaN(val) && val > 0) {
-                    objective += val;
+            // ✅ Initialize ID arrays
+            let objectiveIds = [];
+            let numericIds = [];
+
+            // Sum all selected_objective_questions and collect IDs
+            $parsed.find('.getPreview').each(function () {
+                const obj = $(this).attr('data-objective') || '';
+                const num = $(this).attr('data-numeric') || '';
+
+                if (obj) {
+                    const ids = obj.split(',').filter(Boolean);
+                    objective += ids.length;
+                    objectiveIds = objectiveIds.concat(ids);
+                }
+
+                if (num) {
+                    const ids = num.split(',').filter(Boolean);
+                    numeric += ids.length;
+                    numericIds = numericIds.concat(ids);
                 }
             });
 
-            // Sum all selected_numeric_questions
-            $parsed.find('.selected_numeric_questions').each(function () {
-                const val = parseInt($(this).val());
-                if (!isNaN(val) && val > 0) {
-                    numeric += val;
-                }
-            });
-
-            // ✅ Add to subjectId total (aggregated)
+            // Prepare results
             if (!results[subjectId]) {
-                results[subjectId] = { objective: 0, numeric: 0 };
+                results[subjectId] = {
+                    objective: 0,
+                    numeric: 0,
+                    objective_ids: [],
+                    numeric_ids: []
+                };
             }
-
-
-
-   const $target = $(`#subjectContainer [data-subject_id="${subjectId}"].subject_selected_question`);
-
-    if ($target.length > 0) {
-        $target.text(`Selected Questions: ${objective + numeric}`);
-    } else {
-        console.warn('Target not found for subjectId:', subjectId);
-    }
 
             results[subjectId].objective += objective;
             results[subjectId].numeric += numeric;
+            results[subjectId].objective_ids = results[subjectId].objective_ids.concat(objectiveIds);
+            results[subjectId].numeric_ids = results[subjectId].numeric_ids.concat(numericIds);
+
+            // ✅ Update text in UI
+            const $target = $(`#subjectContainer [data-subject_id="${subjectId}"].subject_selected_question`);
+            if ($target.length > 0) {
+                $target.text(`Selected Questions: ${objective + numeric}`);
+            } else {
+                console.warn('Target not found for subjectId:', subjectId);
+            }
         }
     }
 
-    // console.log(results);
-    // return results;
+    console.log(results); // Optional
+
+   $(`.subject_selected_question[data-subject_id="${subjectId}"]`).attr('data-objective', results[subjectId].objective_ids.join(','));
+$(`.subject_selected_question[data-subject_id="${subjectId}"]`).attr('data-numeric', results[subjectId].numeric_ids.join(','));
+
 }
+
 
     function loadPreview(questionIds) {
         const url = `{{ url('/paperPreview') }}`;
@@ -746,6 +776,7 @@
             },
             success: function(response) {
                 $('#paperPreviewContent').html(response);
+
                 // Re-render MathJax after content is injected
 
             },
@@ -781,13 +812,114 @@
     }
 
     function openQuestionsList(chapterId) {
+    $('.chapter_times_button').show();
+    $('.topic_times_button').hide();
+    $('#questionsListModal').modal('show');
 
-        $('.chapter_times_button').show();
-        $('.topic_times_button').hide();
-        $('#questionsListModal').modal('show');
-        const url = `{{ url('/getQuestionsByChapterId') }}/${chapterId}`;
-        $('#appendQuestionData').load(url);
+    const url = `{{ url('/getQuestionsByChapterId') }}/${chapterId}`;
+
+    $('#appendQuestionData').load(url, function () {
+        // This runs after the questions are loaded
+        checkSelectedQuestions(chapterId);
+    });
+}
+
+function checkSelectedQuestions(chapterId) {
+    const $chapterRow = $(`tr[data-chapter_id="${chapterId}"]`);
+
+    const objectiveStr = $chapterRow.find('.getPreview').attr('data-objective') || '';
+    const numericStr = $chapterRow.find('.getPreview').attr('data-numeric') || '';
+
+    const objectiveArr = objectiveStr.split(',').filter(Boolean);
+    const numericArr = numericStr.split(',').filter(Boolean);
+
+    const allQuestionIds = [...objectiveArr, ...numericArr];
+
+    // Optional: Clear previous highlights
+    $('.question-row').css('background-color', '');
+
+    // Highlight matching rows
+    $('.question-row').each(function () {
+        const dataId = $(this).attr('data-id');
+        if (allQuestionIds.includes(dataId)) {
+            $(this).css('background-color', '#d1ffd1'); // light green
+        }
+    });
+
+    return {
+        objective: objectiveArr,
+        numeric: numericArr
+    };
+}
+
+
+function selectQuestion(questionId, questionTypeId, chapterId) {
+    const $chapterRow = $(`#questionsTableBody tr[data-chapter_id="${chapterId}"]`);
+    const $previewSpan = $chapterRow.find('.getPreview');
+
+    let objectiveIds = ($previewSpan.attr('data-objective') || '').split(',').filter(Boolean);
+    let numericIds = ($previewSpan.attr('data-numeric') || '').split(',').filter(Boolean);
+
+    questionId = String(questionId); // Ensure comparison as string
+
+    let isSelected = false;
+
+    if (questionTypeId === 1) {
+        const index = objectiveIds.indexOf(questionId);
+        if (index === -1) {
+            objectiveIds.push(questionId);
+            isSelected = true;
+        } else {
+            objectiveIds.splice(index, 1);
+        }
+    } else if (questionTypeId === 2) {
+        const index = numericIds.indexOf(questionId);
+        if (index === -1) {
+            numericIds.push(questionId);
+            isSelected = true;
+        } else {
+            numericIds.splice(index, 1);
+        }
     }
+
+    // Update attributes
+    $previewSpan.attr('data-objective', objectiveIds.join(','));
+    $previewSpan.attr('data-numeric', numericIds.join(','));
+
+    // Update visible counts in current row
+    $chapterRow.find('.selected_topic_objective_questions').val(objectiveIds.length);
+    $chapterRow.find('.selected_topic_numeric_questions').val(numericIds.length);
+
+    // Highlight the question row
+    const $questionRow = $(`.question-row[data-id="${questionId}"]`);
+    if (isSelected) {
+        $questionRow.css('background-color', '#d1ffd1');
+    } else {
+        $questionRow.css('background-color', '');
+    }
+
+    // ✅ Only count data from .getPreview inside current chapter row
+    let totalObjective = 0;
+    let totalNumeric = 0;
+
+    $chapterRow.find('.getPreview').each(function () {
+        const objStr = $(this).attr('data-objective') || '';
+        const numStr = $(this).attr('data-numeric') || '';
+
+        totalObjective += objStr.split(',').filter(Boolean).length;
+        totalNumeric += numStr.split(',').filter(Boolean).length;
+    });
+
+    // Update total inputs within this row
+    $chapterRow.find('.selected_objective_questions').val(totalObjective);
+    $chapterRow.find('.selected_objective_numeric').val(totalNumeric);
+    $chapterRow.find('.selected_objective_questions').attr('value',totalObjective);
+    $chapterRow.find('.selected_objective_numeric').attr('value',totalNumeric);
+
+   const classTypeId =  $('#class_type_id').val(); // Get the current class type ID
+
+    draftArray(classTypeId, subjectId)
+}
 
 
 
@@ -845,17 +977,27 @@
 
 
     function goBackToSubTopics() {
-        $('#subTopicsModal').modal('show');
-        $('#questionsListModal').modal('hide');
+       const topicId = $('.topic_times_button').attr('data-topicId');
+      const chapterId = $('.topic_times_button').attr('data-chapterId'); 
+         $('#questionsListModal').modal('hide');
+         openSubTopics(chapterId);
+        
     }
 
-    function questionsListBySubtopic(topicId) {
+    function questionsListBySubtopic(topicId, chapterId) {
         $('.chapter_times_button').hide();
         $('.topic_times_button').show();
         $('#subTopicsModal').modal('hide');
         $('#questionsListModal').modal('show');
         const url = `{{ url('/getQuestionsByTopicId') }}/${topicId}`;
-        $('#appendQuestionData').load(url);
+        // $('#appendQuestionData').load(url);
+$('.topic_times_button').attr('data-topicId',topicId);
+$('.topic_times_button').attr('data-chapterId',chapterId);
+
+         $('#appendQuestionData').load(url, function () {
+        // This runs after the questions are loaded
+        checkSelectedQuestions(chapterId);
+    });
     }
 </script>
 @endsection

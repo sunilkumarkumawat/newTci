@@ -13,7 +13,13 @@
     </tr>
 @else
     @foreach ($questions as $question)
-       <tr>
+      <tr 
+    onclick="selectQuestion({{ $question['id'] ?? 'null' }}, {{ $question['question_type_id'] ?? 'null' }}, {{ $question['chapter_id'] ?? 'null' }})"
+    class="question-row"
+    data-id="{{ $question['id'] ?? '' }}"
+    data-type="{{ $question['question_type_id'] ?? '' }}"
+    data-chapterid="{{ $question['chapter_id'] ?? '' }}"
+>
     <td>{{ $loop->iteration }}</td>
     <td>
         {!! $question['name'] ?? '' !!}

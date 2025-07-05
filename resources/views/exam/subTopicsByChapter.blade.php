@@ -23,7 +23,7 @@
                         {!! $topic['topic_name'] ?? '' !!}
                         <a href="javascript:void(0);" class="text-info ms-2"
                             title="View Sub-topics Questions List"
-                            onclick="questionsListBySubtopic({{ $topic['topic_id'] }})">
+                            onclick="questionsListBySubtopic({{ $topic['topic_id'] }},{{ $chapterId }})">
                             <i class="fas fa-folder-open"></i>
                         </a>
                     </td>
