@@ -34,27 +34,43 @@ class UserController extends Controller
     public function userAdd()
     {
 
-        return view('user/add',['data'=>null]);
+        return view('user/add', ['data' => null]);
     }
-    public function userView()
+    public function userView(Request $request)
     {
         try {
+
+            // ✅ Get uploaded IDs from query string
+            $uploadedIds = $request->query('uploadedIds'); // returns string: "21,22,23"
+
+            // Optional: Convert to array if needed
+            $uploadedIdArray = $uploadedIds ? explode(',', $uploadedIds) : [];
+
+          
             // Create a new instance of the API controller
-            $api = new ApiController();
+            // $api = new ApiController();
 
             // Simulate request with modal_type = User
-            $fakeRequest = new Request([
-                'modal_type' => 'User',
-            ]);
+            // $fakeRequest = new Request([
+            //    'modal_type' => 'User',
+            // ]);
 
             // Call the API method
-            $response = $api->getUsersData($fakeRequest);
+            // $response = $api->getUsersData($fakeRequest);
 
             // Extract data from JSON response
-            $responseData = $response->getData();
+            //  $responseData = $response->getData();
 
             // Check if data exists and is not empty
-            $data = isset($responseData->data) && !empty($responseData->data) ? $responseData->data : [];
+            // $data = isset($responseData->data) && !empty($responseData->data) ? $responseData->data : [];
+
+            $data = User::whereIn('id', $uploadedIdArray)
+                ->get();
+
+            // If no data found, return empty array
+            if ($data->isEmpty()) {
+                $data = [];
+            }
             // Return view with users
             return view('user.userView', ['data' => $data]);
         } catch (\Exception $e) {
@@ -67,24 +83,24 @@ class UserController extends Controller
 
     public function userEdit($id)
     {
-             $api = new ApiController();
+        $api = new ApiController();
 
-            // Simulate request with modal_type = User
-            $fakeRequest = new Request([
-                'modal_type' => 'User',
-                'id' => $id,
-            ]);
+        // Simulate request with modal_type = User
+        $fakeRequest = new Request([
+            'modal_type' => 'User',
+            'id' => $id,
+        ]);
 
-            // Call the API method
-            $response = $api->getCommonRow($fakeRequest);
+        // Call the API method
+        $response = $api->getCommonRow($fakeRequest);
 
-            // Extract data from JSON response
-            $responseData = $response->getData();
+        // Extract data from JSON response
+        $responseData = $response->getData();
 
-              // Check if data exists and is not empty
-            $data = isset($responseData->data) && !empty($responseData->data) ? $responseData->data : [];
+        // Check if data exists and is not empty
+        $data = isset($responseData->data) && !empty($responseData->data) ? $responseData->data : [];
 
-        return view('user.userAdd',['data'=>$data]);
+        return view('user.userAdd', ['data' => $data]);
     }
 
     public function teacherView()

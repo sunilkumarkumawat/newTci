@@ -4,6 +4,9 @@
 @php
     $permissions = Helper::getPermissions();
     $filterable_columns = ['role_id' => true, 'keyword' => true];
+    $data = isset($data) ? $data : [];
+
+  
 @endphp
 
 <div class="content-wrapper">
@@ -24,7 +27,7 @@
                 <div class="card card-outline card-orange col-md-12 col-12 p-0">
                     <div class="card-header bg-primary">
                         <div class="card-title">
-                            <h4><i class="fa fa-desktop"></i> &nbsp;View User</h4>
+                            <h4><i class="fa fa-desktop"></i> &nbsp;{{empty($data) ? 'View User' : 'Uploaded Data By Excel'}}</h4>
                         </div>
                         <div class="card-tools">
                             @if(in_array('user_management.edit', $permissions) || Auth::user()->role_id == 1)
@@ -37,6 +40,7 @@
                     </div>
 
                     <div class="card-body">
+                        @if(empty($data))
                         <div class="bg-item border p-3 rounded">
                             <form id="filterForm">
                                 <div class="row">
@@ -47,6 +51,8 @@
                                 </div>
                             </form>
                         </div>
+
+                        @endif
 
                         <div class="table-responsive">
                             <table id="userTable" class="table table-bordered table-striped mt-4">
@@ -64,6 +70,10 @@
                                         <th>Action</th>
                                     </tr>
                                 </thead>
+
+                                @include('user.view', ['data' => $data])
+                            
+
                             </table>
                         </div>
                     </div>
@@ -134,7 +144,7 @@
     </section>
 </div>
 
-
+@if(empty($data))
 <script>
     $(document).ready(function () {
         const table = $('#userTable').DataTable({
@@ -186,6 +196,6 @@
         });
     });
 </script>
-
+@endif
 
 @endsection

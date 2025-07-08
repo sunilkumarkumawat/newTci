@@ -1515,7 +1515,7 @@
                         .then(response => response.json())
                         .then(res => {
                             if (res.success) {
-                                window.location.href = `{{ url('/') }}/${res.redirect_to}?uploadedId=${res.inserted_ids}`;
+                                window.location.href = `{{ url('/') }}/${res.redirect_to}?uploadedIds=${res.inserted_ids}`;
                             } else {
                                 const errorBox = document.getElementById('errorBox');
                                 errorBox.classList.remove('d-none');
