@@ -8,6 +8,8 @@ use App\Services\CommonService;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\DB;
+use App\Models\Student;
+use App\Models\Subject;
 use Session;
 use Yajra\DataTables\Facades\DataTables;
 use Helper;
@@ -155,6 +157,11 @@ class SharesController extends Controller
     {
         $data = null;
         return view('questions.questionView', compact('data'));
+    }
+    public function recycleBin()
+    {
+        $data = null;
+        return view('questions.recycleBin', compact('data'));
     }
 
     public function createCommon(Request $request)
@@ -395,6 +402,102 @@ class SharesController extends Controller
     //     ]);
     // }
 
+    // get Student data
+    public function studentData(Request $request)
+    {
+        $filters = $request->filterable_columns ?? [];
+
+        $query = Student::query()
+            ->leftJoin('gender', function ($join) {
+                $join->on('student.gender', '=', 'gender.id')
+                    ->whereNull('gender.deleted_at');
+            })
+            ->leftJoin('class_types', function ($join) {
+                $join->on('student.class_type_id', '=', 'class_types.id')
+                    ->whereNull('class_types.deleted_at');
+            })
+            ->select(
+                'student.id',
+                'student.admissionNo',
+                'student.name',
+                // 'student.class_type_id',
+                'student.email',
+                'student.mobile',
+                'student.image',
+                'student.gender',
+                'student.dob',
+                'student.status',
+                'class_types.name as class'
+            );
+
+        // Apply filters
+        foreach ($filters as $filter) {
+            $name = $filter['name'] ?? null;
+            $value = $filter['value'] ?? null;
+
+            if ($name && $value !== null && $value !== '') {
+                if ($name === 'keyword') {
+                    $query->where(function ($q) use ($value) {
+                        $q->where('student.name', 'like', "%{$value}%")
+                            ->orWhere('student.email', 'like', "%{$value}%")
+                            ->orWhere('student.mobile', 'like', "%{$value}%")
+                            ->orWhere('student.admissionNo', 'like', "%{$value}%");
+                    });
+                } else {
+                    $query->where("student.$name", $value);
+                }
+            }
+        }
+
+        return DataTables::of($query)
+            ->addIndexColumn()
+
+
+            // Profile Image
+            ->editColumn('image', function ($item) {
+                $imageUrl = $item->image
+                    ? asset($item->image)
+                    : asset('defaultImages/imageError.png');
+                return '<img src="' . $imageUrl . '" width="40" height="40" class="rounded-circle profileImg" style="cursor:pointer;" />';
+            })
+
+            // Status Badge
+            ->editColumn('status', function ($item) {
+                $badge = $item->status
+                    ? '<span class="badge bg-success">Active</span>'
+                    : '<span class="badge bg-danger">Inactive</span>';
+                return '<span style="cursor:pointer;" data-id="' . $item->id . '" data-status="' . $item->status . '" class="change-status-btn">' . $badge . '</span>';
+            })
+
+            // Gender Formatting
+            ->editColumn('gender', function ($item) {
+                switch ($item->gender) {
+                    case 1:
+                        return 'Male';
+                    case 2:
+                        return 'Female';
+                    case 3:
+                        return 'Other';
+                    default:
+                        return '-';
+                }
+            })
+
+            // Format DOB
+            ->editColumn('dob', function ($item) {
+                return $item->dob ? \Carbon\Carbon::parse($item->dob)->format('d-m-Y') : '';
+            })
+
+            // Action Buttons
+            ->addColumn('action', function ($row) {
+                return view('student.partials.actions', compact('row'))->render();
+            })
+
+            ->rawColumns(['image', 'status', 'action'])
+            ->make(true);
+    }
+
+
     // get user data
     public function userData(Request $request)
     {
@@ -478,9 +581,11 @@ class SharesController extends Controller
                 return view('user.partials.actions', compact('row'))->render();
             })
 
-            ->rawColumns(['gender','image', 'status', 'action'])
+            ->rawColumns(['gender', 'image', 'status', 'action'])
             ->make(true);
     }
+
+
     public function questionData(Request $request)
     {
 
@@ -572,6 +677,72 @@ class SharesController extends Controller
                 return view('questions.partials.actions', compact('row'))->render();
             })
             ->rawColumns(['name', 'ans_a', 'ans_b', 'ans_c', 'ans_d', 'correct_ans', 'action'])
+            ->make(true);
+    }
+
+    // subject data
+    public function subjectData(Request $request)
+    {
+        $filters = $request->filterable_columns ?? [];
+
+        $query = Subject::query()->select('id', 'name');
+
+        // Apply filters
+        foreach ($filters as $filter) {
+            $name = $filter['name'] ?? null;
+            $value = $filter['value'] ?? null;
+
+            if ($name && $value !== null && $value !== '') {
+                if ($name === 'keyword') {
+                    $query->where('name', 'like', "%{$value}%");
+                } else {
+                    $query->where($name, $value);
+                }
+            }
+        }
+
+        return DataTables::of($query)
+            ->addIndexColumn()
+
+            // Add Action column with buttons (partial or inline)
+            ->addColumn('action', function ($row) {
+                return view('subject.partials.actions', compact('row'))->render();
+            })
+
+            ->rawColumns(['action'])
+            ->make(true);
+    }
+
+    // tagsdata
+    public function tagsData(Request $request)
+    {
+        $filters = $request->filterable_columns ?? [];
+
+        $query = Tags::query()->select('id', 'name');
+
+        // Apply filters
+        foreach ($filters as $filter) {
+            $name = $filter['name'] ?? null;
+            $value = $filter['value'] ?? null;
+
+            if ($name && $value !== null && $value !== '') {
+                if ($name === 'keyword') {
+                    $query->where('name', 'like', "%{$value}%");
+                } else {
+                    $query->where($name, $value);
+                }
+            }
+        }
+
+        return DataTables::of($query)
+            ->addIndexColumn()
+
+            // Add Action column with buttons (partial or inline)
+            ->addColumn('action', function ($row) {
+                return view('tags.partials.actions', compact('row'))->render();
+            })
+
+            ->rawColumns(['action'])
             ->make(true);
     }
 
@@ -710,4 +881,6 @@ class SharesController extends Controller
 
         return response()->json(['status' => 'success']);
     }
+
+   
 }

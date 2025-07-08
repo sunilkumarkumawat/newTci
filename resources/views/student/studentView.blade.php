@@ -2,6 +2,7 @@
 @section('content')
     @php
         $permissions = Helper::getPermissions();
+        $filterable_columns = ['branch' => true, 'keyword' => true];
     @endphp
     <div class="content-wrapper">
         <section class="content">
@@ -28,37 +29,21 @@
                                         class="student_management.add btn btn-primary  btn-sm"><i class="fa fa-plus"></i>
                                         <span class="Display_none_mobile"> {{ __('common.Add') }} </span></a>
                                 @endif
-                                {{-- <a href="{{ url('studentAdd') }}" class="btn btn-primary btn-sm"><i
-                                class="fa fa-arrow-left"></i> <span class="Display_none_mobile"> {{ __('common.Back') }}
-                            </span></a> --}}
+
                             </div>
                         </div>
                         <div class="card-body">
                             <div class="bg-item border p-3 rounded">
 
-                                <form id="quickForm" method="post">
-                                    <input type='hidden' value='Student' name='modal_type' />
+                                <form id="studentFilterForm" method="post">
+
                                     <div class="row">
-                                        <div class="col-md-2">
-                                            <label>Search By Registration No</label>
-                                            <input type="text" class="form-control" id="registration_no"
-                                                name="registration_no" placeholder="Registration No" value="">
-                                        </div>
-
-                                        <div class="col-md-2">
-                                            <label>Search By Keywords</label>
-                                            <input type="text" class="form-control"
-                                                placeholder="Ex. Name, Mobile, Email, Aadhaar etc.">
-                                        </div>
-
-                                        <div class="col-md-2">
-                                            <label>Search By Desk No</label>
-                                            <input type="number" class="form-control" id="desk_no" name="registration_no"
-                                                placeholder="Desk No" value="">
-                                        </div>
-
+                                        @include('commoninputs.filterinputs', [
+                                            'filters' => $filterable_columns,
+                                        ])
                                         <div class="col-md-1 mt-4">
-                                            <button type="submit" class="btn btn-primary">Search</button>
+                                            <button type="submit" id="studentFilterFormButton"
+                                                class="btn btn-primary">Search</button>
                                         </div>
                                     </div>
                                 </form>
@@ -70,27 +55,28 @@
                                     <div class="text-md-right col-md-12 col-12 align-content-end ">
                                         <button class="btn btn-outline-primary"><i class="fas fa-file-download"></i> Export
                                             PDF</button>
-                                        <button id="exportExcel" class="btn btn-outline-secondary" type="button"><i class="fas fa-file-download"></i>
+                                        <button id="exportExcel" class="btn btn-outline-secondary" type="button"><i
+                                                class="fas fa-file-download"></i>
                                             Export CSV</button>
                                     </div>
                                 </div>
-                                <table id='dataContainer' class="table table-bordered table-striped mt-1">
+                                <table id="studentTable" class="table table-bordered table-striped mt-1">
                                     <thead>
                                         <tr class="bg-light">
                                             <th>SR.NO</th>
                                             <th class="text-center">Image</th>
+                                            <th>Admission No</th>
                                             <th>Name</th>
+                                            <th>Class</th>
                                             <th>Mobile</th>
-                                            <th>E-Mail</th>
-                                            <th>Admission Date</th>
-                                            <th>City</th>
+                                            <th>Email</th>
+                                            <th>Gender</th>
+                                            <th>DOB</th>
                                             <th>Status</th>
                                             <th>Action</th>
                                         </tr>
                                     </thead>
-                                    <tbody id='dataContainer-student' class="dataContainer" style="min-height: 300px">
-                                        @include('common.loadskeletan', ['loopCount' => 5])
-                                    </tbody>
+
                                 </table>
                             </div>
                         </div>
@@ -158,18 +144,102 @@
         </section>
     </div>
 
-    <!-- Scripts -->
+
+
     <script>
         $(document).ready(function() {
-            $('.profileImg').click(function() {
-                var profileImgUrl = $(this).attr('src');
+            const table = $('#studentTable').DataTable({
+                processing: true,
+                serverSide: true,
+                ajax: {
+                    url: "{{ url('studentData') }}",
+                    data: function(d) {
+                        const formDataArray = [];
+                        $('#studentFilterForm').find('input, select, textarea').each(function() {
+                            const name = $(this).attr('name');
+                            const value = $(this).val();
+                            if (name && value !== null && value !== '' && value !== undefined) {
+                                formDataArray.push({
+                                    name,
+                                    value
+                                });
+                            }
+                        });
+                        d.filterable_columns = formDataArray;
+                    }
+                },
+                columns: [{
+                        data: 'DT_RowIndex',
+                        name: 'DT_RowIndex',
+                        orderable: false,
+                        searchable: false
+                    },
+                    {
+                        data: 'image',
+                        name: 'image',
+                        orderable: false,
+                        searchable: false
+                    },
+                    {
+                        data: 'admissionNo',
+                        name: 'admission_no'
+                    },
+                    {
+                        data: 'name',
+                        name: 'name'
+                    },
+                    {
+                        data: 'class',
+                        name: 'class'
+                    },
+                    {
+                        data: 'mobile',
+                        name: 'mobile'
+                    },
+                    {
+                        data: 'email',
+                        name: 'email'
+                    },
+                    {
+                        data: 'gender',
+                        name: 'gender'
+                    },
+                    {
+                        data: 'dob',
+                        name: 'dob'
+                    },
+                    {
+                        data: 'status',
+                        name: 'status'
+                    },
+                    {
+                        data: 'action',
+                        name: 'action',
+                        orderable: false,
+                        searchable: false
+                    }
+                ],
+                drawCallback: function() {
+                    if (typeof updateEquationsInQuestion === 'function') {
+                        updateEquationsInQuestion();
+                    }
+                }
+            });
+
+            // Reload DataTable on filter button click
+            $('#studentFilterFormButton').on('click', function(e) {
+                e.preventDefault();
+                table.ajax.reload();
+            });
+
+            // Show student image in modal
+            $(document).on('click', '.profileImg', function() {
+                const profileImgUrl = $(this).attr('src');
                 if (profileImgUrl) {
-                    $('#profileImgModal').modal('show');
                     $('#profileImg').attr('src', profileImgUrl);
+                    $('#profileImgModal').modal('show');
                 }
             });
         });
     </script>
-
-
 @endsection

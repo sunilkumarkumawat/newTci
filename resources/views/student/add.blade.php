@@ -25,18 +25,19 @@
                                 <h4><i class="fa fa-address-book"></i> Students Admission</h4>
                             </div>
                             <div class="card-tools">
-                                @if(in_array('student_management.view', $permissions)  || Auth::user()->role_id == 1)
-                                <a href="{{ url('studentView') }}" class="btn btn-primary  btn-sm"><i class="fa fa-eye"></i>
-                                    <span class="Display_none_mobile"> {{ __('common.View') }} </span></a>
+                                @if (in_array('student_management.view', $permissions) || Auth::user()->role_id == 1)
+                                    <a href="{{ url('studentView') }}" class="btn btn-primary  btn-sm"><i
+                                            class="fa fa-eye"></i>
+                                        <span class="Display_none_mobile"> {{ __('common.View') }} </span></a>
                                 @endif
                             </div>
                         </div>
 
                         <!-- Profile Upload Section -->
                         <div class="row">
-                           @include('common.excelUploader',[
-                        'modal' => 'Student',
-                        ])
+                            @include('common.excelUploader', [
+                                'modal' => 'Student',
+                            ])
 
                             <!-- Form Section -->
                             <div class="col-md-9 py-2">
@@ -61,7 +62,8 @@
                                 </div>
                                 <div class="card-body">
 
-                                    <form id="createCommon" enctype="multipart/form-data" data-step="1" data-total_steps='3'> 
+                                    <form id="createCommon" enctype="multipart/form-data" data-step="1"
+                                        data-total_steps='3'>
                                         @if ($isEdit)
                                             <input type='hidden' value='{{ $student->id }}' name='id' />
                                         @endif
@@ -69,8 +71,8 @@
                                         <input type='hidden' id="branch_id" name='branch_id'
                                             value="{{ old('branch_id', $data->branch_id ?? '') }}" />
                                         <input type="hidden" id="session_id" name="session_id"
-                                                value="{{ old('session_id', $data->session_id ?? Session::get('current_session')) }}" />
-
+                                            value="{{ old('session_id', $data->session_id ?? Session::get('current_session')) }}" />
+                                        <input type="hidden" id="unique_id" name="unique_id">
 
                                         @csrf
 
@@ -80,14 +82,8 @@
                                             <div id="step-1" class="wizard-step">
                                                 <h5><i class="fa fa-user"></i> Basic Details</h5>
                                                 <div class="row">
-                                                    <div class="col-md-4">
-                                                        <div class="form-group">
-                                                            <label>Admission No.</label>
-                                                            <input type="text" class="form-control" id="admissionNo"
-                                                                name="admissionNo" placeholder="Admission No."
-                                                                value="{{ old('admissionNo', $student->admissionNo ?? '') }}">
-                                                        </div>
-                                                    </div>
+
+
 
                                                     <div class="col-md-4">
                                                         <div class="form-group">
@@ -105,8 +101,9 @@
                                                             <label for="mobile">Mobile No. <span
                                                                     style="color:red;">*</span></label>
                                                             <input type="tel" class="form-control" id="mobile"
-                                                                name="mobile" placeholder="Mobile No."
-                                                                data-required="true" onkeypress="javascript:return isNumber(event)" maxlength="10" minlength="10"
+                                                                name="mobile" placeholder="Mobile No." data-required="true"
+                                                                onkeypress="javascript:return isNumber(event)"
+                                                                maxlength="10" minlength="10"
                                                                 value="{{ old('mobile', $student->mobile ?? '') }}">
                                                         </div>
                                                     </div>
@@ -128,7 +125,7 @@
                                                             'selected' => $student->gender_id ?? null,
                                                             'label' => 'Gender',
                                                             'required' => true,
-                                                             'useIdAsValue' => false,
+                                                            'useIdAsValue' => false,
                                                         ])
                                                     </div>
 
@@ -143,10 +140,10 @@
                                                         </div>
                                                     </div>
 
-                                                    
+
                                                     <div class="col-md-4">
                                                         <div class="form-group">
-                                                            <label for="admission_date">Date Of Admission  <span
+                                                            <label for="admission_date">Date Of Admission <span
                                                                     style="color:red;">*</span></label>
                                                             <input type="date" class="form-control"
                                                                 id="admission_date" name="admission_date"
@@ -169,14 +166,14 @@
                                                         <div class="form-group">
                                                             <label for="address">Students Address <span
                                                                     style="color:red;">*</span></label>
-                                                            <input type="text" class="form-control"
-                                                                id="address" name="address"
-                                                                placeholder="Students Address" data-required="true"
+                                                            <input type="text" class="form-control" id="address"
+                                                                name="address" placeholder="Students Address"
+                                                                data-required="true"
                                                                 value="{{ old('address', $student->address ?? '') }}">
                                                         </div>
                                                     </div>
 
-                                                    
+
                                                 </div>
                                             </div>
 
@@ -188,115 +185,117 @@
                                                     <div id="additionalDetailsSection" class="col-md-12">
                                                         <div class="row">
                                                             <!-- <div class="col-md-12 mb-2">
-                                                                <h6 class="text-primary">Personal Information</h6>
-                                                            </div> -->
+                                                                        <h6 class="text-primary">Personal Information</h6>
+                                                                    </div> -->
 
                                                             <!-- <div class="col-md-3">
-                                                                <div class="form-group">
-                                                                    <label for="religion">Religion<span
-                                                                            style="color:red;">*</span></label>
-                                                                    <select class="form-control" id="religion"
-                                                                        name="religion" data-required="true">
-                                                                        <option value="">Select</option>
-                                                                        <option value="Hindu"
-                                                                            {{ old('religion', $student->religion ?? '') == 'Hindu' ? 'selected' : '' }}>
-                                                                            Hindu</option>
-                                                                        <option value="Islam"
-                                                                            {{ old('religion', $student->religion ?? '') == 'Islam' ? 'selected' : '' }}>
-                                                                            Islam</option>
-                                                                        <option value="Sikh"
-                                                                            {{ old('religion', $student->religion ?? '') == 'Sikh' ? 'selected' : '' }}>
-                                                                            Sikh</option>
-                                                                        <option value="Buddhism"
-                                                                            {{ old('religion', $student->religion ?? '') == 'Buddhism' ? 'selected' : '' }}>
-                                                                            Buddhism</option>
-                                                                        <option value="Adivasi"
-                                                                            {{ old('religion', $student->religion ?? '') == 'Adivasi' ? 'selected' : '' }}>
-                                                                            Adivasi</option>
-                                                                        <option value="Jain"
-                                                                            {{ old('religion', $student->religion ?? '') == 'Jain' ? 'selected' : '' }}>
-                                                                            Jain</option>
-                                                                        <option value="Christianity"
-                                                                            {{ old('religion', $student->religion ?? '') == 'Christianity' ? 'selected' : '' }}>
-                                                                            Christianity</option>
-                                                                        <option value="Other"
-                                                                            {{ old('religion', $student->religion ?? '') == 'Other' ? 'selected' : '' }}>
-                                                                            Other</option>
-                                                                    </select>
-                                                                </div>
-                                                            </div> -->
+                                                                        <div class="form-group">
+                                                                            <label for="religion">Religion<span
+                                                                                    style="color:red;">*</span></label>
+                                                                            <select class="form-control" id="religion"
+                                                                                name="religion" data-required="true">
+                                                                                <option value="">Select</option>
+                                                                                <option value="Hindu"
+                                                                                    {{ old('religion', $student->religion ?? '') == 'Hindu' ? 'selected' : '' }}>
+                                                                                    Hindu</option>
+                                                                                <option value="Islam"
+                                                                                    {{ old('religion', $student->religion ?? '') == 'Islam' ? 'selected' : '' }}>
+                                                                                    Islam</option>
+                                                                                <option value="Sikh"
+                                                                                    {{ old('religion', $student->religion ?? '') == 'Sikh' ? 'selected' : '' }}>
+                                                                                    Sikh</option>
+                                                                                <option value="Buddhism"
+                                                                                    {{ old('religion', $student->religion ?? '') == 'Buddhism' ? 'selected' : '' }}>
+                                                                                    Buddhism</option>
+                                                                                <option value="Adivasi"
+                                                                                    {{ old('religion', $student->religion ?? '') == 'Adivasi' ? 'selected' : '' }}>
+                                                                                    Adivasi</option>
+                                                                                <option value="Jain"
+                                                                                    {{ old('religion', $student->religion ?? '') == 'Jain' ? 'selected' : '' }}>
+                                                                                    Jain</option>
+                                                                                <option value="Christianity"
+                                                                                    {{ old('religion', $student->religion ?? '') == 'Christianity' ? 'selected' : '' }}>
+                                                                                    Christianity</option>
+                                                                                <option value="Other"
+                                                                                    {{ old('religion', $student->religion ?? '') == 'Other' ? 'selected' : '' }}>
+                                                                                    Other</option>
+                                                                            </select>
+                                                                        </div>
+                                                                    </div> -->
 
                                                             <!-- <div class="col-md-3">
-                                                                <div class="form-group">
-                                                                    <label for="category">Category<span
-                                                                            style="color:red;">*</span></label>
-                                                                    <select class="form-control" id="category"
-                                                                        name="category" data-required="true">
-                                                                        <option value="">Select</option>
-                                                                        <option value="OBC"
-                                                                            {{ old('category', $student->category ?? '') == 'OBC' ? 'selected' : '' }}>
-                                                                            OBC</option>
-                                                                        <option value="ST"
-                                                                            {{ old('category', $student->category ?? '') == 'ST' ? 'selected' : '' }}>
-                                                                            ST</option>
-                                                                        <option value="SC"
-                                                                            {{ old('category', $student->category ?? '') == 'SC' ? 'selected' : '' }}>
-                                                                            SC</option>
-                                                                        <option value="BC"
-                                                                            {{ old('category', $student->category ?? '') == 'BC' ? 'selected' : '' }}>
-                                                                            BC</option>
-                                                                        <option value="GEN"
-                                                                            {{ old('category', $student->category ?? '') == 'GEN' ? 'selected' : '' }}>
-                                                                            GEN</option>
-                                                                        <option value="SBC"
-                                                                            {{ old('category', $student->category ?? '') == 'SBC' ? 'selected' : '' }}>
-                                                                            SBC</option>
-                                                                        <option value="Other"
-                                                                            {{ old('category', $student->category ?? '') == 'Other' ? 'selected' : '' }}>
-                                                                            Other</option>
-                                                                    </select>
-                                                                </div>
-                                                            </div> -->
+                                                                        <div class="form-group">
+                                                                            <label for="category">Category<span
+                                                                                    style="color:red;">*</span></label>
+                                                                            <select class="form-control" id="category"
+                                                                                name="category" data-required="true">
+                                                                                <option value="">Select</option>
+                                                                                <option value="OBC"
+                                                                                    {{ old('category', $student->category ?? '') == 'OBC' ? 'selected' : '' }}>
+                                                                                    OBC</option>
+                                                                                <option value="ST"
+                                                                                    {{ old('category', $student->category ?? '') == 'ST' ? 'selected' : '' }}>
+                                                                                    ST</option>
+                                                                                <option value="SC"
+                                                                                    {{ old('category', $student->category ?? '') == 'SC' ? 'selected' : '' }}>
+                                                                                    SC</option>
+                                                                                <option value="BC"
+                                                                                    {{ old('category', $student->category ?? '') == 'BC' ? 'selected' : '' }}>
+                                                                                    BC</option>
+                                                                                <option value="GEN"
+                                                                                    {{ old('category', $student->category ?? '') == 'GEN' ? 'selected' : '' }}>
+                                                                                    GEN</option>
+                                                                                <option value="SBC"
+                                                                                    {{ old('category', $student->category ?? '') == 'SBC' ? 'selected' : '' }}>
+                                                                                    SBC</option>
+                                                                                <option value="Other"
+                                                                                    {{ old('category', $student->category ?? '') == 'Other' ? 'selected' : '' }}>
+                                                                                    Other</option>
+                                                                            </select>
+                                                                        </div>
+                                                                    </div> -->
 
                                                             <!-- <div class="col-md-3">
-                                                                <div class="form-group">
-                                                                    <label for="caste">Caste</label>
-                                                                    <input type="text" class="form-control"
-                                                                        id="caste" name="caste" placeholder="Caste"
-                                                                        value="{{ old('caste', $student->caste ?? '') }}">
-                                                                </div>
-                                                            </div> -->
+                                                                        <div class="form-group">
+                                                                            <label for="caste">Caste</label>
+                                                                            <input type="text" class="form-control"
+                                                                                id="caste" name="caste" placeholder="Caste"
+                                                                                value="{{ old('caste', $student->caste ?? '') }}">
+                                                                        </div>
+                                                                    </div> -->
 
                                                             <!-- <div class="col-md-3">
-                                                                @include('commoninputs.inputs', [
-                                                                    'modal' => 'BloodGroup', // This decides the data source
-                                                                    'name' => 'bloodgroup_id',
-                                                                    'selected' => $student->bloodgroup_id ?? null,
-                                                                    'label' => 'Select Blood Group',
-                                                                    'required' => false,
-                                                                ])
-                                                            </div> -->
+                                                                        @include('commoninputs.inputs', [
+                                                                            'modal' => 'BloodGroup', // This decides the data source
+                                                                            'name' => 'bloodgroup_id',
+                                                                            'selected' =>
+                                                                                $student->bloodgroup_id ?? null,
+                                                                            'label' => 'Select Blood Group',
+                                                                            'required' => false,
+                                                                        ])
+                                                                    </div> -->
 
                                                             <div class="col-md-12 mb-2 mt-3">
                                                                 <h6 class="text-primary">Location Information</h6>
                                                             </div>
 
                                                             <!-- <div class="col-md-3">
-                                                                @include('commoninputs.inputs', [
-                                                                    'modal' => 'Country', // This decides the data source
-                                                                    'name' => 'country_id',
-                                                                    'selected' => $student->country_id ?? null,
-                                                                    'label' => 'Country',
-                                                                    'required' => true,
-                                                                    'attributes' => [
-                                                                        'data-dependent' => 'state_id',
-                                                                        'data-url' => url(
-                                                                            '/get-dependent-options'),
-                                                                        'data-modal' => 'State',
-                                                                        'data-field' => 'country_id',
-                                                                    ],
-                                                                ])
-                                                            </div> -->
+                                                                        @include('commoninputs.inputs', [
+                                                                            'modal' => 'Country', // This decides the data source
+                                                                            'name' => 'country_id',
+                                                                            'selected' =>
+                                                                                $student->country_id ?? null,
+                                                                            'label' => 'Country',
+                                                                            'required' => true,
+                                                                            'attributes' => [
+                                                                                'data-dependent' => 'state_id',
+                                                                                'data-url' => url(
+                                                                                    '/get-dependent-options'),
+                                                                                'data-modal' => 'State',
+                                                                                'data-field' => 'country_id',
+                                                                            ],
+                                                                        ])
+                                                                    </div> -->
 
                                                             <div class="col-md-3">
                                                                 @include('commoninputs.dependentInputs', [
@@ -332,30 +331,31 @@
                                                             </div>
 
                                                             <!-- <div class="col-md-3">
-                                                                <div class="form-group">
-                                                                    <label for="village">Village/City</label>
-                                                                    <select class="form-control" id="village"
-                                                                        name="village">
-                                                                        <option value="">Select</option>
-                                                                        <option value="Jaipur"
-                                                                            {{ old('village', $student->village ?? '') == 'Jaipur' ? 'selected' : '' }}>
-                                                                            Jaipur</option>
-                                                                        <option value="Sanganer"
-                                                                            {{ old('village', $student->village ?? '') == 'Sanganer' ? 'selected' : '' }}>
-                                                                            Sanganer</option>
-                                                                        <option value="Mansarovar"
-                                                                            {{ old('village', $student->village ?? '') == 'Mansarovar' ? 'selected' : '' }}>
-                                                                            Mansarovar</option>
-                                                                    </select>
-                                                                </div>
-                                                            </div> -->
+                                                                        <div class="form-group">
+                                                                            <label for="village">Village/City</label>
+                                                                            <select class="form-control" id="village"
+                                                                                name="village">
+                                                                                <option value="">Select</option>
+                                                                                <option value="Jaipur"
+                                                                                    {{ old('village', $student->village ?? '') == 'Jaipur' ? 'selected' : '' }}>
+                                                                                    Jaipur</option>
+                                                                                <option value="Sanganer"
+                                                                                    {{ old('village', $student->village ?? '') == 'Sanganer' ? 'selected' : '' }}>
+                                                                                    Sanganer</option>
+                                                                                <option value="Mansarovar"
+                                                                                    {{ old('village', $student->village ?? '') == 'Mansarovar' ? 'selected' : '' }}>
+                                                                                    Mansarovar</option>
+                                                                            </select>
+                                                                        </div>
+                                                                    </div> -->
 
                                                             <div class="col-md-3">
                                                                 <div class="form-group">
                                                                     <label for="pincode">Pin Code</label>
                                                                     <input type="tel" class="form-control"
                                                                         id="pincode" name="pincode"
-                                                                        placeholder="Pin Code" onkeypress="javascript:return isNumber(event)" 
+                                                                        placeholder="Pin Code"
+                                                                        onkeypress="javascript:return isNumber(event)"
                                                                         value="{{ old('pincode', $student->pincode ?? '') }}">
                                                                 </div>
                                                             </div>
@@ -363,25 +363,27 @@
                                                             <div class="col-md-4">
                                                                 <div class="form-group">
                                                                     <label for="aadhaar">Aadhaar No. </label>
-                                                                    <input type="tel" class="form-control" id="aadhaar"
-                                                                        name="aadhaar" placeholder="Aadhaar No."
-                                                                        data-required="false" onkeypress="javascript:return isNumber(event)" maxlength="12" minlength="12"
+                                                                    <input type="tel" class="form-control"
+                                                                        id="aadhaar" name="aadhaar"
+                                                                        placeholder="Aadhaar No." data-required="false"
+                                                                        onkeypress="javascript:return isNumber(event)"
+                                                                        maxlength="12" minlength="12"
                                                                         value="{{ old('aadhaar', $student->aadhaar ?? '') }}">
                                                                 </div>
                                                             </div>
                                                             <div class="col-md-4">
                                                                 <div class="form-group">
                                                                     <label>Photo</label>
-                                                                    <input type="file" class="form-control" name="image"
-                                                                        accept="image/*">
+                                                                    <input type="file" class="form-control"
+                                                                        name="image" accept="image/*">
                                                                     <!-- No value for file inputs for security reasons -->
                                                                 </div>
                                                             </div>
                                                             <div class="col-md-4">
                                                                 <div class="form-group">
                                                                     <label>Aadhaar Image</label>
-                                                                    <input type="file" class="form-control" name="aadhaar_image"
-                                                                        accept="image/*">
+                                                                    <input type="file" class="form-control"
+                                                                        name="aadhaar_image" accept="image/*">
                                                                     <!-- No value for file inputs for security reasons -->
                                                                 </div>
                                                             </div>
@@ -413,19 +415,21 @@
                                                             <input type="tel" class="form-control" id="father_mobile"
                                                                 name="father_mobile" placeholder="Father's Contact No"
                                                                 value="{{ old('father_mobile', $student->father_mobile ?? '') }}"
-                                                                data-required="true" onkeypress="javascript:return isNumber(event)" maxlength="10" minlegth="10">
+                                                                data-required="true"
+                                                                onkeypress="javascript:return isNumber(event)"
+                                                                maxlength="10" minlegth="10">
                                                         </div>
                                                     </div>
 
                                                     <!-- <div class="col-md-4">
-                                                        <div class="form-group">
-                                                            <label for="father_occupation">Father's Occupation</label>
-                                                            <input type="text" class="form-control"
-                                                                id="father_occupation" name="father_occupation"
-                                                                placeholder="Father's Occupation"
-                                                                value="{{ old('father_occupation', $student->father_occupation ?? '') }}">
-                                                        </div>
-                                                    </div> -->
+                                                                <div class="form-group">
+                                                                    <label for="father_occupation">Father's Occupation</label>
+                                                                    <input type="text" class="form-control"
+                                                                        id="father_occupation" name="father_occupation"
+                                                                        placeholder="Father's Occupation"
+                                                                        value="{{ old('father_occupation', $student->father_occupation ?? '') }}">
+                                                                </div>
+                                                            </div> -->
 
                                                     <!-- Additional Guardian Details -->
                                                     <div id="additionalGuardianDetails" class="col-md-12">
@@ -443,86 +447,86 @@
                                                             </div>
 
                                                             <!-- <div class="col-md-4">
-                                                                <div class="form-group">
-                                                                    <label for="mother_mobile">Mother's Contact No</label>
-                                                                    <input type="text" class="form-control"
-                                                                        id="mother_mobile" name="mother_mobile"
-                                                                        placeholder="Mother's Contact No"
-                                                                        value="{{ old('mother_mobile', $student->mother_mobile ?? '') }}">
-                                                                </div>
-                                                            </div> -->
+                                                                        <div class="form-group">
+                                                                            <label for="mother_mobile">Mother's Contact No</label>
+                                                                            <input type="text" class="form-control"
+                                                                                id="mother_mobile" name="mother_mobile"
+                                                                                placeholder="Mother's Contact No"
+                                                                                value="{{ old('mother_mobile', $student->mother_mobile ?? '') }}">
+                                                                        </div>
+                                                                    </div> -->
 
                                                             <!-- <div class="col-md-4">
-                                                                <div class="form-group">
-                                                                    <label for="mother_occupation">Mother's
-                                                                        Occupation</label>
-                                                                    <input type="text" class="form-control"
-                                                                        id="mother_occupation" name="mother_occupation"
-                                                                        placeholder="Mother's Occupation"
-                                                                        value="{{ old('mother_occupation', $student->mother_occupation ?? '') }}">
-                                                                </div>
-                                                            </div> -->
+                                                                        <div class="form-group">
+                                                                            <label for="mother_occupation">Mother's
+                                                                                Occupation</label>
+                                                                            <input type="text" class="form-control"
+                                                                                id="mother_occupation" name="mother_occupation"
+                                                                                placeholder="Mother's Occupation"
+                                                                                value="{{ old('mother_occupation', $student->mother_occupation ?? '') }}">
+                                                                        </div>
+                                                                    </div> -->
 
                                                             <!-- <div class="col-md-4">
-                                                                <div class="form-group">
-                                                                    <label for="guardian_name">Guardian's Name <span
-                                                                            style="color:red;">*</span> (If other than
-                                                                        parent)</label>
-                                                                    <input type="text" class="form-control"
-                                                                        id="guardian_name" name="guardian_name"
-                                                                        placeholder="Guardian's Name"
-                                                                        
-                                                                        value="{{ old('guardian_name', $student->guardian_name ?? '') }}"
-                                                                        required>
-                                                                </div>
-                                                            </div> -->
+                                                                        <div class="form-group">
+                                                                            <label for="guardian_name">Guardian's Name <span
+                                                                                    style="color:red;">*</span> (If other than
+                                                                                parent)</label>
+                                                                            <input type="text" class="form-control"
+                                                                                id="guardian_name" name="guardian_name"
+                                                                                placeholder="Guardian's Name"
+                                                                                
+                                                                                value="{{ old('guardian_name', $student->guardian_name ?? '') }}"
+                                                                                required>
+                                                                        </div>
+                                                                    </div> -->
 
                                                             <!-- <div class="col-md-4">
-                                                                <div class="form-group">
-                                                                    <label for="guardian_mobile">Guardian's Contact No
-                                                                        <span style="color:red;">*</span></label>
-                                                                    <input type="text" class="form-control"
-                                                                        id="guardian_mobile" name="guardian_mobile"
-                                                                        placeholder="Guardian's Contact No"
-                                                                        value="{{ old('guardian_mobile', $student->guardian_mobile ?? '') }}"
-                                                                        required>
-                                                                </div>
-                                                            </div> -->
+                                                                        <div class="form-group">
+                                                                            <label for="guardian_mobile">Guardian's Contact No
+                                                                                <span style="color:red;">*</span></label>
+                                                                            <input type="text" class="form-control"
+                                                                                id="guardian_mobile" name="guardian_mobile"
+                                                                                placeholder="Guardian's Contact No"
+                                                                                value="{{ old('guardian_mobile', $student->guardian_mobile ?? '') }}"
+                                                                                required>
+                                                                        </div>
+                                                                    </div> -->
 
                                                             <!-- <div class="col-md-4">
-                                                                <div class="form-group">
-                                                                    <label for="guardian_relation">Guardian's
-                                                                        Relation</label>
-                                                                    <select class="form-control" id="guardian_relation"
-                                                                        name="guardian_relation">
-                                                                        <option value="">Select</option>
-                                                                        <option value="Grandfather"
-                                                                            {{ old('guardian_relation', $student->guardian_relation ?? '') == 'Grandfather' ? 'selected' : '' }}>
-                                                                            Grandfather</option>
-                                                                        <option value="Grandmother"
-                                                                            {{ old('guardian_relation', $student->guardian_relation ?? '') == 'Grandmother' ? 'selected' : '' }}>
-                                                                            Grandmother</option>
-                                                                        <option value="Uncle"
-                                                                            {{ old('guardian_relation', $student->guardian_relation ?? '') == 'Uncle' ? 'selected' : '' }}>
-                                                                            Uncle</option>
-                                                                        <option value="Aunt"
-                                                                            {{ old('guardian_relation', $student->guardian_relation ?? '') == 'Aunt' ? 'selected' : '' }}>
-                                                                            Aunt</option>
-                                                                        <option value="Other"
-                                                                            {{ old('guardian_relation', $student->guardian_relation ?? '') == 'Other' ? 'selected' : '' }}>
-                                                                            Other</option>
-                                                                    </select>
-                                                                </div>
-                                                            </div> -->
+                                                                        <div class="form-group">
+                                                                            <label for="guardian_relation">Guardian's
+                                                                                Relation</label>
+                                                                            <select class="form-control" id="guardian_relation"
+                                                                                name="guardian_relation">
+                                                                                <option value="">Select</option>
+                                                                                <option value="Grandfather"
+                                                                                    {{ old('guardian_relation', $student->guardian_relation ?? '') == 'Grandfather' ? 'selected' : '' }}>
+                                                                                    Grandfather</option>
+                                                                                <option value="Grandmother"
+                                                                                    {{ old('guardian_relation', $student->guardian_relation ?? '') == 'Grandmother' ? 'selected' : '' }}>
+                                                                                    Grandmother</option>
+                                                                                <option value="Uncle"
+                                                                                    {{ old('guardian_relation', $student->guardian_relation ?? '') == 'Uncle' ? 'selected' : '' }}>
+                                                                                    Uncle</option>
+                                                                                <option value="Aunt"
+                                                                                    {{ old('guardian_relation', $student->guardian_relation ?? '') == 'Aunt' ? 'selected' : '' }}>
+                                                                                    Aunt</option>
+                                                                                <option value="Other"
+                                                                                    {{ old('guardian_relation', $student->guardian_relation ?? '') == 'Other' ? 'selected' : '' }}>
+                                                                                    Other</option>
+                                                                            </select>
+                                                                        </div>
+                                                                    </div> -->
 
                                                             <!-- <div class="col-md-6">
-                                                                <div class="form-group">
-                                                                    <label for="guardian_address">Guardian's Address <span
-                                                                            style="color:red;">*</span></label>
-                                                                    <textarea class="form-control" id="guardian_address" name="guardian_address" placeholder="Guardian's Address"
-                                                                        rows="2" required>{{ old('guardian_address', $student->guardian_address ?? '') }}</textarea>
-                                                                </div>
-                                                            </div> -->
+                                                                        <div class="form-group">
+                                                                            <label for="guardian_address">Guardian's Address <span
+                                                                                    style="color:red;">*</span></label>
+                                                                            <textarea class="form-control" id="guardian_address" name="guardian_address" placeholder="Guardian's Address"
+                                                                                rows="2" required>{{ old('guardian_address', $student->guardian_address ?? '') }}</textarea>
+                                                                        </div>
+                                                                    </div> -->
                                                         </div>
                                                     </div>
                                                 </div>
@@ -588,7 +592,7 @@
                 currentStep++;
                 showStep(currentStep);
                 $('#step-' + currentStep).find('small').remove();
-                 $('#createCommon').attr('data-step',currentStep);
+                $('#createCommon').attr('data-step', currentStep);
             }
         });
 
@@ -598,7 +602,7 @@
             if (currentStep > 1) {
                 currentStep--;
                 showStep(currentStep);
-                $('#createCommon').attr('data-step',currentStep);
+                $('#createCommon').attr('data-step', currentStep);
             }
         });
 
@@ -615,4 +619,11 @@
             document.getElementById('fileName').innerText = event.target.files[0].name;
         }
     </script>
+    {{-- <script>
+        function generateRandomCode(length = 8) {
+            const min = Math.pow(10, length - 1); // e.g., 10000000
+            const max = Math.pow(10, length) - 1; // e.g., 99999999
+            return Math.floor(Math.random() * (max - min + 1)) + min;
+        }
+    </script> --}}
 @endsection

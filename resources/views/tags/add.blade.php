@@ -41,8 +41,9 @@
                                         <div class="row">
                                             <div class="col-md-12 col-12 form-group">
                                                 <label for="name"> Tag Name <span class="text-danger">*</span></label>
-                                                <input type="text" class="form-control" id="name" name="name" placeholder="Enter Tag Name" data-required='true'
-                                                 value="{{ old('name', $data->name ?? '') }}">     
+                                                <input type="text" class="form-control" id="name" name="name"
+                                                    placeholder="Enter Tag Name" data-required='true'
+                                                    value="{{ old('name', $data->name ?? '') }}">
                                             </div>
 
                                             <div class="col-12 col-md-12 text-center mt-2">
@@ -65,7 +66,7 @@
                             </div>
                             <div class="card-body">
                                 <div class="table-responsive">
-                                    <table id='dataContainer'class="table table-bordered table-striped">
+                                    <table id='tagsTable'class="table table-bordered table-striped">
                                         <thead>
                                             <tr class="bg-light">
                                                 <th>SR. NO.</th>
@@ -73,24 +74,67 @@
                                                 <th>Action</th>
                                             </tr>
                                         </thead>
-                                        <tbody id="dataContainer-tags" class='dataContainer'style="min-height:300px">
+                                        {{-- <tbody id="dataContainer-tags" class='dataContainer'style="min-height:300px">
                                            @include('common.loadskeletan',['loopCount'=>6])
-                                        </tbody>
+                                        </tbody> --}}
                                     </table>
                                 </div>
                             </div>
                         </div>
                     </div>
-                <div class="col-md-12 p-0" id="permissionContainer">
+                    <div class="col-md-12 p-0" id="permissionContainer">
 
-                </div>
+                    </div>
                 </div>
             </div>
         </section>
     </div>
 
+    <script>
+        $(document).ready(function() {
+            const subjectTable = $('#tagsTable').DataTable({
+                processing: true,
+                serverSide: true,
+                ajax: {
+                    url: "{{ url('tagsData') }}",
+                    data: function(d) {
+                        const formDataArray = [];
+                        $('#tagsFilterForm').find('input, select, textarea').each(function() {
+                            const name = $(this).attr('name');
+                            const value = $(this).val();
+                            if (name && value !== null && value !== '' && value !== undefined) {
+                                formDataArray.push({
+                                    name,
+                                    value
+                                });
+                            }
+                        });
+                        d.filterable_columns = formDataArray;
+                    }
+                },
+                columns: [{
+                        data: 'DT_RowIndex',
+                        name: 'DT_RowIndex',
+                        orderable: false,
+                        searchable: false
+                    },
+                    {
+                        data: 'name',
+                        name: 'name'
+                    }, // Subject Name
+                    {
+                        data: 'action',
+                        name: 'action',
+                        orderable: false,
+                        searchable: false
+                    } // Buttons
+                ]
+            });
 
-
-
-
+            $('#tagsFilterFormButton').on('click', function(e) {
+                e.preventDefault();
+                subjectTable.ajax.reload();
+            });
+        });
+    </script>
 @endsection
