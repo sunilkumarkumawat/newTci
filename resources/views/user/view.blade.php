@@ -1,11 +1,22 @@
     @php
-    $permissions = Helper::getPermissions();
+        $permissions = Helper::getPermissions();
 
     @endphp
     <tbody>
-        @if(empty($data))
-        @include('common.noDataFound')
+        @if (empty($data))
+            @include('common.noDataFound')
         @else
+            @foreach ($data as $index => $user)
+                <tr>
+                    <td>{{ $index + 1 ?? '' }}</td>
+                    <td>
+                        @include('common.imageViewer', [
+                            'modal' => 'User',
+                            'id' => $user->id,
+                            'field' => 'image',
+                            'defaultImage' => 'defaultImages/imageError.png',
+                            'alt' => 'User Image',
+                        ])
 
         @foreach ($data as $index => $user)
         <tr>

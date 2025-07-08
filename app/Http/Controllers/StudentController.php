@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Validation\Validator;
-use App\Models\User;
+use App\Models\Student;
 use App\Models\Master\Role;
 use App\Models\PermissionManagement;
 use App\Models\BillCounter;
@@ -40,30 +40,37 @@ class StudentController extends Controller
     {
         try {
             // Create a new instance of the API controller
-            $api = new ApiController();
+            $uploadedIds = $request->query('uploadedIds'); // returns string: "21,22,23"
 
+            // Optional: Convert to array if needed
+            $uploadedIdArray = $uploadedIds ? explode(',', $uploadedIds) : [];
             // Simulate request with modal_type = User
-            $fakeRequest = new Request([
-                'modal_type' => 'Admission',
-            ]);
+            // $fakeRequest = new Request([
+            //     'modal_type' => 'Admission',
+            // ]);
 
-            // Call the API method
-            $response = $api->getUsersData($fakeRequest);
+            // // Call the API method
+            // $response = $api->getUsersData($fakeRequest);
 
-            // Extract data from JSON response
-            $responseData = $response->getData();
+            // // Extract data from JSON response
+            // $responseData = $response->getData();
 
-            // Check if data exists and is not empty
-            $data = isset($responseData->data) && !empty($responseData->data) ? $responseData->data : [];
+            // // Check if data exists and is not empty
+            // $data = isset($responseData->data) && !empty($responseData->data) ? $responseData->data : [];
+            $data = Student::whereIn('id', $uploadedIdArray)
+                ->get();
 
-            // Return view with users
-            return view('student.studentView', ['student' => $data]);
+            // If no data found, return empty array
+            if ($data->isEmpty()) {
+                $data = [];
+            }
+            // Return view with students
+            return view('student.studentView', ['data' => $data]);
         } catch (\Exception $e) {
+            // Log the error and show fallback view or message
 
-
-
-            return view('student.studentView', ['student' => []])
-                ->with('error', 'Failed to load student.');
+            return view('student.studentView', ['data' => []])
+                ->with('error', 'Failed to load students.');
         }
     }
 
@@ -90,7 +97,7 @@ class StudentController extends Controller
         return view('student.add', ['student' => $data]);
     }
 
-    
+
 
 
     public function showForm()
