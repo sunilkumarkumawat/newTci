@@ -22,7 +22,7 @@
                 </td>
                 <td>
                     @include('commoninputs.inputs', [
-                        'modal' => 'Class', // This decides the data source
+                        'modal' => 'ClassType', // This decides the data source
                         'name' => 'class_id',
                         'selected' => $student->class_id ?? null,
                         'label' => 'Class',

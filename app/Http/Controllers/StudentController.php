@@ -36,7 +36,7 @@ class StudentController extends Controller
         return view('student.add');
     }
 
-    public function studentView()
+    public function studentView(Request $request)
     {
         try {
             // Create a new instance of the API controller
