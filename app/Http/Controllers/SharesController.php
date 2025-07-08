@@ -795,7 +795,14 @@ class SharesController extends Controller
 
     public function saveExcelData(Request $request, $modal)
     {
+
+
+
+    
         $data = $request->input('data');
+
+
+
 
         // Validate modal type
         if (empty($modal)) {
@@ -826,6 +833,21 @@ class SharesController extends Controller
         $row['created_at'] = $timestamp;
         $row['updated_at'] = $timestamp;
 
+
+        // ✅ Handle password and username for User
+            if ($modal === 'User') {
+                $row['userName'] = $row['mobile'] ?? null;
+                $row['password'] = bcrypt('123456'); // or use Str::random(8)
+                $row['confirm_password'] = '123456'; // or use Str::random(8)
+            }
+
+            // ✅ Handle password for Student
+            if ($modal === 'Student') {
+                $row['password'] = bcrypt('123456'); // or use Str::random(8)
+                $row['confirm_password'] = '123456'; // or use Str::random(8)
+                $row['role_id'] = $role_id;
+                $row['userName'] = $row['mobile'] ?? null; // Assuming mobile is unique
+            }
         $record = $modelClass::create($row); // create() returns the inserted model
         $insertedIds[] = $record->id;
     }
@@ -834,7 +856,7 @@ class SharesController extends Controller
 
     return response()->json([
         'success'       => true,
-        'redirect_to'   => 'userView',
+        'redirect_to'   => $modal =='User' ? 'userView' : 'studentView',
         'inserted_ids'  => implode(',', $insertedIds),
     ]);
 } catch (\Exception $e) {
