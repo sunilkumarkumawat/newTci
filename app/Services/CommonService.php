@@ -46,7 +46,6 @@ class CommonService
     public function createCommon($request)
     {
         $data = collect($request->all())->except(['modal_type', 'id', 'documents', 'categories'])->toArray();
-        // $data['unique_id'] = $this->generateUniqueStudentCode();
         $modal = $request->modal_type;
 
         if (!str_contains($modal, '\\')) {
@@ -62,7 +61,7 @@ class CommonService
 
             // 🔐 Handle password fields
             $this->handlePasswordField($data);
-            
+
             // 💡 Handle permissions (for User only)
             $permissions = null;
             if ($modalName === 'User' && isset($data['permissions'])) {
@@ -77,15 +76,51 @@ class CommonService
                 }
             }
 
+            // 🛑 Duplicate check (for User only on create)
+            if ($modalName === 'User' && !$request->filled('id')) {
+                $duplicate = $modal::where('email', $data['email'] ?? null)
+                    ->orWhere('mobile', $data['mobile'] ?? null)
+                    ->first();
+
+                if ($duplicate) {
+                    return response()->json([
+                        'message' => 'User with same email, mobile already exists.',
+                        'duplicate_fields' => [
+                            'email' => $duplicate->email,
+                            'mobile' => $duplicate->mobile,
+                        ]
+                    ], 409);
+                }
+            }
+
+            // 🛑 Duplicate check for Student (same name + mobile + email)
+            if ($modalName === 'Student' && !$request->filled('id')) {
+                $duplicate = $modal::where('name', $data['name'] ?? null)
+                    ->where('mobile', $data['mobile'] ?? null)
+                    ->where('email', $data['email'] ?? null)
+                    ->first();
+
+                if ($duplicate) {
+                    return response()->json([
+                        'message' => 'A student with the same name, mobile, and email already exists.',
+                        'duplicate_fields' => [
+                            'name'   => $duplicate->name,
+                            'mobile' => $duplicate->mobile,
+                            'email'  => $duplicate->email,
+                        ]
+                    ], 409);
+                }
+            }
+
             // 📝 Create or Update the model
             $record = $request->filled('id') ? $modal::find($request->id) : new $modal;
             if ($request->filled('id') && !$record) {
                 return response()->json(['message' => "$modalName not found."], 404);
             }
-           
+
             $record->fill($data)->save();
 
-            // 🔗 Save permissions
+            // 🔗 Save permissions (if User)
             if ($modalName === 'User' && $permissions !== null) {
                 $this->savePermission($record->id, $permissions);
             }
@@ -116,6 +151,7 @@ class CommonService
             ], 500);
         }
     }
+
 
 
     public function deleteCommon(Request $request, $modal, $id)
@@ -416,15 +452,5 @@ class CommonService
 
 
         return $options;
-    }
-
-    // unique id generator
-    public function generateUniqueStudentCode($length = 8)
-    {
-        do {
-            $uniqueId = mt_rand(pow(10, $length - 1), pow(10, $length) - 1);
-        } while (Student::where('unique_id', $uniqueId)->exists());
-
-        return $uniqueId;
     }
 }

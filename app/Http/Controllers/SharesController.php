@@ -817,22 +817,27 @@ class SharesController extends Controller
 
         $role_id = $modal == 'Student' ? 3 : '';
         try {
-            // Use DB transaction for safety
-            DB::beginTransaction();
+    DB::beginTransaction();
 
-            // Add timestamps
-            $timestamp = now();
-            foreach ($data as &$row) {
-                $row['created_at'] = $timestamp;
-                $row['updated_at'] = $timestamp;
-            }
+    $timestamp = now();
+    $insertedIds = [];
 
-            // Insert in one go
-            $modelClass::insert($data);
+    foreach ($data as &$row) {
+        $row['created_at'] = $timestamp;
+        $row['updated_at'] = $timestamp;
 
-            DB::commit();
-            return response()->json(['success' => true]);
-        } catch (\Exception $e) {
+        $record = $modelClass::create($row); // create() returns the inserted model
+        $insertedIds[] = $record->id;
+    }
+
+    DB::commit();
+
+    return response()->json([
+        'success'       => true,
+        'redirect_to'   => 'userView',
+        'inserted_ids'  => implode(',', $insertedIds),
+    ]);
+} catch (\Exception $e) {
             DB::rollBack();
             $errorMessage = $e->getMessage();
 
