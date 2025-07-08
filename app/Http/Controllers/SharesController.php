@@ -856,6 +856,49 @@ class SharesController extends Controller
             ], 500);
         }
     }
+
+
+
+
+   public function updateSingleField(Request $request)
+{
+    $data = $request->only(['id', 'field_name', 'field_value', 'modal_name']);
+
+    $request->validate([
+        'id' => 'required|integer',
+        'field_name' => 'required|string',
+        'field_value' => 'nullable|string',
+        'modal_name' => 'required|string'
+    ]);
+
+    // Map modal_name to model class
+    $modelMap = [
+        'Student' => \App\Models\Student::class,
+        'Teacher' => \App\Models\Teacher::class,
+        'User' => \App\Models\User::class,
+        // Add other modal_name => model_class mappings here
+    ];
+
+    $modelClass = $modelMap[$data['modal_name']] ?? null;
+
+    if (!$modelClass || !class_exists($modelClass)) {
+        return response()->json([
+            'success' => false,
+            'message' => 'Invalid model name.'
+        ], 400);
+    }
+
+    $model = $modelClass::findOrFail($data['id']);
+    $model->{$data['field_name']} = $data['field_value'];
+    $model->save();
+
+    return response()->json([
+        'success' => true,
+        'message' => 'Field updated successfully.'
+    ]);
+}
+
+
     public function generatePassword(Request $request)
     {
         $data = $request->all(); // includes modal_type, username[], password[]

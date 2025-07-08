@@ -9,7 +9,9 @@
 
         @foreach ($data as $index => $user)
         <tr>
-            <td>{{ $index + 1 ?? '' }}</td>
+            <td>{{ $index + 1 ?? '' }}
+                <input type="hidden" id='modal_name' value="User">
+            </td>
             <td>
                 @include('common.imageViewer', [
                 'modal' => 'User',
@@ -26,7 +28,9 @@
                 'selected' => $user->role_id ?? null,
                 'label' => 'Role',
                 'required' => true,
-                'label'=>false
+                'label'=>false,
+                'className'=>'updateFieldOnChange',
+                'recordId'=> $user->id ?? null,
                 ])</td>
             <td>{{ $user->name ?? '' }} {{ $user->last_name ?? '' }}</td>
             <td>{{ $user->mobile ?? '' }}</td>

@@ -1539,6 +1539,42 @@
             });
         </script>
 
+        <script>
+
+$(document).on('change', '.updateFieldOnChange', function () {
+    let $input = $(this);
+    let value = $input.val();
+    let fieldName = $input.attr('name');
+    let modalName = $('#modal_name').val();
+    let recordId = $input.attr('data-recordId');
+
+    if (!value || !fieldName || !modalName) {
+        console.error("Missing required data attributes.");
+        return;
+    }
+
+    $.ajax({
+        url: '{{ url('/') }}/update-single-field', // Update this URL to your Laravel route
+        method: 'POST',
+        data: {
+            id: recordId,
+            field_name: fieldName,
+            field_value: value,
+            modal_name: modalName,
+            _token: $('meta[name="csrf-token"]').attr('content') // Laravel CSRF token
+        },
+        success: function (res) {
+            console.log('Updated successfully');
+            // Optionally show a success message
+        },
+        error: function (xhr) {
+            console.error('Update failed');
+            // Optionally revert input value or show error
+        }
+    });
+});
+</script>
+
 
         <script>
             $(document).on('click', '.showQuestion', function() {

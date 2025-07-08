@@ -9,6 +9,8 @@
     $attributes = $attributes ?? [];
     $useIdAsValue = $useIdAsValue ?? true;
     $nameField = $nameField ?? true;
+    $className = $className ?? '';
+    $recordId = $recordId ?? '';
 @endphp
 
 @php
@@ -33,12 +35,12 @@
     @endif
 
     <select
-        class="form-control"
+        class="form-control {{$className}}"
         id="{{ $name }}"
         @if($nameField)
             name="{{ $name }}"
         @endif
-       
+        data-recordId="{{ $recordId }}"
         data-required="{{ $isRequired ? 'true' : 'false' }}"
         @foreach($attributes as $attr => $val)
             {{ $attr }}="{{ $val }}"

@@ -180,6 +180,7 @@ Route::middleware(['auth'])->group(function () {
     Route::match(['get', 'post'], 'userPassword', 'SharesController@userPassword');
     Route::match(['get', 'post'], 'allTypeUsersData', 'SharesController@allTypeUsersData');
     Route::match(['get', 'post'], 'generatecode', 'SharesController@generateUniqueStudentCode');
+    Route::match(['get', 'post'], 'update-single-field', 'SharesController@updateSingleField');
 
     Route::match(['get', 'post'], '/admitCard', 'StudentController@showForm');
    
