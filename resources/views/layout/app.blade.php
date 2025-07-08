@@ -157,10 +157,10 @@
         @include('layout.footer')
         <script>
             /*$.ajaxSetup({
-                                                                                                                                                                                                                                                                                                                                                                            headers: {
-                                                                                                                                                                                                                                                                                                                                                                                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                                                                                                                                                                                                                                                                                                                                                                            }
-                                                                                                                                                                                                                                                                                                                                                                        });*/
+                                                                                                                                                                                                                                                                                                                                                                                            headers: {
+                                                                                                                                                                                                                                                                                                                                                                                                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                                                                                                                                                                                                                                                                                                                                                                                            }
+                                                                                                                                                                                                                                                                                                                                                                                        });*/
             //var URL  = "{{ url('/') }}";
         </script>
 
@@ -825,7 +825,7 @@
                     let totalSteps = $(this).attr('data-total_steps') ||
                         1; // Get current step from data attribute or default to 1
 
-
+                    // let student - > unique_id = $this - > generateUniqueStudentCode()
 
                     // Optional helper to format field names like "mobile_no" to "Mobile No"
                     function formatFieldName(name) {
@@ -844,6 +844,8 @@
                     if (currentStep !== totalSteps) {
                         return
                     }
+
+                   
 
                     const formData = new FormData(this); // Handles files + inputs
                     const submitBtn = $form.find('button[type="submit"]');

@@ -147,6 +147,13 @@ class Helper
                         'route' => 'performanceReport',
                         'icon' => 'fa fa-circle',
                     ],
+                    [
+                        'title' => 'Admit Card',
+                        'className' => 'admit_card.add',
+                        'status' => true,
+                        'route' => 'admitCard',
+                        'icon' => 'fa fa-circle',
+                    ],
 
                 ],
             ],
@@ -204,6 +211,13 @@ class Helper
                         'className' => 'question_bank.view',
                         'status' => true,
                         'route' => 'questionView',
+                        'icon' => 'fa fa-circle',
+                    ],
+                    [
+                        'title' => 'Recycle Bin',
+                        'className' => 'recycle.view',
+                        'status' => true,
+                        'route' => 'recycleBin',
                         'icon' => 'fa fa-circle',
                     ],
                 ],

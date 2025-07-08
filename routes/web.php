@@ -179,6 +179,11 @@ Route::middleware(['auth'])->group(function () {
     Route::match(['get', 'post'], 'studentFeesStatus', 'SharesController@studentFeesStatus');
     Route::match(['get', 'post'], 'userPassword', 'SharesController@userPassword');
     Route::match(['get', 'post'], 'allTypeUsersData', 'SharesController@allTypeUsersData');
+    Route::match(['get', 'post'], 'generatecode', 'SharesController@generateUniqueStudentCode');
+
+    Route::match(['get', 'post'], '/admitCard', 'StudentController@showForm');
+   
+
 
     // Teacher
     Route::match(['get', 'post'], 'teacherView', 'TeacherController@teacherView');
@@ -221,8 +226,12 @@ Route::middleware(['auth'])->group(function () {
     Route::match(['get', 'post'], 'questionDashboard', 'SharesController@questionDashboard');
     Route::match(['get', 'post'], 'questions', 'SharesController@questions');
     Route::match(['get', 'post'], 'questionView', 'SharesController@questionView');
+    Route::match(['get', 'post'], 'recycleBin', 'SharesController@recycleBin');
     Route::match(['get', 'post'], 'questionData', 'SharesController@questionData');
     Route::match(['get', 'post'], 'userData', 'SharesController@userData');
+    Route::match(['get', 'post'], 'studentData', 'SharesController@studentData');
+    Route::match(['get', 'post'], 'subjectData', 'SharesController@subjectData');
+    Route::match(['get', 'post'], 'tagsData', 'SharesController@tagsData');
 
 
 
@@ -274,10 +283,10 @@ Route::middleware(['auth'])->group(function () {
     Route::match(['get', 'post'], '/doubtSolution', 'ReportController@doubtSolution');
     Route::match(['get', 'post'], '/attendence_report', 'ReportController@attendencereport');
     Route::match(['get', 'post'], '/customReport', 'ReportController@customreport');
-   
 
 
-//    Route::post('/user/check-exist', [SharesController::class, 'checkUserExist'])->name('user.checkExist');
+
+    //    Route::post('/user/check-exist', [SharesController::class, 'checkUserExist'])->name('user.checkExist');
 
 
 
