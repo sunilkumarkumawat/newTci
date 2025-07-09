@@ -59,11 +59,12 @@ class StudentController extends Controller
             // $data = isset($responseData->data) && !empty($responseData->data) ? $responseData->data : [];
             $data = Student::whereIn('id', $uploadedIdArray)
                 ->get();
-
+// dd($data);
             // If no data found, return empty array
             if ($data->isEmpty()) {
                 $data = [];
             }
+           
             // Return view with students
             return view('student.studentView', ['data' => $data]);
         } catch (\Exception $e) {
