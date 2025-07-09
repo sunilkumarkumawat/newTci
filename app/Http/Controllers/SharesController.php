@@ -13,6 +13,7 @@ use App\Models\Subject;
 use Session;
 use Yajra\DataTables\Facades\DataTables;
 use Helper;
+use PHPUnit\TextUI\XmlConfiguration\CodeCoverage\Report\Php;
 
 class SharesController extends Controller
 {
@@ -408,26 +409,22 @@ class SharesController extends Controller
         $filters = $request->filterable_columns ?? [];
 
         $query = Student::query()
-            ->leftJoin('gender', function ($join) {
-                $join->on('student.gender', '=', 'gender.id')
-                    ->whereNull('gender.deleted_at');
-            })
-            ->leftJoin('class_types', function ($join) {
-                $join->on('student.class_type_id', '=', 'class_types.id')
-                    ->whereNull('class_types.deleted_at');
+            
+            ->leftJoin('batches', function ($join) {
+                $join->on('student.class_type_id', '=', 'batches.id')
+                    ->whereNull('batches.deleted_at');
             })
             ->select(
                 'student.id',
                 'student.admissionNo',
                 'student.name',
-                // 'student.class_type_id',
                 'student.email',
                 'student.mobile',
                 'student.image',
                 'student.gender',
                 'student.dob',
                 'student.status',
-                'class_types.name as class'
+                'batches.name as batch'
             );
 
         // Apply filters
@@ -451,7 +448,6 @@ class SharesController extends Controller
 
         return DataTables::of($query)
             ->addIndexColumn()
-
 
             // Profile Image
             ->editColumn('image', function ($item) {
@@ -795,14 +791,7 @@ class SharesController extends Controller
 
     public function saveExcelData(Request $request, $modal)
     {
-
-
-
-    
         $data = $request->input('data');
-
-
-
 
         // Validate modal type
         if (empty($modal)) {
@@ -824,42 +813,42 @@ class SharesController extends Controller
 
         $role_id = $modal == 'Student' ? 3 : '';
         try {
-    DB::beginTransaction();
+            DB::beginTransaction();
 
-    $timestamp = now();
-    $insertedIds = [];
+            $timestamp = now();
+            $insertedIds = [];
 
-    foreach ($data as &$row) {
-        $row['created_at'] = $timestamp;
-        $row['updated_at'] = $timestamp;
+            foreach ($data as &$row) {
+                $row['created_at'] = $timestamp;
+                $row['updated_at'] = $timestamp;
 
 
-        // ✅ Handle password and username for User
-            if ($modal === 'User') {
-                $row['userName'] = $row['mobile'] ?? null;
-                $row['password'] = bcrypt('123456'); // or use Str::random(8)
-                $row['confirm_password'] = '123456'; // or use Str::random(8)
+                // ✅ Handle password and username for User
+                if ($modal === 'User') {
+                    $row['userName'] = $row['mobile'] ?? null;
+                    $row['password'] = bcrypt('123456'); // or use Str::random(8)
+                    $row['confirm_password'] = '123456'; // or use Str::random(8)
+                }
+
+                // ✅ Handle password for Student
+                if ($modal === 'Student') {
+                    $row['password'] = bcrypt('123456'); // or use Str::random(8)
+                    $row['confirm_password'] = '123456'; // or use Str::random(8)
+                    $row['role_id'] = $role_id;
+                    $row['userName'] = $row['mobile'] ?? null; // Assuming mobile is unique
+                }
+                $record = $modelClass::create($row); // create() returns the inserted model
+                $insertedIds[] = $record->id;
             }
 
-            // ✅ Handle password for Student
-            if ($modal === 'Student') {
-                $row['password'] = bcrypt('123456'); // or use Str::random(8)
-                $row['confirm_password'] = '123456'; // or use Str::random(8)
-                $row['role_id'] = $role_id;
-                $row['userName'] = $row['mobile'] ?? null; // Assuming mobile is unique
-            }
-        $record = $modelClass::create($row); // create() returns the inserted model
-        $insertedIds[] = $record->id;
-    }
+            DB::commit();
 
-    DB::commit();
-
-    return response()->json([
-        'success'       => true,
-        'redirect_to'   => $modal =='User' ? 'userView' : 'studentView',
-        'inserted_ids'  => implode(',', $insertedIds),
-    ]);
-} catch (\Exception $e) {
+            return response()->json([
+                'success'       => true,
+                'redirect_to'   => $modal == 'User' ? 'userView' : 'studentView',
+                'inserted_ids'  => implode(',', $insertedIds),
+            ]);
+        } catch (\Exception $e) {
             DB::rollBack();
             $errorMessage = $e->getMessage();
 
@@ -882,43 +871,43 @@ class SharesController extends Controller
 
 
 
-   public function updateSingleField(Request $request)
-{
-    $data = $request->only(['id', 'field_name', 'field_value', 'modal_name']);
+    public function updateSingleField(Request $request)
+    {
+        $data = $request->only(['id', 'field_name', 'field_value', 'modal_name']);
 
-    $request->validate([
-        'id' => 'required|integer',
-        'field_name' => 'required|string',
-        'field_value' => 'nullable|string',
-        'modal_name' => 'required|string'
-    ]);
+        $request->validate([
+            'id' => 'required|integer',
+            'field_name' => 'required|string',
+            'field_value' => 'nullable|string',
+            'modal_name' => 'required|string'
+        ]);
 
-    // Map modal_name to model class
-    $modelMap = [
-        'Student' => \App\Models\Student::class,
-        'Teacher' => \App\Models\Teacher::class,
-        'User' => \App\Models\User::class,
-        // Add other modal_name => model_class mappings here
-    ];
+        // Map modal_name to model class
+        $modelMap = [
+            'Student' => \App\Models\Student::class,
+            'Teacher' => \App\Models\Teacher::class,
+            'User' => \App\Models\User::class,
+            // Add other modal_name => model_class mappings here
+        ];
 
-    $modelClass = $modelMap[$data['modal_name']] ?? null;
+        $modelClass = $modelMap[$data['modal_name']] ?? null;
 
-    if (!$modelClass || !class_exists($modelClass)) {
+        if (!$modelClass || !class_exists($modelClass)) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Invalid model name.'
+            ], 400);
+        }
+
+        $model = $modelClass::findOrFail($data['id']);
+        $model->{$data['field_name']} = $data['field_value'];
+        $model->save();
+
         return response()->json([
-            'success' => false,
-            'message' => 'Invalid model name.'
-        ], 400);
+            'success' => true,
+            'message' => 'Field updated successfully.'
+        ]);
     }
-
-    $model = $modelClass::findOrFail($data['id']);
-    $model->{$data['field_name']} = $data['field_value'];
-    $model->save();
-
-    return response()->json([
-        'success' => true,
-        'message' => 'Field updated successfully.'
-    ]);
-}
 
 
     public function generatePassword(Request $request)
@@ -951,6 +940,4 @@ class SharesController extends Controller
 
         return response()->json(['status' => 'success']);
     }
-
-   
 }

@@ -6,65 +6,121 @@
     @if (empty($data))
         @include('common.noDataFound')
     @else
-        @foreach ($data as $index => $studentAdd)
+        @foreach ($data as $index => $student)
             <tr>
-                <td>{{ $index + 1 }}</td>
+                <td>
+                    {{ $index + 1 ?? '' }}
+                    <input type="hidden" id="modal_name" value="Student">
+                </td>
+
                 <td>
                     @include('common.imageViewer', [
                         'modal' => 'Student',
-                        'id' => $studentAdd->id,
+                        'id' => $student->id,
                         'field' => 'image',
                         'defaultImage' => 'defaultImages/imageError.png',
                         'alt' => 'Student Photo',
                     ])
-
-
                 </td>
+                @if (empty($data))
+                    <td>{{ $student->admission_no ?? '' }}</td>
+                @endif
+
+                <td>{{ $student->name ?? '' }}</td>
                 <td>
                     @include('commoninputs.inputs', [
-                        'modal' => 'ClassType', // This decides the data source
-                        'name' => 'class_id',
-                        'selected' => $student->class_id ?? null,
-                        'label' => 'Class',
+                        'modal' => 'Batches',
+                        'name' => 'class_type_id',
+                        'selected' => $student->class_type_id ?? null,
+                        'label' => 'Batch',
                         'required' => true,
                         'label' => false,
-                    ])</td>
+                        'className' => 'updateFieldOnChange',
+                        'recordId' => $student->id ?? null,
+                    ])
                 </td>
-                <td>{{ $studentAdd->name ?? '' }}</td>
-                <td>{{ $studentAdd->mobile ?? '' }}</td>
-                <td>{{ $studentAdd->email ?? '' }}</td>
-                <td>{{ $studentAdd->gender ?? '' }}</td>
+                <td>{{ $student->mobile ?? '' }}</td>
+                <td>{{ $student->email ?? '' }}</td>
                 <td>
+                    @include('commoninputs.inputs', [
+                        'modal' => 'Gender',
+                        'name' => 'gender',
+                        'selected' => $student->gender ?? null,
+                        'label' => 'Gender',
+                        'required' => true,
+                        'label' => false,
+                        'className' => 'updateFieldOnChange',
+                        'recordId' => $student->id ?? null,
+                    ])
+                </td>
+
                 <td>
-                    @include('common.dateViewer', ['date' => $studentAdd->admission_date])
+                    @include('common.dateViewer', ['date' => $student->dob ?? ''])
                 </td>
-                </td>
-                <td>{{ $studentAdd->city_id ?? '' }}</td>
+
                 <td>
                     @if (in_array('student_management.status', $permissions) || Auth::user()->role_id == 1)
                         <button
-                            class="student_management.status btn btn-sm w-75 status-change-btn {{ $studentAdd->status == 1 ? 'btn-success' : 'btn-danger' }}"
-                            id="status-Student-{{ $studentAdd->id }}" data-modal="Student" data-id="{{ $studentAdd->id }}"
-                            data-status="{{ $studentAdd->status }}">
-                            {{ $studentAdd->status == 1 ? 'Active' : 'Inactive' }}
+                            class="student_management.status btn btn-sm w-75 status-change-btn {{ $student->status == 1 ? 'btn-success' : 'btn-danger' }}"
+                            id="status-Student-{{ $student->id }}" data-modal="Student" data-id="{{ $student->id }}"
+                            data-status="{{ $student->status }}">
+                            {{ $student->status == 1 ? 'Active' : 'Inactive' }}
                         </button>
                     @else
-                        <span
-                            class="{{ $studentAdd->status == 1 ? 'text-success' : 'text-danger' }}">{{ $studentAdd->status == 1 ? 'Active' : 'Inactive' }}</span>
+                        <span class="{{ $student->status == 1 ? 'text-success' : 'text-danger' }}">
+                            {{ $student->status == 1 ? 'Active' : 'Inactive' }}
+                        </span>
                     @endif
                 </td>
+
                 <td>
                     @if (in_array('student_management.edit', $permissions) || Auth::user()->role_id == 1)
-                        <a href="{{ url('commonEdit/Student/' . $studentAdd->id) }}"
-                            class="student_management.edit btn btn-xs"><i class="fa fa-edit text-primary"></i></a>
+                        <a href="{{ url('commonEdit/Student/' . $student->id) }}"
+                            class="student_management.edit btn btn-xs">
+                            <i class="fa fa-edit text-primary"></i>
+                        </a>
                     @endif
+
                     @if (in_array('student_management.delete', $permissions) || Auth::user()->role_id == 1)
-                        <a class="student_management.delete btn-xs delete-btn" data-modal="Student"
-                            data-id="{{ $studentAdd->id }}">
-                            <i class="fa fa-trash fs-6 text-danger"></i></a>
+                        <a class="btn-xs delete-btn student_management.delete" data-modal="Student"
+                            data-id="{{ $student->id }}">
+                            <i class="fa fa-trash fs-6 text-danger"></i>
+                        </a>
                     @endif
                 </td>
             </tr>
         @endforeach
+    @endif
 </tbody>
-@endif
+
+{{-- apply to all function --}}
+{{-- <script>
+    $(document).ready(function() {
+        // Handle checkbox toggle
+        $(document).on('change', '.apply-class-to-all', function() {
+            const $row = $(this).closest('tr');
+            const $select = $row.find('select[name="class_type_id"]');
+            const selectedClass = $select.val();
+
+            if ($(this).is(':checked')) {
+                if (!selectedClass) {
+                    alert('Please select a Class Type first.');
+                    $(this).prop('checked', false);
+                    return;
+                }
+
+                // Apply the selected class to all rows
+                $('select[name="class_type_id"]').each(function() {
+                    $(this).val(selectedClass).trigger('change').prop('disabled', true);
+                });
+
+                // Check all checkboxes
+                $('.apply-class-to-all').prop('checked', true);
+            } else {
+                // Only uncheck and enable the current row's select
+                $select.prop('disabled', false);
+                $(this).prop('checked', false);
+            }
+        });
+    });
+</script> --}}
