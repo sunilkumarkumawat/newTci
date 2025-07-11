@@ -36,7 +36,18 @@
                 <td>{{ $user->name ?? '' }} {{ $user->last_name ?? '' }}</td>
                 <td>{{ $user->mobile ?? '' }}</td>
                 <td>{{ $user->email ?? '' }}</td>
-                <td>{{ $user->gender_id ?? '' }}</td>
+                <td>
+                    @include('commoninputs.inputs', [
+                        'modal' => 'Gender',
+                        'name' => 'gender',
+                        'selected' => $user->gender ?? null,
+                        'label' => 'Gender',
+                        'required' => true,
+                        'label' => false,
+                        'className' => 'updateFieldOnChange',
+                        'recordId' => $user->id ?? null,
+                    ])
+                </td>
                 <td>
                     @include('common.dateViewer', ['date' => $user->dob ?? ''])
                 </td>
@@ -44,9 +55,7 @@
                     @if (in_array('user_management.status', $permissions) || Auth::user()->role_id == 1)
                         <button
                             class="user_management.status btn btn-sm w-75 status-change-btn {{ $user->status == 1 ? 'btn-success' : 'btn-danger' }}"
-                            id="status-User-{{ $user->id }}"
-                            data-modal="User"
-                            data-id="{{ $user->id }}"
+                            id="status-User-{{ $user->id }}" data-modal="User" data-id="{{ $user->id }}"
                             data-status="{{ $user->status }}">
                             {{ $user->status == 1 ? 'Active' : 'Inactive' }}
                         </button>
@@ -61,7 +70,8 @@
                         </a>
                     @endif
                     @if (in_array('user_management.delete', $permissions) || Auth::user()->role_id == 1)
-                        <a class="btn-xs delete-btn user_management.delete" data-modal="User" data-id="{{ $user->id }}">
+                        <a class="btn-xs delete-btn user_management.delete" data-modal="User"
+                            data-id="{{ $user->id }}">
                             <i class="fa fa-trash fs-6 text-danger"></i>
                         </a>
                     @endif
