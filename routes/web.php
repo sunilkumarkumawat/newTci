@@ -276,6 +276,7 @@ Route::middleware(['auth'])->group(function () {
     Route::match(['get', 'post'], 'getQuestionsByRequest/{classId}/{subjectId}', 'ExamController@getQuestionsByRequest');
     Route::match(['get', 'post'], '/answerkey', 'ExamController@answerkey');
     Route::match(['get', 'post'], '/questionkey', 'ExamController@questionkey');
+    Route::match(['get', 'post'], '/saveGeneratedPaper', 'ExamController@saveGeneratedPaper');
 
 
     // reports & Exports

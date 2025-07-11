@@ -258,6 +258,26 @@ class ExamController extends Controller
     }
 
 
+    public function saveGeneratedPaper(Request $request)
+    {
+        $examData = $request->input('questions');
+        $examId = $request->input('exam_id');
+        $type = $request->input('type'); // Get type, default to 'default'
+        // Create or update the exam
+        $draftExam = Exam::updateOrCreate(
+            ['id' => $examId ?? null],
+            [
+                'user_id' => Auth::id(),
+                'questions_id' => $type=='reset' ? null :  $examData,
+            ]
+        );
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Paper saved successfully.',
+        ]);
+
+    }
     public function PaperPreview(Request $request)
     {
         $jsonData = $request->input('questionIds');

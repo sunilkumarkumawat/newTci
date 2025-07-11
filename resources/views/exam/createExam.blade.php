@@ -53,7 +53,23 @@
 
                     </div>
 
-                    <div class="col-md-9">
+                    <div class="col-md-9" id="createdPaperMessage" style="display: {{ $examDetails->questions_id == null ? 'none' : 'block' }}">
+                        <div class="card card-primary">
+                            <div class="card-header d-flex justify-content-between align-items-center">
+                                <h3 class="card-title mb-0">Generated Paper Preview</h3>
+                                <button type="button" class="btn btn-sm btn-primary" id="editPaperBtn">
+                                    <i class="fas fa-edit"></i> Edit
+                                </button>
+                                <button type='button' id="downloadPdfBtn" class="btn btn-primary">Download PDF</button>
+                            </div>
+                            <!-- /.card-header -->
+                            <div class="card-body" id='renderGeneratedQuestions'>
+
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-9" id='paperCreationSection' style="display: {{$examDetails->questions_id == null ? 'block' : 'none'}}">
                         <div class="row">
                             <div class="col-md-4">
                                 <div class="card card-primary">
@@ -129,6 +145,9 @@
                                             <button type="button" class="btn btn-primary" id="generatePreview">
                                                 <i class="fas fa-eye me-1"></i> Paper Preview
                                             </button>
+                                            <button type='button' class='btn btn-sm bg-primary ml-2'
+                                                onclick="generatePaper()">Generate Paper</button>
+
                                         </div>
                                     </div>
 
@@ -177,6 +196,8 @@
                                             </tbody>
                                         </table>
                                     </div>
+
+
                                 </div>
 
 
@@ -186,6 +207,7 @@
                     </div>
 
                 </div>
+
             </form>
         </div>
     </section>
@@ -198,7 +220,7 @@
 
             <div class="modal-header">
                 <h5 class="modal-title" id="paperPreviewModalLabel">Paper Preview</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                <button type="button" class="btn" data-bs-dismiss="modal" aria-label="Close">
                     <i class="fas fa-times"></i>
                 </button>
             </div>
@@ -206,6 +228,8 @@
             <div class="modal-body">
                 <div id="paperPreviewContent">
                     <!-- Dynamically loaded paper content will go here -->
+
+
                 </div>
             </div>
 
@@ -224,7 +248,7 @@
 
             <div class="modal-header">
                 <h5 class="modal-title" id="getPaperPreviewModalLabel">Paper Preview</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                <button type="button" class="btn" data-bs-dismiss="modal" aria-label="Close">
                     <i class="fas fa-times"></i>
                 </button>
             </div>
@@ -276,7 +300,7 @@
 
             <div class="modal-header">
                 <h5 class="modal-title" id="subTopicsModalLabel">Sub-topic List</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                <button type="button" class="btn" data-bs-dismiss="modal" aria-label="Close">
                     <i class="fas fa-times"></i>
                 </button>
             </div>
@@ -323,28 +347,35 @@
 
 <script>
     // Global variables
-    let totalQuestions = 0;
-    let marksPerQuestion = 4;
-    let numberOfSelectedSubject = 0;
+
     let finalArray = @json($questioningData) || {};
     let overviewMap = @json($overviewingData ?? null);
     let finalQuestionArray = @json($finalQuestionArray ?? []);
+let generatedQuestions = JSON.parse(@json($examDetails->questions_id ?? '[]'));
 
-    if (overviewMap !== null) {
 
+let hasQuestions = Object.values(generatedQuestions).some(arr => Array.isArray(arr) && arr.length > 0);
+
+if (hasQuestions) {
+    loadPreview(generatedQuestions, 'renderGeneratedQuestions');
+} else {
+    console.log("No questions found.");
+}
+
+
+    if (overviewMap.length > 0) {
         $('#subject_overview').html($(overviewMap)); // Set the subject_overview_id if available
-
     }
+
+    let totalQuestions = parseInt($('#total_questions').val());
+    let marksPerQuestion = parseInt($('#per_question_marks').val());
+    let numberOfSelectedSubject = 0;
 
 
     function draftArray(classTypeId, subjectId) {
         if (!finalArray[classTypeId]) {
             finalArray[classTypeId] = {};
         }
-
-
-
-
 
         // 🔁 Copy and sync input values
         let $originalRows = $('#questionsTableBody').children();
@@ -372,15 +403,17 @@
 
         updateSelectedQuestionCountsBySubject();
 
-         const subjectOverview = $('#subject_overview').html(); // Or use `.data('overview-id')` from somewhere
+        const subjectOverview = $('#subject_overview').html(); // Or use `.data('overview-id')` from somewhere
 
         // ✅ Store subject_overview_id
         overviewMap = subjectOverview;
         // 🔁 Save both arrays
         draftExam(finalArray, overviewMap);
- 
+
     }
+
     $('#questionsSelectionSection').hide();
+
 
 
     function loadQuestionsTable(classTypeId, subjectId) {
@@ -400,6 +433,8 @@
 
     // Utility: Update total fields in the UI
     function updateTotalFields() {
+
+
         $('#total_questions').val(totalQuestions);
         $('#total_questions').attr('value', totalQuestions);
         $('#total_marks').val(totalQuestions * marksPerQuestion);
@@ -420,7 +455,7 @@
                 </button>
                 <strong><i class="fas fa-book mr-1"></i> ${subjectName}</strong><br>
                 <span class="text-muted">Total Questions: ${numberOfQuestions}</span><br>
-                <span class="text-muted subject_selected_question" data-subject_id="${subjectId}">Selected Questions: ${0}</span><br>
+                <span class="text-muted subject_selected_question" data-subject_id="${subjectId}" data-subject_name="${subjectName}">Selected Questions: ${0}</span><br>
                 <span class="text-muted">Marks per Question: ${marksPerQuestion}</span><br>
                 <span class="text-muted">Total Marks: ${totalMarks}</span>
             </div>
@@ -481,8 +516,19 @@
             const questionsToRemove = parseInt(match[1]);
             totalQuestions -= questionsToRemove;
             if (totalQuestions < 0) totalQuestions = 0;
-            updateTotalFields();
+
+            const questionsInCurrentSubject = parseInt($('#number_of_questions_per_subject').val());
+            const totalTillNow = parseInt($('#total_questions').val());
+            const perQuestionsMarks = parseInt($('#per_question_marks').val());
+
+            $('#total_questions').val(totalTillNow - questionsInCurrentSubject);
+            $('#total_questions').attr('value', totalTillNow - questionsInCurrentSubject);
+            $('#total_marks').val((totalTillNow - questionsInCurrentSubject) * perQuestionsMarks);
+            $('#total_marks').attr('value', totalTillNow * perQuestionsMarks);
+
+
         }
+
 
         subjectBox.remove();
         const subjectOverview = $('#subject_overview').html(); // Or use `.data('overview-id')` from somewhere
@@ -499,9 +545,11 @@
 
     // Optional: Subject item click handler
     $(document).on('click', '.subject-item', function() {
+        $('#questionsTableBody').html('');
+        $('#class_type_id').val('');
 
         subjectId = $(this).data('subject-id');
-        let classTypeId = $('#class_type_id').val();
+        // let classTypeId = $('#class_type_id').val();
         $('#questionsSelectionSection').show();
         $('.subject-item').removeClass('selected-subject');
         $(this).addClass('selected-subject');
@@ -521,23 +569,23 @@
 
 
     // Optional: Subject item click handler
-    $(document).on('click', '#generatePreview', function () {
-    let questionIds = {};
+    $(document).on('click', '#generatePreview', function() {
+        let questionIds = {};
 
-    $('.subject_selected_question').each(function () {
-        const subjectId = $(this).data('subject_id');
-        const objectiveStr = $(this).attr('data-objective') || '';
-        const numericStr = $(this).attr('data-numeric') || '';
+        $('.subject_selected_question').each(function() {
+            const subjectId = $(this).data('subject_id');
+            const objectiveStr = $(this).attr('data-objective') || '';
+            const numericStr = $(this).attr('data-numeric') || '';
 
-        const objectiveIds = objectiveStr.split(',').filter(Boolean);
-        const numericIds = numericStr.split(',').filter(Boolean);
+            const objectiveIds = objectiveStr.split(',').filter(Boolean);
+            const numericIds = numericStr.split(',').filter(Boolean);
 
-        questionIds[subjectId] = [...objectiveIds, ...numericIds];
+            questionIds[subjectId] = [...objectiveIds, ...numericIds];
+        });
+
+        // 🔥 Now call your preview function
+        loadPreview(questionIds);
     });
-
-    // 🔥 Now call your preview function
-    loadPreview(questionIds);
-});
     // Optional: Subject item click handler
     $(document).on('click', '.getPreview', function() {
         const objective = ($(this).data('objective') || '').toString().split(',').filter(Boolean);
@@ -692,80 +740,85 @@
         });
     }
 
-   function updateSelectedQuestionCountsBySubject() {
-    let results = {};
+    function updateSelectedQuestionCountsBySubject() {
+        let results = {};
 
-    for (let classTypeId in finalArray) {
-        if (!finalArray.hasOwnProperty(classTypeId)) continue;
+        for (let classTypeId in finalArray) {
+            if (!finalArray.hasOwnProperty(classTypeId)) continue;
 
-        for (let subjectId in finalArray[classTypeId]) {
-            if (!finalArray[classTypeId].hasOwnProperty(subjectId)) continue;
+            for (let subjectId in finalArray[classTypeId]) {
+                if (!finalArray[classTypeId].hasOwnProperty(subjectId)) continue;
 
-            const html = finalArray[classTypeId][subjectId];
-            const $parsed = $('<div>').html(html);
+                const html = finalArray[classTypeId][subjectId];
+                const $parsed = $('<div>').html(html);
 
-            let objective = 0;
-            let numeric = 0;
+                let objective = 0;
+                let numeric = 0;
 
-            // ✅ Initialize ID arrays
-            let objectiveIds = [];
-            let numericIds = [];
+                // ✅ Initialize ID arrays
+                let objectiveIds = [];
+                let numericIds = [];
 
-            // Sum all selected_objective_questions and collect IDs
-            $parsed.find('.getPreview').each(function () {
-                const obj = $(this).attr('data-objective') || '';
-                const num = $(this).attr('data-numeric') || '';
+                // Sum all selected_objective_questions and collect IDs
+                $parsed.find('.getPreview').each(function() {
+                    const obj = $(this).attr('data-objective') || '';
+                    const num = $(this).attr('data-numeric') || '';
 
-                if (obj) {
-                    const ids = obj.split(',').filter(Boolean);
-                    objective += ids.length;
-                    objectiveIds = objectiveIds.concat(ids);
+                    if (obj) {
+                        const ids = obj.split(',').filter(Boolean);
+                        objective += ids.length;
+                        objectiveIds = objectiveIds.concat(ids);
+                    }
+
+                    if (num) {
+                        const ids = num.split(',').filter(Boolean);
+                        numeric += ids.length;
+                        numericIds = numericIds.concat(ids);
+                    }
+                });
+
+                // Prepare results
+                if (!results[subjectId]) {
+                    results[subjectId] = {
+                        objective: 0,
+                        numeric: 0,
+                        objective_ids: [],
+                        numeric_ids: []
+                    };
                 }
 
-                if (num) {
-                    const ids = num.split(',').filter(Boolean);
-                    numeric += ids.length;
-                    numericIds = numericIds.concat(ids);
+                results[subjectId].objective += objective;
+                results[subjectId].numeric += numeric;
+                results[subjectId].objective_ids = results[subjectId].objective_ids.concat(objectiveIds);
+                results[subjectId].numeric_ids = results[subjectId].numeric_ids.concat(numericIds);
+
+                // ✅ Update text in UI
+                const $target = $(`#subjectContainer [data-subject_id="${subjectId}"].subject_selected_question`);
+                if ($target.length > 0) {
+                    $target.text(`Selected Questions: ${objective + numeric}`);
+                } else {
+                    console.warn('Target not found for subjectId:', subjectId);
                 }
-            });
-
-            // Prepare results
-            if (!results[subjectId]) {
-                results[subjectId] = {
-                    objective: 0,
-                    numeric: 0,
-                    objective_ids: [],
-                    numeric_ids: []
-                };
-            }
-
-            results[subjectId].objective += objective;
-            results[subjectId].numeric += numeric;
-            results[subjectId].objective_ids = results[subjectId].objective_ids.concat(objectiveIds);
-            results[subjectId].numeric_ids = results[subjectId].numeric_ids.concat(numericIds);
-
-            // ✅ Update text in UI
-            const $target = $(`#subjectContainer [data-subject_id="${subjectId}"].subject_selected_question`);
-            if ($target.length > 0) {
-                $target.text(`Selected Questions: ${objective + numeric}`);
-            } else {
-                console.warn('Target not found for subjectId:', subjectId);
             }
         }
+
+        console.log(results); // Optional
+
+        $(`.subject_selected_question[data-subject_id="${subjectId}"]`).attr('data-objective', results[subjectId].objective_ids.join(','));
+        $(`.subject_selected_question[data-subject_id="${subjectId}"]`).attr('data-numeric', results[subjectId].numeric_ids.join(','));
+
     }
 
-    console.log(results); // Optional
 
-   $(`.subject_selected_question[data-subject_id="${subjectId}"]`).attr('data-objective', results[subjectId].objective_ids.join(','));
-$(`.subject_selected_question[data-subject_id="${subjectId}"]`).attr('data-numeric', results[subjectId].numeric_ids.join(','));
+    function loadPreview(questionIds, renderId = null) {
 
-}
-
-
-    function loadPreview(questionIds) {
         const url = `{{ url('/paperPreview') }}`;
 
-        $('#paperPreviewModal').modal('show');
+
+        if (renderId == null) {
+            $('#paperPreviewModal').modal('show');
+        }
+
 
         $.ajax({
             url: url,
@@ -775,7 +828,13 @@ $(`.subject_selected_question[data-subject_id="${subjectId}"]`).attr('data-numer
                 _token: '{{ csrf_token() }}'
             },
             success: function(response) {
-                $('#paperPreviewContent').html(response);
+
+                if (renderId !== null) {
+                    $('#' + renderId).html(response);
+                } else {
+                    $('#paperPreviewContent').html(response);
+                }
+
 
                 // Re-render MathJax after content is injected
 
@@ -812,114 +871,123 @@ $(`.subject_selected_question[data-subject_id="${subjectId}"]`).attr('data-numer
     }
 
     function openQuestionsList(chapterId) {
-    $('.chapter_times_button').show();
-    $('.topic_times_button').hide();
-    $('#questionsListModal').modal('show');
+        $('.chapter_times_button').show();
+        $('.topic_times_button').hide();
+        $('#questionsListModal').modal('show');
 
-    const url = `{{ url('/getQuestionsByChapterId') }}/${chapterId}`;
+        const url = `{{ url('/getQuestionsByChapterId') }}/${chapterId}`;
 
-    $('#appendQuestionData').load(url, function () {
-        // This runs after the questions are loaded
-        checkSelectedQuestions(chapterId);
-    });
-}
-
-function checkSelectedQuestions(chapterId) {
-    const $chapterRow = $(`tr[data-chapter_id="${chapterId}"]`);
-
-    const objectiveStr = $chapterRow.find('.getPreview').attr('data-objective') || '';
-    const numericStr = $chapterRow.find('.getPreview').attr('data-numeric') || '';
-
-    const objectiveArr = objectiveStr.split(',').filter(Boolean);
-    const numericArr = numericStr.split(',').filter(Boolean);
-
-    const allQuestionIds = [...objectiveArr, ...numericArr];
-
-    // Optional: Clear previous highlights
-    $('.question-row').css('background-color', '');
-
-    // Highlight matching rows
-    $('.question-row').each(function () {
-        const dataId = $(this).attr('data-id');
-        if (allQuestionIds.includes(dataId)) {
-            $(this).css('background-color', '#d1ffd1'); // light green
-        }
-    });
-
-    return {
-        objective: objectiveArr,
-        numeric: numericArr
-    };
-}
-
-
-function selectQuestion(questionId, questionTypeId, chapterId) {
-    const $chapterRow = $(`#questionsTableBody tr[data-chapter_id="${chapterId}"]`);
-    const $previewSpan = $chapterRow.find('.getPreview');
-
-    let objectiveIds = ($previewSpan.attr('data-objective') || '').split(',').filter(Boolean);
-    let numericIds = ($previewSpan.attr('data-numeric') || '').split(',').filter(Boolean);
-
-    questionId = String(questionId); // Ensure comparison as string
-
-    let isSelected = false;
-
-    if (questionTypeId === 1) {
-        const index = objectiveIds.indexOf(questionId);
-        if (index === -1) {
-            objectiveIds.push(questionId);
-            isSelected = true;
-        } else {
-            objectiveIds.splice(index, 1);
-        }
-    } else if (questionTypeId === 2) {
-        const index = numericIds.indexOf(questionId);
-        if (index === -1) {
-            numericIds.push(questionId);
-            isSelected = true;
-        } else {
-            numericIds.splice(index, 1);
-        }
+        $('#appendQuestionData').load(url, function() {
+            // This runs after the questions are loaded
+            checkSelectedQuestions(chapterId);
+        });
     }
 
-    // Update attributes
-    $previewSpan.attr('data-objective', objectiveIds.join(','));
-    $previewSpan.attr('data-numeric', numericIds.join(','));
+    function checkSelectedQuestions(chapterId) {
+        const $chapterRow = $(`tr[data-chapter_id="${chapterId}"]`);
 
-    // Update visible counts in current row
-    $chapterRow.find('.selected_topic_objective_questions').val(objectiveIds.length);
-    $chapterRow.find('.selected_topic_numeric_questions').val(numericIds.length);
+        const objectiveStr = $chapterRow.find('.getPreview').attr('data-objective') || '';
+        const numericStr = $chapterRow.find('.getPreview').attr('data-numeric') || '';
 
-    // Highlight the question row
-    const $questionRow = $(`.question-row[data-id="${questionId}"]`);
-    if (isSelected) {
-        $questionRow.css('background-color', '#d1ffd1');
-    } else {
-        $questionRow.css('background-color', '');
+        const objectiveArr = objectiveStr.split(',').filter(Boolean);
+        const numericArr = numericStr.split(',').filter(Boolean);
+
+        const allQuestionIds = [...objectiveArr, ...numericArr];
+
+        // Optional: Clear previous highlights
+        $('.question-row').css('background-color', '');
+
+        // Highlight matching rows
+        $('.question-row').each(function() {
+            const dataId = $(this).attr('data-id');
+            if (allQuestionIds.includes(dataId)) {
+                $(this).css('background-color', '#d1ffd1'); // light green
+            }
+        });
+
+        return {
+            objective: objectiveArr,
+            numeric: numericArr
+        };
     }
 
-    // ✅ Only count data from .getPreview inside current chapter row
-    let totalObjective = 0;
-    let totalNumeric = 0;
 
-    $chapterRow.find('.getPreview').each(function () {
-        const objStr = $(this).attr('data-objective') || '';
-        const numStr = $(this).attr('data-numeric') || '';
+    function selectQuestion(questionId, questionTypeId, chapterId) {
+        const $chapterRow = $(`#questionsTableBody tr[data-chapter_id="${chapterId}"]`);
+        let $previewSpan = $chapterRow.find('.getPreview');
 
-        totalObjective += objStr.split(',').filter(Boolean).length;
-        totalNumeric += numStr.split(',').filter(Boolean).length;
-    });
+        // ✅ Ensure .getPreview span exists
+        if ($previewSpan.length === 0) {
+            $previewSpan = $('<span class="getPreview" style="text-decoration: underline; cursor: pointer;"data-objective="" data-numeric="" ">Preview</span>');
+            $chapterRow.find('td.preview').append($previewSpan); // ✅ Append to <td class="preview">
+        }
 
-    // Update total inputs within this row
-    $chapterRow.find('.selected_objective_questions').val(totalObjective);
-    $chapterRow.find('.selected_objective_numeric').val(totalNumeric);
-    $chapterRow.find('.selected_objective_questions').attr('value',totalObjective);
-    $chapterRow.find('.selected_objective_numeric').attr('value',totalNumeric);
+        let objectiveIds = ($previewSpan.attr('data-objective') || '').split(',').filter(Boolean);
+        let numericIds = ($previewSpan.attr('data-numeric') || '').split(',').filter(Boolean);
 
-   const classTypeId =  $('#class_type_id').val(); // Get the current class type ID
+        questionId = String(questionId); // Ensure comparison as string
+        let isSelected = false;
 
-    draftArray(classTypeId, subjectId)
-}
+        if (questionTypeId === 1) {
+            const index = objectiveIds.indexOf(questionId);
+            if (index === -1) {
+                objectiveIds.push(questionId);
+                isSelected = true;
+            } else {
+                objectiveIds.splice(index, 1);
+            }
+        } else if (questionTypeId === 2) {
+            const index = numericIds.indexOf(questionId);
+            if (index === -1) {
+                numericIds.push(questionId);
+                isSelected = true;
+            } else {
+                numericIds.splice(index, 1);
+            }
+        }
+
+        // Update data attributes
+        $previewSpan.attr('data-objective', objectiveIds.join(','));
+        $previewSpan.attr('data-numeric', numericIds.join(','));
+
+        // Update per-topic values
+        $chapterRow.find('.selected_topic_objective_questions').val(objectiveIds.length);
+        $chapterRow.find('.selected_topic_numeric_questions').val(numericIds.length);
+
+        // Highlight selection
+        const $questionRow = $(`.question-row[data-id="${questionId}"]`);
+        if (isSelected) {
+            $questionRow.css('background-color', '#d1ffd1');
+        } else {
+            $questionRow.css('background-color', '');
+        }
+
+        // ✅ Calculate total questions in current chapter row
+        let totalObjective = 0;
+        let totalNumeric = 0;
+
+        $chapterRow.find('.getPreview').each(function() {
+            let objStr = $(this).attr('data-objective') || '';
+            let numStr = $(this).attr('data-numeric') || '';
+
+            totalObjective += objStr.split(',').filter(Boolean).length;
+            totalNumeric += numStr.split(',').filter(Boolean).length;
+        });
+
+        $chapterRow.find('.selected_objective_questions')
+            .val(totalObjective)
+            .attr('value', totalObjective);
+
+        $chapterRow.find('.selected_objective_numeric')
+            .val(totalNumeric)
+            .attr('value', totalNumeric);
+
+        const classTypeId = $('#class_type_id').val();
+
+        // ✅ Ensure subjectId is defined somewhere
+        draftArray(classTypeId, subjectId);
+    }
+
 
 
 
@@ -977,11 +1045,11 @@ function selectQuestion(questionId, questionTypeId, chapterId) {
 
 
     function goBackToSubTopics() {
-       const topicId = $('.topic_times_button').attr('data-topicId');
-      const chapterId = $('.topic_times_button').attr('data-chapterId'); 
-         $('#questionsListModal').modal('hide');
-         openSubTopics(chapterId);
-        
+        const topicId = $('.topic_times_button').attr('data-topicId');
+        const chapterId = $('.topic_times_button').attr('data-chapterId');
+        $('#questionsListModal').modal('hide');
+        openSubTopics(chapterId);
+
     }
 
     function questionsListBySubtopic(topicId, chapterId) {
@@ -991,13 +1059,143 @@ function selectQuestion(questionId, questionTypeId, chapterId) {
         $('#questionsListModal').modal('show');
         const url = `{{ url('/getQuestionsByTopicId') }}/${topicId}`;
         // $('#appendQuestionData').load(url);
-$('.topic_times_button').attr('data-topicId',topicId);
-$('.topic_times_button').attr('data-chapterId',chapterId);
+        $('.topic_times_button').attr('data-topicId', topicId);
+        $('.topic_times_button').attr('data-chapterId', chapterId);
 
-         $('#appendQuestionData').load(url, function () {
-        // This runs after the questions are loaded
-        checkSelectedQuestions(chapterId);
-    });
+        $('#appendQuestionData').load(url, function() {
+            // This runs after the questions are loaded
+            checkSelectedQuestions(chapterId);
+        });
     }
+
+    function generatePaper(type = null) {
+        let questionIds = {};
+        let perSubjectQuestions = parseInt($("#number_of_questions_per_subject").val()) || 0;
+
+        let isValid = true;
+        let invalidSubjects = [];
+
+        $('.subject_selected_question').each(function() {
+            const subjectId = $(this).data('subject_id');
+            const subjectName = $(this).data('subject_name');
+
+
+            const objectiveStr = $(this).attr('data-objective') || '';
+            const numericStr = $(this).attr('data-numeric') || '';
+
+            const objectiveIds = objectiveStr.split(',').filter(Boolean);
+            const numericIds = numericStr.split(',').filter(Boolean);
+
+            const allQuestions = [...objectiveIds, ...numericIds];
+            questionIds[subjectId] = allQuestions;
+
+            // ✅ Validate total selected questions for the subject
+            if (allQuestions.length !== perSubjectQuestions) {
+                isValid = false;
+                invalidSubjects.push(subjectName);
+            }
+        });
+
+        // ✅ Stop execution if any subject doesn't match the required count
+        if (!isValid) {
+            alert(`Each subject must have exactly ${perSubjectQuestions} questions.\nMismatched subject(s): ${invalidSubjects.join(', ')}`);
+            return;
+        }
+
+        const url = `{{ url('/saveGeneratedPaper') }}`;
+
+        $.ajax({
+            url: url,
+            type: 'POST',
+            data: {
+                questions: JSON.stringify(questionIds),
+                exam_id: '{{ $examDetails->id ?? 0 }}',
+                type: type,
+                _token: '{{ csrf_token() }}'
+            },
+            success: function(response) {
+                if (response.status === 'success') {
+                    $('#questionsSelectionSection').hide();
+
+                    if (type !== 'reset') {
+                        toastr.success(response.message);
+                        window.location.href = window.location.href; // reload page
+                    }
+                } else {
+                    toastr.error("Failed to save draft.");
+                }
+            },
+            error: function(xhr) {
+                console.error("Draft save failed:", xhr);
+            }
+        });
+    }
+
+
+
+
+
+    $('#editPaperBtn').on('click', function() {
+        $('#createdPaperMessage').hide();
+        $('#paperCreationSection').show();
+
+        generatePaper('reset')
+
+    });
 </script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+
+<script>
+ document.getElementById("downloadPdfBtn").addEventListener("click", async function () {
+    const el = document.getElementById("renderGeneratedQuestions");
+
+    // Wait for MathJax if used
+    if (typeof MathJax !== "undefined" && MathJax.typesetPromise) {
+        await MathJax.typesetPromise();
+    }
+
+    // Use html2canvas to create screenshot
+    const canvas = await html2canvas(el, {
+        scale: 2,
+        useCORS: true,
+        backgroundColor: "#ffffff"
+    });
+
+    const imgData = canvas.toDataURL("image/jpeg", 1.0);
+
+    const { jsPDF } = window.jspdf;
+    const pdf = new jsPDF("p", "mm", "a4");
+
+    const pdfWidth = pdf.internal.pageSize.getWidth();
+    const pdfHeight = pdf.internal.pageSize.getHeight();
+
+    const imgWidth = pdfWidth;
+    const imgHeight = (canvas.height * imgWidth) / canvas.width;
+
+    // Multi-page support
+    let heightLeft = imgHeight;
+    let position = 0;
+
+    if (heightLeft <= pdfHeight) {
+        pdf.addImage(imgData, "JPEG", 0, 0, imgWidth, imgHeight);
+    } else {
+        while (heightLeft > 0) {
+            pdf.addImage(imgData, "JPEG", 0, position, imgWidth, imgHeight);
+            heightLeft -= pdfHeight;
+            position -= pdfHeight;
+            if (heightLeft > 0) {
+                pdf.addPage();
+            }
+        }
+    }
+
+    pdf.save("math_questions.pdf");
+});
+
+</script>
+
+
 @endsection
