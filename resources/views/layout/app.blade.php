@@ -157,10 +157,10 @@
         @include('layout.footer')
         <script>
             /*$.ajaxSetup({
-                                                                                                                                                                                                                                                                                                                                                                                            headers: {
-                                                                                                                                                                                                                                                                                                                                                                                                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                                                                                                                                                                                                                                                                                                                                                                                            }
-                                                                                                                                                                                                                                                                                                                                                                                        });*/
+                                                                                                                                                                                                                                                                                                                                                                                                                                                            headers: {
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                                                                                                                                                                                                                                                                                                                                                                                                                                                            }
+                                                                                                                                                                                                                                                                                                                                                                                                                                                        });*/
             //var URL  = "{{ url('/') }}";
         </script>
 
@@ -297,6 +297,48 @@
             })
         </script>
 
+        {{-- export excel data --}}
+        <script>
+            function exportToExcelUsingSheetJS(tableId) {
+                const table = document.getElementById(tableId);
+                const data = [];
+
+                for (let i = 0; i < table.rows.length; i++) {
+                    const row = table.rows[i];
+                    const rowData = [];
+                    for (let j = 0; j < row.cells.length; j++) {
+                        const cell = row.cells[j];
+                        const input = cell.querySelector("input");
+                        const text = input ? input.value : cell.innerText;
+                        rowData.push(text);
+                    }
+                    data.push(rowData);
+                }
+
+                const worksheet = XLSX.utils.aoa_to_sheet(data);
+
+                const range = XLSX.utils.decode_range(worksheet['!ref']);
+                for (let R = range.s.r; R <= range.e.r; ++R) {
+                    for (let C = range.s.c; C <= range.e.c; ++C) {
+                        const cellRef = XLSX.utils.encode_cell({
+                            r: R,
+                            c: C
+                        });
+                        if (!worksheet[cellRef]) continue;
+                        worksheet[cellRef].t = 's'; // ensure string type
+                    }
+                }
+
+                const workbook = XLSX.utils.book_new();
+                XLSX.utils.book_append_sheet(workbook, worksheet, "Sheet1");
+
+                // 📁 Get the current route and convert it into a safe filename
+                const routePath = window.location.pathname.replace(/^\//, '').replace(/[^a-zA-Z0-9]/g, '_') || 'export';
+                const filename = routePath + ".xlsx";
+
+                XLSX.writeFile(workbook, filename);
+            }
+        </script>   
 
         <script>
             var timer2 = "5:01";
@@ -845,7 +887,7 @@
                         return
                     }
 
-                   
+
 
                     const formData = new FormData(this); // Handles files + inputs
                     const submitBtn = $form.find('button[type="submit"]');
@@ -1515,7 +1557,8 @@
                         .then(response => response.json())
                         .then(res => {
                             if (res.success) {
-                                window.location.href = `{{ url('/') }}/${res.redirect_to}?uploadedIds=${res.inserted_ids}`;
+                                window.location.href =
+                                    `{{ url('/') }}/${res.redirect_to}?uploadedIds=${res.inserted_ids}`;
                             } else {
                                 const errorBox = document.getElementById('errorBox');
                                 errorBox.classList.remove('d-none');
@@ -1540,40 +1583,39 @@
         </script>
 
         <script>
+            $(document).on('change', '.updateFieldOnChange', function() {
+                let $input = $(this);
+                let value = $input.val();
+                let fieldName = $input.attr('name');
+                let modalName = $('#modal_name').val();
+                let recordId = $input.attr('data-recordId');
 
-$(document).on('change', '.updateFieldOnChange', function () {
-    let $input = $(this);
-    let value = $input.val();
-    let fieldName = $input.attr('name');
-    let modalName = $('#modal_name').val();
-    let recordId = $input.attr('data-recordId');
+                if (!value || !fieldName || !modalName) {
+                    console.error("Missing required data attributes.");
+                    return;
+                }
 
-    if (!value || !fieldName || !modalName) {
-        console.error("Missing required data attributes.");
-        return;
-    }
-
-    $.ajax({
-        url: '{{ url('/') }}/update-single-field', // Update this URL to your Laravel route
-        method: 'POST',
-        data: {
-            id: recordId,
-            field_name: fieldName,
-            field_value: value,
-            modal_name: modalName,
-            _token: $('meta[name="csrf-token"]').attr('content') // Laravel CSRF token
-        },
-        success: function (res) {
-            console.log('Updated successfully');
-            // Optionally show a success message
-        },
-        error: function (xhr) {
-            console.error('Update failed');
-            // Optionally revert input value or show error
-        }
-    });
-});
-</script>
+                $.ajax({
+                    url: '{{ url('/') }}/update-single-field', // Update this URL to your Laravel route
+                    method: 'POST',
+                    data: {
+                        id: recordId,
+                        field_name: fieldName,
+                        field_value: value,
+                        modal_name: modalName,
+                        _token: $('meta[name="csrf-token"]').attr('content') // Laravel CSRF token
+                    },
+                    success: function(res) {
+                        console.log('Updated successfully');
+                        // Optionally show a success message
+                    },
+                    error: function(xhr) {
+                        console.error('Update failed');
+                        // Optionally revert input value or show error
+                    }
+                });
+            });
+        </script>
 
 
         <script>
