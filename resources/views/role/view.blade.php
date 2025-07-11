@@ -1,6 +1,6 @@
-@php
-    dd($role->name ?? '' );
-@endphp
+{{-- @php
+    dd($data );
+@endphp --}}
 
 @if (!empty($data) && count($data) > 0)
     @foreach ($data as $index => $role)

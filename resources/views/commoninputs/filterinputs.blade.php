@@ -25,7 +25,7 @@ $filters = $filters ?? ['keyword' => true,'batches'=>true, 'admission_no' => tru
 @case('status')
 <div class="col-md-2">
     <label>Search By Status</label>
-    <select class="form-control" name="status">
+    <select class="form-control" name="status" id="statusFilter">
         <option value="">Select</option>
         <option value="1">Active</option>
         <option value="0">InActive</option>

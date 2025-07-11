@@ -314,7 +314,7 @@ $permissions = Helper::getPermissions();
                                                                         ])
                                                                     </div> -->
 
-                                                        <div class="col-md-3">
+                                                        <div class="col-md-4">
                                                             @include('commoninputs.dependentInputs', [
                                                             'modal' => 'State',
                                                             'name' => 'state_id',
@@ -334,7 +334,7 @@ $permissions = Helper::getPermissions();
                                                             ])
                                                         </div>
 
-                                                        <div class="col-md-3">
+                                                        <div class="col-md-4">
                                                             @include('commoninputs.dependentInputs', [
                                                             'modal' => 'City',
                                                             'name' => 'city_id',
@@ -366,7 +366,7 @@ $permissions = Helper::getPermissions();
                                                                         </div>
                                                                     </div> -->
 
-                                                        <div class="col-md-3">
+                                                        <div class="col-md-4">
                                                             <div class="form-group">
                                                                 <label for="pincode">Pin Code</label>
                                                                 <input type="tel" class="form-control"
