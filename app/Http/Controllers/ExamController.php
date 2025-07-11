@@ -10,6 +10,8 @@ use Yajra\DataTables\Facades\DataTables;
 use App\Helpers\helper;
 use App\Models\ExamDraft;
 use Illuminate\Support\Facades\Auth;
+use Carbon\Carbon;
+use Illuminate\Support\Str;
 
 class ExamController extends Controller
 {
@@ -268,7 +270,7 @@ class ExamController extends Controller
             ['id' => $examId ?? null],
             [
                 'user_id' => Auth::id(),
-                'questions_id' => $type=='reset' ? null :  $examData,
+                'questions_id' => $type == 'reset' ? null :  $examData,
             ]
         );
 
@@ -276,7 +278,6 @@ class ExamController extends Controller
             'status' => 'success',
             'message' => 'Paper saved successfully.',
         ]);
-
     }
     public function PaperPreview(Request $request)
     {
@@ -293,7 +294,7 @@ class ExamController extends Controller
             $questions = Question::whereIn('id', $questionIds)
                 ->get();
 
-                $subjectName = DB::table('all_subjects')
+            $subjectName = DB::table('all_subjects')
                 ->where('id', $subject)
                 ->value('name');
 
@@ -359,10 +360,125 @@ class ExamController extends Controller
 
         return view('exam.paperPreview', compact('questionsBySubject'));
     }
-    public function startExam()
+    public function startExam(Request $request, $examId)
     {
-        return view('exam.startExam');
+        $studentId = Auth::guard('student')->id();
+
+        // Fetch exam details
+        $exam = DB::table('exams')
+            ->leftJoin('exam_patterns', 'exams.exam_pattern_id', '=', 'exam_patterns.id')
+            ->where('exams.id', $examId)
+            ->select(
+                'exams.*',
+                'exam_patterns.name as pattern_name'
+            )
+            ->first();
+        if (!$exam || !$exam->duration_minutes) {
+            return response()->json(['error' => 'Exam not found or duration missing'], 404);
+        }
+
+        $questionIds = json_decode($exam->questions_id, true);
+
+        if (!$questionIds || !is_array($questionIds)) {
+            return response()->json(['error' => 'Invalid or empty question IDs'], 400);
+        }
+
+        $durationMinutes = $exam->duration_minutes;
+
+        // Initialize attempt variable
+        $finalAttempt = null;
+
+        // Check for existing active attempt
+        $latestAttempt = DB::table('exam_attempts')
+            ->where('student_id', $studentId)
+            ->where('exam_id', $examId)
+            ->orderByDesc('attempt_number')
+            ->first();
+
+        if ($latestAttempt && $latestAttempt->is_submitted == 0) {
+            $startTime = Carbon::parse($latestAttempt->start_time);
+            $endTime = Carbon::parse($latestAttempt->end_time);
+
+            // Use existing if still within duration
+            if (now()->lessThan($endTime)) {
+                $finalAttempt = $latestAttempt;
+            }
+        }
+
+        // If no valid existing attempt, create a new one
+        if (!$finalAttempt) {
+            $attemptNumber = $latestAttempt ? $latestAttempt->attempt_number + 1 : 1;
+            $startTime = now();
+            $endTime = $startTime->copy()->addMinutes($durationMinutes);
+            $uniqueId = strtoupper(Str::random(10));
+
+            $attemptId = DB::table('exam_attempts')->insertGetId([
+                'student_id' => $studentId,
+                'exam_id' => $examId,
+                'attempt_number' => $attemptNumber,
+                'unique_id' => $uniqueId,
+                'start_time' => $startTime,
+                'end_time' => $endTime,
+                'is_submitted' => 0,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ]);
+
+            $finalAttempt = DB::table('exam_attempts')->where('id', $attemptId)->first();
+        }
+
+        // Ensure questions are stored (will check inside method for duplicates)
+        $this->storeExamQuestions($questionIds, $examId, $finalAttempt->unique_id);
+
+
+        $examResults = DB::table('exam_results')
+            ->where('student_id', $studentId)
+            ->where('exam_id', $examId)
+            ->where('attempt_unique_id', $finalAttempt->unique_id)
+            ->get();
+
+
+        return view('exam.startExam', ['questionData' => $examResults, 'attempt'=> $finalAttempt, 'examData' => $exam]);
     }
+
+
+
+    public function storeExamQuestions($questionArray, $examId, $attemptUniqueId)
+    {
+        $studentId = Auth::guard('student')->id();
+
+        foreach ($questionArray as $subjectId => $questionIds) {
+
+            // Shuffle only the question IDs (values), not the subject ID (key)
+            $shuffledQuestions = $questionIds;
+            shuffle($shuffledQuestions); // Now values are shuffled
+
+            foreach ($shuffledQuestions as $questionId) {
+
+                // Check if the row already exists
+                $exists = DB::table('exam_results')->where([
+                    ['exam_id', '=', $examId],
+                    ['student_id', '=', $studentId],
+                    ['subject_id', '=', $subjectId],
+                    ['question_id', '=', $questionId],
+                    ['attempt_unique_id', '=', $attemptUniqueId],
+                ])->exists();
+
+                if (!$exists) {
+                    DB::table('exam_results')->insert([
+                        'student_id'        => $studentId,
+                        'exam_id'           => $examId,
+                        'subject_id'        => $subjectId,
+                        'question_id'       => $questionId,
+                        'attempt_unique_id' => $attemptUniqueId,
+                        'created_at'        => now(),
+                        'updated_at'        => now(),
+                    ]);
+                }
+            }
+        }
+    }
+
 
     public function answerkey()
     {

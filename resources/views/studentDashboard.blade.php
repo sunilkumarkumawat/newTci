@@ -240,7 +240,7 @@ a:hover, a:active, a:focus {
                 <div class="col-md-3 col-12">
 					<div class="row">
 						<div class="col-6">
-							<a class="box box-link-shadow text-center card-outline card-orange pull-up" href="javascript:void(0)">
+							<a class="box box-link-shadow text-center card-outline card-orange pull-up" href="{{ url('/student/exams/start/1') }}">
 								<div class="box-body py-5 bg-primary-light px-5">
 									<p class="fw-500 text-primary text-overflow">Topic Wise</p>
 								</div>

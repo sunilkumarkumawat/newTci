@@ -12,13 +12,19 @@ use Illuminate\Support\Facades\DB;
 // 🔓 Public Routes
 Route::match(['get', 'post'], 'login', 'Auth\AuthController@getLogin')->name('login');
 Route::get('/', function () {
-    return redirect('/dashboard');
+    if (Auth::guard('web')->check()) {
+        return redirect('/dashboard'); // Redirect to user dashboard
+    } elseif (Auth::guard('student')->check()) {
+        return redirect('/student/dashboard'); // Redirect to student dashboard
+    }
+
+    return redirect('/login'); 
 });
 
-Route::prefix('student')->group(function () {
-    Route::match(['get', 'post'], 'dashboard', 'Students\StudentController@studentDashboard');
-    Route::match(['get', 'post'], 'examTerminal', 'Students\StudentController@examTerminal');
-});
+// Route::prefix('student')->group(function () {
+//     Route::match(['get', 'post'], 'dashboard', 'Students\StudentController@studentDashboard');
+//     Route::match(['get', 'post'], 'examTerminal', 'Students\StudentController@examTerminal');
+// });
 
 Route::get('logout', function () {
     $userId = null;
@@ -105,7 +111,7 @@ Route::post('/loginAuth', function (Request $request) {
 
 
 // 🔐 Protected Routes (Only accessible if logged in)
-Route::middleware(['auth'])->group(function () {
+Route::middleware(['auth:web'])->group(function () {
 
     // Dashboard
     Route::match(['get', 'post'], 'dashboard', 'Controller@index');
@@ -118,6 +124,8 @@ Route::middleware(['auth'])->group(function () {
         session(['current_session' => $sessionId]);
         return redirect()->back();
     })->name('set.session');
+
+
 
     // branch
     Route::match(['get', 'post'], 'commonEdit/{modal}/{id}', 'SharesController@commonEdit');
@@ -254,12 +262,7 @@ Route::middleware(['auth'])->group(function () {
     Route::match(['get', 'post'], 'feedbackAnalytics', 'FeedbackController@feedbackAnalytics');
     Route::match(['get', 'post'], 'archiveExport', 'FeedbackController@archiveExport');
 
-    //Exam Analysis 
-    Route::match(['get', 'post'], 'startExam', 'ExamController@startExam');
-
-
-
-
+    //Exam
 
     Route::match(['get', 'post'], 'exam/dashboard', 'ExamController@dashboard');
     Route::match(['get', 'post'], 'exam/list', 'ExamController@examList');
@@ -277,6 +280,7 @@ Route::middleware(['auth'])->group(function () {
     Route::match(['get', 'post'], '/answerkey', 'ExamController@answerkey');
     Route::match(['get', 'post'], '/questionkey', 'ExamController@questionkey');
     Route::match(['get', 'post'], '/saveGeneratedPaper', 'ExamController@saveGeneratedPaper');
+  
 
 
     // reports & Exports
@@ -292,4 +296,10 @@ Route::middleware(['auth'])->group(function () {
 
 
 
+});
+
+
+
+Route::middleware(['auth:student'])->group(function () {
+    Route::match(['get', 'post'], '/student/exams/start/{exam_id}', 'ExamController@startExam');
 });

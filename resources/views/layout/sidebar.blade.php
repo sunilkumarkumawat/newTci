@@ -9,7 +9,7 @@ $getSetting = Helper::getSetting();
  <!-- Main Sidebar Container -->
  <aside class="main-sidebar bg-light d-none d-md-block" id="sidebar">
      <!-- Brand Logo -->
-     <a href="{{ url('/dashboard') }}">
+     <a href="{{ url('/') }}">
          <div class="top_brand_section">
             @include('common.imageViewer', [
                 'modal' => 'Setting',
@@ -62,7 +62,7 @@ function renderSidebarMenu($items) {
 
             <!-- Dashboard Link -->
             <li class="nav-item">
-                <a href="{{url('/dashboard')}}" class="nav-link {{ request()->is('dashboard') ? 'active' : '' }}">
+                <a href="{{url('/')}}" class="nav-link {{ request()->is('dashboard') ? 'active' : '' }} {{ request()->is('student/dashboard') ? 'active' : '' }}">
                     <i class="nav-icon fas fa-th"></i>
                     <p>Dashboard</p>
                 </a>
