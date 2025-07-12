@@ -280,6 +280,7 @@ Route::middleware(['auth:web'])->group(function () {
     Route::match(['get', 'post'], '/answerkey', 'ExamController@answerkey');
     Route::match(['get', 'post'], '/questionkey', 'ExamController@questionkey');
     Route::match(['get', 'post'], '/saveGeneratedPaper', 'ExamController@saveGeneratedPaper');
+    Route::match(['get', 'post'], '/assignExam', 'ExamController@AssignExam');
   
 
 
