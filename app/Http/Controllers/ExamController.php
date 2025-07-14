@@ -10,6 +10,7 @@ use Yajra\DataTables\Facades\DataTables;
 use App\Helpers\helper;
 use App\Models\ExamDraft;
 use App\Models\ExamResult;
+use App\Models\AssignExam;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
 use Illuminate\Support\Str;
@@ -209,6 +210,7 @@ class ExamController extends Controller
                 'exams.user_id',
                 'exams.status',
                 'exams.created_at',
+                // 'exams.assign_to',
                 'exams.deleted_at',
                 'users.name as created_by' // optional: to display in the datatable
             );
@@ -253,10 +255,15 @@ class ExamController extends Controller
             ->editColumn('created_at', function ($item) {
                 return \Carbon\Carbon::parse($item->created_at)->format('d-m-Y');
             })
+
+            ->addColumn('assign_to', function ($row) {
+                return '<span class="assign-btn text-primary" style="cursor: pointer; text-decoration: underline" data-id="' . $row->id . '" data-name="' . e($row->name) . '">Click here to assign</span>';
+            })
+
             ->addColumn('action', function ($row) {
                 return view('exam.partials.actions', compact('row'))->render();
             })
-            ->rawColumns(['status', 'created_by', 'action'])
+            ->rawColumns(['status', 'created_by', 'assign_to', 'action'])
             ->make(true);
     }
 
@@ -439,7 +446,7 @@ class ExamController extends Controller
             ->get();
 
 
-        return view('exam.startExam', ['questionData' => $examResults, 'attempt'=> $finalAttempt, 'examData' => $exam]);
+        return view('exam.startExam', ['questionData' => $examResults, 'attempt' => $finalAttempt, 'examData' => $exam]);
     }
 
 
@@ -558,5 +565,37 @@ public function saveAns(Request $request)
     public function questionkey()
     {
         return view('exam.questionKey');
+    }
+
+
+    // assign exam
+    public function AssignExam(Request $request)
+    {
+        // Optional: Use validation if needed
+        $request->validate([
+            'exam_id' => 'required|integer',
+            'class_type_id' => 'required|integer',
+            'exam_date' => 'required|date',
+            'duration_minutes' => 'required|integer|min:1',
+        ]);
+
+        // Check for duplicate assignment
+        $exists = AssignExam::where('exam_id', $request->exam_id)
+            ->where('class_type_id', $request->class_type_id)
+            ->exists();
+
+        if ($exists) {
+            return redirect()->back()->with('error', 'This exam is already assigned to the selected batch.');
+        }
+
+        // Save the new assignment
+        AssignExam::create([
+            'exam_id' => $request->exam_id,
+            'class_type_id' => $request->class_type_id,
+            'exam_date' => $request->exam_date,
+            'duration_minutes' => $request->duration_minutes,
+        ]);
+
+        return redirect()->back()->with('success', 'Exam assigned successfully.');
     }
 }
