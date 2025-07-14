@@ -143,12 +143,9 @@
       withCredentials: true
     },
     success: function (response) {
-      // ✅ Redirect based on model
-      if (response.model === 'student') {
-        window.location.href = baseUrl + '/student/dashboard';
-      } else {
-        window.location.href = baseUrl + '/dashboard';
-      }
+     
+        window.location.href = baseUrl;
+     
     },
     error: function (xhr) {
       let response = xhr.responseJSON;

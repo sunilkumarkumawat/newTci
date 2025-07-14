@@ -48,7 +48,7 @@ $exam_id = 1;
             <div class="header-controls">
                 <button type="button" class="control-btn language-btn" id="change_language">
                     <i class="fas fa-language"></i>
-                    <span>हिंदी</span>
+                    <span>English</span>
                 </button>
                 <button type="button" class="control-btn fullscreen-btn" data-widget="fullscreen">
                     <i class="fas fa-expand"></i>
@@ -132,13 +132,20 @@ $exam_id = 1;
                     $subjectIds = $questionData->pluck('subject_id')->unique()->values()->toArray();
                     @endphp
 
-                    @foreach($subjectIds as $item)
-
+                    @foreach($subjectIds as $subjectId)
                     @php
-                    $value = DB::table('all_subjects')->where('id',$item)->first();
-
+                    $value = DB::table('all_subjects')->where('id', $subjectId)->first();
+                    $questionIds = $questionData->where('subject_id', $subjectId)->pluck('question_id')->toArray();
+                    $questionIdsJson = json_encode($questionIds); // convert to JSON for embedding in data attribute
+                    $questionTypes = $questionData->where('subject_id', $subjectId)->pluck('question_type')->toArray(); // Add this line
                     @endphp
-                    <button class="subject-tab get_parts" data-subject_name="{{$value->name ?? ''}}" data-subject_id="{{$value->id ?? ''}}">
+
+                    <button
+                        class="subject-tab get_parts"
+                        data-subject_name="{{ $value->name ?? '' }}"
+                        data-subject_id="{{ $value->id ?? '' }}"
+                        data-questionsids='@json($questionIds)'
+                        data-question_types='@json($questionTypes)'>
                         {{ $value->name ?? '' }}
                     </button>
                     @endforeach
@@ -176,7 +183,7 @@ $exam_id = 1;
 <!-- Hidden Form -->
 <form action="{{url('resultExam')}}" method="post" id="formAdd" style="display: none;">
     @csrf
-    <input type="hidden" id="currentSubjectId" />
+
     <input type="hidden" name="result" id="form_submit_ans" />
     <input type="hidden" name="exam_id" value="1" />
 </form>
@@ -1094,207 +1101,29 @@ $exam_id = 1;
 </style>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/js/all.min.js"></script>
+
 <script>
-    // All the existing JavaScript functionality remains the same
-    // Static exam configuration
-    var part_a_compulsory = 2;
-    var part_b_compulsory = 0;
-    var lengthB = 0;
-    var count_plus = 0;
-    var question_id = '';
-    var currentIndex = '';
-    var currentKey = '';
-
-    let uniqueSubjects = ['1: Mathematics', '2: Physics', '3: Chemistry'];
-
-    // Static questions data
-    var myArray = [{
-            id: 1,
-            name: 'What is 2+2?',
-            ans_a: '3',
-            ans_b: '4',
-            ans_c: '5',
-            ans_d: '6',
-            correct_ans: '2',
-            subject_id: 1,
-            question_type_id: 1,
-            hi_name: '2+2 क्या है?',
-            hi_ans_a: '3',
-            hi_ans_b: '4',
-            hi_ans_c: '5',
-            hi_ans_d: '6'
-        },
-        {
-            id: 2,
-            name: 'What is 3×3?',
-            ans_a: '6',
-            ans_b: '9',
-            ans_c: '12',
-            ans_d: '15',
-            correct_ans: '2',
-            subject_id: 1,
-            question_type_id: 1,
-            hi_name: '3×3 क्या है?',
-            hi_ans_a: '6',
-            hi_ans_b: '9',
-            hi_ans_c: '12',
-            hi_ans_d: '15'
-        },
-        {
-            id: 3,
-            name: 'What is the unit of force?',
-            ans_a: 'Joule',
-            ans_b: 'Newton',
-            ans_c: 'Watt',
-            ans_d: 'Pascal',
-            correct_ans: '2',
-            subject_id: 2,
-            question_type_id: 1,
-            hi_name: 'बल की इकाई क्या है?',
-            hi_ans_a: 'जूल',
-            hi_ans_b: 'न्यूटन',
-            hi_ans_c: 'वाट',
-            hi_ans_d: 'पास्कल'
-        },
-        {
-            id: 4,
-            name: 'What is the speed of light?',
-            ans_a: '3×10⁸ m/s',
-            ans_b: '3×10⁶ m/s',
-            ans_c: '3×10⁷ m/s',
-            ans_d: '3×10⁹ m/s',
-            correct_ans: '1',
-            subject_id: 2,
-            question_type_id: 1,
-            hi_name: 'प्रकाश की गति क्या है?',
-            hi_ans_a: '3×10⁸ m/s',
-            hi_ans_b: '3×10⁶ m/s',
-            hi_ans_c: '3×10⁷ m/s',
-            hi_ans_d: '3×10⁹ m/s'
-        },
-        {
-            id: 5,
-            name: 'What is H₂O?',
-            ans_a: 'Hydrogen',
-            ans_b: 'Oxygen',
-            ans_c: 'Water',
-            ans_d: 'Carbon dioxide',
-            correct_ans: '3',
-            subject_id: 3,
-            question_type_id: 1,
-            hi_name: 'H₂O क्या है?',
-            hi_ans_a: 'हाइड्रोजन',
-            hi_ans_b: 'ऑक्सीजन',
-            hi_ans_c: 'पानी',
-            hi_ans_d: 'कार्बन डाइऑक्साइड'
-        },
-        {
-            id: 6,
-            name: 'What is NaCl?',
-            ans_a: 'Sugar',
-            ans_b: 'Salt',
-            ans_c: 'Acid',
-            ans_d: 'Base',
-            correct_ans: '2',
-            subject_id: 3,
-            question_type_id: 1,
-            hi_name: 'NaCl क्या है?',
-            hi_ans_a: 'चीनी',
-            hi_ans_b: 'नमक',
-            hi_ans_c: 'अम्ल',
-            hi_ans_d: 'क्षार'
-        }
-    ];
-
-    var paper_medium = {
-        medium: 1
-    };
-    var ansArray = [];
-
-    // Static questions structure
-    var questionsTemp = [{
-            ques_id: 1,
-            subject: '1: Mathematics',
-            part: 'A',
-            subject_id: 1
-        },
-        {
-            ques_id: 2,
-            subject: '1: Mathematics',
-            part: 'A',
-            subject_id: 1
-        },
-        {
-            ques_id: 3,
-            subject: '2: Physics',
-            part: 'A',
-            subject_id: 2
-        },
-        {
-            ques_id: 4,
-            subject: '2: Physics',
-            part: 'A',
-            subject_id: 2
-        },
-        {
-            ques_id: 5,
-            subject: '3: Chemistry',
-            part: 'A',
-            subject_id: 3
-        },
-        {
-            ques_id: 6,
-            subject: '3: Chemistry',
-            part: 'A',
-            subject_id: 3
-        }
-    ];
-
-    $(myArray).each(function(index) {
-        var part = '';
-        $(questionsTemp).each(function(key, item) {
-            if (item['ques_id'] == myArray[index].id) {
-                part = item['part'];
-            }
-        });
-
-        ansArray[index] = {
-            'que_id': myArray[index].id,
-            'ans': null,
-            'correct': 0,
-            'time': 0,
-            'visited_count': 0,
-            'subject_id': myArray[index].subject_id,
-            'q_type': myArray[index].question_type_id,
-            'part': part
-        }
-    });
-
     $(document).ready(function() {
+        const questionCache = {}; // Store question_id → question_data
+        var languageField = 'English';
+        let currentQuestion = '';
+        let currentSelectedAns = '';
 
-        function toSaveIntoInput() {
-            $('#form_submit_ans').val(JSON.stringify(ansArray));
+
+
+
+
+        function updateQuestionProgress(currentIndex, total) {
+            $('.progress-text').text(`${currentIndex} of ${total}`);
+            let percentage = (currentIndex / total) * 100;
+            $('.progress-fill').css('width', percentage + '%');
         }
 
-        let timerInterval;
-
-        function myTimer() {
-            if (currentIndex !== '' && ansArray[currentIndex]) {
-                ansArray[currentIndex]['time'] = Number(ansArray[currentIndex]['time']) + 1;
-            }
+        function updateQuestionMeta(index, type) {
+            $('.question-number').text(`Question ${index}`);
+            $('.question-type').text(type);
         }
 
-        function addTimer() {
-            timerInterval = setInterval(myTimer, 1000);
-        }
-
-        function stopTimer() {
-            clearInterval(timerInterval);
-        }
-
-        if ($('.get_parts').length) {
-            $('.get_parts').eq(0).click();
-        }
 
         function modifiedString(item) {
             if (!item) return '';
@@ -1306,276 +1135,254 @@ $exam_id = 1;
             return modifiedString1;
         }
 
-        function setQuestion() {
-            stopTimer();
-            $('.questioning_area').html('');
+        function renderQuestion(questionData) {
+            const display = questionData.type === 'numeric' ? 2 : 1;
 
-            var language_field = '';
-
-            if (paper_medium.medium == 2) {
-                language_field = 'hi_';
-            } else {
-                language_field = '';
+            // Determine language prefix
+            let prefix = '';
+            if (languageField === 'हिंदी') {
+                prefix = 'hi_';
             }
 
-            var filteredArray = myArray.filter(function(item) {
-                return item.id == question_id;
-            });
+            const questionText = modifiedString(questionData[prefix + 'name'] || questionData.name || 'No Question');
+            const ansA = modifiedString(questionData[prefix + 'ans_a'] || '');
+            const ansB = modifiedString(questionData[prefix + 'ans_b'] || '');
+            const ansC = modifiedString(questionData[prefix + 'ans_c'] || '');
+            const ansD = modifiedString(questionData[prefix + 'ans_d'] || '');
 
-            if (filteredArray.length === 0) return;
-
-            var display = filteredArray[0]['question_type_id'];
-
-            // Update question number and progress
-            $('.question-number').text(`Question ${parseInt(currentKey) + 1}`);
-            $('.progress-text').text(`${parseInt(currentKey) + 1} of ${myArray.length}`);
-            $('.progress-fill').css('width', `${((parseInt(currentKey) + 1) / myArray.length) * 100}%`);
+            // Use stored answer if available (optional)
+            // const currentAns = ansArray[currentIndex] ? (ansArray[currentIndex]['ans'] || '') : '';
 
             const questionHtml = `
-            <h5 class="question-text">${modifiedString(filteredArray[0][language_field+'name'])}</h5>
-           
-            <div class="options-container" style='display:${display == 1 ? "block" : "none" }'>
-                <div class="option-item"> 
-                    <input name="radios" value="1" type="radio" id="o1" >
-                    <label for="o1" data-letter="A">
-                        ${modifiedString(filteredArray[0][language_field+'ans_a'])}
-                    </label>
-                </div>
-                <div class="option-item">
-                    <input name="radios" value="2" type="radio" id="o2" >
-                    <label for="o2" data-letter="B">
-                        ${modifiedString(filteredArray[0][language_field+'ans_b'])}
-                    </label>
-                </div>
-                <div class="option-item">
-                    <input name="radios" value="3" type="radio" id="o3" >
-                    <label for="o3" data-letter="C">
-                        ${modifiedString(filteredArray[0][language_field+'ans_c'])}
-                    </label>
-                </div>
-                <div class="option-item">
-                    <input name="radios" value="4" type="radio" id="o4" >
-                    <label for="o4" data-letter="D">
-                        ${modifiedString(filteredArray[0][language_field+'ans_d'])}
-                    </label>
-                </div>
-            </div>
-            <div class="numeric-input" style='display:${display == 2 ? "block" : "none" }'>
-                <label>Your Answer:</label>
-                <input name="numeric_ans" class="form-control" type="text" id="numeric_ans" value="${ansArray[currentIndex] ? ansArray[currentIndex]['ans'] || '' : ''}">
-            </div>
-        `;
+        <h5 class="question-text">${questionText}</h5>
 
-            $('.questioning_area').html(questionHtml);
-            $('.questioning_area').addClass('slide-in');
+        <div class="options-container" style="display: ${display === 1 ? 'block' : 'none'}">
+            <div class="option-item"> 
+                <input name="radios" value="1" type="radio" id="o1" data-id="${questionData.id}">
+                <label for="o1" data-letter="A">${ansA}</label>
+            </div>
+            <div class="option-item"> 
+                <input name="radios" value="2" type="radio" id="o2" data-id="${questionData.id}">
+                <label for="o2" data-letter="B">${ansB}</label>
+            </div>
+            <div class="option-item"> 
+                <input name="radios" value="3" type="radio" id="o3" data-id="${questionData.id}">
+                <label for="o3" data-letter="C">${ansC}</label>
+            </div>
+            <div class="option-item"> 
+                <input name="radios" value="4" type="radio" id="o4" data-id="${questionData.id}">
+                <label for="o4" data-letter="D">${ansD}</label>
+            </div>
+        </div>
 
-            // Set previously selected answer
-            if (ansArray[currentIndex] && ansArray[currentIndex]['ans']) {
-                $("input[name='radios'][value=" + ansArray[currentIndex]['ans'] + "]").prop('checked', true);
+        <div class="numeric-input" style="display: ${display === 2 ? 'block' : 'none'}">
+            <label>Your Answer:</label>
+            <input name="numeric_ans" class="form-control" type="text" id="numeric_ans" value="${'1'}">
+        </div>
+    `;
+
+            $('.questioning_area').html(questionHtml).addClass('slide-in');
+            // ✅ Initialize MathJax rendering
+            if (window.MathJax && MathJax.typesetPromise) {
+                MathJax.typesetPromise(['.questioning_area']).catch((err) => console.error('MathJax error:', err));
+            }
+        }
+
+        $(document).on("click", ".option-item label", function() {
+            const inputId = $(this).attr('for'); // e.g., "o2"
+            const $radio = $('#' + inputId); // get the matching input
+
+            const value = $radio.val(); // radio value (e.g., "2")
+            const dataId = $radio.data('id'); // data-id (e.g., "6")
+
+            currentQuestion = dataId;
+            currentSelectedAns = value;
+
+        });
+
+
+
+        function saveAns() {
+            $.ajax({
+                url: '{{url("/")}}/save-ans', // Your API endpoint
+                method: 'POST',
+                data: {
+                    question_id: currentQuestion,
+                    choice: currentSelectedAns,
+                    unique_id: "{{$attempt->unique_id}}",
+                    _token: '{{ csrf_token() }}' // Laravel CSRF protection
+                },
+                success: function(response) {
+
+
+                    if (response.status) {
+                        console.log('Answer saved for question:', currentQuestion);
+
+                        var $questions = $('.question_number');
+                        var foundNext = false;
+
+                        $questions.each(function(index) {
+                            if ($(this).data('question_id') == currentQuestion) {
+                                var $next = $questions.eq(index + 1);
+                                if ($next.length) {
+                                    console.log('Moving to next question:', $next.data('question_id'));
+                                    $next.trigger('click');
+                                    foundNext = true;
+                                }
+                                return false; // break loop
+                            }
+                        });
+
+                        if (!foundNext) {
+                            console.log('No more questions in this subject.');
+
+                            // Find current subject tab
+                            var $currentTab = $('.get_parts.active');
+                            var $nextTab = $('.get_parts').eq($('.get_parts').index($currentTab) + 1);
+
+                            if ($nextTab.length) {
+                                console.log('Moving to next subject tab:', $nextTab.data('subject_id'));
+                                $nextTab.trigger('click');
+
+                                // Wait for questions to render, then auto-click first question
+                                setTimeout(function() {
+                                    $('.question_number').eq(0).trigger('click');
+                                }, 200);
+                            } else {
+                                alert('No more subjects.');
+                                // Optional: show finish/submit UI
+                            }
+                        }
+                    } else {
+                        alert('Something Went Wrong')
+                    }
+
+
+                },
+                error: function() {
+                    $('#question_detail').html(`<p>Error fetching question.</p>`);
+                }
+            });
+        }
+        $(document).on("click", "#save_and_next", function() {
+            saveAns();
+
+
+        });
+
+        $(".get_parts").on("click", function() {
+            let questions = $(this).attr('data-questionsids');
+            let types = $(this).attr('data-question_types');
+
+            $(".subject-tab").removeClass('active');
+            $(this).addClass('active');
+
+            let questionHtml = '';
+            let questionArray = [];
+            let questionTypeArray = [];
+
+            try {
+                questionArray = JSON.parse(questions);
+                questionTypeArray = JSON.parse(types);
+
+                questionArray.forEach(function(id, index) {
+                    const qType = questionTypeArray[index] || 'Single Choice';
+                    questionHtml += `
+                    <button class="question_number" data-question_id="${id}" data-question_type="${qType}">
+                        ${index + 1}
+                    </button>
+                `;
+                });
+
+                updateQuestionProgress(1, questionArray.length);
+                updateQuestionMeta(1, questionTypeArray[0] || 'Single Choice');
+
+            } catch (e) {
+                console.error("Invalid JSON", e);
             }
 
-            ansArray[currentIndex]['visited_count'] = Number(ansArray[currentIndex]['visited_count']) + 1;
-            addTimer();
+            $("#ques_list").html(questionHtml);
 
             setTimeout(function() {
-                $('.questioning_area').removeClass('slide-in');
-            }, 500);
-        }
-
-        // Event handlers
-        $("#mark_review").on("click", function(e) {
-            $(`[data-question="${question_id}"]`).removeClass('btn-success btn-danger btn-secondary').addClass("btn-maroon");
-            navigateToNext();
+                $('.question_number').first().trigger('click');
+            }, 100);
         });
-
-        $("#save_and_next").on("click", function(e) {
-            saveCurrentAnswer();
-            navigateToNext();
-            toSaveIntoInput();
-        });
-
-        function navigateToNext() {
-            if (currentIndex !== -1) {
-                let nextIndex;
-                if (currentIndex < $('.question_number').length - 1) {
-                    nextIndex = currentIndex + 1;
-                } else {
-                    nextIndex = 0;
-                }
-                let nextQuestion = $('.question_number').eq(nextIndex);
-                if (nextQuestion.length) {
-                    nextQuestion.trigger('click');
-                }
-            }
-        }
-
-        function saveCurrentAnswer() {
-            var ansValue = '';
-            var correctAns = 1;
-
-            var questionArray = myArray.filter(function(item) {
-                return item.id == question_id;
-            });
-
-            if (questionArray.length === 0) return;
-
-            if (questionArray[0]['question_type_id'] == 2) {
-                ansValue = $('#numeric_ans').val();
-                if (ansValue == questionArray[0]['ans_a']) {
-                    correctAns = 2;
-                } else {
-                    correctAns = 1;
-                }
-            } else {
-                ansValue = $('input[name="radios"]:checked').val();
-                if (ansValue == questionArray[0]['correct_ans']) {
-                    correctAns = 2;
-                } else if (ansValue == undefined) {
-                    correctAns = '';
-                } else {
-                    correctAns = 1;
-                }
-            }
-
-            if (ansArray[currentIndex]) {
-                ansArray[currentIndex]['ans'] = ansValue || null;
-                ansArray[currentIndex]['correct'] = correctAns;
-                ansArray[currentIndex]['time'] = '';
-
-                $('.question_number').eq(currentIndex).removeClass('btn-success btn-danger btn-maroon btn-secondary');
-
-                if (ansArray[currentIndex]['ans'] !== null) {
-                    $('.question_number').eq(currentIndex).addClass('btn-success');
-                } else {
-                    $('.question_number').eq(currentIndex).addClass('btn-danger');
-                }
-            }
-        }
 
         $(document).on("click", ".question_number", function() {
+
+
+
             $(".question_number").removeClass('btn-primary');
             $(this).addClass('btn-primary');
 
-            currentIndex = $('.question_number').index(this);
-            question_id = $(this).attr('data-question');
-            currentKey = $(this).attr('data-index');
+            let currentIndex = $(this).index() + 1;
+            let total = $(".question_number").length;
+            let questionId = $(this).attr('data-question_id');
 
-            setQuestion();
+
+
+            let questionType = $(this).attr('data-question_type') || 'Single Choice';
+
+            updateQuestionProgress(currentIndex, total);
+            updateQuestionMeta(currentIndex, questionType);
+
+
+
+
+
+            // Check in cache
+            if (questionCache[questionId]) {
+
+                renderQuestion(questionCache[questionId]); // Use cached data
+            } else {
+                // AJAX fetch if not in cache
+                $.ajax({
+                    url: '{{url("/")}}/initialize-question', // Your API endpoint
+                    method: 'POST',
+                    data: {
+                        question_id: questionId,
+                        _token: '{{ csrf_token() }}' // Laravel CSRF protection
+                    },
+                    success: function(response) {
+                        if (response.status && response.data) {
+
+                            questionCache[questionId] = response.data;
+                            renderQuestion(response.data);
+                            console.log(questionCache)
+
+                        } else {
+                            $('#question_detail').html(`<p>Question not found.</p>`);
+                        }
+                    },
+                    error: function() {
+                        $('#question_detail').html(`<p>Error fetching question.</p>`);
+                    }
+                });
+            }
         });
+
+        // Initial load
+        if ($('.get_parts').length) {
+            $('.get_parts').eq(0).trigger('click');
+        }
 
         $("#change_language").on("click", function() {
-            if (paper_medium.medium === 1) {
-                paper_medium.medium = 2;
+            if (languageField === 'हिंदी') {
+
                 $(this).find('span').text('English');
+                languageField = 'English';
             } else {
-                paper_medium.medium = 1;
                 $(this).find('span').text('हिंदी');
-            }
-            setQuestion();
-        });
-
-        $("#clear_response").on("click", function() {
-            $('input[name="radios"]').prop('checked', false);
-            $("#numeric_ans").val('');
-
-            if (ansArray[currentIndex]) {
-                ansArray[currentIndex]['ans'] = null;
-                ansArray[currentIndex]['correct'] = 0;
-                $('.question_number').eq(currentIndex).removeClass('btn-success btn-maroon').addClass('btn-danger');
+                languageField = 'हिंदी';
             }
 
-            $('.questioning_area').addClass('shake');
-            setTimeout(function() {
-                $('.questioning_area').removeClass('shake');
-            }, 1200);
+            $('.question_number.btn-primary').trigger('click');
         });
-
-        $("#modal-btn-confirm").on("click", function() {
-            $("#hide_modal").trigger("click");
-            $("#formAdd").trigger("submit");
-        });
-
-        toSaveIntoInput();
     });
+</script>
 
-    // Subject and question management
-    var questionsData = JSON.stringify([{
-            ques_id: 1,
-            subject: '1: Mathematics',
-            part: 'A',
-            subject_id: 1
-        },
-        {
-            ques_id: 2,
-            subject: '1: Mathematics',
-            part: 'A',
-            subject_id: 1
-        },
-        {
-            ques_id: 3,
-            subject: '2: Physics',
-            part: 'A',
-            subject_id: 2
-        },
-        {
-            ques_id: 4,
-            subject: '2: Physics',
-            part: 'A',
-            subject_id: 2
-        },
-        {
-            ques_id: 5,
-            subject: '3: Chemistry',
-            part: 'A',
-            subject_id: 3
-        },
-        {
-            ques_id: 6,
-            subject: '3: Chemistry',
-            part: 'A',
-            subject_id: 3
-        }
-    ]);
-    var questions = JSON.parse(questionsData);
 
-    $(".get_parts").on("click", function() {
-        var subject = $(this).attr('data-subject_name');
-        var currentSubjectId = $(this).attr('data-subject_id');
-
-        $("#currentSubjectId").val(currentSubjectId);
-
-        $(".subject-tab").removeClass('active');
-        $(this).addClass('active');
-
-        var subjectQuestions = questions.filter(function(question) {
-            return question.subject === subject;
-        });
-
-        var partAQuestions = subjectQuestions.filter(q => q.part === 'A');
-        var questionHtml = '';
-
-        partAQuestions.forEach(function(question, index) {
-            var visited = 0;
-            ansArray.forEach(function(item) {
-                if (item.que_id == question.ques_id && item.ans !== null) {
-                    visited = 1;
-                }
-            });
-
-            questionHtml += `
-            <button class="question_number ${visited == 1 ? "btn-success" : "btn-secondary"}" data-index="${index}" data-question="${question.ques_id}">
-                ${index+1}
-            </button>
-        `;
-        });
-
-        $("#ques_list").html(questionHtml);
-
-        setTimeout(function() {
-            $('.question_number').first().trigger('click');
-        }, 100);
-    });
-
+<script>
     // Timer functionality
     $(document).ready(function() {
         function setTimmer() {
@@ -1617,5 +1424,7 @@ $exam_id = 1;
         }
     });
 </script>
+
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 
 @endsection

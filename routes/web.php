@@ -103,9 +103,8 @@ Route::post('/loginAuth', function (Request $request) {
     return response()->json([
         'user' => $authUser,
         'model' => $modelType,
-        'redirect_to' => $modelType === 'student'
-            ? url('/student/dashboard')
-            : url('/dashboard'),
+        'redirect_to' =>url('/')
+           
     ]);
 });
 
@@ -302,4 +301,7 @@ Route::middleware(['auth:web'])->group(function () {
 
 Route::middleware(['auth:student'])->group(function () {
     Route::match(['get', 'post'], '/student/exams/start/{exam_id}', 'ExamController@startExam');
+    Route::match(['get', 'post'], '/student/dashboard', 'Students\StudentController@studentDashboard');
+    Route::match(['get', 'post'], '/initialize-question', 'ExamController@initializeQuestion');
+    Route::match(['get', 'post'], '/save-ans', 'ExamController@saveAns');
 });

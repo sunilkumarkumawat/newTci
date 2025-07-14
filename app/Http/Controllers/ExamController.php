@@ -9,6 +9,7 @@ use DB;
 use Yajra\DataTables\Facades\DataTables;
 use App\Helpers\helper;
 use App\Models\ExamDraft;
+use App\Models\ExamResult;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
 use Illuminate\Support\Str;
@@ -441,6 +442,76 @@ class ExamController extends Controller
         return view('exam.startExam', ['questionData' => $examResults, 'attempt'=> $finalAttempt, 'examData' => $exam]);
     }
 
+
+
+    public function initializeQuestion(Request $request)
+{
+    $questionId = $request->input('question_id');
+
+    if (!$questionId) {
+        return response()->json([
+            'status' => false,
+            'message' => 'Question ID is required.'
+        ], 400);
+    }
+
+    $question = Question::find($questionId);
+
+    if (!$question) {
+        return response()->json([
+            'status' => false,
+            'message' => 'Question not found.'
+        ], 404);
+    }
+
+    return response()->json([
+        'status' => true,
+        'data' => $question
+    ]);
+}
+
+
+public function saveAns(Request $request)
+{
+    $request->validate([
+        'question_id' => 'required|integer|exists:questions,id',
+        'choice' => 'nullable|string|max:255',
+        'unique_id' => 'required|string|exists:exam_results,attempt_unique_id',
+    ]);
+
+    $studentId = Auth::guard('student')->id();
+
+    if (!$studentId) {
+        return response()->json([
+            'status' => false,
+            'message' => 'Unauthenticated student.'
+        ], 401);
+    }
+
+    // Find the exam result record to update
+    $result = ExamResult::where('attempt_unique_id', $request->unique_id)
+                        ->where('student_id', $studentId)
+                        ->where('question_id', $request->question_id)
+                        ->first();
+
+    if (!$result) {
+        return response()->json([
+            'status' => false,
+            'message' => 'Answer record not found.'
+        ], 404);
+    }
+
+    // Update the answer
+    $result->choice = $request->choice;
+    $result->skip = 0;
+    $result->save();
+
+    return response()->json([
+        'status' => true,
+        'message' => 'Answer updated successfully.',
+        'data' => $result
+    ]);
+}
 
 
     public function storeExamQuestions($questionArray, $examId, $attemptUniqueId)
